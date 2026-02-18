@@ -1,0 +1,61 @@
+spring:
+  application:
+    name: anti-doom-scroll
+  datasource:
+    url: jdbc:postgresql://localhost:5432/antidoomscroll
+    username: antidoomscroll
+    password: antidoomscroll
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 5
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+    properties:
+      hibernate:
+        default_schema: public
+        jdbc:
+          time_zone: UTC
+    show-sql: false
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+    baseline-on-migrate: true
+
+server:
+  port: 8080
+
+# MVP: allow anonymous local profile (no account)
+app:
+  anonymous-profile-enabled: true
+  session-default-seconds: 180
+  low-battery-mode-seconds: 45
+  cors:
+    origins: http://localhost:5173
+  # Journey: scalable step sequence; add steps or go to any step by index
+  journey:
+    code: default
+    name: "Default journey"
+    steps:
+      - stepIndex: 0
+        type: OPEN_APP
+        config:
+          exerciseCount: 3
+      - stepIndex: 1
+        type: REFLECTION
+        config:
+          contentKey: why-doom-scrolling
+      - stepIndex: 2
+        type: CHAPTER_EXERCISES
+        config:
+          subjectCodes: [default, B1]
+    content:
+      why-doom-scrolling:
+        title: "Why am I doom scrolling?"
+        body: "Pause. You opened the app—that's the first step. Before more exercises, take a breath. Notice what you were avoiding or seeking. No judgment. When you're ready, continue to exercises by chapter."
+
+logging:
+  level:
+    app: INFO
+    org.springframework.web: INFO

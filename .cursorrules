@@ -1,0 +1,64 @@
+# Cursor Rules - Doomscroll Replacement Trainer (Java + Web)
+# Goal: build a JITAI-like app that replaces doomscroll with micro-exercises:
+# ultra-easy -> easy -> medium -> optional hard. Fast reward, real skill.
+
+## Tech stack (default)
+- Backend: Java 21, Spring Boot 3, Gradle, PostgreSQL, Flyway
+- API: REST JSON (OpenAPI generated)
+- Frontend: React + TypeScript + Vite
+- Auth: local email+password or passkeys (MVP can be anonymous local profile)
+- Mobile: PWA first (installable), later native wrapper if needed
+
+## Coding style
+- Prefer clean architecture boundaries:
+  - domain (pure)
+  - application (use cases)
+  - infrastructure (db, http, ai providers)
+  - web (controllers)
+- No business logic in controllers.
+- Use immutable DTOs, mapstruct optional.
+- Use UTC timestamps, store user timezone separately.
+- Write tests: unit for domain scoring + spaced repetition, integration for API.
+- Keep functions small, avoid cleverness, prefer readability.
+
+## Product logic constraints
+- App must start fast. No heavy AI on critical path.
+- Every "reopen" must launch an ultra-easy exercise in < 1 second (cached).
+- Exercise session structure:
+  - step 1: ultra-easy (success guaranteed)
+  - step 2: easy/medium based on user's axis of the day
+  - step 3: optional challenge (only if user opts-in)
+- Scoring must be transparent and consistent:
+  - accuracy, speed, confidence calibration, streak bonus (small)
+  - never punish harshly: avoid negative reinforcement.
+
+## Data model essentials
+- UserProfile: goals, daily axes, risk windows, preferences
+- Exercise: type, difficulty, prompt, expected answers, scoring params
+- Attempt: timestamps, response, correctness, reaction time, confidence, score
+- Deck/Card (memory): spaced repetition schedule + SM-2 simplified
+- DailyPlan: selected axes + queued exercise ids
+- TriggerEvent (optional): open/reopen context (time, appRef, intent)
+
+## AI usage policy
+- AI is optional and must degrade gracefully.
+- AI can:
+  - generate flashcards (Q/A, cloze, QCM)
+  - generate mini-problems + explanations
+  - generate keyword lists for guided blurting
+- AI must NOT be required to validate every attempt (MVP: deterministic scoring).
+- When AI is used, store the generated artifact + provenance, allow user edit.
+
+## UX rules
+- Maximum friction: 1 lightweight pause screen on reopen.
+- Default session length: 2-5 minutes.
+- Always offer "low battery brain" mode: 30-60 seconds.
+
+## Security & privacy
+- Store minimal data, encrypt secrets, never log user content in plaintext.
+- Allow local-only mode (no account) for MVP if possible.
+
+## Output format expectations (for Cursor)
+- When asked to implement: generate complete files.
+- When asked to design: provide API contracts + domain models + migrations.
+- Always include example payloads and edge cases.

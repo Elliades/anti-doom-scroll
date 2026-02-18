@@ -1,0 +1,58 @@
+# --- OS ---
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# --- IDEs / editors ---
+.idea/
+*.iml
+*.ipr
+*.iws
+.vscode/
+
+# --- Logs ---
+*.log
+logs/
+
+# --- Secrets / local env ---
+.env
+.env.*
+!.env.example
+
+# --- Java / Kotlin / Gradle / Spring Boot ---
+build/
+out/
+target/
+.gradle/
+**/.gradle/
+*.class
+hs_err_pid*
+replay_pid*
+
+# Keep Gradle wrapper + project files (if present)
+!gradle/wrapper/gradle-wrapper.properties
+!gradle/wrapper/gradle-wrapper.jar
+!gradlew
+!gradlew.bat
+
+# --- Frontend (Vite / React / TS) ---
+frontend/node_modules/
+**/node_modules/
+frontend/dist/
+**/dist/
+frontend/.vite/
+**/.vite/
+
+# Vite / tooling caches
+*.tsbuildinfo
+.eslintcache
+.stylelintcache
+.parcel-cache/
+.turbo/
+.cache/
+
+# --- Test / coverage output ---
+coverage/
+**/coverage/
+

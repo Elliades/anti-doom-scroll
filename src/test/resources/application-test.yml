@@ -1,0 +1,35 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;MODE=PostgreSQL;DATABASE_TO_LOWER=TRUE
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    database-platform: org.hibernate.dialect.H2Dialect
+  flyway:
+    enabled: false
+
+app:
+  anonymous-profile-enabled: true
+  journey:
+    code: default
+    name: "Test journey"
+    steps:
+      - stepIndex: 0
+        type: OPEN_APP
+        config:
+          exerciseCount: 3
+      - stepIndex: 1
+        type: REFLECTION
+        config:
+          contentKey: why-doom-scrolling
+      - stepIndex: 2
+        type: CHAPTER_EXERCISES
+        config:
+          subjectCodes: [default, B1]
+    content:
+      why-doom-scrolling:
+        title: "Why am I doom scrolling?"
+        body: "Pause. Take a breath. When ready, continue."
