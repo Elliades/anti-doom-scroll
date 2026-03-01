@@ -1,8 +1,0 @@
-spring:
-  datasource:
-    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/antidoomscroll}
-    username: ${SPRING_DATASOURCE_USERNAME:antidoomscroll}
-    password: ${SPRING_DATASOURCE_PASSWORD:antidoomscroll}
-
-server:
-  port: ${PORT:5173}
