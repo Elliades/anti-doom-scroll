@@ -29,13 +29,13 @@ app:
         levels:
           - levelIndex: 0
             allowedDifficulties: [ULTRA_EASY]
-            subjectCode: default
+            subjectCodes: [default]
           - levelIndex: 1
             allowedDifficulties: [ULTRA_EASY, EASY]
-            subjectCode: default
+            subjectCodes: [default]
           - levelIndex: 2
             allowedDifficulties: [EASY]
-            subjectCode: default
+            subjectCodes: [default]
       sum:
         name: "Math Sum Ladder"
         thresholds:
@@ -45,16 +45,325 @@ app:
         levels:
           - levelIndex: 0
             allowedDifficulties: [ULTRA_EASY]
-            subjectCode: default
-            mathOperations: [ADD]
+            subjectCodes: [default]
+            exerciseParamFilter:
+              operation: [ADD]
           - levelIndex: 1
             allowedDifficulties: [ULTRA_EASY, EASY]
-            subjectCode: default
-            mathOperations: [ADD]
+            subjectCodes: [default]
+            exerciseParamFilter:
+              operation: [ADD]
           - levelIndex: 2
             allowedDifficulties: [EASY]
-            subjectCode: default
-            mathOperations: [ADD, SUBTRACT]
+            subjectCodes: [default]
+            exerciseParamFilter:
+              operation: [ADD, SUBTRACT]
+      # Multi-subject combo: math + nback at the same level
+      combo:
+        name: "Math + N-Back Combo Ladder"
+        thresholds:
+          minScoreToStay: 0.40
+          minScoreToAdvance: 0.75
+          answersNeededToAdvance: 5
+        levels:
+          - levelIndex: 0
+            allowedDifficulties: [ULTRA_EASY]
+            subjectCodes: [default, B1]
+      # N-Back 30-level ladder (simplified for tests — uses exercises in data.sql)
+      nback:
+        name: "N-Back Ladder"
+        thresholds:
+          minScoreToStay: 0.40
+          minScoreToAdvance: 0.75
+          answersNeededToAdvance: 5
+        levels:
+          # Phase 1: Card N-back
+          - levelIndex: 0
+            allowedDifficulties: [ULTRA_EASY]
+            subjectCodes: [B1]
+            allowedTypes: [N_BACK]
+            exerciseParamFilter:
+              n: ["1"]
+              suitCount: ["1"]
+          - levelIndex: 1
+            allowedDifficulties: [ULTRA_EASY]
+            subjectCodes: [B1]
+            allowedTypes: [N_BACK]
+            exerciseParamFilter:
+              n: ["1"]
+              suitCount: ["2"]
+          - levelIndex: 2
+            allowedDifficulties: [ULTRA_EASY]
+            subjectCodes: [B1]
+            allowedTypes: [N_BACK]
+            exerciseParamFilter:
+              n: ["1"]
+              suitCount: ["3"]
+          - levelIndex: 3
+            allowedDifficulties: [ULTRA_EASY]
+            subjectCodes: [B1]
+            allowedTypes: [N_BACK]
+            exerciseParamFilter:
+              n: ["1"]
+              suitCount: ["4"]
+          - levelIndex: 4
+            allowedDifficulties: [EASY]
+            subjectCodes: [B1]
+            allowedTypes: [N_BACK]
+            exerciseParamFilter:
+              n: ["2"]
+              suitCount: ["1"]
+          - levelIndex: 5
+            allowedDifficulties: [EASY]
+            subjectCodes: [B1]
+            allowedTypes: [N_BACK]
+            exerciseParamFilter:
+              n: ["2"]
+              suitCount: ["2"]
+          - levelIndex: 6
+            allowedDifficulties: [EASY]
+            subjectCodes: [B1]
+            allowedTypes: [N_BACK]
+            exerciseParamFilter:
+              n: ["2"]
+              suitCount: ["3"]
+          - levelIndex: 7
+            allowedDifficulties: [EASY]
+            subjectCodes: [B1]
+            allowedTypes: [N_BACK]
+            exerciseParamFilter:
+              n: ["2"]
+              suitCount: ["4"]
+          - levelIndex: 8
+            allowedDifficulties: [MEDIUM]
+            subjectCodes: [B1]
+            allowedTypes: [N_BACK]
+            exerciseParamFilter:
+              n: ["3"]
+              suitCount: ["2"]
+          - levelIndex: 9
+            allowedDifficulties: [MEDIUM]
+            subjectCodes: [B1]
+            allowedTypes: [N_BACK]
+            exerciseParamFilter:
+              n: ["3"]
+              suitCount: ["4"]
+          # Phase 2: Grid Position N-back
+          - levelIndex: 10
+            allowedDifficulties: [ULTRA_EASY]
+            subjectCodes: [B1]
+            allowedTypes: [N_BACK_GRID]
+            exerciseParamFilter:
+              n: ["1"]
+              gridSize: ["3"]
+          - levelIndex: 11
+            allowedDifficulties: [ULTRA_EASY]
+            subjectCodes: [B1]
+            allowedTypes: [N_BACK_GRID]
+            exerciseParamFilter:
+              n: ["1"]
+              gridSize: ["4"]
+          - levelIndex: 12
+            allowedDifficulties: [EASY]
+            subjectCodes: [B1]
+            allowedTypes: [N_BACK_GRID]
+            exerciseParamFilter:
+              n: ["2"]
+              gridSize: ["3"]
+          - levelIndex: 13
+            allowedDifficulties: [EASY]
+            subjectCodes: [B1]
+            allowedTypes: [N_BACK_GRID]
+            exerciseParamFilter:
+              n: ["2"]
+              gridSize: ["4"]
+          - levelIndex: 14
+            allowedDifficulties: [MEDIUM]
+            subjectCodes: [B1]
+            allowedTypes: [N_BACK_GRID]
+            exerciseParamFilter:
+              n: ["3"]
+              gridSize: ["3"]
+          - levelIndex: 15
+            allowedDifficulties: [MEDIUM]
+            subjectCodes: [B1]
+            allowedTypes: [N_BACK_GRID]
+            exerciseParamFilter:
+              n: ["3"]
+              gridSize: ["4"]
+          - levelIndex: 16
+            allowedDifficulties: [EASY, MEDIUM]
+            subjectCodes: [B1]
+            allowedTypes: [N_BACK_GRID]
+          - levelIndex: 17
+            allowedDifficulties: [MEDIUM]
+            subjectCodes: [B1]
+            allowedTypes: [N_BACK, N_BACK_GRID]
+            exerciseParamFilter:
+              n: ["3"]
+          - levelIndex: 18
+            allowedDifficulties: [EASY, MEDIUM]
+            subjectCodes: [B1]
+            allowedTypes: [N_BACK, N_BACK_GRID]
+          - levelIndex: 19
+            allowedDifficulties: [MEDIUM]
+            subjectCodes: [B1]
+            allowedTypes: [N_BACK_GRID]
+            exerciseParamFilter:
+              n: ["3"]
+              gridSize: ["4"]
+          # Phase 3: Dual N-back
+          - levelIndex: 20
+            allowedDifficulties: [ULTRA_EASY]
+            subjectCodes: [B1]
+            allowedTypes: [DUAL_NBACK_CARD]
+            exerciseParamFilter:
+              n: ["1"]
+          - levelIndex: 21
+            allowedDifficulties: [ULTRA_EASY]
+            subjectCodes: [B1]
+            allowedTypes: [DUAL_NBACK_GRID]
+            exerciseParamFilter:
+              n: ["1"]
+          - levelIndex: 22
+            allowedDifficulties: [EASY]
+            subjectCodes: [B1]
+            allowedTypes: [DUAL_NBACK_CARD, DUAL_NBACK_GRID]
+            exerciseParamFilter:
+              n: ["1"]
+          - levelIndex: 23
+            allowedDifficulties: [EASY]
+            subjectCodes: [B1]
+            allowedTypes: [DUAL_NBACK_CARD]
+            exerciseParamFilter:
+              n: ["2"]
+          - levelIndex: 24
+            allowedDifficulties: [EASY]
+            subjectCodes: [B1]
+            allowedTypes: [DUAL_NBACK_GRID]
+            exerciseParamFilter:
+              n: ["2"]
+          - levelIndex: 25
+            allowedDifficulties: [EASY, MEDIUM]
+            subjectCodes: [B1]
+            allowedTypes: [DUAL_NBACK_CARD, DUAL_NBACK_GRID]
+            exerciseParamFilter:
+              n: ["2"]
+          - levelIndex: 26
+            allowedDifficulties: [MEDIUM]
+            subjectCodes: [B1]
+            allowedTypes: [DUAL_NBACK_CARD]
+            exerciseParamFilter:
+              n: ["3"]
+          - levelIndex: 27
+            allowedDifficulties: [MEDIUM]
+            subjectCodes: [B1]
+            allowedTypes: [DUAL_NBACK_GRID]
+            exerciseParamFilter:
+              n: ["3"]
+          - levelIndex: 28
+            allowedDifficulties: [MEDIUM, HARD]
+            subjectCodes: [B1]
+            allowedTypes: [DUAL_NBACK_CARD, DUAL_NBACK_GRID]
+            exerciseParamFilter:
+              n: ["3"]
+          - levelIndex: 29
+            allowedDifficulties: [HARD]
+            subjectCodes: [B1]
+            allowedTypes: [DUAL_NBACK_CARD, DUAL_NBACK_GRID]
+      # Pair ladder (test): 3 card-pair levels then 3 sum-pair levels
+      pair:
+        name: "Memory Pair Ladder"
+        thresholds:
+          minScoreToStay: 0.40
+          minScoreToAdvance: 0.75
+          answersNeededToAdvance: 5
+        levels:
+          # Phase 1: MEMORY_CARD_PAIRS
+          - levelIndex: 0
+            allowedDifficulties: [ULTRA_EASY]
+            subjectCodes: [MEMORY]
+            allowedTypes: [MEMORY_CARD_PAIRS]
+          - levelIndex: 1
+            allowedDifficulties: [EASY]
+            subjectCodes: [MEMORY]
+            allowedTypes: [MEMORY_CARD_PAIRS]
+          - levelIndex: 2
+            allowedDifficulties: [MEDIUM]
+            subjectCodes: [MEMORY]
+            allowedTypes: [MEMORY_CARD_PAIRS]
+          # Phase 2: SUM_PAIR
+          - levelIndex: 3
+            allowedDifficulties: [ULTRA_EASY]
+            subjectCodes: [MEMORY]
+            allowedTypes: [SUM_PAIR]
+          - levelIndex: 4
+            allowedDifficulties: [EASY]
+            subjectCodes: [MEMORY]
+            allowedTypes: [SUM_PAIR]
+          - levelIndex: 5
+            allowedDifficulties: [HARD]
+            subjectCodes: [MEMORY]
+            allowedTypes: [SUM_PAIR]
+      # Estimation ladder: 9 levels for test coverage (mirrors full 30-level phase structure)
+      # Each phase and bridge is represented at least once.
+      estimation:
+        name: "Estimation Ladder"
+        thresholds:
+          minScoreToStay: 0.40
+          minScoreToAdvance: 0.75
+          answersNeededToAdvance: 5
+        levels:
+          - levelIndex: 0  # Phase 1: ULTRA_EASY
+            allowedDifficulties: [ULTRA_EASY]
+            subjectCodes: [ESTIMATION]
+          - levelIndex: 1  # Phase 1 continued
+            allowedDifficulties: [ULTRA_EASY]
+            subjectCodes: [ESTIMATION]
+          - levelIndex: 2  # Bridge 1→2
+            allowedDifficulties: [ULTRA_EASY, EASY]
+            subjectCodes: [ESTIMATION]
+          - levelIndex: 3  # Phase 2: EASY
+            allowedDifficulties: [EASY]
+            subjectCodes: [ESTIMATION]
+          - levelIndex: 4  # Bridge 2→3
+            allowedDifficulties: [EASY, MEDIUM]
+            subjectCodes: [ESTIMATION]
+          - levelIndex: 5  # Phase 3: MEDIUM
+            allowedDifficulties: [MEDIUM]
+            subjectCodes: [ESTIMATION]
+          - levelIndex: 6  # Bridge 3→4
+            allowedDifficulties: [MEDIUM, HARD]
+            subjectCodes: [ESTIMATION]
+          - levelIndex: 7  # Phase 4: HARD
+            allowedDifficulties: [HARD]
+            subjectCodes: [ESTIMATION]
+          - levelIndex: 8  # Phase 5: VERY_HARD
+            allowedDifficulties: [VERY_HARD]
+            subjectCodes: [ESTIMATION]
+      # Anagram ladder: 5 levels for test coverage (mirrors full 30-level structure)
+      anagram:
+        name: "Anagram Ladder"
+        thresholds:
+          minScoreToStay: 0.40
+          minScoreToAdvance: 0.75
+          answersNeededToAdvance: 5
+        levels:
+          - levelIndex: 0
+            allowedDifficulties: [ULTRA_EASY]
+            subjectCodes: [WORD]
+          - levelIndex: 1
+            allowedDifficulties: [ULTRA_EASY, EASY]
+            subjectCodes: [WORD]
+          - levelIndex: 2
+            allowedDifficulties: [EASY]
+            subjectCodes: [WORD]
+          - levelIndex: 3
+            allowedDifficulties: [EASY, MEDIUM]
+            subjectCodes: [WORD]
+          - levelIndex: 4
+            allowedDifficulties: [MEDIUM]
+            subjectCodes: [WORD]
   journey:
     code: default
     name: "Test journey"

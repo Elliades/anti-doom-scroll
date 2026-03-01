@@ -84,6 +84,13 @@ export interface AnagramParamsDto {
   letterColorHint?: boolean
 }
 
+export interface WordleParamsDto {
+  answer: string
+  wordLength: number
+  maxAttempts?: number
+  language?: string
+}
+
 export interface ExerciseDto {
   id: string
   subjectId: string
@@ -113,6 +120,7 @@ export interface ExerciseDto {
   imagePairParams?: ImagePairParamsDto | null
   imagePairDeck?: ImagePairCardDto[] | null
   anagramParams?: AnagramParamsDto | null
+  wordleParams?: WordleParamsDto | null
 }
 
 export interface SessionStepDto {

@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { JourneyPage } from './pages/JourneyPage'
 import { LadderPage } from './pages/LadderPage'
+import { LadderListPage } from './pages/LadderListPage'
 import { SubjectsListPage } from './pages/SubjectsListPage'
 import { SubjectDetailPage } from './pages/SubjectDetailPage'
 import { ExercisesListPage } from './pages/ExercisesListPage'
@@ -12,8 +13,8 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<JourneyPage />} />
-        <Route path="/ladder" element={<LadderPage />} />
-        <Route path="/ladder/sum" element={<LadderPage ladderCode="sum" />} />
+        <Route path="/ladder" element={<LadderListPage />} />
+        <Route path="/ladder/:code" element={<LadderPage />} />
         <Route path="/subjects" element={<SubjectsListPage />} />
         <Route path="/subjects/:code" element={<SubjectDetailPage />} />
         <Route path="/exercises" element={<ExercisesListPage />} />

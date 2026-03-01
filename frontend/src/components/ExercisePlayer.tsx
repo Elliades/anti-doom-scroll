@@ -8,6 +8,7 @@ import { DualNBackGridExercise } from './DualNBackGridExercise'
 import { NBackExercise } from './NBackExercise'
 import { NBackGridExercise } from './NBackGridExercise'
 import { AnagramExercise } from './exercises/AnagramExercise'
+import { WordleExercise } from './exercises/WordleExercise'
 import { GenericTextExercise } from './exercises/GenericTextExercise'
 import { MemoryCardExercise } from './exercises/MemoryCardExercise'
 import { ImagePairExercise } from './exercises/ImagePairExercise'
@@ -45,6 +46,9 @@ const EXERCISE_TYPE_COMPONENTS: Record<string, React.ComponentType<{ exercise: E
   ),
   ANAGRAM: ({ exercise, onComplete }) => (
     <AnagramExercise exercise={exercise} onComplete={onComplete} />
+  ),
+  WORDLE: ({ exercise, onComplete }) => (
+    <WordleExercise exercise={exercise} onComplete={onComplete} />
   ),
 }
 

@@ -12,4 +12,13 @@ class LadderConfigAdapter(
 
     override fun getByCode(code: String): LadderConfig? =
         properties.ladderByCode(code)
+
+    override fun listAll(): List<LadderPort.LadderSummary> =
+        properties.ladders.map { (code, def) ->
+            LadderPort.LadderSummary(
+                code = code,
+                name = def.name,
+                levelCount = def.levels.size
+            )
+        }
 }

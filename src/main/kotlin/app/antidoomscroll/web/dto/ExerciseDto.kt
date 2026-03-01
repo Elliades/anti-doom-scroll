@@ -36,7 +36,11 @@ data class ExerciseDto(
     val imagePairParams: ImagePairParamsDto? = null,
     val imagePairDeck: List<ImagePairCardDto>? = null,
     /** ANAGRAM: scrambled letters + answer, generated at response time. */
-    val anagramParams: AnagramParamsDto? = null
+    val anagramParams: AnagramParamsDto? = null,
+    /** WORDLE: secret answer + word length + max attempts, generated at response time. */
+    val wordleParams: WordleParamsDto? = null,
+    /** ESTIMATION: correct answer, unit, tolerance factor and category for logarithmic scoring. */
+    val estimationParams: EstimationParamsDto? = null
 )
 
 data class ImagePairParamsDto(
@@ -111,3 +115,23 @@ data class SumPairGroupDto(val static: Int, val color: String, val cards: List<I
 
 /** Single card with group info for flat deck display. */
 data class SumPairCardDto(val value: Int, val static: Int, val color: String)
+
+data class WordleParamsDto(
+    val answer: String,
+    val wordLength: Int,
+    val maxAttempts: Int = 6,
+    val language: String = "fr"
+)
+
+/**
+ * Params for ESTIMATION exercise.
+ * Score = max(0, 1 − |ln(userAnswer/correctAnswer)| / ln(toleranceFactor)).
+ * category: "math" | "geography" | "science" | "history".
+ */
+data class EstimationParamsDto(
+    val correctAnswer: Double,
+    val unit: String,
+    val toleranceFactor: Double,
+    val category: String,
+    val hint: String? = null
+)

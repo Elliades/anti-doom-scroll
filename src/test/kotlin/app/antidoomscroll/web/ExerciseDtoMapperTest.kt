@@ -7,12 +7,14 @@ import app.antidoomscroll.application.MathFlashcardGenerator
 import app.antidoomscroll.application.MemoryCardDeckCache
 import app.antidoomscroll.application.SumPairGenerator
 import app.antidoomscroll.application.SumPairRoundsCache
+import app.antidoomscroll.application.WordleGenerator
 import app.antidoomscroll.application.port.ExercisePort
 import app.antidoomscroll.domain.Difficulty
 import app.antidoomscroll.domain.Exercise
 import app.antidoomscroll.domain.ExerciseType
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
+import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -23,6 +25,7 @@ import java.util.UUID
 
 /**
  * Ensures N_BACK exercises always get nBackParams in the DTO (fixes "missing sequence" in app).
+ * Also covers ESTIMATION type: estimationParams populated from exerciseParams.
  */
 @ExtendWith(MockitoExtension::class)
 class ExerciseDtoMapperTest {
@@ -35,9 +38,16 @@ class ExerciseDtoMapperTest {
     private val imagePairDeckCache = ImagePairDeckCache(ImagePairGenerator())
     private val mathFlashcardGenerator = MathFlashcardGenerator()
     private val anagramGenerator = AnagramGenerator()
+    private val wordleGenerator = WordleGenerator()
 
     private val nBackId = UUID.fromString("c0000000-0000-0000-0000-000000000001")
     private val subjectId = UUID.fromString("b0000000-0000-0000-0000-000000000004")
+    private val estimSubjectId = UUID.fromString("b0000000-0000-0000-0000-000000000013")
+
+    private fun mapper() = ExerciseDtoMapper(
+        exercisePort, sumPairRoundsCache, memoryCardDeckCache,
+        imagePairDeckCache, mathFlashcardGenerator, anagramGenerator, wordleGenerator
+    )
 
     @Test
     fun `when N_BACK exercise has null exerciseParams then findExerciseParamsById is used and DTO has nBackParams`() {
@@ -58,8 +68,7 @@ class ExerciseDtoMapperTest {
         )
         `when`(exercisePort.findExerciseParamsById(nBackId)).thenReturn(paramsFromDb)
 
-        val mapper = ExerciseDtoMapper(exercisePort, sumPairRoundsCache, memoryCardDeckCache, imagePairDeckCache, mathFlashcardGenerator, anagramGenerator)
-        val dto = mapper.toExerciseDto(exerciseWithoutParams, "B1")
+        val dto = mapper().toExerciseDto(exerciseWithoutParams, "B1")
 
         assertEquals("N_BACK", dto.type)
         assertNotNull(dto.nBackParams) { "N_BACK DTO must have nBackParams (app would show 'missing sequence')" }
@@ -82,8 +91,7 @@ class ExerciseDtoMapperTest {
             timeLimitSeconds = 30,
             exerciseParams = null
         )
-        val mapper = ExerciseDtoMapper(exercisePort, sumPairRoundsCache, memoryCardDeckCache, imagePairDeckCache, mathFlashcardGenerator, anagramGenerator)
-        val dto = mapper.toExerciseDto(exerciseParametric, "B1")
+        val dto = mapper().toExerciseDto(exerciseParametric, "B1")
         assertNotNull(dto.nBackParams) { "Parametric N_BACK must produce nBackParams" }
         assertEquals(1, dto.nBackParams!!.n)
         assertTrue(dto.nBackParams!!.sequence.size >= 3)
@@ -110,8 +118,7 @@ class ExerciseDtoMapperTest {
             exerciseParams = params
         )
 
-        val mapper = ExerciseDtoMapper(exercisePort, sumPairRoundsCache, memoryCardDeckCache, imagePairDeckCache, mathFlashcardGenerator, anagramGenerator)
-        val dto = mapper.toExerciseDto(exerciseWithParams, "B1")
+        val dto = mapper().toExerciseDto(exerciseWithParams, "B1")
 
         assertNotNull(dto.nBackParams)
         assertEquals(1, dto.nBackParams!!.n)
@@ -135,8 +142,7 @@ class ExerciseDtoMapperTest {
             exerciseParams = params
         )
 
-        val mapper = ExerciseDtoMapper(exercisePort, sumPairRoundsCache, memoryCardDeckCache, imagePairDeckCache, mathFlashcardGenerator, anagramGenerator)
-        val dto = mapper.toExerciseDto(exercise, "MEMORY")
+        val dto = mapper().toExerciseDto(exercise, "MEMORY")
 
         assertEquals("MEMORY_CARD_PAIRS", dto.type)
         assertNotNull(dto.memoryCardParams)
@@ -164,9 +170,7 @@ class ExerciseDtoMapperTest {
             timeLimitSeconds = 120,
             exerciseParams = params
         )
-        val mapper = ExerciseDtoMapper(exercisePort, sumPairRoundsCache, memoryCardDeckCache, imagePairDeckCache, mathFlashcardGenerator, anagramGenerator)
-
-        val dto = mapper.toExerciseDto(exercise, "MEMORY")
+        val dto = mapper().toExerciseDto(exercise, "MEMORY")
 
         assertEquals("SUM_PAIR", dto.type)
         assertNotNull(dto.sumPairParams)
@@ -201,8 +205,7 @@ class ExerciseDtoMapperTest {
             timeLimitSeconds = 120,
             exerciseParams = params
         )
-        val mapper = ExerciseDtoMapper(exercisePort, sumPairRoundsCache, memoryCardDeckCache, imagePairDeckCache, mathFlashcardGenerator, anagramGenerator)
-        val dto = mapper.toExerciseDto(exercise, "MEMORY")
+        val dto = mapper().toExerciseDto(exercise, "MEMORY")
         assertEquals("IMAGE_PAIR", dto.type)
         assertNotNull(dto.imagePairParams)
         assertEquals(4, dto.imagePairParams!!.pairCount)
@@ -234,8 +237,7 @@ class ExerciseDtoMapperTest {
             exerciseParams = params
         )
 
-        val mapper = ExerciseDtoMapper(exercisePort, sumPairRoundsCache, memoryCardDeckCache, imagePairDeckCache, mathFlashcardGenerator, anagramGenerator)
-        val dto = mapper.toExerciseDto(exercise, "default")
+        val dto = mapper().toExerciseDto(exercise, "default")
 
         assertEquals("FLASHCARD_QA", dto.type)
         assertNotNull(dto.prompt)
@@ -266,8 +268,7 @@ class ExerciseDtoMapperTest {
             timeLimitSeconds = 30,
             exerciseParams = params
         )
-        val mapper = ExerciseDtoMapper(exercisePort, sumPairRoundsCache, memoryCardDeckCache, imagePairDeckCache, mathFlashcardGenerator, anagramGenerator)
-        val dto = mapper.toExerciseDto(exercise, "default")
+        val dto = mapper().toExerciseDto(exercise, "default")
         assertEquals("FLASHCARD_QA", dto.type)
         assertEquals("MULTIPLY", dto.mathOperation)
         assertNotNull(dto.prompt)
@@ -294,8 +295,7 @@ class ExerciseDtoMapperTest {
             timeLimitSeconds = 30,
             exerciseParams = params
         )
-        val mapper = ExerciseDtoMapper(exercisePort, sumPairRoundsCache, memoryCardDeckCache, imagePairDeckCache, mathFlashcardGenerator, anagramGenerator)
-        val dto = mapper.toExerciseDto(exercise, "default")
+        val dto = mapper().toExerciseDto(exercise, "default")
         assertEquals("FLASHCARD_QA", dto.type)
         assertEquals("DIVIDE", dto.mathOperation)
         assertNotNull(dto.prompt)
@@ -321,8 +321,7 @@ class ExerciseDtoMapperTest {
             timeLimitSeconds = 45,
             exerciseParams = params
         )
-        val mapper = ExerciseDtoMapper(exercisePort, sumPairRoundsCache, memoryCardDeckCache, imagePairDeckCache, mathFlashcardGenerator, anagramGenerator)
-        val dto = mapper.toExerciseDto(exercise, "B1")
+        val dto = mapper().toExerciseDto(exercise, "B1")
         assertEquals("N_BACK_GRID", dto.type)
         assertNotNull(dto.nBackGridParams)
         assertEquals(1, dto.nBackGridParams!!.n)
@@ -355,8 +354,7 @@ class ExerciseDtoMapperTest {
             timeLimitSeconds = 60,
             exerciseParams = params
         )
-        val mapper = ExerciseDtoMapper(exercisePort, sumPairRoundsCache, memoryCardDeckCache, imagePairDeckCache, mathFlashcardGenerator, anagramGenerator)
-        val dto = mapper.toExerciseDto(exercise, "B1")
+        val dto = mapper().toExerciseDto(exercise, "B1")
         assertEquals("DUAL_NBACK_GRID", dto.type)
         assertNotNull(dto.dualNBackGridParams)
         assertEquals(1, dto.dualNBackGridParams!!.n)
@@ -383,12 +381,124 @@ class ExerciseDtoMapperTest {
             timeLimitSeconds = 60,
             exerciseParams = params
         )
-        val mapper = ExerciseDtoMapper(exercisePort, sumPairRoundsCache, memoryCardDeckCache, imagePairDeckCache, mathFlashcardGenerator, anagramGenerator)
-        val dto = mapper.toExerciseDto(exercise, "B1")
+        val dto = mapper().toExerciseDto(exercise, "B1")
         assertEquals("DUAL_NBACK_CARD", dto.type)
         assertNotNull(dto.dualNBackCardParams)
         assertEquals(1, dto.dualNBackCardParams!!.n)
         assertEquals(listOf("AC", "2D", "2C", "3H"), dto.dualNBackCardParams!!.sequence)
         assertEquals(listOf(2), dto.dualNBackCardParams!!.matchNumberIndices)
+    }
+
+    @Test
+    fun `when ESTIMATION exercise has full params then DTO has estimationParams with all fields`() {
+        val params = mapOf(
+            "correctAnswer" to 330.0,
+            "unit" to "m",
+            "toleranceFactor" to 1.5,
+            "category" to "geography",
+            "hint" to "Built in 1889."
+        )
+        val exercise = Exercise(
+            id = UUID.fromString("a0000000-0000-0000-0000-000000000301"),
+            subjectId = estimSubjectId,
+            type = ExerciseType.ESTIMATION,
+            difficulty = Difficulty.ULTRA_EASY,
+            prompt = "How tall is the Eiffel Tower (in meters)?",
+            expectedAnswers = listOf("330"),
+            timeLimitSeconds = 25,
+            exerciseParams = params
+        )
+        val dto = mapper().toExerciseDto(exercise, "ESTIMATION")
+
+        assertEquals("ESTIMATION", dto.type)
+        assertNotNull(dto.estimationParams)
+        assertEquals(330.0, dto.estimationParams!!.correctAnswer)
+        assertEquals("m", dto.estimationParams!!.unit)
+        assertEquals(1.5, dto.estimationParams!!.toleranceFactor)
+        assertEquals("geography", dto.estimationParams!!.category)
+        assertEquals("Built in 1889.", dto.estimationParams!!.hint)
+    }
+
+    @Test
+    fun `when ESTIMATION exercise has no hint then estimationParams hint is null`() {
+        val params = mapOf(
+            "correctAnswer" to 365.0,
+            "unit" to "days",
+            "toleranceFactor" to 1.03,
+            "category" to "math"
+        )
+        val exercise = Exercise(
+            id = UUID.fromString("a0000000-0000-0000-0000-000000000300"),
+            subjectId = estimSubjectId,
+            type = ExerciseType.ESTIMATION,
+            difficulty = Difficulty.ULTRA_EASY,
+            prompt = "How many days are in a year?",
+            expectedAnswers = listOf("365"),
+            timeLimitSeconds = 20,
+            exerciseParams = params
+        )
+        val dto = mapper().toExerciseDto(exercise, "ESTIMATION")
+
+        assertEquals("ESTIMATION", dto.type)
+        assertNotNull(dto.estimationParams)
+        assertEquals(365.0, dto.estimationParams!!.correctAnswer)
+        assertEquals("days", dto.estimationParams!!.unit)
+        assertNull(dto.estimationParams!!.hint)
+    }
+
+    @Test
+    fun `when ESTIMATION exercise has missing required param then estimationParams is null`() {
+        val params = mapOf(
+            "unit" to "m",
+            "toleranceFactor" to 1.5,
+            "category" to "geography"
+            // correctAnswer is missing
+        )
+        val exercise = Exercise(
+            id = UUID.fromString("a0000000-0000-0000-0000-000000000399"),
+            subjectId = estimSubjectId,
+            type = ExerciseType.ESTIMATION,
+            difficulty = Difficulty.EASY,
+            prompt = "Missing answer?",
+            expectedAnswers = emptyList(),
+            timeLimitSeconds = 30,
+            exerciseParams = params
+        )
+        val dto = mapper().toExerciseDto(exercise, "ESTIMATION")
+
+        assertEquals("ESTIMATION", dto.type)
+        assertNull(dto.estimationParams)
+    }
+
+    @Test
+    fun `when ESTIMATION exercise has math category then DTO type is ESTIMATION and no other params are set`() {
+        val params = mapOf(
+            "correctAnswer" to 391.0,
+            "unit" to "",
+            "toleranceFactor" to 1.1,
+            "category" to "math",
+            "hint" to "Decompose: 17×20 + 17×3"
+        )
+        val exercise = Exercise(
+            id = UUID.fromString("a0000000-0000-0000-0000-000000000308"),
+            subjectId = estimSubjectId,
+            type = ExerciseType.ESTIMATION,
+            difficulty = Difficulty.EASY,
+            prompt = "Estimate: 17 × 23 = ?",
+            expectedAnswers = listOf("391"),
+            timeLimitSeconds = 20,
+            exerciseParams = params
+        )
+        val dto = mapper().toExerciseDto(exercise, "ESTIMATION")
+
+        assertEquals("ESTIMATION", dto.type)
+        assertNotNull(dto.estimationParams)
+        assertEquals(391.0, dto.estimationParams!!.correctAnswer)
+        assertEquals("math", dto.estimationParams!!.category)
+        assertNull(dto.nBackParams)
+        assertNull(dto.memoryCardParams)
+        assertNull(dto.sumPairParams)
+        assertNull(dto.anagramParams)
+        assertNull(dto.wordleParams)
     }
 }

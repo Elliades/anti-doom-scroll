@@ -68,6 +68,18 @@ class ExercisePersistenceAdapter(
         return list.shuffled().take(limit).map(::toDomain)
     }
 
+    override fun findRandomBySubjectsAndDifficulties(subjectIds: List<UUID>, difficulties: List<Difficulty>, limit: Int): List<Exercise> {
+        if (difficulties.isEmpty()) return emptyList()
+        val diffStrings = difficulties.map { it.name }
+        val pageSize = (limit * 5).coerceAtLeast(20)
+        val list = if (subjectIds.isEmpty()) {
+            repository.findByDifficultyInOrderByCreatedAtAsc(diffStrings, PageRequest.of(0, pageSize))
+        } else {
+            repository.findBySubjectIdInAndDifficultyInOrderByCreatedAtAsc(subjectIds, diffStrings, PageRequest.of(0, pageSize))
+        }
+        return list.shuffled().take(limit).map(::toDomain)
+    }
+
     override fun findRandomUltraEasyOrEasy(limit: Int): List<Exercise> {
         val pageSize = (limit * 10).coerceAtLeast(50)
         val list = repository.findUltraEasyOrEasy(PageRequest.of(0, pageSize))

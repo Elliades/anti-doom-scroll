@@ -2,6 +2,11 @@ package app.antidoomscroll.web
 
 import app.antidoomscroll.application.AnagramGenerator
 import app.antidoomscroll.application.AnagramParamsResolver
+import app.antidoomscroll.application.DualNBackCardSequenceGenerator
+import app.antidoomscroll.application.DualNBackGridSequenceGenerator
+import app.antidoomscroll.application.NBackGridSequenceGenerator
+import app.antidoomscroll.application.WordleGenerator
+import app.antidoomscroll.application.WordleParamsResolver
 import app.antidoomscroll.application.MathFlashcardGenerator
 import app.antidoomscroll.application.NBackSequenceGenerator
 import app.antidoomscroll.application.ImagePairDeckCache
@@ -13,6 +18,8 @@ import app.antidoomscroll.domain.Exercise
 import app.antidoomscroll.domain.ExerciseType
 import app.antidoomscroll.domain.NBackParams
 import app.antidoomscroll.web.dto.AnagramParamsDto
+import app.antidoomscroll.web.dto.EstimationParamsDto
+import app.antidoomscroll.web.dto.WordleParamsDto
 import app.antidoomscroll.web.dto.DualNBackCardParamsDto
 import app.antidoomscroll.web.dto.DualNBackGridParamsDto
 import app.antidoomscroll.web.dto.ExerciseDto
@@ -41,7 +48,8 @@ class ExerciseDtoMapper(
     private val memoryCardDeckCache: MemoryCardDeckCache,
     private val imagePairDeckCache: ImagePairDeckCache,
     private val mathFlashcardGenerator: MathFlashcardGenerator,
-    private val anagramGenerator: AnagramGenerator
+    private val anagramGenerator: AnagramGenerator,
+    private val wordleGenerator: WordleGenerator
 ) {
 
     fun toExerciseDto(ex: Exercise, subjectCode: String?): ExerciseDto {
@@ -54,9 +62,9 @@ class ExerciseDtoMapper(
             Pair(exerciseWithParams.prompt, exerciseWithParams.expectedAnswers)
         }
         val nBackParams = resolveNBackParams(exerciseWithParams)
-        val nBackGridParams = exerciseWithParams.nBackGridParams()
-        val dualNBackGridParams = exerciseWithParams.dualNBackGridParams()
-        val dualNBackCardParams = exerciseWithParams.dualNBackCardParams()
+        val nBackGridParams = resolveNBackGridParams(exerciseWithParams)
+        val dualNBackGridParams = resolveDualNBackGridParams(exerciseWithParams)
+        val dualNBackCardParams = resolveDualNBackCardParams(exerciseWithParams)
         val memoryCardParams = exerciseWithParams.memoryCardParams()
         val imagePairParams = exerciseWithParams.imagePairParams()
         val sumPairParams = SumPairParamsResolver.resolve(exerciseWithParams)
@@ -70,6 +78,25 @@ class ExerciseDtoMapper(
                     answer = r.answer,
                     hintIntervalSeconds = hintIntervalSeconds,
                     letterColorHint = letterColorHint
+                )
+            }
+        }
+        val estimationParams = exerciseWithParams.estimationParams()?.let { p ->
+            EstimationParamsDto(
+                correctAnswer = p.correctAnswer,
+                unit = p.unit,
+                toleranceFactor = p.toleranceFactor,
+                category = p.category,
+                hint = p.hint
+            )
+        }
+        val wordleParams = WordleParamsResolver.resolve(exerciseWithParams)?.let { p ->
+            wordleGenerator.generate(p)?.let { r ->
+                WordleParamsDto(
+                    answer = r.answer,
+                    wordLength = r.wordLength,
+                    maxAttempts = r.maxAttempts,
+                    language = p.language
                 )
             }
         }
@@ -99,32 +126,9 @@ class ExerciseDtoMapper(
             timeLimitSeconds = exerciseWithParams.timeLimitSeconds,
             mathOperation = mathParams?.operation?.name,
             nBackParams = nBackParams,
-            nBackGridParams = nBackGridParams?.let { p ->
-                NBackGridParamsDto(
-                    n = p.n,
-                    sequence = p.sequence,
-                    matchIndices = p.matchIndices,
-                    gridSize = p.gridSize
-                )
-            },
-            dualNBackGridParams = dualNBackGridParams?.let { p ->
-                DualNBackGridParamsDto(
-                    n = p.n,
-                    sequence = p.sequence.map { GridStimulusDto(position = it.position, color = it.color) },
-                    matchPositionIndices = p.matchPositionIndices,
-                    matchColorIndices = p.matchColorIndices,
-                    colors = p.colors,
-                    gridSize = p.gridSize
-                )
-            },
-            dualNBackCardParams = dualNBackCardParams?.let { p ->
-                DualNBackCardParamsDto(
-                    n = p.n,
-                    sequence = p.sequence,
-                    matchColorIndices = p.matchColorIndices,
-                    matchNumberIndices = p.matchNumberIndices
-                )
-            },
+            nBackGridParams = nBackGridParams,
+            dualNBackGridParams = dualNBackGridParams,
+            dualNBackCardParams = dualNBackCardParams,
             memoryCardParams = memoryCardParams?.let { p ->
                 MemoryCardParamsDto(
                     pairCount = p.pairCount,
@@ -156,7 +160,112 @@ class ExerciseDtoMapper(
                     backgroundColorHex = c.backgroundColorHex
                 )
             },
-            anagramParams = anagramParams
+            anagramParams = anagramParams,
+            wordleParams = wordleParams,
+            estimationParams = estimationParams
+        )
+    }
+
+    /**
+     * Resolves N_BACK_GRID params: from stored static sequence, or dynamically from (n, gridSize).
+     * Parametric exercises store only n + gridSize (+ optional sequenceLength); sequence is generated fresh each call.
+     */
+    private fun resolveNBackGridParams(ex: Exercise): NBackGridParamsDto? {
+        if (ex.type != ExerciseType.N_BACK_GRID) return null
+        val stored = ex.nBackGridParams()
+        if (stored != null) {
+            return NBackGridParamsDto(
+                n = stored.n,
+                sequence = stored.sequence,
+                matchIndices = stored.matchIndices,
+                gridSize = stored.gridSize
+            )
+        }
+        val p = ex.exerciseParams ?: return null
+        val n = (p["n"] as? Number)?.toInt() ?: return null
+        val gridSize = (p["gridSize"] as? Number)?.toInt() ?: 3
+        val sequenceLength = (p["sequenceLength"] as? Number)?.toInt() ?: 12
+        val (sequence, matchIndices) = NBackGridSequenceGenerator.generate(
+            n = n,
+            gridSize = gridSize,
+            sequenceLength = sequenceLength.coerceAtLeast(n + 2),
+            seed = kotlin.random.Random.Default.nextInt()
+        )
+        return NBackGridParamsDto(n = n, sequence = sequence, matchIndices = matchIndices, gridSize = gridSize)
+    }
+
+    /**
+     * Resolves DUAL_NBACK_GRID params: from stored static sequence, or dynamically from (n, gridSize, colorCount).
+     */
+    private fun resolveDualNBackGridParams(ex: Exercise): DualNBackGridParamsDto? {
+        if (ex.type != ExerciseType.DUAL_NBACK_GRID) return null
+        val stored = ex.dualNBackGridParams()
+        if (stored != null) {
+            return DualNBackGridParamsDto(
+                n = stored.n,
+                sequence = stored.sequence.map { GridStimulusDto(position = it.position, color = it.color) },
+                matchPositionIndices = stored.matchPositionIndices,
+                matchColorIndices = stored.matchColorIndices,
+                colors = stored.colors,
+                gridSize = stored.gridSize
+            )
+        }
+        val p = ex.exerciseParams ?: return null
+        val n = (p["n"] as? Number)?.toInt() ?: return null
+        val gridSize = (p["gridSize"] as? Number)?.toInt() ?: 3
+        val colorCount = (p["colorCount"] as? Number)?.toInt() ?: 4
+        val sequenceLength = (p["sequenceLength"] as? Number)?.toInt() ?: 12
+        val result = DualNBackGridSequenceGenerator.generate(
+            n = n,
+            gridSize = gridSize,
+            colorCount = colorCount,
+            sequenceLength = sequenceLength.coerceAtLeast(n + 2),
+            seed = kotlin.random.Random.Default.nextInt()
+        )
+        return DualNBackGridParamsDto(
+            n = n,
+            sequence = result.sequence.map { s ->
+                GridStimulusDto(
+                    position = (s["position"] as? Number)?.toInt() ?: 0,
+                    color = s["color"]?.toString() ?: "#000000"
+                )
+            },
+            matchPositionIndices = result.matchPositionIndices,
+            matchColorIndices = result.matchColorIndices,
+            colors = result.colors,
+            gridSize = gridSize
+        )
+    }
+
+    /**
+     * Resolves DUAL_NBACK_CARD params: from stored static sequence, or dynamically from (n, suitCount).
+     */
+    private fun resolveDualNBackCardParams(ex: Exercise): DualNBackCardParamsDto? {
+        if (ex.type != ExerciseType.DUAL_NBACK_CARD) return null
+        val stored = ex.dualNBackCardParams()
+        if (stored != null) {
+            return DualNBackCardParamsDto(
+                n = stored.n,
+                sequence = stored.sequence,
+                matchColorIndices = stored.matchColorIndices,
+                matchNumberIndices = stored.matchNumberIndices
+            )
+        }
+        val p = ex.exerciseParams ?: return null
+        val n = (p["n"] as? Number)?.toInt() ?: return null
+        val suitCount = (p["suitCount"] as? Number)?.toInt() ?: 4
+        val sequenceLength = (p["sequenceLength"] as? Number)?.toInt() ?: 12
+        val result = DualNBackCardSequenceGenerator.generate(
+            n = n,
+            suitCount = suitCount,
+            sequenceLength = sequenceLength.coerceAtLeast(n + 2),
+            seed = kotlin.random.Random.Default.nextInt()
+        )
+        return DualNBackCardParamsDto(
+            n = n,
+            sequence = result.sequence,
+            matchColorIndices = result.matchColorIndices,
+            matchNumberIndices = result.matchNumberIndices
         )
     }
 

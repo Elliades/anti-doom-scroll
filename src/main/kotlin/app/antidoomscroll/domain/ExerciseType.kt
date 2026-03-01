@@ -16,5 +16,7 @@ enum class ExerciseType {
     MEMORY_CARD_PAIRS,
     SUM_PAIR,
     IMAGE_PAIR,
-    ANAGRAM
+    ANAGRAM,
+    WORDLE,
+    ESTIMATION
 }

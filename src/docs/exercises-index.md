@@ -12,12 +12,17 @@
 | **N-back** | `B1` | N_BACK (3: 1-back, 2-back, 3-back), N_BACK_GRID (2), DUAL_NBACK_GRID (1), DUAL_NBACK_CARD (1) |
 | **Memory** | `MEMORY` | MEMORY_CARD_PAIRS (3), SUM_PAIR (5), IMAGE_PAIR (2) |
 | **Anagrammes (FR)** | `ANAGRAM_FR` | ANAGRAM (4: ULTRA_EASY, EASY, MEDIUM, HARD) |
+| **Wordle (FR)** | `WORDLE_FR` | WORDLE (4: EASY=3 letters, MEDIUM=5, HARD=6, VERY_HARD=7) |
+| **Wordle (EN)** | `WORDLE_EN` | WORDLE (4: EASY=3 letters, MEDIUM=5, HARD=6, VERY_HARD=7) |
+| **Estimation** | `ESTIMATION` | ESTIMATION (20: ULTRA_EASY=5, EASY=5, MEDIUM=5, HARD=3, VERY_HARD=3) |
 
 **Default** — Sum, Subtraction, Multiplication, Division (math flashcard) by difficulty.  
 **B1** — N-back card, N-back grid, dual N-back grid, dual N-back card.  
 **MEMORY** — Memory card pairs and sum-pair exercises.  
-**ANAGRAM_FR** — French anagrams by difficulty.
-
+**ANAGRAM_FR** — French anagrams by difficulty.  
+**WORDLE_FR** — French Wordle: guess the hidden word. EASY=3 letters, MEDIUM=5, HARD=6, VERY_HARD=7.  
+**WORDLE_EN** — English Wordle: guess the hidden word. EASY=3 letters, MEDIUM=5, HARD=6, VERY_HARD=7.  
+**ESTIMATION** — Approximate numerical answers (geography, science, mental math). Scored on accuracy + speed.
 ---
 
 ## If /api/subjects and /api/exercises are empty
@@ -50,6 +55,8 @@
 | **Start a session** (returns steps with exercises) | [http://localhost:5173/api/session/start](http://localhost:5173/api/session/start) |
 | **Start ladder session** (score-based level progression) | [http://localhost:5173/api/session/start?mode=ladder](http://localhost:5173/api/session/start?mode=ladder) |
 | **Start sum ladder** (math: ADD→SUBTRACT→MULT/DIV, levels 0–25) | [http://localhost:5173/api/session/start?mode=ladder&ladderCode=sum](http://localhost:5173/api/session/start?mode=ladder&ladderCode=sum) |
+| **Start anagram ladder** (French words: 2-3 → 8-15 letters, levels 0–29) | [http://localhost:5173/api/session/start?mode=ladder&ladderCode=anagram](http://localhost:5173/api/session/start?mode=ladder&ladderCode=anagram) |
+| **Start estimation ladder** (approximate numbers, 30 levels) | [http://localhost:5173/api/session/start?mode=ladder&ladderCode=estimation](http://localhost:5173/api/session/start?mode=ladder&ladderCode=estimation) |
 | **Start session, prefer one type** | [http://localhost:5173/api/session/start?preferType=SUM_PAIR](http://localhost:5173/api/session/start?preferType=SUM_PAIR) |
 | **Open-app session** | [http://localhost:5173/api/session/start?mode=openapp](http://localhost:5173/api/session/start?mode=openapp) |
 | **Journey definition** | [http://localhost:5173/api/journey?code=default](http://localhost:5173/api/journey?code=default) |
@@ -291,12 +298,70 @@
 | **All exercises** | [http://localhost:5173/api/exercises](http://localhost:5173/api/exercises) |
 | N-Back 1, 2, 3 (card) | [api/nback/1](http://localhost:5173/api/nback/1) · [api/nback/2](http://localhost:5173/api/nback/2) · [api/nback/3](http://localhost:5173/api/nback/3) |
 | N-Back Grid, Dual Grid, Dual Card | Via [api/exercises](http://localhost:5173/api/exercises) by type |
-| Exercises in subject | [api/subjects/default/exercises](http://localhost:5173/api/subjects/default/exercises) · [api/subjects/B1/exercises](http://localhost:5173/api/subjects/B1/exercises) · [api/subjects/WORD/exercises](http://localhost:5173/api/subjects/WORD/exercises) |
+| Exercises in subject | [api/subjects/default/exercises](http://localhost:5173/api/subjects/default/exercises) · [api/subjects/B1/exercises](http://localhost:5173/api/subjects/B1/exercises) · [api/subjects/WORD/exercises](http://localhost:5173/api/subjects/WORD/exercises) · [api/subjects/WORDLE_FR/exercises](http://localhost:5173/api/subjects/WORDLE_FR/exercises) · [api/subjects/WORDLE_EN/exercises](http://localhost:5173/api/subjects/WORDLE_EN/exercises) · [api/subjects/ESTIMATION/exercises](http://localhost:5173/api/subjects/ESTIMATION/exercises) |
 | Start session | [http://localhost:5173/api/session/start](http://localhost:5173/api/session/start) |
 | Journey | [http://localhost:5173/api/journey?code=default](http://localhost:5173/api/journey?code=default) |
 | Journey step content | [api/journey/steps/0/content?journeyCode=default](http://localhost:5173/api/journey/steps/0/content?journeyCode=default) (step 0, 1, 2, …) |
 | Health | [http://localhost:5173/api/health](http://localhost:5173/api/health) |
 | **If you have an ID** | `http://localhost:5173/api/exercises/{id}` |
+
+---
+
+---
+
+## Estimation Ladder (`estimation`) — 30 levels
+
+**Start:** `GET /api/session/start?mode=ladder&ladderCode=estimation`  
+**Next:** `POST /api/session/ladder/next` (send `ladderState` + `lastScore` back each time)
+
+### Level map
+
+| Levels | Difficulties | Phase |
+|--------|-------------|-------|
+| 0–4 | ULTRA_EASY | Everyday warmup — days/year, Eiffel Tower, π×10, sound speed, hours/week |
+| 5–6 | ULTRA_EASY + EASY | Bridge — mixed everyday + school |
+| 7–11 | EASY | School knowledge — Everest, Paris→NYC, France population, 17×23, √200 |
+| 12–13 | EASY + MEDIUM | Bridge — mixed school + cultural |
+| 14–18 | MEDIUM | Cultural + harder math — Earth population, Earth→Moon, France area, e³, 2^10 |
+| 19–20 | MEDIUM + HARD | Bridge — mixed cultural + expert |
+| 21–24 | HARD | Expert knowledge — speed of light, Earth→Sun distance, 7^5 |
+| 25–26 | HARD + VERY_HARD | Bridge — mixed expert + specialist |
+| 27–29 | VERY_HARD | Specialist peak — seconds/year, age of universe, 2^20 |
+
+**Thresholds:** advance ≥ 75%, stay ≥ 40%, demote < 40% (evaluated after every 5 answers).  
+**Scoring on each answer:** `score = max(0, 1 − |ln(answer/correct)| / ln(toleranceFactor))`, scaled by speed bonus.
+
+---
+
+## 15. Estimation (ESTIMATION)
+
+- **Subject code:** `ESTIMATION`
+- **Goal:** Approximate a numerical answer as quickly and accurately as possible.
+- **Categories:** `geography` (monuments, distances, areas, populations), `science` (physical constants, astronomical distances), `math` (mental arithmetic: π×N, √N, powers, factorials).
+- **Scoring (logarithmic):** `score = max(0, 1 − |ln(answer / correctAnswer)| / ln(toleranceFactor))`
+  - `toleranceFactor = 1.03–1.05` → very tight (exact math: ±3–5% = 0)
+  - `toleranceFactor = 1.1–1.15` → tight (mental math: ±10–15% = 0)
+  - `toleranceFactor = 1.3–1.5` → moderate (school knowledge)
+  - `toleranceFactor = 2.0–10.0` → wide (orders-of-magnitude geography/science)
+- **API params returned (`estimationParams`):**
+  - `correctAnswer: Double` — the true value
+  - `unit: String` — unit label (e.g. `"m"`, `"km"`, `"million people"`, `""`)
+  - `toleranceFactor: Double` — controls score decay (see formula above)
+  - `category: String` — `"geography"` | `"science"` | `"math"` | `"history"`
+  - `hint: String?` — optional contextual hint (shown after a few seconds or on request)
+- **Prompt:** stored in DB, returned as-is (no generation at response time).
+- **Expected answers:** indicative string list (e.g. `["330"]`); actual grading uses the logarithmic formula.
+- **Difficulty mapping:**
+
+| Difficulty | Tolerance range | Examples |
+|---|---|---|
+| ULTRA_EASY | 1.03–1.5 | Days/year, Eiffel Tower height, π×10, hours/week |
+| EASY | 1.1–2.0 | Everest height, Paris→NYC, √200, 17×23 |
+| MEDIUM | 1.05–2.0 | Earth population, Earth→Moon distance, area of France, e³, 2^10 |
+| HARD | 1.1–1.5 | Speed of light, Earth→Sun distance, 7^5 |
+| VERY_HARD | 1.05–1.3 | Seconds/year, age of universe, 2^20 |
+
+- **Access:** [api/subjects/ESTIMATION/exercises](http://localhost:5173/api/subjects/ESTIMATION/exercises)
 
 ---
 

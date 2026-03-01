@@ -2,6 +2,18 @@ import type { LadderSessionResponseDto, LadderStateDto, LadderNextResponseDto } 
 
 const API_BASE = '/api'
 
+export interface LadderSummaryDto {
+  code: string
+  name: string | null
+  levelCount: number
+}
+
+export async function listLadders(): Promise<LadderSummaryDto[]> {
+  const res = await fetch(`${API_BASE}/ladders`)
+  if (!res.ok) throw new Error(`Failed to load ladders: ${res.status}`)
+  return res.json()
+}
+
 export async function startLadderSession(
   profileId?: string,
   ladderCode: string = 'default'

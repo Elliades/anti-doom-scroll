@@ -136,18 +136,25 @@ export function LadderSessionBlock({ ladderCode = 'default' }: LadderSessionBloc
 
   const backUrl = ladderCode === 'sum' ? '/ladder' : '/'
 
-  const levelProgress =
-    ladderState != null ? `${ladderState.recentScores.length}/${ANSWERS_NEEDED}` : '—'
-  const currentScore =
+  const currentScoreRaw =
     ladderState && ladderState.recentScores.length > 0
-      ? formatPercent(
-          ladderState.recentScores.reduce((a, b) => a + b, 0) / ladderState.recentScores.length
-        )
-      : '—'
-  const overallScore =
+      ? ladderState.recentScores.reduce((a, b) => a + b, 0) / ladderState.recentScores.length
+      : null
+  const currentScore = currentScoreRaw !== null ? formatPercent(currentScoreRaw) : '—'
+  const overallScoreRaw =
     ladderState && ladderState.overallTotal > 0
-      ? formatPercent(ladderState.overallScoreSum / ladderState.overallTotal)
-      : '—'
+      ? ladderState.overallScoreSum / ladderState.overallTotal
+      : null
+  const overallScore = overallScoreRaw !== null ? formatPercent(overallScoreRaw) : '—'
+
+  const scoreColor = (v: number | null) =>
+    v === null ? 'var(--text-dim)' : v >= 0.75 ? 'var(--correct)' : v >= 0.4 ? '#f59e0b' : 'var(--incorrect)'
+
+  const recentDots = Array.from({ length: ANSWERS_NEEDED }, (_, i) => {
+    const s = ladderState?.recentScores[i]
+    if (s === undefined) return 'empty'
+    return s >= 0.5 ? 'correct' : 'incorrect'
+  })
 
   return (
     <div className="screen">
@@ -156,10 +163,35 @@ export function LadderSessionBlock({ ladderCode = 'default' }: LadderSessionBloc
           ← Back
         </Link>
         <span className="badge">{ladderCode === 'sum' ? 'Sum Ladder' : 'Ladder'}</span>
-        <span className="step">
-          Level {ladderState?.currentLevelIndex ?? 0} · {levelProgress} answers · {currentScore} · Overall: {overallScore}
-        </span>
       </header>
+
+      <div className="ladder-metrics" aria-label="Ladder progress">
+        <div className="ladder-metric">
+          <span className="ladder-metric-label">Level</span>
+          <span className="ladder-metric-value ladder-metric-level">
+            {ladderState?.currentLevelIndex ?? 0}
+          </span>
+        </div>
+
+        <div className="ladder-metric ladder-metric--mid">
+          <span className="ladder-metric-label">Current</span>
+          <div className="ladder-score-dots" aria-hidden="true">
+            {recentDots.map((state, i) => (
+              <span key={i} className={`ladder-score-dot ladder-score-dot--${state}`} />
+            ))}
+          </div>
+          <span className="ladder-metric-value" style={{ color: scoreColor(currentScoreRaw) }}>
+            {currentScore}
+          </span>
+        </div>
+
+        <div className="ladder-metric">
+          <span className="ladder-metric-label">Overall</span>
+          <span className="ladder-metric-value" style={{ color: scoreColor(overallScoreRaw) }}>
+            {overallScore}
+          </span>
+        </div>
+      </div>
 
       {levelToast && (
         <div
@@ -184,7 +216,7 @@ export function LadderSessionBlock({ ladderCode = 'default' }: LadderSessionBloc
           <ExercisePlayer
             key={`${exercise.id}-${exerciseKey}`}
             exercise={exercise}
-            onComplete={(result, elapsed) => {
+            onComplete={(result, _elapsed) => {
               void handleComplete(typeof result === 'number' ? { score: result } : result)
             }}
           />

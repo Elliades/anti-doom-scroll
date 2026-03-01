@@ -68,9 +68,125 @@
 - Frontend: no code change; /subjects lists all, /subjects/:code shows exercises, /play/:exerciseId plays one. All data-driven from API.
 
 ## Adding a new exercise type
+
+### Complete checklist (all 4 layers must be updated — nothing is auto-discovered)
+
+**Backend — Domain & mapping (required for any new type):**
+1. `domain/ExerciseType.kt` — add the new enum value.
+2. `domain/Exercise.kt` — add a typed accessor method (e.g. `fun myTypeParams(): MyTypeParams?`) if the type needs structured params beyond the raw map.
+3. `web/dto/ExerciseDto.kt` — add the new params DTO field (nullable).
+4. `web/ExerciseDtoMapper.kt` — populate the new params field when `exercise.type == ExerciseType.MY_TYPE`.
+5. (Optional) `application/MyTypeGenerator.kt` — if params are generated at request time (like n-back sequences or wordle words) rather than stored statically.
+
+**Backend — Data seeding (both layers required):**
+6. `infrastructure/persistence/LocalDataSeeder.kt` — add the new subject (if new) and exercises under it. Use a fresh UUID prefix (e.g. `h0000000-…`) to avoid ID conflicts with existing exercises. Re-use an existing subject ID if the type belongs to an existing subject.
+7. `src/main/resources/db/migration/VXX__my_type.sql` — Flyway migration for production PostgreSQL. Use `ON CONFLICT (id) DO NOTHING` for idempotency. Increment VXX to the next unused version.
+
+**Frontend — Component & registry (both required):**
+8. `frontend/src/components/exercises/MyTypeExercise.tsx` — implement the UI component with `props: { exercise: ExerciseDto; onComplete?: (score?: number) => void }`.
+9. `frontend/src/components/ExercisePlayer.tsx` — register in `EXERCISE_TYPE_COMPONENTS`: `MY_TYPE: MyTypeExercise`.
+10. `frontend/src/utils/exerciseLabels.ts` — add a human-readable label for the type.
+
+**Tests:**
+11. Add the new exercise to `src/test/resources/data.sql` (test seed).
+12. Add or extend integration tests for the new type.
+
+### Why there's no auto-registration
+Exercises are stored in the database (PostgreSQL in prod, H2 in local). There is no classpath scan for exercise definitions. The trade-off: total control over IDs, params, difficulty, and subject assignment with zero magic. The checklist above is the contract.
+
+### Subject codes currently registered
+| Code | Name | Exercise types |
+|------|------|----------------|
+| `default` | Default | FLASHCARD_QA (ADD, SUBTRACT, MULTIPLY, DIVIDE) |
+| `B1` | N-back | N_BACK, N_BACK_GRID, DUAL_NBACK_GRID, DUAL_NBACK_CARD |
+| `MEMORY` | Memory | MEMORY_CARD_PAIRS, SUM_PAIR, IMAGE_PAIR |
+| `WORD` | Word | ANAGRAM |
+| `WORDLE_FR` | Wordle (FR) | WORDLE |
+| `WORDLE_EN` | Wordle (EN) | WORDLE |
+| `ESTIMATION` | Estimation | ESTIMATION |
+
+### Exercise ID prefixes (to avoid collisions)
+| Prefix | Used for |
+|--------|----------|
+| `a0000000-…` | FLASHCARD_QA (math), WORDLE, ESTIMATION exercises |
+| `b0000000-…` | Subjects |
+| `c0000000-…` | N_BACK, N_BACK_GRID, DUAL_NBACK_* exercises |
+| `d0000000-…` | MEMORY_CARD_PAIRS exercises |
+| `e0000000-…` | SUM_PAIR exercises |
+| `f0000000-…` | ANAGRAM exercises |
+| `f1000000-…` | IMAGE_PAIR exercises (local seeder) |
+| `f2000000-…` | Next new exercise type |
+
 - Backend: (1) Add enum value in domain ExerciseType.kt. (2) Add persistence for type-specific params if needed (exercise_params JSONB or domain parser). (3) Ensure ExerciseDto / ExerciseDtoMapper can carry and map those params. No new REST endpoint per type; existing GET /api/exercises/{id} and session/journey APIs return type + params.
 - Frontend: (1) Add a component (e.g. XxxExercise.tsx) with props exercise: ExerciseDto, onComplete?: (score?: number) => void. (2) Register it in the exercise type registry in ExercisePlayer.tsx: EXERCISE_TYPE_COMPONENTS['NEW_TYPE'] = NewTypeExercise. (3) Do not change SessionExerciseBlock or the play page layout.
 - Add exercises to a subject: insert into exercise (id, subject_id, type, difficulty, prompt, expected_answers, time_limit_seconds, exercise_params). Link subject_id to existing subject. No code change.
+
+## Adding a new ladder
+Read `src/docs/score-ladder-architecture.md` and `src/docs/ladder-sum.md` first.
+
+### What a ladder is
+A ladder is a score-driven, level-climbing game mode. The player plays exercises continuously; after every N answers (default 5) their average score decides whether they advance (≥75%), stay (40–75%), or demote (<40%). Level changes are non-blocking — the player keeps playing.
+
+### Backend (YAML-only, no code change for a simple ladder)
+1. Add a new key under `app.ladder.ladders` in `application.yml` (and `application-test.yml`):
+```yaml
+app:
+  ladder:
+    ladders:
+      my-ladder:                          # ← unique code; becomes /ladder/my-ladder
+        name: "My Ladder"
+        thresholds:
+          minScoreToStay: 0.40
+          minScoreToAdvance: 0.75
+          answersNeededToAdvance: 5
+        levels:
+          - levelIndex: 0
+            allowedDifficulties: [ULTRA_EASY]
+            subjectCodes: [default]                          # one or more subjects
+            exerciseParamFilter:                             # optional — any exerciseParams key
+              operation: [ADD]
+          - levelIndex: 1
+            allowedDifficulties: [ULTRA_EASY, EASY]
+            subjectCodes: [default, B1]                     # combo: pool from both subjects
+            allowedTypes: [FLASHCARD_QA]                    # optional — gate on ExerciseType
+```
+- `subjectCodes` — one or more subject codes to pool candidates from; empty = all subjects.
+- `exerciseParamFilter` — generic key/value match against `exercise.exerciseParams` JSON (any-match per key). Use it instead of hardcoded type-specific fields.
+- `allowedTypes` — optional gate on `ExerciseType` enum values.
+- No new Kotlin file needed for a YAML-only ladder.
+
+2. The ladder is instantly available at `GET /api/session/start?mode=ladder&ladderCode=my-ladder` and `GET /ladder/my-ladder` in the frontend.
+
+### Backend (code change — new filtering dimension)
+If a new dimension is needed that cannot be expressed as `exerciseParamFilter` (rare):
+- Extend `LadderLevel` domain model with a new optional field.
+- Add corresponding field to `LadderConfigProperties.LevelDef`.
+- Add the filter logic to `LadderExercisePicker.applyFilters()` only — no other class needs to change.
+
+### Key classes
+| Class | Role |
+|-------|------|
+| `domain/LadderLevel.kt` | Immutable level definition (subjectCodes, difficulties, filters) |
+| `domain/LadderConfig.kt` | Aggregates levels + thresholds |
+| `domain/LadderState.kt` | Client-carried mutable state (currentLevel, recentScores, overallScore) |
+| `application/LadderExercisePicker.kt` | Single component that translates a level → exercise |
+| `application/StartLadderSessionUseCase.kt` | Starts the session, returns level 0 exercise |
+| `application/GetNextLadderExerciseUseCase.kt` | Processes score, applies advancement, returns next exercise |
+| `config/LadderConfigProperties.kt` | Binds YAML → domain via `LadderPort` |
+| `web/LadderController.kt` | `GET /api/ladders` — discovery endpoint |
+
+### Frontend
+- `/ladder` — lists all ladders (fetched from `GET /api/ladders`). Rendered by `LadderListPage`.
+- `/ladder/:code` — starts a session for that ladder. `LadderPage` reads `code` from `useParams()`.
+- `LadderSessionBlock` is generic; it only depends on `ladderCode`.
+- No frontend code change needed when adding a ladder in YAML — it appears automatically in the list.
+
+### Tests
+- Add the new ladder config to `application-test.yml` under `app.ladder.ladders`.
+- Add integration test cases in `LadderSessionApiIntegrationTest.kt`:
+  - `start<MyLadder>Session_returnsExpectedExercise()` — verifies level 0 filter.
+  - `listLadders_includesMyLadder()` — verifies discovery endpoint.
+  - Optionally: `<myLadder>Next_advancesLevel()` — verifies advancement after 5 scores ≥0.75.
 
 ## Output format expectations (for Cursor)
 - When asked to implement: generate complete files.

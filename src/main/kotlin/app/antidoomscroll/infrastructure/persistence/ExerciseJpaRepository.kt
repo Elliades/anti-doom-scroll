@@ -41,4 +41,17 @@ interface ExerciseJpaRepository : JpaRepository<ExerciseEntity, UUID> {
     fun findAllNBack(): List<ExerciseEntity>
 
     fun findBySubjectIdOrderByCreatedAtAsc(subjectId: UUID, pageable: Pageable): List<ExerciseEntity>
+
+    /** Multi-subject difficulty query for combo ladder levels. */
+    fun findBySubjectIdInAndDifficultyInOrderByCreatedAtAsc(
+        subjectIds: List<UUID>,
+        difficulties: List<String>,
+        pageable: Pageable
+    ): List<ExerciseEntity>
+
+    /** All exercises matching any of the given difficulties (no subject filter). */
+    fun findByDifficultyInOrderByCreatedAtAsc(
+        difficulties: List<String>,
+        pageable: Pageable
+    ): List<ExerciseEntity>
 }

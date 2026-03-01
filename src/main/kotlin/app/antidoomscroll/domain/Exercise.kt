@@ -193,6 +193,40 @@ data class Exercise(
         }
     }.getOrNull()
 
+    fun wordleParams(): WordleParams? = runCatching {
+        when (type) {
+            ExerciseType.WORDLE -> {
+                val p = exerciseParams ?: return@runCatching null
+                val wordLength = (p["wordLength"] as? Number)?.toInt() ?: return@runCatching null
+                val language = (p["language"] as? String)?.lowercase() ?: "fr"
+                val maxAttempts = (p["maxAttempts"] as? Number)?.toInt() ?: 6
+                WordleParams(wordLength = wordLength, language = language, maxAttempts = maxAttempts)
+            }
+            else -> null
+        }
+    }.getOrNull()
+
+    fun estimationParams(): EstimationParams? = runCatching {
+        when (type) {
+            ExerciseType.ESTIMATION -> {
+                val p = exerciseParams ?: return@runCatching null
+                val correctAnswer = (p["correctAnswer"] as? Number)?.toDouble() ?: return@runCatching null
+                val unit = (p["unit"] as? String) ?: return@runCatching null
+                val toleranceFactor = (p["toleranceFactor"] as? Number)?.toDouble() ?: return@runCatching null
+                val category = (p["category"] as? String) ?: return@runCatching null
+                val hint = p["hint"] as? String
+                EstimationParams(
+                    correctAnswer = correctAnswer,
+                    unit = unit,
+                    toleranceFactor = toleranceFactor,
+                    category = category,
+                    hint = hint
+                )
+            }
+            else -> null
+        }
+    }.getOrNull()
+
     fun dualNBackCardParams(): DualNBackCardParams? = runCatching {
         when (type) {
             ExerciseType.DUAL_NBACK_CARD -> {

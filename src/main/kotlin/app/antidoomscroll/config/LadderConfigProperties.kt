@@ -1,7 +1,7 @@
 package app.antidoomscroll.config
 
 import app.antidoomscroll.domain.Difficulty
-import app.antidoomscroll.domain.MathOperation
+import app.antidoomscroll.domain.ExerciseType
 import app.antidoomscroll.domain.LadderConfig
 import app.antidoomscroll.domain.LadderLevel
 import app.antidoomscroll.domain.LadderThresholds
@@ -28,9 +28,16 @@ data class LadderConfigProperties(
         data class LevelDef(
             val levelIndex: Int,
             val allowedDifficulties: List<String> = emptyList(),
-            val subjectCode: String? = null,
+            /** One or more subject codes to pool candidates from. Empty = all subjects. */
+            val subjectCodes: List<String> = emptyList(),
             val exerciseIds: List<String>? = null,
-            val mathOperations: List<String>? = null
+            /**
+             * Generic exercise param filter: key → allowed values (any-match).
+             * Example: {operation: [ADD, SUBTRACT]}
+             */
+            val exerciseParamFilter: Map<String, List<String>>? = null,
+            /** Optional gate on ExerciseType (e.g. [N_BACK]). */
+            val allowedTypes: List<String>? = null
         )
     }
 
@@ -40,9 +47,14 @@ data class LadderConfigProperties(
             LadderLevel(
                 levelIndex = l.levelIndex,
                 allowedDifficulties = l.allowedDifficulties.map { Difficulty.valueOf(it) },
-                subjectCode = l.subjectCode ?: "default",
-                exerciseIds = l.exerciseIds?.mapNotNull { runCatching { UUID.fromString(it) }.getOrNull() }?.takeIf { it.isNotEmpty() },
-                mathOperations = l.mathOperations?.map { MathOperation.valueOf(it) }?.takeIf { it.isNotEmpty() }
+                subjectCodes = l.subjectCodes,
+                exerciseIds = l.exerciseIds
+                    ?.mapNotNull { runCatching { UUID.fromString(it) }.getOrNull() }
+                    ?.takeIf { it.isNotEmpty() },
+                exerciseParamFilter = l.exerciseParamFilter?.takeIf { it.isNotEmpty() },
+                allowedTypes = l.allowedTypes
+                    ?.map { ExerciseType.valueOf(it) }
+                    ?.takeIf { it.isNotEmpty() }
             )
         }
         return LadderConfig(

@@ -22,6 +22,10 @@ class LadderSessionApiIntegrationTest {
     @Autowired
     private lateinit var mvc: MockMvc
 
+    // ------------------------------------------------------------------
+    // Basic ladder session
+    // ------------------------------------------------------------------
+
     @Test
     fun startLadderSession_returnsExerciseAndLadderState() {
         val response = mvc.perform(get("/api/session/start").param("mode", "ladder"))
@@ -108,6 +112,34 @@ class LadderSessionApiIntegrationTest {
     }
 
     @Test
+    fun ladderNext_between40And75_staysSameLevel() {
+        val nextBody = """
+            {
+                "ladderState": {
+                    "ladderCode": "default",
+                    "currentLevelIndex": 0,
+                    "recentScores": [0.5, 0.6, 0.55, 0.5, 0.6],
+                    "overallScoreSum": 2.75,
+                    "overallTotal": 5
+                },
+                "lastScore": 0.6
+            }
+        """.trimIndent()
+
+        mvc.perform(
+            post("/api/session/ladder/next")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(nextBody)
+        )
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.ladderState.currentLevelIndex").value(0))
+    }
+
+    // ------------------------------------------------------------------
+    // exerciseParamFilter: sum ladder (formerly mathOperations)
+    // ------------------------------------------------------------------
+
+    @Test
     fun startSumLadderSession_returnsAddExercise() {
         mvc.perform(
             get("/api/session/start")
@@ -154,27 +186,74 @@ class LadderSessionApiIntegrationTest {
         assert(mathOp == "ADD" || mathOp == "SUBTRACT") { "Expected ADD or SUBTRACT, got $mathOp" }
     }
 
-    @Test
-    fun ladderNext_between40And75_staysSameLevel() {
-        val nextBody = """
-            {
-                "ladderState": {
-                    "ladderCode": "default",
-                    "currentLevelIndex": 0,
-                    "recentScores": [0.5, 0.6, 0.55, 0.5, 0.6],
-                    "overallScoreSum": 2.75,
-                    "overallTotal": 5
-                },
-                "lastScore": 0.6
-            }
-        """.trimIndent()
+    // ------------------------------------------------------------------
+    // Multi-subject combo level
+    // ------------------------------------------------------------------
 
+    @Test
+    fun startComboLadderSession_returnsExerciseFromEitherSubject() {
         mvc.perform(
-            post("/api/session/ladder/next")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(nextBody)
+            get("/api/session/start")
+                .param("mode", "ladder")
+                .param("ladderCode", "combo")
         )
             .andExpect(status().isOk())
+            .andExpect(jsonPath("$.ladderState.ladderCode").value("combo"))
             .andExpect(jsonPath("$.ladderState.currentLevelIndex").value(0))
+            .andExpect(jsonPath("$.exercise").exists())
+            .andExpect(jsonPath("$.exercise.id").exists())
+    }
+
+    // ------------------------------------------------------------------
+    // allowedTypes filter
+    // ------------------------------------------------------------------
+
+    @Test
+    fun startNBackLadderSession_returnsNBackTypeOnly() {
+        mvc.perform(
+            get("/api/session/start")
+                .param("mode", "ladder")
+                .param("ladderCode", "nback")
+        )
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.ladderState.ladderCode").value("nback"))
+            .andExpect(jsonPath("$.exercise").exists())
+            .andExpect(jsonPath("$.exercise.type").value("N_BACK"))
+    }
+
+    // ------------------------------------------------------------------
+    // GET /api/ladders discovery
+    // ------------------------------------------------------------------
+
+    @Test
+    fun listLadders_returnsAllConfiguredLadders() {
+        mvc.perform(get("/api/ladders"))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$").isArray())
+            .andExpect(jsonPath("$[?(@.code == 'default')]").exists())
+            .andExpect(jsonPath("$[?(@.code == 'sum')]").exists())
+            .andExpect(jsonPath("$[?(@.code == 'combo')]").exists())
+            .andExpect(jsonPath("$[?(@.code == 'nback')]").exists())
+            .andExpect(jsonPath("$[?(@.code == 'nback')].levelCount").value(30))
+    }
+
+    @Test
+    fun listLadders_includesLevelCountAndName() {
+        val result = mvc.perform(get("/api/ladders"))
+            .andExpect(status().isOk())
+            .andReturn()
+
+        val tree = com.fasterxml.jackson.module.kotlin.jacksonObjectMapper()
+            .readTree(result.response.contentAsString)
+
+        val sumLadder = tree.find { it.get("code")?.asText() == "sum" }
+        assert(sumLadder != null) { "sum ladder not found in response" }
+        assert(sumLadder!!.get("name")?.asText() == "Math Sum Ladder") { "sum ladder name mismatch" }
+        assert(sumLadder.get("levelCount")?.asInt() == 3) { "sum ladder should have 3 levels in test config" }
+
+        val nbackLadder = tree.find { it.get("code")?.asText() == "nback" }
+        assert(nbackLadder != null) { "nback ladder not found in response" }
+        assert(nbackLadder!!.get("name")?.asText() == "N-Back Ladder") { "nback ladder name mismatch" }
+        assert(nbackLadder.get("levelCount")?.asInt() == 30) { "nback ladder should have 30 levels" }
     }
 }

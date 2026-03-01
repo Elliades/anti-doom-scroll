@@ -1,6 +1,5 @@
 package app.antidoomscroll.application
 
-import app.antidoomscroll.application.port.ExercisePort
 import app.antidoomscroll.application.port.LadderPort
 import app.antidoomscroll.application.port.SubjectPort
 import app.antidoomscroll.domain.Exercise
@@ -9,13 +8,12 @@ import org.springframework.stereotype.Service
 
 /**
  * Process a completed exercise and return the next one with updated ladder state.
- * Applies advancement logic: 75%+ advance, &lt;40% demote, else stay.
+ * Applies advancement logic: 75%+ advance, <40% demote, else stay.
  */
 @Service
 class GetNextLadderExerciseUseCase(
     private val ladderPort: LadderPort,
-    private val startLadderSessionUseCase: StartLadderSessionUseCase,
-    private val exercisePort: ExercisePort,
+    private val ladderExercisePicker: LadderExercisePicker,
     private val subjectPort: SubjectPort
 ) {
 
@@ -49,7 +47,7 @@ class GetNextLadderExerciseUseCase(
         }
 
         val level = config.levelAt(newState.currentLevelIndex) ?: return null
-        val exercise = startLadderSessionUseCase.pickExerciseForLevel(config, level)
+        val exercise = ladderExercisePicker.pick(config, level)
 
         val subjectCode = exercise?.let { subjectPort.findById(it.subjectId)?.code }
 

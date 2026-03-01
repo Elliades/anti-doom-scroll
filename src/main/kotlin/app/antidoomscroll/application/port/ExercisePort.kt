@@ -38,6 +38,13 @@ interface ExercisePort {
     fun findRandomBySubjectAndDifficulties(subjectId: UUID, difficulties: List<Difficulty>, limit: Int = 1): List<Exercise>
 
     /**
+     * Random exercises from multiple subjects matching any of the given difficulties.
+     * Used by ladder levels that combine exercises from different subjects.
+     * If [subjectIds] is empty, returns exercises from ALL subjects (no subject filter).
+     */
+    fun findRandomBySubjectsAndDifficulties(subjectIds: List<UUID>, difficulties: List<Difficulty>, limit: Int = 20): List<Exercise>
+
+    /**
      * Random ultra-easy or easy exercises from all subjects (for openapp session).
      * @param limit max number to return (e.g. 3).
      */
