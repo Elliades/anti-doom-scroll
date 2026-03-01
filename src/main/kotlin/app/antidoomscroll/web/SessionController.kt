@@ -1,69 +1,116 @@
 package app.antidoomscroll.web
 
+import app.antidoomscroll.application.GetNextLadderExerciseUseCase
+import app.antidoomscroll.application.StartLadderSessionUseCase
 import app.antidoomscroll.application.StartSessionUseCase
-import app.antidoomscroll.domain.Exercise
 import app.antidoomscroll.domain.ExerciseType
-import app.antidoomscroll.domain.SessionStep
-import app.antidoomscroll.web.dto.ExerciseDto
+import app.antidoomscroll.domain.LadderState
+import app.antidoomscroll.web.dto.LadderNextRequestDto
+import app.antidoomscroll.web.dto.LadderNextResponseDto
+import app.antidoomscroll.web.dto.LadderSessionResponseDto
+import app.antidoomscroll.web.dto.LadderStateDto
+import app.antidoomscroll.web.dto.LevelChangeDto
 import app.antidoomscroll.web.dto.SessionResponseDto
 import app.antidoomscroll.web.dto.SessionStepDto
 import org.springframework.http.MediaType
+import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 /**
- * REST controller: start session (reopen flow). No business logic here.
+ * REST controller: start session (reopen flow) and ladder mode.
  */
 @RestController
 @RequestMapping("/api/session")
 class SessionController(
-    private val startSessionUseCase: StartSessionUseCase
+    private val startSessionUseCase: StartSessionUseCase,
+    private val startLadderSessionUseCase: StartLadderSessionUseCase,
+    private val getNextLadderExerciseUseCase: GetNextLadderExerciseUseCase,
+    private val exerciseDtoMapper: ExerciseDtoMapper
 ) {
 
     @GetMapping("/start", produces = [MediaType.APPLICATION_JSON_VALUE])
     fun startSession(
         @RequestParam(required = false) profileId: String?,
         @RequestParam(required = false) preferType: String?,
-        @RequestParam(required = false) mode: String?
-    ): SessionResponseDto {
-        val result = if (mode?.lowercase() == "openapp") {
-            startSessionUseCase.startOpenAppSession(profileId)
-        } else {
-            val type = preferType?.takeIf { it.isNotBlank() }?.let { runCatching { ExerciseType.valueOf(it) }.getOrNull() }
-            startSessionUseCase.startSession(profileId, type)
+        @RequestParam(required = false) mode: String?,
+        @RequestParam(required = false) ladderCode: String?
+    ): ResponseEntity<*> {
+        return when (mode?.lowercase()) {
+            "ladder" -> {
+                val code = ladderCode ?: "default"
+                val result = startLadderSessionUseCase.start(profileId, code)
+                ResponseEntity.ok(toLadderSessionResponseDto(result))
+            }
+            "openapp" -> {
+                val result = startSessionUseCase.startOpenAppSession(profileId)
+                ResponseEntity.ok(toSessionResponseDto(result))
+            }
+            else -> {
+                val type = preferType?.takeIf { it.isNotBlank() }?.let { runCatching { ExerciseType.valueOf(it) }.getOrNull() }
+                val result = startSessionUseCase.startSession(profileId, type)
+                ResponseEntity.ok(toSessionResponseDto(result))
+            }
         }
-        return SessionResponseDto(
+    }
+
+    @PostMapping("/ladder/next", produces = [MediaType.APPLICATION_JSON_VALUE], consumes = [MediaType.APPLICATION_JSON_VALUE])
+    fun ladderNext(@RequestBody body: LadderNextRequestDto): ResponseEntity<LadderNextResponseDto> {
+        val state = toLadderState(body.ladderState)
+        val result = getNextLadderExerciseUseCase.getNext(state, body.lastScore)
+            ?: return ResponseEntity.notFound().build()
+        val exerciseDto = result.exercise?.let { exerciseDtoMapper.toExerciseDto(it, result.subjectCode) }
+        return ResponseEntity.ok(
+            LadderNextResponseDto(
+                exercise = exerciseDto,
+                ladderState = toLadderStateDto(result.ladderState),
+                levelChanged = result.levelChanged?.let { LevelChangeDto(it.from, it.to, it.direction) }
+            )
+        )
+    }
+
+    private fun toSessionResponseDto(result: StartSessionUseCase.SessionResult): SessionResponseDto =
+        SessionResponseDto(
             profileId = result.profileId,
             steps = result.steps.map { stepWithCode ->
                 SessionStepDto(
                     stepIndex = stepWithCode.step.stepIndex,
                     difficulty = stepWithCode.step.difficulty.name,
-                    exercise = toExerciseDto(stepWithCode.step.exercise, stepWithCode.subjectCode)
+                    exercise = exerciseDtoMapper.toExerciseDto(stepWithCode.step.exercise, stepWithCode.subjectCode)
                 )
             },
             sessionDefaultSeconds = result.sessionDefaultSeconds,
             lowBatteryModeSeconds = result.lowBatteryModeSeconds
         )
-    }
 
-    private fun toExerciseDto(ex: Exercise, subjectCode: String?): ExerciseDto =
-        ExerciseDto(
-            id = ex.id,
-            subjectId = ex.subjectId,
-            subjectCode = subjectCode,
-            type = ex.type.name,
-            difficulty = ex.difficulty.name,
-            prompt = ex.prompt,
-            expectedAnswers = ex.expectedAnswers,
-            timeLimitSeconds = ex.timeLimitSeconds,
-            nBackParams = ex.nBackParams()?.let { p ->
-                app.antidoomscroll.web.dto.NBackParamsDto(
-                    n = p.n,
-                    sequence = p.sequence,
-                    matchIndices = p.matchIndices
-                )
-            }
+    private fun toLadderSessionResponseDto(result: StartLadderSessionUseCase.LadderSessionResult): LadderSessionResponseDto =
+        LadderSessionResponseDto(
+            profileId = result.profileId,
+            exercise = exerciseDtoMapper.toExerciseDto(result.exercise, result.subjectCode),
+            ladderState = toLadderStateDto(result.ladderState),
+            sessionDefaultSeconds = result.sessionDefaultSeconds,
+            lowBatteryModeSeconds = result.lowBatteryModeSeconds
+        )
+
+    private fun toLadderStateDto(s: LadderState): LadderStateDto =
+        LadderStateDto(
+            ladderCode = s.ladderCode,
+            currentLevelIndex = s.currentLevelIndex,
+            recentScores = s.recentScores,
+            overallScoreSum = s.overallScoreSum,
+            overallTotal = s.overallTotal
+        )
+
+    private fun toLadderState(d: LadderStateDto): LadderState =
+        LadderState(
+            ladderCode = d.ladderCode,
+            currentLevelIndex = d.currentLevelIndex,
+            recentScores = d.recentScores,
+            overallScoreSum = d.overallScoreSum,
+            overallTotal = d.overallTotal
         )
 }

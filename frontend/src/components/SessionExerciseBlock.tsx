@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react'
 import type { SessionResponseDto, SessionStepDto } from '../types/api'
-import { NBackExercise } from './NBackExercise'
+import type { ExerciseResult } from '../types/exercise'
+import { ExercisePlayer } from './ExercisePlayer'
+import { ScoreAnimation } from './ScoreAnimation'
 
 function formatElapsed(seconds: number): string {
   const m = Math.floor(seconds / 60)
@@ -18,15 +20,14 @@ interface SessionExerciseBlockProps {
 
 export function SessionExerciseBlock({
   session,
-  profileId,
+  profileId: _profileId,
   elapsedSeconds,
   onDone,
   stepLabel,
 }: SessionExerciseBlockProps) {
   const [stepIndex, setStepIndex] = useState(0)
-  const [answer, setAnswer] = useState('')
-  const [revealed, setRevealed] = useState(false)
-  const [nbackDone, setNbackDone] = useState(false)
+  const [stepDone, setStepDone] = useState(false)
+  const [lastResult, setLastResult] = useState<{ result: ExerciseResult; elapsedMs: number } | null>(null)
 
   const steps = session.steps
   if (steps.length === 0) {
@@ -42,33 +43,19 @@ export function SessionExerciseBlock({
 
   const step = steps[stepIndex] as SessionStepDto
   const exercise = step.exercise
-  const isNBack = exercise.type === 'N_BACK'
-  const isCorrect = !isNBack && exercise.expectedAnswers.some(
-    (a) => a.trim().toLowerCase() === answer.trim().toLowerCase()
-  )
-  const canProceed = isNBack ? nbackDone : revealed
 
   const goNext = () => {
     setStepIndex((i) => i + 1)
-    setAnswer('')
-    setRevealed(false)
-    setNbackDone(false)
-  }
-
-  const handleCheck = () => {
-    if (revealed) return
-    setRevealed(true)
-    if (!isNBack && isCorrect && stepIndex < steps.length - 1) {
-      setTimeout(goNext, 400)
-    }
+    setStepDone(false)
+    setLastResult(null)
   }
 
   useEffect(() => {
-    if (isNBack && nbackDone && stepIndex < steps.length - 1) {
+    if (stepDone && stepIndex < steps.length - 1) {
       const t = setTimeout(goNext, 600)
       return () => clearTimeout(t)
     }
-  }, [isNBack, nbackDone, stepIndex, steps.length])
+  }, [stepDone, stepIndex, steps.length])
 
   const isLastStep = stepIndex >= steps.length - 1
   const handlePrimaryAction = () => {
@@ -84,37 +71,34 @@ export function SessionExerciseBlock({
         <span className="timer" aria-label="Elapsed time">{formatElapsed(elapsedSeconds)}</span>
       </header>
       <main className="main">
-        {isNBack ? (
-          <NBackExercise exercise={exercise} onComplete={() => setNbackDone(true)} />
+        {stepDone && lastResult ? (
+          <>
+            <ScoreAnimation
+              score={lastResult.result.score}
+              elapsedMs={lastResult.elapsedMs}
+              subscores={lastResult.result.subscores}
+            />
+            <div className="session-info">
+              <small>Session: {session.sessionDefaultSeconds}s default · Low battery: {session.lowBatteryModeSeconds}s</small>
+            </div>
+          </>
         ) : (
           <>
-            <p className="prompt">{exercise.prompt}</p>
-            <div className="input-row">
-              <input
-                type="text"
-                value={answer}
-                onChange={(e) => setAnswer(e.target.value)}
-                onKeyDown={(e) => e.key === 'Enter' && handleCheck()}
-                placeholder="Your answer"
-                autoFocus
-                disabled={revealed}
-              />
-              {!revealed ? (
-                <button onClick={handleCheck}>Check</button>
-              ) : (
-                <span className={isCorrect ? 'correct' : 'incorrect'}>
-                  {isCorrect ? '✓ Correct' : `✗ Expected: ${exercise.expectedAnswers[0] ?? '—'}`}
-                </span>
-              )}
+            <ExercisePlayer
+              exercise={exercise}
+              onComplete={(result, elapsed) => {
+                setLastResult({ result, elapsedMs: elapsed ?? 0 })
+                setStepDone(true)
+              }}
+            />
+            <div className="session-info">
+              <small>Session: {session.sessionDefaultSeconds}s default · Low battery: {session.lowBatteryModeSeconds}s</small>
             </div>
           </>
         )}
-        <div className="session-info">
-          <small>Session: {session.sessionDefaultSeconds}s default · Low battery: {session.lowBatteryModeSeconds}s</small>
-        </div>
       </main>
       <footer className="footer">
-        <button onClick={handlePrimaryAction} disabled={!canProceed}>
+        <button onClick={handlePrimaryAction} disabled={!stepDone}>
           {isLastStep ? 'Continue' : 'Next'}
         </button>
       </footer>

@@ -16,6 +16,13 @@ class CacheConfig {
     @Bean
     fun cacheManager(): ConcurrentMapCacheManager =
         ConcurrentMapCacheManager().apply {
-            setCacheNames(listOf("ultraEasyExercise", "ultraEasyExerciseByType"))
+            setCacheNames(listOf(
+                "ultraEasyExercise",
+                "ultraEasyExerciseByType",
+                "nBackByLevel",
+                "sumPairRounds",
+                "memoryCardDeck",
+                "imagePairDeck"
+            ))
         }
 }

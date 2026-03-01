@@ -6,6 +6,9 @@ import java.util.UUID
  * Immutable DTO for exercise in API responses.
  * Exercises belong to a subject (subjectId / subjectCode).
  * For N_BACK type, nBackParams contains sequence and matchIndices.
+ * For MEMORY_CARD_PAIRS type, memoryCardParams contains pairCount and symbols.
+ * For SUM_PAIR type, sumPairParams and sumPairGroups (generated at response time).
+ * For FLASHCARD_QA math: mathOperation is ADD, SUBTRACT, MULTIPLY, or DIVIDE (for UI labels).
  */
 data class ExerciseDto(
     val id: UUID,
@@ -16,7 +19,45 @@ data class ExerciseDto(
     val prompt: String,
     val expectedAnswers: List<String>,
     val timeLimitSeconds: Int,
-    val nBackParams: NBackParamsDto? = null
+    /** When type is FLASHCARD_QA and exercise has math params: ADD, SUBTRACT, MULTIPLY, DIVIDE. */
+    val mathOperation: String? = null,
+    val nBackParams: NBackParamsDto? = null,
+    val nBackGridParams: NBackGridParamsDto? = null,
+    val dualNBackGridParams: DualNBackGridParamsDto? = null,
+    val dualNBackCardParams: DualNBackCardParamsDto? = null,
+    val memoryCardParams: MemoryCardParamsDto? = null,
+    val sumPairParams: SumPairParamsDto? = null,
+    val sumPairRounds: List<SumPairRoundDto>? = null,
+    /** Groups: static + color + cards (for displaying colored statics). */
+    val sumPairGroups: List<SumPairGroupDto>? = null,
+    /** Flat shuffled deck: all cards in display order, stable per session. */
+    val sumPairDeck: List<SumPairCardDto>? = null,
+    /** IMAGE_PAIR: config and generated deck (background + image; match same background + same image). */
+    val imagePairParams: ImagePairParamsDto? = null,
+    val imagePairDeck: List<ImagePairCardDto>? = null,
+    /** ANAGRAM: scrambled letters + answer, generated at response time. */
+    val anagramParams: AnagramParamsDto? = null
+)
+
+data class ImagePairParamsDto(
+    val pairCount: Int,
+    val maxPairsPerBackground: Int,
+    val colorCount: Int
+)
+
+data class ImagePairCardDto(
+    val backgroundId: Int,
+    val imageId: String,
+    val backgroundColorHex: String?
+)
+
+data class AnagramParamsDto(
+    val scrambledLetters: List<String>,
+    val answer: String,
+    /** Hint every N seconds of inactivity; default 10. */
+    val hintIntervalSeconds: Int = 10,
+    /** When true, filled slots show green (correct) or red (wrong) — another kind of hint. */
+    val letterColorHint: Boolean = true
 )
 
 data class NBackParamsDto(
@@ -24,3 +65,49 @@ data class NBackParamsDto(
     val sequence: List<String>,
     val matchIndices: List<Int>
 )
+
+data class NBackGridParamsDto(
+    val n: Int,
+    val sequence: List<Int>,
+    val matchIndices: List<Int>,
+    val gridSize: Int = 3
+)
+
+data class GridStimulusDto(val position: Int, val color: String)
+
+data class DualNBackGridParamsDto(
+    val n: Int,
+    val sequence: List<GridStimulusDto>,
+    val matchPositionIndices: List<Int>,
+    val matchColorIndices: List<Int>,
+    val colors: List<String>,
+    val gridSize: Int = 3
+)
+
+data class DualNBackCardParamsDto(
+    val n: Int,
+    val sequence: List<String>,
+    val matchColorIndices: List<Int>,
+    val matchNumberIndices: List<Int>
+)
+
+data class MemoryCardParamsDto(
+    val pairCount: Int,
+    val symbols: List<String>,
+    /** Pre-shuffled deck: 2× each symbol, stable per session (cached by exercise ID). */
+    val shuffledDeck: List<String>? = null
+)
+
+data class SumPairParamsDto(
+    val staticNumbers: List<Int>,
+    val pairsPerRound: Int,
+    val minValue: Int = 1,
+    val maxValue: Int = 99
+)
+
+data class SumPairRoundDto(val static: Int, val cards: List<Int>)
+
+data class SumPairGroupDto(val static: Int, val color: String, val cards: List<Int>)
+
+/** Single card with group info for flat deck display. */
+data class SumPairCardDto(val value: Int, val static: Int, val color: String)

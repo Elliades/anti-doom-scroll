@@ -1,8 +1,14 @@
+/// <reference types="vitest" />
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import { VitePWA } from 'vite-plugin-pwa'
 
 export default defineConfig({
+  test: {
+    environment: 'happy-dom',
+    setupFiles: ['./src/test/setup.ts'],
+    globals: true
+  },
   plugins: [
     react(),
     VitePWA({
@@ -36,10 +42,10 @@ export default defineConfig({
     })
   ],
   server: {
-    port: 5173,
+    port: 5174,  // Backend runs on 5173; frontend dev on 5174
     proxy: {
       '/api': {
-        target: 'http://localhost:8080',
+        target: 'http://localhost:5173',
         changeOrigin: true
       }
     }

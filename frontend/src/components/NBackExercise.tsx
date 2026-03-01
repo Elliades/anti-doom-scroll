@@ -1,42 +1,54 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useMemo } from 'react'
 import type { ExerciseDto } from '../types/api'
+import type { ExerciseResult } from '../types/exercise'
+import { isCardCode } from './NBackCardDisplay'
+import { NBackCardCarousel } from './NBackCardCarousel'
 
 interface NBackExerciseProps {
   exercise: ExerciseDto
-  onComplete?: (score: number) => void
+  onComplete?: (result: ExerciseResult | number) => void
 }
 
 /**
- * 1-Back (and N-Back) working memory exercise.
- * Displays sequence one item at a time; user taps "Match" when current == item N steps back.
- * Ultra-easy: ~2.5s per letter, 1-back.
+ * N-Back working memory exercise.
+ * Displays sequence one item at a time (cards or letters); user taps "Match" when current == item N steps back.
+ * Uses playing cards when sequence contains card codes (e.g. AC, 2D, QH).
  */
 export function NBackExercise({ exercise, onComplete }: NBackExerciseProps) {
-  const params = exercise.nBackParams
-  if (!params) {
+  const params = exercise.nBackParams ?? exercise.nbackParams
+  if (!params || !params.sequence?.length) {
     return <p className="error">Invalid N-Back exercise: missing sequence.</p>
   }
 
+  const n = params.n ?? 1
   const [phase, setPhase] = useState<'intro' | 'playing' | 'done'>('intro')
   const [index, setIndex] = useState(0)
   const [userMatches, setUserMatches] = useState<Set<number>>(new Set())
-  const [showMatchFeedback, setShowMatchFeedback] = useState<boolean | null>(null)
+  const [showMatchFeedback, setShowMatchFeedback] = useState<'correct' | 'wrong' | null>(null)
+  const [showCanMatchNotice, setShowCanMatchNotice] = useState(false)
 
   const intervalMs = 2500 // ultra-easy: slow speed
-  const matchIndicesSet = new Set(params.matchIndices)
+  const matchIndicesSet = new Set(params.matchIndices ?? [])
+  const matchDisabled = index < n
+
+  const useCards = useMemo(
+    () => params.sequence.length > 0 && isCardCode(params.sequence[0]),
+    [params.sequence]
+  )
 
   const handleMatchTap = useCallback(() => {
-    if (phase !== 'playing') return
+    if (phase !== 'playing' || matchDisabled) return
+    const isCorrect = matchIndicesSet.has(index)
     setUserMatches((prev) => new Set(prev).add(index))
-    setShowMatchFeedback(true)
-    setTimeout(() => setShowMatchFeedback(null), 300)
-  }, [phase, index])
+    setShowMatchFeedback(isCorrect ? 'correct' : 'wrong')
+    setTimeout(() => setShowMatchFeedback(null), 800)
+  }, [phase, index, matchDisabled, matchIndicesSet])
 
   useEffect(() => {
-    if (phase !== 'playing' || index >= params.sequence.length) return
+    if (phase !== 'playing' || useCards || index >= params.sequence.length) return
     const t = setTimeout(() => setIndex((i) => i + 1), intervalMs)
     return () => clearTimeout(t)
-  }, [phase, index, params.sequence.length, intervalMs])
+  }, [phase, index, params.sequence.length, intervalMs, useCards])
 
   useEffect(() => {
     if (phase === 'playing' && index >= params.sequence.length) {
@@ -44,22 +56,54 @@ export function NBackExercise({ exercise, onComplete }: NBackExerciseProps) {
     }
   }, [phase, index, params.sequence.length])
 
+  // When first card with a match target appears (index === n), show "Match is now active!"
   useEffect(() => {
-    if (phase === 'done') onComplete?.(1)
-  }, [phase, onComplete])
+    if (phase !== 'playing') return
+    if (index > n) {
+      setShowCanMatchNotice(false)
+      return
+    }
+    if (index !== n) return
+    setShowCanMatchNotice(true)
+    const t = setTimeout(() => setShowCanMatchNotice(false), 2500)
+    return () => clearTimeout(t)
+  }, [phase, index, n])
 
   const score = computeScore(userMatches, matchIndicesSet)
+  const hits = intersectionSize(userMatches, matchIndicesSet)
+  const misses = matchIndicesSet.size - hits
+  const falseAlarms = userMatches.size - hits
+  const totalTargets = matchIndicesSet.size
+  const accuracy = totalTargets === 0 ? 100 : Math.round((hits / totalTargets) * 100)
+
+  useEffect(() => {
+    if (phase === 'done') {
+      const subscores: { label: string; value: string | number }[] = [
+        { label: 'Hits', value: `${hits}/${totalTargets}` },
+      ]
+      if (misses > 0) subscores.push({ label: 'Misses', value: misses })
+      if (falseAlarms > 0) subscores.push({ label: 'False alarms', value: falseAlarms })
+      subscores.push({ label: 'Accuracy', value: `${accuracy}%` })
+      onComplete?.({ score, subscores })
+    }
+  }, [phase, onComplete, score, hits, misses, falseAlarms, totalTargets, accuracy])
+
 
   const handleStart = () => setPhase('playing')
+  const handleComplete = useCallback(() => setPhase('done'), [])
   const resultMessage = getResultMessage(score)
 
   if (phase === 'intro') {
     return (
       <div className="nback-intro">
+        <div className="nback-n-badge" aria-label={`${n}-Back`}>
+          {n}-Back
+        </div>
         <p className="prompt">{exercise.prompt}</p>
         <p className="nback-instruction">
-          Letters will appear one by one. Tap <strong>Match</strong> when the current letter
-          matches the previous one ({params.n}-back).
+          {useCards
+            ? 'Cards will appear one by one. Tap Match when the current card matches the one from ' + params.n + ' step(s) back.'
+            : 'Items will appear one by one. Tap Match when the current item matches the one from ' + params.n + ' step(s) back.'}
         </p>
         <button onClick={handleStart} className="nback-start-btn">
           Start
@@ -69,19 +113,53 @@ export function NBackExercise({ exercise, onComplete }: NBackExerciseProps) {
   }
 
   if (phase === 'playing') {
-    const currentLetter = params.sequence[index]
+    const currentItem = params.sequence[index]
+    const exampleM = n + 1
     return (
       <div className="nback-playing">
-        <div className="nback-letter" key={index}>
-          {currentLetter}
+        <div className="nback-n-badge" aria-label={`${n}-Back`}>
+          {n}-Back
         </div>
+        <div className="nback-stimulus">
+          {useCards ? (
+            <NBackCardCarousel
+              n={params.n}
+              sequence={params.sequence}
+              onCardShow={setIndex}
+              onComplete={handleComplete}
+            />
+          ) : (
+            <span className="nback-letter">{currentItem}</span>
+          )}
+        </div>
+        {matchDisabled && (
+          <p className="nback-wait-hint">No match possible yet (first {n} cards)</p>
+        )}
+        {showCanMatchNotice && (
+          <p className="nback-can-match-notice" role="status">
+            Match is now active!
+          </p>
+        )}
+        {showMatchFeedback && (
+          <p
+            className={`nback-feedback nback-feedback--${showMatchFeedback}`}
+            role="status"
+          >
+            {showMatchFeedback === 'correct' ? 'Correct!' : 'Incorrect'}
+          </p>
+        )}
         <button
           onClick={handleMatchTap}
-          className={`nback-match-btn ${showMatchFeedback === true ? 'nback-match-tapped' : ''}`}
-          disabled={showMatchFeedback !== null}
+          className={`nback-match-btn ${
+            showMatchFeedback === 'correct' ? 'nback-match-correct' : ''
+          } ${showMatchFeedback === 'wrong' ? 'nback-match-wrong' : ''}`}
+          disabled={matchDisabled || showMatchFeedback !== null}
         >
           Match
         </button>
+        <p className="nback-example">
+          Card m matches card m−{n} (e.g. card {exampleM} = card 1)
+        </p>
         <div className="nback-progress">
           {index + 1} / {params.sequence.length}
         </div>

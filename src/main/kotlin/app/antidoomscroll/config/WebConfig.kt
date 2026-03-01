@@ -11,9 +11,25 @@ class WebConfig(
 ) : WebMvcConfigurer {
 
     override fun addCorsMappings(registry: CorsRegistry) {
-        registry.addMapping("/api/**")
-            .allowedOrigins(*corsOrigins.split(",").toTypedArray())
+        val origins = corsOrigins.split(",").map { it.trim() }.filter { it.isNotEmpty() }
+
+        // Allow any localhost port so local dev works regardless of which port
+        // Vite binds to (5174, 5175, … when the preferred port is already taken).
+        val hasLocalhostWildcard = origins.any { it.matches(Regex("https?://localhost.*")) }
+
+        val mapping = registry.addMapping("/api/**")
             .allowedMethods("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS")
             .allowCredentials(true)
+
+        if (hasLocalhostWildcard) {
+            // allowedOriginPatterns supports wildcards; use it when localhost is configured
+            mapping.allowedOriginPatterns(*origins
+                .map { if (it.startsWith("http://localhost") || it.startsWith("https://localhost")) "http://localhost:*" else it }
+                .distinct()
+                .toTypedArray()
+            )
+        } else {
+            mapping.allowedOrigins(*origins.toTypedArray())
+        }
     }
 }

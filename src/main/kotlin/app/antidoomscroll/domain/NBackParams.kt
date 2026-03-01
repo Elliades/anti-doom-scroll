@@ -55,4 +55,12 @@ data class NBackScore(
         val falseAlarmPenalty = (falseAlarms * 0.1).coerceAtMost(0.3) // cap penalty
         return (hitBonus - falseAlarmPenalty).coerceIn(0.0, 1.0)
     }
+
+    /** Extensible subscore details for display (hits, misses, false alarms, accuracy). */
+    fun toSubscoreDetails(): List<Pair<String, String>> = buildList {
+        add("Hits" to "$hits/$totalTargets")
+        if (misses > 0) add("Misses" to "$misses")
+        if (falseAlarms > 0) add("False alarms" to "$falseAlarms")
+        add("Accuracy" to "${(accuracy() * 100).toInt()}%")
+    }
 }

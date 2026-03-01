@@ -2,7 +2,6 @@ package app.antidoomscroll.web
 
 import app.antidoomscroll.application.GetJourneyStepContentUseCase
 import app.antidoomscroll.application.StartSessionUseCase
-import app.antidoomscroll.domain.Exercise
 import app.antidoomscroll.application.port.JourneyPort
 import app.antidoomscroll.domain.JourneyStepType
 import app.antidoomscroll.web.dto.ChapterSeriesContentDto
@@ -27,7 +26,8 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("/api/journey")
 class JourneyController(
     private val journeyPort: JourneyPort,
-    private val getJourneyStepContentUseCase: GetJourneyStepContentUseCase
+    private val getJourneyStepContentUseCase: GetJourneyStepContentUseCase,
+    private val exerciseDtoMapper: ExerciseDtoMapper
 ) {
 
     @GetMapping(produces = [MediaType.APPLICATION_JSON_VALUE])
@@ -117,29 +117,11 @@ class JourneyController(
             SessionStepDto(
                 stepIndex = stepWithCode.step.stepIndex,
                 difficulty = stepWithCode.step.difficulty.name,
-                exercise = toExerciseDto(stepWithCode.step.exercise, stepWithCode.subjectCode)
+                exercise = exerciseDtoMapper.toExerciseDto(stepWithCode.step.exercise, stepWithCode.subjectCode)
             )
         },
         sessionDefaultSeconds = sessionDefaultSeconds,
         lowBatteryModeSeconds = lowBatteryModeSeconds
     )
 
-    private fun toExerciseDto(ex: Exercise, subjectCode: String?) =
-        app.antidoomscroll.web.dto.ExerciseDto(
-            id = ex.id,
-            subjectId = ex.subjectId,
-            subjectCode = subjectCode,
-            type = ex.type.name,
-            difficulty = ex.difficulty.name,
-            prompt = ex.prompt,
-            expectedAnswers = ex.expectedAnswers,
-            timeLimitSeconds = ex.timeLimitSeconds,
-            nBackParams = ex.nBackParams()?.let { p ->
-                app.antidoomscroll.web.dto.NBackParamsDto(
-                    n = p.n,
-                    sequence = p.sequence,
-                    matchIndices = p.matchIndices
-                )
-            }
-        )
 }

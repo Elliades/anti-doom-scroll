@@ -2,6 +2,7 @@ package app.antidoomscroll.infrastructure.config
 
 import app.antidoomscroll.application.port.JourneyPort
 import app.antidoomscroll.application.port.ReflectionContentPort
+import app.antidoomscroll.application.port.ReflectionContentPort.ReflectionContent
 import app.antidoomscroll.config.JourneyConfigProperties
 import app.antidoomscroll.domain.Journey
 import org.springframework.stereotype.Component

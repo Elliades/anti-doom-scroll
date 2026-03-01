@@ -9,5 +9,12 @@ enum class ExerciseType {
     QCM,
     KEYWORD_BLURTING,
     MINI_PROBLEM,
-    N_BACK
+    N_BACK,
+    N_BACK_GRID,
+    DUAL_NBACK_GRID,
+    DUAL_NBACK_CARD,
+    MEMORY_CARD_PAIRS,
+    SUM_PAIR,
+    IMAGE_PAIR,
+    ANAGRAM
 }

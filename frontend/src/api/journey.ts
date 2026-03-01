@@ -5,7 +5,7 @@ const API_BASE = '/api'
 function journeyErrorMessage(status: number): string {
   if (status === 404) return 'Journey not found. Check backend config (app.journey in application.yml).'
   if (status >= 500) return `Server error (${status}). Check backend logs.`
-  if (status === 502 || status === 503) return `Backend may not be running (${status}). Start the server on port 8080.`
+  if (status === 502 || status === 503) return `Backend may not be running (${status}). Start the server on port 5173.`
   return `Journey failed: ${status}`
 }
 
@@ -16,7 +16,7 @@ export async function getJourney(code: string = 'default'): Promise<JourneyDto> 
     return res.json()
   } catch (e) {
     if (e instanceof TypeError && e.message.includes('fetch')) {
-      throw new Error('Cannot reach backend. Is the server running on port 8080?')
+      throw new Error('Cannot reach backend. Is the server running on port 5173?')
     }
     throw e
   }

@@ -24,7 +24,7 @@ spring:
     baseline-on-migrate: true
 
 server:
-  port: 8080
+  port: 5173
 
 # MVP: allow anonymous local profile (no account)
 app:
@@ -32,7 +32,151 @@ app:
   session-default-seconds: 180
   low-battery-mode-seconds: 45
   cors:
-    origins: http://localhost:5173
+    origins: http://localhost:5173, http://localhost:5174
+  # Ladder mode: score-based level progression (40% stay, 75% advance, last 5 answers)
+  ladder:
+    defaultCode: default
+    ladders:
+      default:
+        name: "Default Ladder"
+        thresholds:
+          minScoreToStay: 0.40
+          minScoreToAdvance: 0.75
+          answersNeededToAdvance: 5
+        levels:
+          - levelIndex: 0
+            allowedDifficulties: [ULTRA_EASY]
+            subjectCode: default
+          - levelIndex: 1
+            allowedDifficulties: [ULTRA_EASY, EASY]
+            subjectCode: default
+          - levelIndex: 2
+            allowedDifficulties: [EASY]
+            subjectCode: default
+          - levelIndex: 3
+            allowedDifficulties: [EASY, MEDIUM]
+            subjectCode: default
+          - levelIndex: 4
+            allowedDifficulties: [MEDIUM]
+            subjectCode: default
+      # Sum ladder: addition → subtraction → mult/div, levels 0-25
+      sum:
+        name: "Math Sum Ladder"
+        thresholds:
+          minScoreToStay: 0.40
+          minScoreToAdvance: 0.75
+          answersNeededToAdvance: 5
+        levels:
+          # 0: ultra easy sum only
+          - levelIndex: 0
+            allowedDifficulties: [ULTRA_EASY]
+            subjectCode: default
+            mathOperations: [ADD]
+          # 1-5: ultra easy → easy (add only)
+          - levelIndex: 1
+            allowedDifficulties: [ULTRA_EASY, EASY]
+            subjectCode: default
+            mathOperations: [ADD]
+          - levelIndex: 2
+            allowedDifficulties: [ULTRA_EASY, EASY]
+            subjectCode: default
+            mathOperations: [ADD]
+          - levelIndex: 3
+            allowedDifficulties: [EASY]
+            subjectCode: default
+            mathOperations: [ADD]
+          - levelIndex: 4
+            allowedDifficulties: [EASY, MEDIUM]
+            subjectCode: default
+            mathOperations: [ADD]
+          - levelIndex: 5
+            allowedDifficulties: [EASY, MEDIUM]
+            subjectCode: default
+            mathOperations: [ADD]
+          # 6-10: add subtraction, same difficulty progression
+          - levelIndex: 6
+            allowedDifficulties: [ULTRA_EASY]
+            subjectCode: default
+            mathOperations: [ADD, SUBTRACT]
+          - levelIndex: 7
+            allowedDifficulties: [ULTRA_EASY, EASY]
+            subjectCode: default
+            mathOperations: [ADD, SUBTRACT]
+          - levelIndex: 8
+            allowedDifficulties: [ULTRA_EASY, EASY]
+            subjectCode: default
+            mathOperations: [ADD, SUBTRACT]
+          - levelIndex: 9
+            allowedDifficulties: [EASY]
+            subjectCode: default
+            mathOperations: [ADD, SUBTRACT]
+          - levelIndex: 10
+            allowedDifficulties: [EASY, MEDIUM]
+            subjectCode: default
+            mathOperations: [ADD, SUBTRACT]
+          # 11-15: mix until medium sum-subtraction
+          - levelIndex: 11
+            allowedDifficulties: [EASY, MEDIUM]
+            subjectCode: default
+            mathOperations: [ADD, SUBTRACT]
+          - levelIndex: 12
+            allowedDifficulties: [MEDIUM]
+            subjectCode: default
+            mathOperations: [ADD, SUBTRACT]
+          - levelIndex: 13
+            allowedDifficulties: [MEDIUM]
+            subjectCode: default
+            mathOperations: [ADD, SUBTRACT]
+          - levelIndex: 14
+            allowedDifficulties: [MEDIUM, HARD]
+            subjectCode: default
+            mathOperations: [ADD, SUBTRACT]
+          - levelIndex: 15
+            allowedDifficulties: [MEDIUM, HARD]
+            subjectCode: default
+            mathOperations: [ADD, SUBTRACT]
+          # 16-20: adding multiplication/division
+          - levelIndex: 16
+            allowedDifficulties: [ULTRA_EASY]
+            subjectCode: default
+            mathOperations: [ADD, SUBTRACT, MULTIPLY, DIVIDE]
+          - levelIndex: 17
+            allowedDifficulties: [ULTRA_EASY, EASY]
+            subjectCode: default
+            mathOperations: [ADD, SUBTRACT, MULTIPLY, DIVIDE]
+          - levelIndex: 18
+            allowedDifficulties: [EASY]
+            subjectCode: default
+            mathOperations: [ADD, SUBTRACT, MULTIPLY, DIVIDE]
+          - levelIndex: 19
+            allowedDifficulties: [EASY, MEDIUM]
+            subjectCode: default
+            mathOperations: [ADD, SUBTRACT, MULTIPLY, DIVIDE]
+          - levelIndex: 20
+            allowedDifficulties: [EASY, MEDIUM]
+            subjectCode: default
+            mathOperations: [ADD, SUBTRACT, MULTIPLY, DIVIDE]
+          # 21-25: increasing multiplication/division
+          - levelIndex: 21
+            allowedDifficulties: [EASY]
+            subjectCode: default
+            mathOperations: [MULTIPLY, DIVIDE]
+          - levelIndex: 22
+            allowedDifficulties: [EASY, MEDIUM]
+            subjectCode: default
+            mathOperations: [MULTIPLY, DIVIDE]
+          - levelIndex: 23
+            allowedDifficulties: [MEDIUM]
+            subjectCode: default
+            mathOperations: [MULTIPLY, DIVIDE]
+          - levelIndex: 24
+            allowedDifficulties: [MEDIUM, HARD]
+            subjectCode: default
+            mathOperations: [MULTIPLY, DIVIDE]
+          - levelIndex: 25
+            allowedDifficulties: [HARD]
+            subjectCode: default
+            mathOperations: [MULTIPLY, DIVIDE]
   # Journey: scalable step sequence; add steps or go to any step by index
   journey:
     code: default
@@ -59,3 +203,9 @@ logging:
   level:
     app: INFO
     org.springframework.web: INFO
+    org.hibernate.SQL: WARN
+  file:
+    name: backend.log
+  pattern:
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+    console: "%d %-5level %logger{36} - %msg%n"

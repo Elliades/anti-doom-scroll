@@ -1,9 +1,9 @@
 # Cursor Rules - Doomscroll Replacement Trainer (Java + Web)
-# Goal: build a JITAI-like app that replaces doomscroll with micro-exercises:
+# Goal: build a JITAI-like app for web/android that replaces doomscroll with micro-exercises:
 # ultra-easy -> easy -> medium -> optional hard. Fast reward, real skill.
 
 ## Tech stack (default)
-- Backend: Java 21, Spring Boot 3, Gradle, PostgreSQL, Flyway
+- Backend: kotlin , Spring Boot 3, Gradle, PostgreSQL
 - API: REST JSON (OpenAPI generated)
 - Frontend: React + TypeScript + Vite
 - Auth: local email+password or passkeys (MVP can be anonymous local profile)
@@ -20,6 +20,9 @@
 - Use UTC timestamps, store user timezone separately.
 - Write tests: unit for domain scoring + spaced repetition, integration for API.
 - Keep functions small, avoid cleverness, prefer readability.
+- Always use Kotlin for Android.
+- Always create end2end and functional tests for all code.
+- Create and update MD files for each feature and architecture always read this file first when working on a feature or architecture.
 
 ## Product logic constraints
 - App must start fast. No heavy AI on critical path.
@@ -58,7 +61,19 @@
 - Store minimal data, encrypt secrets, never log user content in plaintext.
 - Allow local-only mode (no account) for MVP if possible.
 
+## Adding a new subject (chapter)
+- Subjects are first-class; each has a code (e.g. default, B1, nback). Read src/docs/architecture-scaling.md and src/docs/architecture-subjects.md first.
+- Backend: add subject via DB migration or seed (table subject: id, code, name, description, parent_subject_id, scoring_config). No new controller or route.
+- To expose in journey: add the subject code to app.journey.steps (CHAPTER_EXERCISES) config subjectCodes in application.yml.
+- Frontend: no code change; /subjects lists all, /subjects/:code shows exercises, /play/:exerciseId plays one. All data-driven from API.
+
+## Adding a new exercise type
+- Backend: (1) Add enum value in domain ExerciseType.kt. (2) Add persistence for type-specific params if needed (exercise_params JSONB or domain parser). (3) Ensure ExerciseDto / ExerciseDtoMapper can carry and map those params. No new REST endpoint per type; existing GET /api/exercises/{id} and session/journey APIs return type + params.
+- Frontend: (1) Add a component (e.g. XxxExercise.tsx) with props exercise: ExerciseDto, onComplete?: (score?: number) => void. (2) Register it in the exercise type registry in ExercisePlayer.tsx: EXERCISE_TYPE_COMPONENTS['NEW_TYPE'] = NewTypeExercise. (3) Do not change SessionExerciseBlock or the play page layout.
+- Add exercises to a subject: insert into exercise (id, subject_id, type, difficulty, prompt, expected_answers, time_limit_seconds, exercise_params). Link subject_id to existing subject. No code change.
+
 ## Output format expectations (for Cursor)
 - When asked to implement: generate complete files.
 - When asked to design: provide API contracts + domain models + migrations.
 - Always include example payloads and edge cases.
+- When adding a subject or exercise type: always read .cursorrules and src/docs/architecture-scaling.md first; follow the steps above so the app stays scalable and URLs/routes remain stable.

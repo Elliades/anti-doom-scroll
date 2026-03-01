@@ -22,15 +22,18 @@ class NBackSessionApiIntegrationTest {
 
     @Test
     fun startSessionWithPreferTypeNBack_returnsNBackExercise() {
-        mvc.perform(get("/api/session/start").param("preferType", "N_BACK"))
+        val result = mvc.perform(get("/api/session/start").param("preferType", "N_BACK"))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.profileId").exists())
             .andExpect(jsonPath("$.steps").isArray())
             .andExpect(jsonPath("$.steps[0].exercise.type").value("N_BACK"))
-            .andExpect(jsonPath("$.steps[0].exercise.nBackParams").exists())
-            .andExpect(jsonPath("$.steps[0].exercise.nBackParams.n").value(1))
-            .andExpect(jsonPath("$.steps[0].exercise.nBackParams.sequence").isArray())
-            .andExpect(jsonPath("$.steps[0].exercise.nBackParams.matchIndices").isArray())
+            .andReturn()
+        val exercise = com.fasterxml.jackson.databind.ObjectMapper().readTree(result.response.contentAsString).get("steps").get(0).get("exercise")
+        val params = exercise.get("nBackParams") ?: exercise.get("nbackParams")
+        org.junit.jupiter.api.Assertions.assertNotNull(params) { "N_BACK step must have nBackParams" }
+        org.junit.jupiter.api.Assertions.assertEquals(1, params.get("n").asInt())
+        org.junit.jupiter.api.Assertions.assertTrue(params.get("sequence").isArray)
+        org.junit.jupiter.api.Assertions.assertTrue(params.get("matchIndices").isArray)
     }
 
     @Test

@@ -10,7 +10,7 @@
 |---------|------|-----------|
 | **Default** | `default` | FLASHCARD_QA ADD (4: ULTRA_EASY, EASY, MEDIUM, HARD), FLASHCARD_QA SUBTRACT (4), FLASHCARD_QA MULTIPLY (4), FLASHCARD_QA DIVIDE (4) |
 | **N-back** | `B1` | N_BACK (3: 1-back, 2-back, 3-back), N_BACK_GRID (2), DUAL_NBACK_GRID (1), DUAL_NBACK_CARD (1) |
-| **Memory** | `MEMORY` | MEMORY_CARD_PAIRS (3), SUM_PAIR (4) |
+| **Memory** | `MEMORY` | MEMORY_CARD_PAIRS (3), SUM_PAIR (5), IMAGE_PAIR (2) |
 | **Anagrammes (FR)** | `ANAGRAM_FR` | ANAGRAM (4: ULTRA_EASY, EASY, MEDIUM, HARD) |
 
 **Default** — Sum, Subtraction, Multiplication, Division (math flashcard) by difficulty.  
@@ -49,6 +49,7 @@
 | **Exercises in subject “B1”** | [http://localhost:5173/api/subjects/B1/exercises](http://localhost:5173/api/subjects/B1/exercises) |
 | **Start a session** (returns steps with exercises) | [http://localhost:5173/api/session/start](http://localhost:5173/api/session/start) |
 | **Start ladder session** (score-based level progression) | [http://localhost:5173/api/session/start?mode=ladder](http://localhost:5173/api/session/start?mode=ladder) |
+| **Start sum ladder** (math: ADD→SUBTRACT→MULT/DIV, levels 0–25) | [http://localhost:5173/api/session/start?mode=ladder&ladderCode=sum](http://localhost:5173/api/session/start?mode=ladder&ladderCode=sum) |
 | **Start session, prefer one type** | [http://localhost:5173/api/session/start?preferType=SUM_PAIR](http://localhost:5173/api/session/start?preferType=SUM_PAIR) |
 | **Open-app session** | [http://localhost:5173/api/session/start?mode=openapp](http://localhost:5173/api/session/start?mode=openapp) |
 | **Journey definition** | [http://localhost:5173/api/journey?code=default](http://localhost:5173/api/journey?code=default) |
@@ -117,7 +118,8 @@
 
 ### 6. N_BACK (Card)
 
-- **Params** (response as `nBackParams`):
+- **Input params** (stored in `exercise_params`): `n`, `suitCount` (1–4). Easy: n=1, suitCount=1. Harder: n=2 suitCount=2; n=3 suitCount=4.
+- **Params** (response as `nBackParams`): `sequence` and `matchIndices` are generated at runtime from (n, suitCount). Legacy: stored `sequence`+`matchIndices` still supported.
 
   | Field | Type | Description |
   |-------|------|-------------|
@@ -199,6 +201,8 @@
   |-------|------|--------------|
   | `scrambledLetters` | `List<String>` | Shuffled letters to recompose. |
   | `answer` | `String` | Correct word. |
+  | `hintIntervalSeconds` | `Int` | Hint every N seconds of inactivity (default 10). From exercise `exerciseParams.hintIntervalSeconds`. |
+  | `letterColorHint` | `Boolean` | When true, filled slots show green (correct) or red (wrong) — another kind of hint (default true). From exercise `exerciseParams.letterColorHint`. |
 
 - **Letter range per difficulty:**
 
@@ -207,10 +211,11 @@
   | ULTRA_EASY | 2–3 |
   | EASY | 3–4 |
   | MEDIUM | 4–5 |
-  | HARD | 5+ |
+  | HARD | 6–7 |
+  | VERY_HARD | 8+ |
 
-- **Subject**: `ANAGRAM_FR` (French). English subject (`ANAGRAM_EN`) can be added later.
-- **Access**: [Exercises in subject ANAGRAM_FR](http://localhost:5173/api/subjects/ANAGRAM_FR/exercises) or session/journey.
+- **Subject**: `WORD`.
+- **Access**: [Exercises in WORD](http://localhost:5173/api/subjects/WORD/exercises).
 - **Details**: See [exercise-anagram.md](exercise-anagram.md).
 
 ---
@@ -245,15 +250,36 @@
 
   | Field | Type | Description |
   |-------|------|-------------|
-  | `staticNumbers` | `List<Int>` | One or more static values K; valid pair (a,b) iff a + K = b. Single = one round; multiple = multi-round. |
+  | `staticNumbers` | `List<Int>` | One or more static values K; valid pair (a,b) iff a + K = b. Or use `staticCount`+`staticMin`+`staticMax` for random statics per play. |
   | `pairsPerRound` | `Int` | Number of sum pairs per round (2 × pairsPerRound cards per round). ≥ 2. |
   | `minValue` | `Int` | Optional min for generated numbers (default 1). |
   | `maxValue` | `Int` | Optional max for generated numbers (default 99). |
+  | `minDigits` | `Int?` | Optional: min digits for displayed numbers (1–9). When set with `maxDigits`, overrides min/max value (e.g. 1–2 → 1–99). |
+  | `maxDigits` | `Int?` | Optional: max digits for displayed numbers (1–9). |
 
-  **Response-only (generated):** `sumPairRounds`: `List<{ static: Int, cards: List<Int> }>` — one entry per round; `cards` are the shuffled numbers for that round.
+  **Response-only (generated):** `sumPairRounds` / `sumPairGroups` + `sumPairDeck` — groups by static with colors; deck is shuffled cards.
 
-- **Access (no ID):** [All exercises](http://localhost:5173/api/exercises) or [default/B1](http://localhost:5173/api/subjects/default/exercises) — list includes SUM_PAIR with full params; or [session prefer SUM_PAIR](http://localhost:5173/api/session/start?preferType=SUM_PAIR).
+- **Access (no ID):** [All exercises](http://localhost:5173/api/exercises) or [MEMORY subject](http://localhost:5173/api/subjects/MEMORY/exercises); or [session prefer SUM_PAIR](http://localhost:5173/api/session/start?preferType=SUM_PAIR).
 - **Details:** See [exercise-sum-pair.md](exercise-sum-pair.md).
+
+---
+
+### 10. IMAGE_PAIR
+
+- **Params** (response as `imagePairParams`); **generated at response time:** `imagePairDeck`.
+
+  | Field | Type | Description |
+  |-------|------|-------------|
+  | `pairCount` | `Int` | Number of pairs (total cards = 2 × pairCount). ≥ 2. |
+  | `maxPairsPerBackground` | `Int` | At most this many pairs share the same background (duplicate cap). Default 2. |
+  | `colorCount` | `Int` | 0 = no background color; 1 = no color + 1 color (2 backgrounds); etc. Number of background types = colorCount + 1. |
+
+  **Matching rule:** Two cards match iff they have the **same background and the same image**. Only animals (images) with the same background can match.
+
+  **Response-only (generated):** `imagePairDeck`: `List<{ backgroundId, imageId, backgroundColorHex? }>` — shuffled deck.
+
+- **Access (no ID):** [All exercises](http://localhost:5173/api/exercises) or [MEMORY subject](http://localhost:5173/api/subjects/MEMORY/exercises).
+- **Details:** See [exercise-pair-architecture.md](exercise-pair-architecture.md).
 
 ---
 
@@ -265,7 +291,7 @@
 | **All exercises** | [http://localhost:5173/api/exercises](http://localhost:5173/api/exercises) |
 | N-Back 1, 2, 3 (card) | [api/nback/1](http://localhost:5173/api/nback/1) · [api/nback/2](http://localhost:5173/api/nback/2) · [api/nback/3](http://localhost:5173/api/nback/3) |
 | N-Back Grid, Dual Grid, Dual Card | Via [api/exercises](http://localhost:5173/api/exercises) by type |
-| Exercises in subject | [api/subjects/default/exercises](http://localhost:5173/api/subjects/default/exercises) · [api/subjects/B1/exercises](http://localhost:5173/api/subjects/B1/exercises) · [api/subjects/ANAGRAM_FR/exercises](http://localhost:5173/api/subjects/ANAGRAM_FR/exercises) |
+| Exercises in subject | [api/subjects/default/exercises](http://localhost:5173/api/subjects/default/exercises) · [api/subjects/B1/exercises](http://localhost:5173/api/subjects/B1/exercises) · [api/subjects/WORD/exercises](http://localhost:5173/api/subjects/WORD/exercises) |
 | Start session | [http://localhost:5173/api/session/start](http://localhost:5173/api/session/start) |
 | Journey | [http://localhost:5173/api/journey?code=default](http://localhost:5173/api/journey?code=default) |
 | Journey step content | [api/journey/steps/0/content?journeyCode=default](http://localhost:5173/api/journey/steps/0/content?journeyCode=default) (step 0, 1, 2, …) |

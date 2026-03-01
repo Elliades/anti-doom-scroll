@@ -1,9 +1,9 @@
 package app.antidoomscroll.infrastructure.persistence
 
+import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
-import org.springframework.data.repository.query.Param
 import java.util.UUID
 
 interface ExerciseJpaRepository : JpaRepository<ExerciseEntity, UUID> {
@@ -23,9 +23,22 @@ interface ExerciseJpaRepository : JpaRepository<ExerciseEntity, UUID> {
         pageable: Pageable
     ): List<ExerciseEntity>
 
-    @Query(
-        value = "SELECT * FROM exercise WHERE difficulty IN ('ULTRA_EASY', 'EASY') ORDER BY RANDOM() LIMIT :limit",
-        nativeQuery = true
-    )
-    fun findRandomUltraEasyOrEasy(@Param("limit") limit: Int): List<ExerciseEntity>
+    fun findBySubjectIdAndDifficultyInOrderByCreatedAtAsc(
+        subjectId: UUID,
+        difficulties: List<String>,
+        pageable: Pageable
+    ): List<ExerciseEntity>
+
+    /**
+     * JPQL so that all entity attributes (including exercise_params JSON) are properly loaded.
+     * Native query bypasses JdbcTypeCode and leaves exercise_params null for N_BACK.
+     * Call with page size large enough to allow shuffling for random order.
+     */
+    @Query("SELECT e FROM ExerciseEntity e WHERE e.difficulty IN ('ULTRA_EASY', 'EASY') ORDER BY e.createdAt")
+    fun findUltraEasyOrEasy(pageable: Pageable): List<ExerciseEntity>
+
+    @Query("SELECT e FROM ExerciseEntity e WHERE e.type = 'N_BACK' ORDER BY e.createdAt")
+    fun findAllNBack(): List<ExerciseEntity>
+
+    fun findBySubjectIdOrderByCreatedAtAsc(subjectId: UUID, pageable: Pageable): List<ExerciseEntity>
 }

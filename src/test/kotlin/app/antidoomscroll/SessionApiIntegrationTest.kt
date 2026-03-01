@@ -46,4 +46,12 @@ class SessionApiIntegrationTest {
             .andExpect(jsonPath("$[0].code").value("default"))
             .andExpect(jsonPath("$[0].scoringConfig").exists())
     }
+
+    @Test
+    fun listExercisesBySubject_returnsExercises() {
+        mvc.perform(get("/api/subjects/default/exercises"))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$").isArray())
+            .andExpect(jsonPath("$[0].subjectCode").value("default"))
+    }
 }

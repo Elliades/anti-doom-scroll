@@ -1,9 +1,8 @@
 package app.antidoomscroll.infrastructure.persistence
 
 import app.antidoomscroll.domain.SubjectScoringConfig
+import app.antidoomscroll.infrastructure.persistence.converter.SubjectScoringConfigConverter
 import jakarta.persistence.*
-import org.hibernate.annotations.JdbcTypeCode
-import org.hibernate.type.SqlTypes
 import java.time.Instant
 import java.util.UUID
 
@@ -27,8 +26,8 @@ class SubjectEntity {
     @Column(name = "parent_subject_id")
     var parentSubjectId: UUID? = null
 
-    @JdbcTypeCode(SqlTypes.JSON)
-    @Column(name = "scoring_config", nullable = false, columnDefinition = "jsonb")
+    @Convert(converter = SubjectScoringConfigConverter::class)
+    @Column(name = "scoring_config", nullable = false, length = 500)
     var scoringConfig: SubjectScoringConfig = SubjectScoringConfig()
 
     @Column(name = "created_at", nullable = false, updatable = false)

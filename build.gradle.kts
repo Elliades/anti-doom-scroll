@@ -29,6 +29,7 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib")
     runtimeOnly("org.postgresql:postgresql")
+    runtimeOnly("com.h2database:h2") // for local profile (run without Docker/PostgreSQL)
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("com.h2database:h2")
 }
@@ -42,4 +43,19 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
 
 tasks.withType<Test> {
     useJUnitPlatform()
+}
+
+// Show JVM stdout/stderr so startup errors are visible when bootRun exits with code 1
+tasks.named<org.springframework.boot.gradle.tasks.run.BootRun>("bootRun") {
+    standardOutput = System.out
+    errorOutput = System.err
+}
+
+// Run the built JAR so you see the full Spring Boot log (use when bootRun fails with exit code 1)
+tasks.register<Exec>("runJar") {
+    group = "application"
+    description = "Run the built JAR (use to see full startup error when bootRun fails)"
+    dependsOn("bootJar")
+    val jarFile = tasks.bootJar.get().archiveFile.get().asFile
+    commandLine("java", "-jar", jarFile.absolutePath)
 }

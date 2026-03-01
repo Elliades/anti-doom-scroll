@@ -93,4 +93,21 @@ class OpenAppSessionApiIntegrationTest {
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.steps").isArray())
     }
+
+    @Test
+    fun startSessionWithModeOpenApp_nBackStepsIncludeSequence() {
+        val result = mvc.perform(get("/api/session/start").param("mode", "openapp"))
+            .andExpect(status().isOk())
+            .andReturn()
+        val tree = com.fasterxml.jackson.databind.ObjectMapper().readTree(result.response.contentAsString)
+        val steps = tree.get("steps")
+        for (i in 0 until steps.size()) {
+            val exercise = steps[i].get("exercise")
+            if (exercise.has("type") && exercise.get("type").asText() == "N_BACK") {
+                val params = exercise.get("nBackParams") ?: exercise.get("nbackParams")
+                assertTrue(params != null && !params.isNull) { "N_BACK step must have nBackParams" }
+                assertTrue(params.has("sequence")) { "nBackParams must have sequence" }
+            }
+        }
+    }
 }

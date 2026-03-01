@@ -1,8 +1,8 @@
 package app.antidoomscroll.infrastructure.persistence
 
+import app.antidoomscroll.infrastructure.persistence.converter.JsonListStringConverter
+import app.antidoomscroll.infrastructure.persistence.converter.JsonMapConverter
 import jakarta.persistence.*
-import org.hibernate.annotations.JdbcTypeCode
-import org.hibernate.type.SqlTypes
 import java.time.Instant
 import java.util.UUID
 
@@ -26,14 +26,14 @@ class ExerciseEntity {
     @Column(name = "prompt", nullable = false, columnDefinition = "TEXT")
     var prompt: String = ""
 
-    @JdbcTypeCode(SqlTypes.JSON)
+    @Convert(converter = JsonListStringConverter::class)
     @Column(name = "expected_answers", columnDefinition = "jsonb")
     var expectedAnswers: List<String>? = null
 
     @Column(name = "time_limit_seconds", nullable = false)
     var timeLimitSeconds: Int = 60
 
-    @JdbcTypeCode(SqlTypes.JSON)
+    @Convert(converter = JsonMapConverter::class)
     @Column(name = "exercise_params", columnDefinition = "jsonb")
     var exerciseParams: Map<String, Any?>? = null
 

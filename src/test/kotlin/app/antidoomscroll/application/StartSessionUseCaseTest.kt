@@ -20,6 +20,7 @@ import org.mockito.Mockito.verify
 import org.mockito.Mockito.`when`
 import org.mockito.junit.jupiter.MockitoExtension
 import java.time.Instant
+import java.time.ZoneId
 import java.util.UUID
 
 @ExtendWith(MockitoExtension::class)
@@ -65,13 +66,11 @@ class StartSessionUseCaseTest {
         val profile = UserProfile(
             id = profileId,
             displayName = null,
-            timezoneId = "UTC",
+            timezone = ZoneId.of("UTC"),
             dailyAxes = emptyList(),
             sessionDefaultSeconds = 180,
             lowBatteryModeSeconds = 45,
-            anonymous = true,
-            createdAt = Instant.now(),
-            updatedAt = Instant.now()
+            anonymous = true
         )
         `when`(profilePort.getOrCreateAnonymousProfile()).thenReturn(profile)
 
@@ -84,7 +83,7 @@ class StartSessionUseCaseTest {
             scoringConfig = SubjectScoringConfig(),
             createdAt = Instant.now()
         )
-        `when`(subjectPort.findById(any())).thenReturn(subject)
+        `when`(subjectPort.findById(subjectId)).thenReturn(subject)
 
         val result = useCase.startOpenAppSession(null)
 
@@ -111,16 +110,14 @@ class StartSessionUseCaseTest {
         val profile = UserProfile(
             id = profileId,
             displayName = null,
-            timezoneId = "UTC",
+            timezone = ZoneId.of("UTC"),
             dailyAxes = emptyList(),
             sessionDefaultSeconds = 180,
             lowBatteryModeSeconds = 45,
-            anonymous = true,
-            createdAt = Instant.now(),
-            updatedAt = Instant.now()
+            anonymous = true
         )
         `when`(profilePort.getOrCreateAnonymousProfile()).thenReturn(profile)
-        `when`(subjectPort.findById(any())).thenReturn(
+        `when`(subjectPort.findById(subjectId)).thenReturn(
             Subject(
                 id = subjectId,
                 code = "default",
@@ -145,13 +142,11 @@ class StartSessionUseCaseTest {
         val profile = UserProfile(
             id = profileId,
             displayName = null,
-            timezoneId = "UTC",
+            timezone = ZoneId.of("UTC"),
             dailyAxes = emptyList(),
             sessionDefaultSeconds = 180,
             lowBatteryModeSeconds = 45,
-            anonymous = true,
-            createdAt = Instant.now(),
-            updatedAt = Instant.now()
+            anonymous = true
         )
         `when`(profilePort.getOrCreateAnonymousProfile()).thenReturn(profile)
 

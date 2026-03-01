@@ -28,11 +28,12 @@ data class JourneyConfigProperties(
         code = code,
         name = name,
         steps = steps.map { s ->
+            val typeStr = s.type.uppercase().replace("\u002D", "_")
             JourneyStepDef(
                 stepIndex = s.stepIndex,
-                type = JourneyStepType.valueOf(s.type.uppercase().replace("-", "_")),
+                type = JourneyStepType.valueOf(typeStr),
                 config = s.config
             )
         }.sortedBy { it.stepIndex }
-    }
+    )
 }
