@@ -91,6 +91,16 @@ export interface WordleParamsDto {
   language?: string
 }
 
+/** ESTIMATION: correct answer, unit, tolerance factor and category for scoring. When timeWeightHigher, time matters more than precision (pure math). */
+export interface EstimationParamsDto {
+  correctAnswer: number
+  unit: string
+  toleranceFactor: number
+  category: string
+  hint?: string | null
+  timeWeightHigher?: boolean
+}
+
 export interface ExerciseDto {
   id: string
   subjectId: string
@@ -102,6 +112,8 @@ export interface ExerciseDto {
   timeLimitSeconds: number
   /** FLASHCARD_QA math: ADD, SUBTRACT, MULTIPLY, DIVIDE — for display label (Sum, Subtraction, etc.) */
   mathOperation?: string | null
+  /** Human arithmetic complexity score (0–5 very easy, 5–15 elementary, 15–30 intermediate, 30+ advanced). */
+  mathComplexityScore?: number | null
   /** API may return nBackParams or nbackParams (casing varies) */
   nBackParams?: NBackParamsDto | null
   nbackParams?: NBackParamsDto | null
@@ -121,6 +133,8 @@ export interface ExerciseDto {
   imagePairDeck?: ImagePairCardDto[] | null
   anagramParams?: AnagramParamsDto | null
   wordleParams?: WordleParamsDto | null
+  /** ESTIMATION: correctAnswer, unit, toleranceFactor, category, hint */
+  estimationParams?: EstimationParamsDto | null
 }
 
 export interface SessionStepDto {
@@ -189,5 +203,35 @@ export interface LadderSessionResponseDto {
 export interface LadderNextResponseDto {
   exercise: ExerciseDto | null
   ladderState: LadderStateDto
+  levelChanged?: { from: number; to: number; direction: string } | null
+}
+
+// Ladder Mix
+export interface PerLadderStateDto {
+  recentScores: number[]
+  overallScoreSum: number
+  overallTotal: number
+}
+
+export interface LadderMixStateDto {
+  mixCode: string
+  ladderCodes: string[]
+  currentLevelIndex: number
+  perLadderStates: Record<string, PerLadderStateDto>
+  nextLadderIndex: number
+}
+
+export interface LadderMixSessionResponseDto {
+  profileId: string
+  mode: string
+  exercise: ExerciseDto
+  ladderMixState: LadderMixStateDto
+  sessionDefaultSeconds: number
+  lowBatteryModeSeconds: number
+}
+
+export interface LadderMixNextResponseDto {
+  exercise: ExerciseDto | null
+  ladderMixState: LadderMixStateDto
   levelChanged?: { from: number; to: number; direction: string } | null
 }

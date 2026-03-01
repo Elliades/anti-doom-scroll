@@ -12,7 +12,9 @@ import java.util.UUID
 @ConfigurationProperties(prefix = "app.ladder")
 data class LadderConfigProperties(
     @DefaultValue("default") val defaultCode: String,
-    val ladders: Map<String, LadderDef> = emptyMap()
+    val ladders: Map<String, LadderDef> = emptyMap(),
+    /** Mix definitions: code -> list of ladder codes to alternate between. */
+    val mixes: Map<String, List<String>> = emptyMap()
 ) {
     data class LadderDef(
         val name: String? = null,

@@ -5,13 +5,14 @@ import type { ExerciseResult } from '../types/exercise'
 interface DualNBackGridExerciseProps {
   exercise: ExerciseDto
   onComplete?: (result: ExerciseResult | number) => void
+  showInstruction?: boolean
 }
 
 /**
  * Dual Grid N-Back: 3×3 grid with colored cells. User taps "Match Position" or "Match Color"
  * when that attribute matches N steps back.
  */
-export function DualNBackGridExercise({ exercise, onComplete }: DualNBackGridExerciseProps) {
+export function DualNBackGridExercise({ exercise, onComplete, showInstruction = true }: DualNBackGridExerciseProps) {
   const params = exercise.dualNBackGridParams ?? exercise.dualNbackGridParams
   if (!params || !params.sequence?.length) {
     return <p className="error">Invalid Dual Grid N-Back exercise: missing sequence.</p>
@@ -93,10 +94,12 @@ export function DualNBackGridExercise({ exercise, onComplete }: DualNBackGridExe
           {n}-Back
         </div>
         <p className="prompt">{exercise.prompt}</p>
-        <p className="nback-instruction">
-          Cells will light up with different colors. Tap &quot;Match Position&quot; when the same cell appears
-          again, or &quot;Match Color&quot; when the same color appears, {params.n} step(s) back.
-        </p>
+        {showInstruction && (
+          <p className="nback-instruction">
+            Cells will light up with different colors. Tap &quot;Match Position&quot; when the same cell appears
+            again, or &quot;Match Color&quot; when the same color appears, {params.n} step(s) back.
+          </p>
+        )}
         <button onClick={handleStart} className="nback-start-btn">
           Start
         </button>

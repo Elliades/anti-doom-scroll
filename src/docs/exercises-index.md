@@ -79,6 +79,7 @@
   - EASY: 1–2 digits + 1–2 digits
   - MEDIUM: 2–3 digits + 2–3 digits
   - HARD: 3–4 digits + 3–4 digits
+- **Complexity:** Each generated problem has a human arithmetic complexity score (see [human_arithmetic_complexity_model.md](human_arithmetic_complexity_model.md)). The generator targets the exercise difficulty band (0–5 very easy, 5–15 elementary, 15–30 intermediate, 30+ advanced). API returns `mathComplexityScore`; UI shows it for math exercises.
 - **Access (no ID):** [All exercises](http://localhost:5173/api/exercises) or [subjects](http://localhost:5173/api/subjects) then subject’s exercises, or session/journey.
 
 ---

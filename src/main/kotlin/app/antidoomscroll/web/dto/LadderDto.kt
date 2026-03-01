@@ -46,3 +46,41 @@ data class LevelChangeDto(
     val to: Int,
     val direction: String
 )
+
+// --- Ladder Mix ---
+
+data class PerLadderStateDto(
+    val recentScores: List<Double>,
+    val overallScoreSum: Double,
+    val overallTotal: Int
+)
+
+data class LadderMixStateDto(
+    val mixCode: String,
+    val ladderCodes: List<String>,
+    val currentLevelIndex: Int,
+    val perLadderStates: Map<String, PerLadderStateDto>,
+    val nextLadderIndex: Int
+)
+
+data class LadderMixSessionResponseDto(
+    val profileId: String,
+    val mode: String = "ladderMix",
+    val exercise: ExerciseDto,
+    val ladderMixState: LadderMixStateDto,
+    val sessionDefaultSeconds: Int,
+    val lowBatteryModeSeconds: Int
+)
+
+data class LadderMixNextRequestDto(
+    val profileId: String? = null,
+    val ladderMixState: LadderMixStateDto,
+    val lastCompletedLadderCode: String,
+    val lastScore: Double
+)
+
+data class LadderMixNextResponseDto(
+    val exercise: ExerciseDto?,
+    val ladderMixState: LadderMixStateDto,
+    val levelChanged: LevelChangeDto? = null
+)

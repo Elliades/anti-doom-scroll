@@ -208,6 +208,18 @@ body {
   margin-top: 0.25rem;
 }
 
+.estimation-subscores {
+  list-style: none;
+  margin: 0.75rem 0 0;
+  padding: 0;
+  font-size: 0.95rem;
+  color: var(--text-dim);
+}
+
+.estimation-subscores li {
+  margin-top: 0.25rem;
+}
+
 .score-subscore-label {
   font-weight: 500;
   color: var(--text);
@@ -221,6 +233,12 @@ body {
   font-size: 1.35rem;
   line-height: 1.5;
   margin: 0 0 1.5rem;
+}
+
+.math-complexity {
+  font-size: 0.9rem;
+  color: var(--text-dim);
+  margin: -0.75rem 0 1rem;
 }
 
 .input-row {
@@ -465,6 +483,33 @@ body {
 .ladder-score-dot--empty {
   background: transparent;
   border: 1.5px solid rgba(139, 139, 158, 0.35);
+}
+
+.ladder-mix-per-ladder {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.ladder-mix-ladder-row {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.75rem;
+}
+
+.ladder-mix-ladder-label {
+  min-width: 4rem;
+  color: var(--text-dim);
+}
+
+.ladder-section-title {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-dim);
+  margin: 0 0 0.25rem 0;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
 @media (prefers-color-scheme: light) {
@@ -1296,6 +1341,7 @@ body {
 }
 
 .anagram-key {
+  position: relative;
   width: 2.25rem;
   height: 2.25rem;
   border: 2px solid var(--surface);
@@ -1308,6 +1354,17 @@ body {
   font-family: inherit;
   text-transform: uppercase;
   transition: border-color 0.2s, background 0.2s;
+}
+
+.anagram-key-count {
+  position: absolute;
+  top: 1px;
+  right: 2px;
+  font-size: 0.5rem;
+  font-weight: 600;
+  line-height: 1;
+  color: var(--text-dim);
+  pointer-events: none;
 }
 
 .anagram-key:hover:not(:disabled) {

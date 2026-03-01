@@ -7,13 +7,15 @@ package app.antidoomscroll.domain
  * - toleranceFactor = 2.0 → moderate (within 2× = partial credit)
  * - toleranceFactor = 10.0 → wide (orders-of-magnitude, within 10× = partial credit)
  * Category: "math" | "geography" | "science" | "history".
+ * When [timeWeightHigher] is true (e.g. pure arithmetic), scoring weights time more than precision.
  */
 data class EstimationParams(
     val correctAnswer: Double,
     val unit: String,
     val toleranceFactor: Double,
     val category: String,
-    val hint: String? = null
+    val hint: String? = null,
+    val timeWeightHigher: Boolean = false
 ) {
     init {
         require(correctAnswer > 0) { "correctAnswer must be positive" }

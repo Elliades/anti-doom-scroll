@@ -237,6 +237,80 @@ class LadderSessionApiIntegrationTest {
             .andExpect(jsonPath("$[?(@.code == 'nback')].levelCount").value(30))
     }
 
+    // ------------------------------------------------------------------
+    // Ladder Mix: alternate between ladders, both must pass to advance
+    // ------------------------------------------------------------------
+
+    @Test
+    fun startLadderMixSession_returnsExerciseAndMixState() {
+        mvc.perform(
+            get("/api/session/start")
+                .param("mode", "ladderMix")
+                .param("ladderMixCode", "mix")
+        )
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.mode").value("ladderMix"))
+            .andExpect(jsonPath("$.exercise").exists())
+            .andExpect(jsonPath("$.ladderMixState").exists())
+            .andExpect(jsonPath("$.ladderMixState.mixCode").value("mix"))
+            .andExpect(jsonPath("$.ladderMixState.ladderCodes").isArray())
+            .andExpect(jsonPath("$.ladderMixState.ladderCodes[0]").value("sum"))
+            .andExpect(jsonPath("$.ladderMixState.ladderCodes[1]").value("anagram"))
+            .andExpect(jsonPath("$.ladderMixState.currentLevelIndex").value(0))
+            .andExpect(jsonPath("$.ladderMixState.nextLadderIndex").value(0))
+            .andExpect(jsonPath("$.ladderMixState.perLadderStates").exists())
+    }
+
+    @Test
+    fun ladderMixNext_alternatesLaddersAndAdvancesWhenBothPass() {
+        mvc.perform(
+            get("/api/session/start")
+                .param("mode", "ladderMix")
+                .param("ladderMixCode", "mix")
+        )
+            .andExpect(status().isOk())
+
+        // Both ladders have 5 scores >= 75% -> should advance
+        val nextBody = """
+            {
+                "ladderMixState": {
+                    "mixCode": "mix",
+                    "ladderCodes": ["sum", "anagram"],
+                    "currentLevelIndex": 0,
+                    "perLadderStates": {
+                        "sum": {"recentScores": [0.8, 0.9, 0.85, 0.9, 0.88], "overallScoreSum": 4.33, "overallTotal": 5},
+                        "anagram": {"recentScores": [0.8, 0.85, 0.9, 0.88, 0.82], "overallScoreSum": 4.25, "overallTotal": 5}
+                    },
+                    "nextLadderIndex": 1
+                },
+                "lastCompletedLadderCode": "sum",
+                "lastScore": 0.88
+            }
+        """.trimIndent()
+
+        mvc.perform(
+            post("/api/session/ladder-mix/next")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(nextBody)
+        )
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.exercise").exists())
+            .andExpect(jsonPath("$.ladderMixState.currentLevelIndex").value(1))
+            .andExpect(jsonPath("$.ladderMixState.perLadderStates.sum.recentScores").isEmpty)
+            .andExpect(jsonPath("$.ladderMixState.perLadderStates.anagram.recentScores").isEmpty)
+            .andExpect(jsonPath("$.levelChanged.direction").value("up"))
+    }
+
+    @Test
+    fun listLadderMixes_returnsSingleMixLadder() {
+        mvc.perform(get("/api/ladders/mixes"))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$").isArray())
+            .andExpect(jsonPath("$[?(@.code == 'mix')]").exists())
+            .andExpect(jsonPath("$[?(@.code == 'mix')].name").value("Ladder Mix"))
+            .andExpect(jsonPath("$[?(@.code == 'mix')].ladderCodes").isArray())
+    }
+
     @Test
     fun listLadders_includesLevelCountAndName() {
         val result = mvc.perform(get("/api/ladders"))

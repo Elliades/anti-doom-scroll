@@ -242,6 +242,8 @@ class ExerciseDtoMapperTest {
         assertEquals("FLASHCARD_QA", dto.type)
         assertNotNull(dto.prompt)
         assertNotNull(dto.expectedAnswers)
+        assertNotNull(dto.mathComplexityScore) { "Math flashcard DTO should include complexity score" }
+        assertTrue(dto.mathComplexityScore!! >= 0.0)
         assertEquals(1, dto.expectedAnswers.size)
         assert(dto.prompt.startsWith("What is ")) { "Generated prompt should start with 'What is '" }
         assert(dto.prompt.contains(" + ")) { "Addition prompt should contain ' + '" }
@@ -417,6 +419,31 @@ class ExerciseDtoMapperTest {
         assertEquals(1.5, dto.estimationParams!!.toleranceFactor)
         assertEquals("geography", dto.estimationParams!!.category)
         assertEquals("Built in 1889.", dto.estimationParams!!.hint)
+        assertEquals(false, dto.estimationParams!!.timeWeightHigher)
+    }
+
+    @Test
+    fun `when ESTIMATION exercise has timeWeightHigher then DTO has timeWeightHigher true`() {
+        val params = mapOf(
+            "correctAnswer" to 124.0,
+            "unit" to "",
+            "toleranceFactor" to 1.15,
+            "category" to "math",
+            "timeWeightHigher" to true
+        )
+        val exercise = Exercise(
+            id = UUID.fromString("a0000000-0000-0000-0000-000000000321"),
+            subjectId = estimSubjectId,
+            type = ExerciseType.ESTIMATION,
+            difficulty = Difficulty.ULTRA_EASY,
+            prompt = "Estimate: 372 ÷ 3 = ?",
+            expectedAnswers = listOf("124"),
+            timeLimitSeconds = 20,
+            exerciseParams = params
+        )
+        val dto = mapper().toExerciseDto(exercise, "ESTIMATION")
+        assertNotNull(dto.estimationParams)
+        assertEquals(true, dto.estimationParams!!.timeWeightHigher)
     }
 
     @Test

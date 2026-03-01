@@ -10,45 +10,57 @@ import { NBackGridExercise } from './NBackGridExercise'
 import { AnagramExercise } from './exercises/AnagramExercise'
 import { WordleExercise } from './exercises/WordleExercise'
 import { GenericTextExercise } from './exercises/GenericTextExercise'
+import { EstimationExercise } from './exercises/EstimationExercise'
 import { MemoryCardExercise } from './exercises/MemoryCardExercise'
 import { ImagePairExercise } from './exercises/ImagePairExercise'
 import { SumPairExercise } from './exercises/SumPairExercise'
 
 export interface ExercisePlayerProps {
   exercise: ExerciseDto
+  /** When false, exercise intro screens omit the instruction paragraph (e.g. ladder: show only on first exercise). Default true. */
+  showInstruction?: boolean
   onComplete?: (result: ExerciseResult, elapsedMs?: number) => void
 }
 
 /** Exercise components accept onComplete with ExerciseResult | number for backward compat */
-type ExerciseCompleteHandler = (result: ExerciseResult | number) => void
+type ExerciseCompleteHandler = (result?: ExerciseResult | number) => void
 
-const EXERCISE_TYPE_COMPONENTS: Record<string, React.ComponentType<{ exercise: ExerciseDto; onComplete?: ExerciseCompleteHandler }>> = {
-  N_BACK: ({ exercise, onComplete }) => (
-    <NBackExercise exercise={exercise} onComplete={onComplete} />
+type ExerciseComponentProps = {
+  exercise: ExerciseDto
+  onComplete?: ExerciseCompleteHandler
+  showInstruction?: boolean
+}
+
+const EXERCISE_TYPE_COMPONENTS: Record<string, React.ComponentType<ExerciseComponentProps>> = {
+  N_BACK: ({ exercise, onComplete, showInstruction }) => (
+    <NBackExercise exercise={exercise} onComplete={onComplete} showInstruction={showInstruction} />
   ),
-  N_BACK_GRID: ({ exercise, onComplete }) => (
-    <NBackGridExercise exercise={exercise} onComplete={onComplete} />
+  N_BACK_GRID: ({ exercise, onComplete, showInstruction }) => (
+    <NBackGridExercise exercise={exercise} onComplete={onComplete} showInstruction={showInstruction} />
   ),
-  DUAL_NBACK_GRID: ({ exercise, onComplete }) => (
-    <DualNBackGridExercise exercise={exercise} onComplete={onComplete} />
+  DUAL_NBACK_GRID: ({ exercise, onComplete, showInstruction }) => (
+    <DualNBackGridExercise exercise={exercise} onComplete={onComplete} showInstruction={showInstruction} />
   ),
-  DUAL_NBACK_CARD: ({ exercise, onComplete }) => (
-    <DualNBackCardExercise exercise={exercise} onComplete={onComplete} />
+  DUAL_NBACK_CARD: ({ exercise, onComplete, showInstruction }) => (
+    <DualNBackCardExercise exercise={exercise} onComplete={onComplete} showInstruction={showInstruction} />
   ),
-  MEMORY_CARD_PAIRS: ({ exercise, onComplete }) => (
-    <MemoryCardExercise exercise={exercise} onComplete={onComplete} />
+  MEMORY_CARD_PAIRS: ({ exercise, onComplete, showInstruction }) => (
+    <MemoryCardExercise exercise={exercise} onComplete={onComplete} showInstruction={showInstruction} />
   ),
-  SUM_PAIR: ({ exercise, onComplete }) => (
-    <SumPairExercise exercise={exercise} onComplete={onComplete} />
+  SUM_PAIR: ({ exercise, onComplete, showInstruction }) => (
+    <SumPairExercise exercise={exercise} onComplete={onComplete} showInstruction={showInstruction} />
   ),
-  IMAGE_PAIR: ({ exercise, onComplete }) => (
-    <ImagePairExercise exercise={exercise} onComplete={onComplete} />
+  IMAGE_PAIR: ({ exercise, onComplete, showInstruction }) => (
+    <ImagePairExercise exercise={exercise} onComplete={onComplete} showInstruction={showInstruction} />
   ),
-  ANAGRAM: ({ exercise, onComplete }) => (
-    <AnagramExercise exercise={exercise} onComplete={onComplete} />
+  ANAGRAM: ({ exercise, onComplete, showInstruction }) => (
+    <AnagramExercise exercise={exercise} onComplete={onComplete} showInstruction={showInstruction} />
   ),
   WORDLE: ({ exercise, onComplete }) => (
     <WordleExercise exercise={exercise} onComplete={onComplete} />
+  ),
+  ESTIMATION: ({ exercise, onComplete, showInstruction }) => (
+    <EstimationExercise exercise={exercise} onComplete={onComplete} showInstruction={showInstruction} />
   ),
 }
 
@@ -57,7 +69,7 @@ const EXERCISE_TYPE_COMPONENTS: Record<string, React.ComponentType<{ exercise: E
  * Result display is decoupled — the parent (LadderSessionBlock, SessionExerciseBlock,
  * PlayExercisePage) owns showing the score and action buttons.
  */
-export function ExercisePlayer({ exercise, onComplete }: ExercisePlayerProps) {
+export function ExercisePlayer({ exercise, showInstruction = true, onComplete }: ExercisePlayerProps) {
   const [elapsedMs, setElapsedMs] = useState(0)
   const completedRef = useRef(false)
   const startRef = useRef(Date.now())
@@ -86,6 +98,7 @@ export function ExercisePlayer({ exercise, onComplete }: ExercisePlayerProps) {
       </div>
       <ExerciseComponent
         exercise={exercise}
+        showInstruction={showInstruction}
         onComplete={handleComplete}
       />
     </div>

@@ -24,7 +24,8 @@ spring:
     baseline-on-migrate: true
 
 server:
-  port: 5173
+  # PORT is set by Cloud Run (default 8080); use 5173 for local dev
+  port: ${PORT:5173}
 
 # MVP: allow anonymous local profile (no account)
 app:
@@ -767,6 +768,15 @@ app:
           - levelIndex: 29
             allowedDifficulties: [VERY_HARD]
             subjectCodes: [ESTIMATION]
+    # Single mix ladder: alternates through all ladders; advance when all pass their level
+    mixes:
+      mix:
+        - default
+        - sum
+        - anagram
+        - pair
+        - nback
+        - estimation
   # Journey: scalable step sequence; add steps or go to any step by index
   journey:
     code: default

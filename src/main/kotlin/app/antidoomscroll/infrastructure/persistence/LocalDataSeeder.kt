@@ -1149,6 +1149,78 @@ class LocalDataSeeder(
                 expectedAnswers = listOf("1048576")
                 timeLimitSeconds = 30
                 exerciseParams = mapOf("correctAnswer" to 1048576.0, "unit" to "", "toleranceFactor" to 1.05, "category" to "math", "hint" to "2^10 = 1 024, so 2^20 = 1 024².")
+            },
+            // Extra ULTRA_EASY for first-level variety
+            ExerciseEntity().apply {
+                id = UUID.fromString("a0000000-0000-0000-0000-000000000321")
+                subjectId = estimationId
+                type = "ESTIMATION"
+                difficulty = "ULTRA_EASY"
+                prompt = "Estimate: 372 ÷ 3 = ?"
+                expectedAnswers = listOf("124")
+                timeLimitSeconds = 20
+                exerciseParams = mapOf("correctAnswer" to 124.0, "unit" to "", "toleranceFactor" to 1.15, "category" to "math", "timeWeightHigher" to true)
+            },
+            ExerciseEntity().apply {
+                id = UUID.fromString("a0000000-0000-0000-0000-000000000322")
+                subjectId = estimationId
+                type = "ESTIMATION"
+                difficulty = "ULTRA_EASY"
+                prompt = "A car travels at 100 km/h. How long (in hours) to cover 50 km?"
+                expectedAnswers = listOf("0.5")
+                timeLimitSeconds = 25
+                exerciseParams = mapOf("correctAnswer" to 0.5, "unit" to "hours", "toleranceFactor" to 1.2, "category" to "math", "hint" to "time = distance ÷ speed")
+            },
+            ExerciseEntity().apply {
+                id = UUID.fromString("a0000000-0000-0000-0000-000000000323")
+                subjectId = estimationId
+                type = "ESTIMATION"
+                difficulty = "ULTRA_EASY"
+                prompt = "Budget is 72K, daily rate is 612. How many days can you cover?"
+                expectedAnswers = listOf("117.6")
+                timeLimitSeconds = 25
+                exerciseParams = mapOf("correctAnswer" to 117.647, "unit" to "days", "toleranceFactor" to 1.15, "category" to "math", "hint" to "days = budget ÷ daily rate")
+            },
+            // Car speed + conversion h/min — easier tau for first level
+            ExerciseEntity().apply {
+                id = UUID.fromString("a0000000-0000-0000-0000-000000000324")
+                subjectId = estimationId
+                type = "ESTIMATION"
+                difficulty = "ULTRA_EASY"
+                prompt = "A car travels at 130 km/h. How long (in hours) to cover 50 km?"
+                expectedAnswers = listOf("0.385")
+                timeLimitSeconds = 25
+                exerciseParams = mapOf("correctAnswer" to 0.385, "unit" to "hours", "toleranceFactor" to 1.4, "category" to "math", "hint" to "time = distance ÷ speed")
+            },
+            ExerciseEntity().apply {
+                id = UUID.fromString("a0000000-0000-0000-0000-000000000325")
+                subjectId = estimationId
+                type = "ESTIMATION"
+                difficulty = "ULTRA_EASY"
+                prompt = "A car travels at 60 km/h. How long (in minutes) to cover 30 km?"
+                expectedAnswers = listOf("30")
+                timeLimitSeconds = 25
+                exerciseParams = mapOf("correctAnswer" to 30.0, "unit" to "minutes", "toleranceFactor" to 1.4, "category" to "math", "hint" to "time = distance ÷ speed; 1 h = 60 min")
+            },
+            ExerciseEntity().apply {
+                id = UUID.fromString("a0000000-0000-0000-0000-000000000326")
+                subjectId = estimationId
+                type = "ESTIMATION"
+                difficulty = "ULTRA_EASY"
+                prompt = "How many minutes are in 1.5 hours?"
+                expectedAnswers = listOf("90")
+                timeLimitSeconds = 20
+                exerciseParams = mapOf("correctAnswer" to 90.0, "unit" to "minutes", "toleranceFactor" to 1.4, "category" to "math", "hint" to "1 hour = 60 minutes")
+            },
+            ExerciseEntity().apply {
+                id = UUID.fromString("a0000000-0000-0000-0000-000000000327")
+                subjectId = estimationId
+                type = "ESTIMATION"
+                difficulty = "ULTRA_EASY"
+                prompt = "How many minutes are in 2 hours?"
+                expectedAnswers = listOf("120")
+                timeLimitSeconds = 20
+                exerciseParams = mapOf("correctAnswer" to 120.0, "unit" to "minutes", "toleranceFactor" to 1.4, "category" to "math", "hint" to "1 hour = 60 minutes")
             }
         )
 

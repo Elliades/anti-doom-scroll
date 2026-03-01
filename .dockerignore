@@ -1,0 +1,34 @@
+# Frontend (not needed for backend image)
+frontend/
+
+# Build outputs and caches
+build/
+out/
+.gradle/
+**/.gradle/
+
+# IDE and OS
+.idea/
+.vscode/
+*.iml
+.DS_Store
+Thumbs.db
+
+# Logs and temp
+*.log
+logs/
+.git/
+.firebase/
+*.md
+!README.md
+
+# Test / coverage
+coverage/
+**/coverage/
+
+# Scripts and config not needed in image
+scripts/
+.firebaserc
+firebase.json
+.cursorrules
+*.ps1

@@ -364,6 +364,10 @@ app:
           - levelIndex: 4
             allowedDifficulties: [MEDIUM]
             subjectCodes: [WORD]
+    mixes:
+      mix:
+        - sum
+        - anagram
   journey:
     code: default
     name: "Test journey"

@@ -1,6 +1,12 @@
-import type { LadderSessionResponseDto, LadderStateDto, LadderNextResponseDto } from '../types/api'
-
-const API_BASE = '/api'
+import type {
+  LadderSessionResponseDto,
+  LadderStateDto,
+  LadderNextResponseDto,
+  LadderMixSessionResponseDto,
+  LadderMixStateDto,
+  LadderMixNextResponseDto,
+} from '../types/api'
+import { API_BASE, ensureJsonResponse } from './config'
 
 export interface LadderSummaryDto {
   code: string
@@ -8,9 +14,57 @@ export interface LadderSummaryDto {
   levelCount: number
 }
 
+export interface LadderMixSummaryDto {
+  code: string
+  name: string | null
+  ladderCodes: string[]
+}
+
 export async function listLadders(): Promise<LadderSummaryDto[]> {
   const res = await fetch(`${API_BASE}/ladders`)
+  ensureJsonResponse(res)
   if (!res.ok) throw new Error(`Failed to load ladders: ${res.status}`)
+  return res.json()
+}
+
+export async function listLadderMixes(): Promise<LadderMixSummaryDto[]> {
+  const res = await fetch(`${API_BASE}/ladders/mixes`)
+  if (res.status === 404) return [] // Backend may not expose mixes yet
+  ensureJsonResponse(res)
+  if (!res.ok) throw new Error(`Failed to load ladder mixes: ${res.status}`)
+  return res.json()
+}
+
+export async function startLadderMixSession(
+  profileId?: string,
+  mixCode: string = 'mix'
+): Promise<LadderMixSessionResponseDto> {
+  const params = new URLSearchParams()
+  params.set('mode', 'ladderMix')
+  params.set('ladderMixCode', mixCode)
+  if (profileId) params.set('profileId', profileId)
+  const res = await fetch(`${API_BASE}/session/start?${params.toString()}`)
+  ensureJsonResponse(res)
+  if (!res.ok) throw new Error(`Ladder mix start failed: ${res.status}`)
+  return res.json()
+}
+
+export async function getNextLadderMixExercise(
+  ladderMixState: LadderMixStateDto,
+  lastCompletedLadderCode: string,
+  lastScore: number
+): Promise<LadderMixNextResponseDto> {
+  const res = await fetch(`${API_BASE}/session/ladder-mix/next`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      ladderMixState,
+      lastCompletedLadderCode,
+      lastScore,
+    }),
+  })
+  ensureJsonResponse(res)
+  if (!res.ok) throw new Error(`Ladder mix next failed: ${res.status}`)
   return res.json()
 }
 
@@ -23,6 +77,7 @@ export async function startLadderSession(
   params.set('ladderCode', ladderCode)
   if (profileId) params.set('profileId', profileId)
   const res = await fetch(`${API_BASE}/session/start?${params.toString()}`)
+  ensureJsonResponse(res)
   if (!res.ok) throw new Error(`Ladder start failed: ${res.status}`)
   return res.json()
 }
@@ -39,6 +94,7 @@ export async function getNextLadderExercise(
       lastScore,
     }),
   })
+  ensureJsonResponse(res)
   if (!res.ok) throw new Error(`Ladder next failed: ${res.status}`)
   return res.json()
 }

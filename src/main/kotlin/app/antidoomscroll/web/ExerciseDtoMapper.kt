@@ -55,11 +55,11 @@ class ExerciseDtoMapper(
     fun toExerciseDto(ex: Exercise, subjectCode: String?): ExerciseDto {
         val exerciseWithParams = resolveNBackParamsIfNeeded(ex)
         val mathParams = exerciseWithParams.mathFlashcardParams()
-        val (prompt, expectedAnswers) = if (mathParams != null) {
-            val (p, a) = mathFlashcardGenerator.generate(mathParams)
-            Pair(p, listOf(a))
+        val (prompt, expectedAnswers, mathComplexityScore) = if (mathParams != null) {
+            val result = mathFlashcardGenerator.generate(mathParams, exerciseWithParams.difficulty)
+            Triple(result.prompt, listOf(result.expectedAnswer), result.complexityScore)
         } else {
-            Pair(exerciseWithParams.prompt, exerciseWithParams.expectedAnswers)
+            Triple(exerciseWithParams.prompt, exerciseWithParams.expectedAnswers, null)
         }
         val nBackParams = resolveNBackParams(exerciseWithParams)
         val nBackGridParams = resolveNBackGridParams(exerciseWithParams)
@@ -87,7 +87,8 @@ class ExerciseDtoMapper(
                 unit = p.unit,
                 toleranceFactor = p.toleranceFactor,
                 category = p.category,
-                hint = p.hint
+                hint = p.hint,
+                timeWeightHigher = p.timeWeightHigher
             )
         }
         val wordleParams = WordleParamsResolver.resolve(exerciseWithParams)?.let { p ->
@@ -125,6 +126,7 @@ class ExerciseDtoMapper(
             expectedAnswers = expectedAnswers,
             timeLimitSeconds = exerciseWithParams.timeLimitSeconds,
             mathOperation = mathParams?.operation?.name,
+            mathComplexityScore = mathComplexityScore,
             nBackParams = nBackParams,
             nBackGridParams = nBackGridParams,
             dualNBackGridParams = dualNBackGridParams,

@@ -1,6 +1,5 @@
 import type { ExerciseDto, SessionResponseDto } from '../types/api'
-
-const API_BASE = '/api'
+import { API_BASE, ensureJsonResponse } from './config'
 
 export async function startSession(
   profileId?: string,
@@ -14,6 +13,7 @@ export async function startSession(
   const query = params.toString()
   const url = query ? `${API_BASE}/session/start?${query}` : `${API_BASE}/session/start`
   const res = await fetch(url)
+  ensureJsonResponse(res)
   if (!res.ok) throw new Error(`Session start failed: ${res.status}`)
   return res.json()
 }
@@ -22,6 +22,7 @@ export async function startSession(
 export async function getNBackByLevel(level: number): Promise<ExerciseDto | null> {
   const res = await fetch(`${API_BASE}/nback/${level}`)
   if (res.status === 404) return null
+  ensureJsonResponse(res)
   if (!res.ok) throw new Error(`N-back fetch failed: ${res.status}`)
   return res.json()
 }
@@ -37,6 +38,7 @@ const NBACK_ID_TO_LEVEL: Record<string, number> = {
 export async function getExerciseById(id: string): Promise<ExerciseDto | null> {
   const res = await fetch(`${API_BASE}/exercises/${encodeURIComponent(id)}?_=${Date.now()}`)
   if (res.status === 404) return null
+  ensureJsonResponse(res)
   if (!res.ok) throw new Error(`Exercise fetch failed: ${res.status}`)
   const ex = (await res.json()) as ExerciseDto
   const nbackParams = ex.nBackParams ?? ex.nbackParams
