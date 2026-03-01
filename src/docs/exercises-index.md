@@ -1,0 +1,277 @@
+# Exercises index
+
+**Goal:** Access exercises via URL **without knowing any exercise ID**. Base URL: `http://localhost:5173`.
+
+---
+
+## Subjects and exercises (by subject)
+
+| Subject | Code | Exercises |
+|---------|------|-----------|
+| **Default** | `default` | FLASHCARD_QA ADD (4: ULTRA_EASY, EASY, MEDIUM, HARD), FLASHCARD_QA SUBTRACT (4), FLASHCARD_QA MULTIPLY (4), FLASHCARD_QA DIVIDE (4) |
+| **N-back** | `B1` | N_BACK (3: 1-back, 2-back, 3-back), N_BACK_GRID (2), DUAL_NBACK_GRID (1), DUAL_NBACK_CARD (1) |
+| **Memory** | `MEMORY` | MEMORY_CARD_PAIRS (3), SUM_PAIR (4) |
+| **Anagrammes (FR)** | `ANAGRAM_FR` | ANAGRAM (4: ULTRA_EASY, EASY, MEDIUM, HARD) |
+
+**Default** — Sum, Subtraction, Multiplication, Division (math flashcard) by difficulty.  
+**B1** — N-back card, N-back grid, dual N-back grid, dual N-back card.  
+**MEMORY** — Memory card pairs and sum-pair exercises.  
+**ANAGRAM_FR** — French anagrams by difficulty.
+
+---
+
+## If /api/subjects and /api/exercises are empty
+
+- **Using in-memory (no PostgreSQL):** Start the backend with the **local** profile so seed data is loaded:
+  - `./gradlew bootRun --args='--spring.profiles.active=local'`  
+  - Then open [http://localhost:5173/api/subjects](http://localhost:5173/api/subjects) and [http://localhost:5173/api/exercises](http://localhost:5173/api/exercises).
+- **Using PostgreSQL:** Ensure the database exists and the app can connect; Flyway runs on first boot and seeds subjects and exercises. If the DB was created empty or migrations failed, check logs and DB connection.
+
+---
+
+## Main URLs (no ID needed)
+
+| What you want | URL (GET) |
+|---------------|-----------|
+| **All subjects** | [http://localhost:5173/api/subjects](http://localhost:5173/api/subjects) |
+| **All exercises** | [http://localhost:5173/api/exercises](http://localhost:5173/api/exercises) |
+
+---
+
+## More URLs
+
+| What you want | URL (GET) |
+|---------------|-----------|
+| **N-Back 1** | [http://localhost:5173/api/nback/1](http://localhost:5173/api/nback/1) |
+| **N-Back 2** | [http://localhost:5173/api/nback/2](http://localhost:5173/api/nback/2) |
+| **N-Back 3** | [http://localhost:5173/api/nback/3](http://localhost:5173/api/nback/3) |
+| **Exercises in subject “default”** | [http://localhost:5173/api/subjects/default/exercises](http://localhost:5173/api/subjects/default/exercises) |
+| **Exercises in subject “B1”** | [http://localhost:5173/api/subjects/B1/exercises](http://localhost:5173/api/subjects/B1/exercises) |
+| **Start a session** (returns steps with exercises) | [http://localhost:5173/api/session/start](http://localhost:5173/api/session/start) |
+| **Start ladder session** (score-based level progression) | [http://localhost:5173/api/session/start?mode=ladder](http://localhost:5173/api/session/start?mode=ladder) |
+| **Start session, prefer one type** | [http://localhost:5173/api/session/start?preferType=SUM_PAIR](http://localhost:5173/api/session/start?preferType=SUM_PAIR) |
+| **Open-app session** | [http://localhost:5173/api/session/start?mode=openapp](http://localhost:5173/api/session/start?mode=openapp) |
+| **Journey definition** | [http://localhost:5173/api/journey?code=default](http://localhost:5173/api/journey?code=default) |
+| **Journey step 0 content** (e.g. open-app session) | [http://localhost:5173/api/journey/steps/0/content?journeyCode=default](http://localhost:5173/api/journey/steps/0/content?journeyCode=default) |
+| **Journey step 1 content** (e.g. reflection) | [http://localhost:5173/api/journey/steps/1/content?journeyCode=default](http://localhost:5173/api/journey/steps/1/content?journeyCode=default) |
+| **Journey step 2 content** (chapter exercises) | [http://localhost:5173/api/journey/steps/2/content?journeyCode=default&chapterIndex=0](http://localhost:5173/api/journey/steps/2/content?journeyCode=default&chapterIndex=0) |
+
+**If you already have an exercise ID** (e.g. from a list response):  
+[http://localhost:5173/api/exercises/{id}](http://localhost:5173/api/exercises/{id})
+
+---
+
+## Exercise types and params
+
+### 1. Sum (FLASHCARD_QA, operation: ADD)
+
+- **Display name:** Sum (API returns `mathOperation: "ADD"` for UI label).
+- **Params:** `operation: ADD`, `firstMax`, `secondMax` — digit ranges per difficulty:
+  - ULTRA_EASY (opening): 1 digit + 1–2 digits (max 3 digits total)
+  - EASY: 1–2 digits + 1–2 digits
+  - MEDIUM: 2–3 digits + 2–3 digits
+  - HARD: 3–4 digits + 3–4 digits
+- **Access (no ID):** [All exercises](http://localhost:5173/api/exercises) or [subjects](http://localhost:5173/api/subjects) then subject’s exercises, or session/journey.
+
+---
+
+### 1b. Subtraction (FLASHCARD_QA, operation: SUBTRACT)
+
+- **Display name:** Subtraction (API returns `mathOperation: "SUBTRACT"` for UI label).
+- **Params:** `operation: SUBTRACT`, `firstMax`, `secondMax`. Generator ensures subtrahend ≤ minuend (non-negative results). Same difficulty progression as Sum:
+  - ULTRA_EASY: 1–2 digit − 1 digit (e.g. 12 − 5)
+  - EASY: 1–2 digits − 1–2 digits
+  - MEDIUM: 2–3 digits − 2–3 digits
+  - HARD: 3–4 digits − 3–4 digits
+- **Access (no ID):** Same as Sum (default subject); list shows "Subtraction" when `mathOperation` is SUBTRACT.
+
+---
+
+### 2. CLOZE
+
+- **Params:** None (generic).
+- **Access (no ID):** Same as above (subject list, session, journey).
+
+---
+
+### 3. QCM
+
+- **Params:** None (generic).
+- **Access (no ID):** Same as above.
+
+---
+
+### 4. KEYWORD_BLURTING
+
+- **Params:** None (generic).
+- **Access (no ID):** Same as above.
+
+---
+
+### 5. MINI_PROBLEM
+
+- **Params:** None (generic).
+- **Access (no ID):** Same as above.
+
+---
+
+### 6. N_BACK (Card)
+
+- **Params** (response as `nBackParams`):
+
+  | Field | Type | Description |
+  |-------|------|-------------|
+  | `n` | `Int` | Match current item with item N positions back (1 = previous). |
+  | `sequence` | `List<String>` | Stimuli to display one-by-one. **Card codes** (e.g. `AC`, `2D`, `QH`) or letters. |
+  | `matchIndices` | `List<Int>` | 0-based positions where current == item at (current - n). |
+
+- **Access (no ID):** Use level URLs: [1-back](http://localhost:5173/api/nback/1), [2-back](http://localhost:5173/api/nback/2), [3-back](http://localhost:5173/api/nback/3).
+- **Details:** See [exercise-nback.md](exercise-nback.md).
+
+---
+
+### 6b. N_BACK_GRID
+
+- **Params** (response as `nBackGridParams`):
+
+  | Field | Type | Description |
+  |-------|------|-------------|
+  | `n` | `Int` | Match current grid position with position N steps back. |
+  | `sequence` | `List<Int>` | Grid cell indices 0–8 (3×3, row-major). |
+  | `matchIndices` | `List<Int>` | Positions where current cell == cell at (current - n). |
+  | `gridSize` | `Int` | Grid dimension (default 3). |
+
+- **Details:** See [exercise-nback-architecture.md](exercise-nback-architecture.md).
+
+---
+
+### 6c. DUAL_NBACK_GRID
+
+- **Params** (response as `dualNBackGridParams`):
+
+  | Field | Type | Description |
+  |-------|------|-------------|
+  | `n` | `Int` | Same as single N-back. |
+  | `sequence` | `List<{position, color}>` | Position (0–8) and color per stimulus. |
+  | `matchPositionIndices` | `List<Int>` | Positions where current position == position N back. |
+  | `matchColorIndices` | `List<Int>` | Positions where current color == color N back. |
+  | `colors` | `List<String>` | Up to 4 hex colors for stimuli. |
+
+- **User action:** "Match Position" or "Match Color" buttons.
+- **Details:** See [exercise-nback-architecture.md](exercise-nback-architecture.md).
+
+---
+
+### 6d. DUAL_NBACK_CARD
+
+- **Params** (response as `dualNBackCardParams`):
+
+  | Field | Type | Description |
+  |-------|------|-------------|
+  | `n` | `Int` | Same as single N-back. |
+  | `sequence` | `List<String>` | Card codes. |
+  | `matchColorIndices` | `List<Int>` | Suit match (e.g. both Clubs). |
+  | `matchNumberIndices` | `List<Int>` | Rank match (e.g. both 2). |
+
+- **User action:** "Match Color" (suit) or "Match Number" (rank) buttons.
+- **Details:** See [exercise-nback-architecture.md](exercise-nback-architecture.md).
+
+---
+
+### 7. MEMORY_CARD_PAIRS
+
+- **Params** (response as `memoryCardParams`):
+
+  | Field | Type | Description |
+  |-------|------|-------------|
+  | `pairCount` | `Int` | Number of pairs (total cards = 2 × pairCount). Must be ≥ 2. |
+  | `symbols` | `List<String>` | One symbol per pair (e.g. emoji or letter); size must equal `pairCount`. |
+
+- **Access (no ID):** [All exercises](http://localhost:5173/api/exercises) or [default](http://localhost:5173/api/subjects/default/exercises) / [B1](http://localhost:5173/api/subjects/B1/exercises) — list; each item has `id` if needed.
+
+---
+
+### 8. ANAGRAM
+
+- **Params** (response as `anagramParams`); **generated at response time:**
+
+  | Field | Type | Description |
+  |-------|------|--------------|
+  | `scrambledLetters` | `List<String>` | Shuffled letters to recompose. |
+  | `answer` | `String` | Correct word. |
+
+- **Letter range per difficulty:**
+
+  | Difficulty | Letters |
+  |------------|---------|
+  | ULTRA_EASY | 2–3 |
+  | EASY | 3–4 |
+  | MEDIUM | 4–5 |
+  | HARD | 5+ |
+
+- **Subject**: `ANAGRAM_FR` (French). English subject (`ANAGRAM_EN`) can be added later.
+- **Access**: [Exercises in subject ANAGRAM_FR](http://localhost:5173/api/subjects/ANAGRAM_FR/exercises) or session/journey.
+- **Details**: See [exercise-anagram.md](exercise-anagram.md).
+
+---
+
+### 1c. Multiplication (FLASHCARD_QA, operation: MULTIPLY)
+
+- **Display name:** Multiplication (API returns `mathOperation: "MULTIPLY"`).
+- **Params:** `operation: MULTIPLY`; optional `firstValues` (e.g. `[2, 5, 10]`) for fixed multipliers; else `firstMin`/`firstMax`, `secondMin`/`secondMax`. Difficulty progression (own logic, not digit-based like Sum):
+  - **ULTRA_EASY:** 2, 5, or 10 × single digit (e.g. 2×7, 10×4) — `firstValues: [2,5,10]`, `secondMax: 9`.
+  - **EASY:** Times tables — 1–9 × 1–12 (e.g. 7×8).
+  - **MEDIUM:** Two-digit × one-digit (e.g. 24×7).
+  - **HARD:** Two-digit × two-digit (e.g. 24×17).
+- **Access (no ID):** [All exercises](http://localhost:5173/api/exercises) or default subject; session/journey.
+
+---
+
+### 1d. Division (FLASHCARD_QA, operation: DIVIDE)
+
+- **Display name:** Division (API returns `mathOperation: "DIVIDE"`). All divisions are clean (dividend = divisor × quotient).
+- **Params:** `operation: DIVIDE`; optional `secondValues` (e.g. `[2, 5, 10]`) for fixed divisors; else `firstMin`/`firstMax` (quotient range), `secondMin`/`secondMax` (divisor range). Difficulty progression:
+  - **ULTRA_EASY:** ÷ 2, 5, or 10 with quotient 1–9 (e.g. 20÷2, 45÷5).
+  - **EASY:** Divisor 2–9, quotient 1–12 (times-table divisions).
+  - **MEDIUM:** Divisor 1–9, quotient 1–99 (e.g. 432÷6).
+  - **HARD:** Two-digit ÷ two-digit (quotient and divisor 10–99).
+- **Access (no ID):** Same as Multiplication.
+
+---
+
+### 9. SUM_PAIR
+
+- **Params** (response as `sumPairParams`); **generated at response time:** `sumPairRounds`.
+
+  | Field | Type | Description |
+  |-------|------|-------------|
+  | `staticNumbers` | `List<Int>` | One or more static values K; valid pair (a,b) iff a + K = b. Single = one round; multiple = multi-round. |
+  | `pairsPerRound` | `Int` | Number of sum pairs per round (2 × pairsPerRound cards per round). ≥ 2. |
+  | `minValue` | `Int` | Optional min for generated numbers (default 1). |
+  | `maxValue` | `Int` | Optional max for generated numbers (default 99). |
+
+  **Response-only (generated):** `sumPairRounds`: `List<{ static: Int, cards: List<Int> }>` — one entry per round; `cards` are the shuffled numbers for that round.
+
+- **Access (no ID):** [All exercises](http://localhost:5173/api/exercises) or [default/B1](http://localhost:5173/api/subjects/default/exercises) — list includes SUM_PAIR with full params; or [session prefer SUM_PAIR](http://localhost:5173/api/session/start?preferType=SUM_PAIR).
+- **Details:** See [exercise-sum-pair.md](exercise-sum-pair.md).
+
+---
+
+## Quick reference: URLs (base `http://localhost:5173`)
+
+| What | URL |
+|------|-----|
+| **All subjects** | [http://localhost:5173/api/subjects](http://localhost:5173/api/subjects) |
+| **All exercises** | [http://localhost:5173/api/exercises](http://localhost:5173/api/exercises) |
+| N-Back 1, 2, 3 (card) | [api/nback/1](http://localhost:5173/api/nback/1) · [api/nback/2](http://localhost:5173/api/nback/2) · [api/nback/3](http://localhost:5173/api/nback/3) |
+| N-Back Grid, Dual Grid, Dual Card | Via [api/exercises](http://localhost:5173/api/exercises) by type |
+| Exercises in subject | [api/subjects/default/exercises](http://localhost:5173/api/subjects/default/exercises) · [api/subjects/B1/exercises](http://localhost:5173/api/subjects/B1/exercises) · [api/subjects/ANAGRAM_FR/exercises](http://localhost:5173/api/subjects/ANAGRAM_FR/exercises) |
+| Start session | [http://localhost:5173/api/session/start](http://localhost:5173/api/session/start) |
+| Journey | [http://localhost:5173/api/journey?code=default](http://localhost:5173/api/journey?code=default) |
+| Journey step content | [api/journey/steps/0/content?journeyCode=default](http://localhost:5173/api/journey/steps/0/content?journeyCode=default) (step 0, 1, 2, …) |
+| Health | [http://localhost:5173/api/health](http://localhost:5173/api/health) |
+| **If you have an ID** | `http://localhost:5173/api/exercises/{id}` |
+
+---
+
+*When adding or changing exercise types or params, update this index and any type-specific doc (e.g. `exercise-sum-pair.md`).*
