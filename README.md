@@ -243,16 +243,10 @@ On the **`prod`** branch the app is wired for production:
 - **Database:** Neon PostgreSQL (URL and user are in `application-prod.yml`).
 - **Frontend:** Firebase Hosting; `frontend/.env.production` sets `VITE_API_URL` to the Cloud Run API.
 
-**One-time: set the DB password on Cloud Run** (no other backend config needed):
+**Deploy backend** (do this every time you deploy; the script sets the DB password on the service then builds and deploys the image so the new revision starts successfully):
 
 ```powershell
 $env:NEON_DB_PASSWORD = "your-neon-password"
-.\scripts\set-production-env-cloudrun.ps1
-```
-
-**Deploy backend** (build and push the image; Cloud Run will use the new image with prod config):
-
-```powershell
 .\scripts\deploy-backend-cloudrun.ps1
 ```
 
