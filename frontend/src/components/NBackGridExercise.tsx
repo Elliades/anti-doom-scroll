@@ -5,13 +5,14 @@ import type { ExerciseResult } from '../types/exercise'
 interface NBackGridExerciseProps {
   exercise: ExerciseDto
   onComplete?: (result: ExerciseResult | number) => void
+  showInstruction?: boolean
 }
 
 /**
  * Grid N-Back: 3×3 grid, one cell highlighted per stimulus.
  * User taps Match when the highlighted position matches N steps back.
  */
-export function NBackGridExercise({ exercise, onComplete }: NBackGridExerciseProps) {
+export function NBackGridExercise({ exercise, onComplete, showInstruction = true }: NBackGridExerciseProps) {
   const params = exercise.nBackGridParams ?? exercise.nbackGridParams
   if (!params || !params.sequence?.length) {
     return <p className="error">Invalid Grid N-Back exercise: missing sequence.</p>
@@ -73,10 +74,12 @@ export function NBackGridExercise({ exercise, onComplete }: NBackGridExercisePro
           {n}-Back
         </div>
         <p className="prompt">{exercise.prompt}</p>
-        <p className="nback-instruction">
-          A cell will light up in the grid. Tap Match when the highlighted position matches the one from{' '}
-          {params.n} step(s) back.
-        </p>
+        {showInstruction && (
+          <p className="nback-instruction">
+            A cell will light up in the grid. Tap Match when the highlighted position matches the one from{' '}
+            {params.n} step(s) back.
+          </p>
+        )}
         <button onClick={handleStart} className="nback-start-btn">
           Start
         </button>

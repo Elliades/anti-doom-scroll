@@ -1,0 +1,23 @@
+# Neon PostgreSQL profile. Set env vars (no secrets in repo):
+#   SPRING_DATASOURCE_URL     e.g. jdbc:postgresql://ep-xxx-pooler.region.aws.neon.tech/neondb?sslmode=require
+#   SPRING_DATASOURCE_USERNAME e.g. neondb_owner
+#   SPRING_DATASOURCE_PASSWORD (from Neon dashboard)
+# Usage: --spring.profiles.active=neon  or SPRING_PROFILES_ACTIVE=neon
+spring:
+  datasource:
+    url: ${SPRING_DATASOURCE_URL}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 5
+      connection-timeout: 10000
+      keepalive-time: 30000
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+    baseline-on-migrate: true

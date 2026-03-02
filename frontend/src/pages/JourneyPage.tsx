@@ -142,7 +142,6 @@ export function JourneyPage() {
       <Link to="/subjects" className="subjects-link">Subjects</Link>
       <Link to="/exercises" className="subjects-link">All exercises</Link>
       <Link to="/ladder" className="subjects-link">Ladder</Link>
-      <Link to="/ladder/sum" className="subjects-link">Sum Ladder</Link>
       {journey.steps.map((_, i) => (
         <button
           key={i}

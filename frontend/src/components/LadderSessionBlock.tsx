@@ -34,6 +34,8 @@ export function LadderSessionBlock({ ladderCode = 'default' }: LadderSessionBloc
   const [exerciseKey, setExerciseKey] = useState(0)
   /** Non-blocking toast shown when the player changes level. Auto-dismissed after 3 s. */
   const [levelToast, setLevelToast] = useState<{ from: number; to: number; direction: string } | null>(null)
+  /** True only for the very first exercise of the ladder; used to show instruction once. */
+  const [isFirstExerciseInLadder, setIsFirstExerciseInLadder] = useState(true)
 
   /**
    * Use refs for values that must be read at async-call time, not captured in closures.
@@ -53,6 +55,7 @@ export function LadderSessionBlock({ ladderCode = 'default' }: LadderSessionBloc
     setLoading(true)
     setInlineError(null)
     setLevelToast(null)
+    setIsFirstExerciseInLadder(true)
     transitioningRef.current = false
     clearToastTimer()
     try {
@@ -103,6 +106,7 @@ export function LadderSessionBlock({ ladderCode = 'default' }: LadderSessionBloc
 
       if (next.exercise) {
         setExercise(next.exercise)
+        setIsFirstExerciseInLadder(false)
         // Always increment the key so ExercisePlayer remounts even when the
         // backend returns the same exercise entity ID (math exercises, etc.)
         setExerciseKey(k => k + 1)
@@ -216,6 +220,7 @@ export function LadderSessionBlock({ ladderCode = 'default' }: LadderSessionBloc
           <ExercisePlayer
             key={`${exercise.id}-${exerciseKey}`}
             exercise={exercise}
+            showInstruction={isFirstExerciseInLadder}
             onComplete={(result, _elapsed) => {
               void handleComplete(typeof result === 'number' ? { score: result } : result)
             }}

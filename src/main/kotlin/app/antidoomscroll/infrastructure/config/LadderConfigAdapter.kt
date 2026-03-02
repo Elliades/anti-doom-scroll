@@ -21,4 +21,24 @@ class LadderConfigAdapter(
                 levelCount = def.levels.size
             )
         }
+
+    override fun getMixByCode(code: String): LadderPort.LadderMixDef? {
+        val ladderCodes = properties.mixes[code] ?: return null
+        if (ladderCodes.size < 2) return null
+        return LadderPort.LadderMixDef(mixCode = code, ladderCodes = ladderCodes)
+    }
+
+    override fun listAllMixes(): List<LadderPort.LadderMixSummary> =
+        properties.mixes
+            .filter { it.value.size >= 2 }
+            .map { (code, ladderCodes) ->
+                val name = if (code == "mix" || ladderCodes.size > 2) "Ladder Mix" else {
+                    ladderCodes.mapNotNull { properties.ladders[it]?.name }.joinToString(" + ").takeIf { it.isNotBlank() }
+                }
+                LadderPort.LadderMixSummary(
+                    code = code,
+                    name = name,
+                    ladderCodes = ladderCodes
+                )
+            }
 }

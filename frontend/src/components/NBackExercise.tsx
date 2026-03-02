@@ -7,6 +7,8 @@ import { NBackCardCarousel } from './NBackCardCarousel'
 interface NBackExerciseProps {
   exercise: ExerciseDto
   onComplete?: (result: ExerciseResult | number) => void
+  /** When false, intro screen omits the instruction paragraph (e.g. ladder: only first exercise). Default true. */
+  showInstruction?: boolean
 }
 
 /**
@@ -14,7 +16,7 @@ interface NBackExerciseProps {
  * Displays sequence one item at a time (cards or letters); user taps "Match" when current == item N steps back.
  * Uses playing cards when sequence contains card codes (e.g. AC, 2D, QH).
  */
-export function NBackExercise({ exercise, onComplete }: NBackExerciseProps) {
+export function NBackExercise({ exercise, onComplete, showInstruction = true }: NBackExerciseProps) {
   const params = exercise.nBackParams ?? exercise.nbackParams
   if (!params || !params.sequence?.length) {
     return <p className="error">Invalid N-Back exercise: missing sequence.</p>
@@ -100,11 +102,13 @@ export function NBackExercise({ exercise, onComplete }: NBackExerciseProps) {
           {n}-Back
         </div>
         <p className="prompt">{exercise.prompt}</p>
-        <p className="nback-instruction">
-          {useCards
-            ? 'Cards will appear one by one. Tap Match when the current card matches the one from ' + params.n + ' step(s) back.'
-            : 'Items will appear one by one. Tap Match when the current item matches the one from ' + params.n + ' step(s) back.'}
-        </p>
+        {showInstruction && (
+          <p className="nback-instruction">
+            {useCards
+              ? 'Cards will appear one by one. Tap Match when the current card matches the one from ' + params.n + ' step(s) back.'
+              : 'Items will appear one by one. Tap Match when the current item matches the one from ' + params.n + ' step(s) back.'}
+          </p>
+        )}
         <button onClick={handleStart} className="nback-start-btn">
           Start
         </button>

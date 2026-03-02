@@ -1,0 +1,44 @@
+{
+  "firstLevel": {
+    "toleranceFactorMin": 1.5,
+    "toleranceFactorMax": 1.7
+  },
+  "budget_days": {
+    "minLevelIndex": 10,
+    "budgets": [12000, 24000, 36000, 72000, 100000, 150000],
+    "dailyRates": [300, 450, 612, 800, 1200],
+    "askInMonthsWhenDifficultyScoreMin": 50,
+    "promptDays": "Budget is {budget}K, daily rate is {dailyRate}. How many days can you cover?",
+    "promptMonths": "Budget is {budget}K, daily rate is {dailyRate}. How many months can you cover?",
+    "toleranceBase": 1.15,
+    "toleranceRange": 0.1,
+    "hintDays": "days = budget ÷ daily rate",
+    "hintMonths": "days = budget ÷ daily rate; then ÷ 30 for months"
+  },
+  "speed_time": {
+    "speeds": [50, 80, 90, 100, 110, 120, 130, 140],
+    "distances": [30, 50, 75, 100, 150, 200, 250],
+    "askInMinutesOnFirstLevel": true,
+    "promptHours": "A car travels at {speed} km/h. How long (in hours) to cover {distance} km?",
+    "promptMinutes": "A car travels at {speed} km/h. How long (in minutes) to cover {distance} km?",
+    "toleranceBase": 1.2,
+    "toleranceRange": 0.1,
+    "hintHours": "time = distance ÷ speed",
+    "hintMinutes": "time = distance ÷ speed; 1 h = 60 min"
+  },
+  "conversion_h_min": {
+    "hoursValues": [0.5, 1.0, 1.5, 2.0, 2.5, 3.0],
+    "prompt": "How many minutes are in {hours} hours?",
+    "toleranceBase": 1.15,
+    "toleranceRange": 0.1,
+    "hint": "1 hour = 60 minutes"
+  },
+  "pure_math": {
+    "toleranceBase": 1.05,
+    "toleranceRange": 0.15,
+    "fallbackToleranceBase": 1.15,
+    "fallbackToleranceRange": 0.1,
+    "fallbackDivisorRange": [2, 12],
+    "fallbackQuotientRange": [10, 200]
+  }
+}

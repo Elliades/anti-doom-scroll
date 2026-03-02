@@ -21,6 +21,8 @@ data class ExerciseDto(
     val timeLimitSeconds: Int,
     /** When type is FLASHCARD_QA and exercise has math params: ADD, SUBTRACT, MULTIPLY, DIVIDE. */
     val mathOperation: String? = null,
+    /** Human arithmetic complexity score (0–5 very easy, 5–15 elementary, 15–30 intermediate, 30+ advanced). */
+    val mathComplexityScore: Double? = null,
     val nBackParams: NBackParamsDto? = null,
     val nBackGridParams: NBackGridParamsDto? = null,
     val dualNBackGridParams: DualNBackGridParamsDto? = null,
@@ -127,11 +129,13 @@ data class WordleParamsDto(
  * Params for ESTIMATION exercise.
  * Score = max(0, 1 − |ln(userAnswer/correctAnswer)| / ln(toleranceFactor)).
  * category: "math" | "geography" | "science" | "history".
+ * When timeWeightHigher is true (e.g. pure arithmetic), frontend weights time more than precision.
  */
 data class EstimationParamsDto(
     val correctAnswer: Double,
     val unit: String,
     val toleranceFactor: Double,
     val category: String,
-    val hint: String? = null
+    val hint: String? = null,
+    val timeWeightHigher: Boolean = false
 )

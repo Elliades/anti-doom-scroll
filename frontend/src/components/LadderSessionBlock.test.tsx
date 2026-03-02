@@ -30,6 +30,25 @@ function makeExercise(id: string, prompt: string): ExerciseDto {
   }
 }
 
+/** SUM_PAIR exercise with one pair (two cards) so we can complete quickly and test instruction visibility. */
+function makeSumPairExercise(id: string, prompt: string): ExerciseDto {
+  return {
+    id,
+    subjectId: 'sub-1',
+    subjectCode: 'sum',
+    type: 'SUM_PAIR',
+    difficulty: 'ULTRA_EASY',
+    prompt,
+    expectedAnswers: [],
+    timeLimitSeconds: 60,
+    sumPairGroups: [{ static: 0, color: '#3b82f6', cards: [1, 1] }],
+    sumPairDeck: [
+      { value: 1, static: 0, color: '#3b82f6' },
+      { value: 1, static: 0, color: '#3b82f6' },
+    ],
+  }
+}
+
 function makeState(level = 0, recentScores: number[] = [], overallTotal = 0): LadderStateDto {
   return {
     ladderCode: 'default',
@@ -210,4 +229,53 @@ describe('LadderSessionBlock – continuous play (no blocking score screen)', ()
     expect(document.querySelector('.score-animation')).not.toBeInTheDocument()
     expect(screen.queryByText(/Excellent|Well done|Good effort|Keep practicing/)).not.toBeInTheDocument()
   }, 8000)
+
+  it('shows instruction only on the first exercise of the ladder, not on subsequent exercises', async () => {
+    const firstPrompt = 'Sum-pair round 1'
+    const secondPrompt = 'Sum-pair round 2'
+    vi.mocked(ladderApi.startLadderSession).mockResolvedValue({
+      profileId: 'p1',
+      mode: 'ladder',
+      exercise: makeSumPairExercise('sumpair-1', firstPrompt),
+      ladderState: makeState(0, [], 0),
+      sessionDefaultSeconds: 60,
+      lowBatteryModeSeconds: 30,
+    } satisfies LadderSessionResponseDto)
+
+    vi.mocked(ladderApi.getNextLadderExercise).mockResolvedValue({
+      exercise: makeSumPairExercise('sumpair-2', secondPrompt),
+      ladderState: makeState(0, [1], 1),
+    } satisfies LadderNextResponseDto)
+
+    renderLadder()
+    await waitForExercise(firstPrompt)
+
+    // First exercise: instruction paragraph must be visible (text is split by <strong>)
+    const instructionEl = document.querySelector('.sumpair-instruction')
+    expect(instructionEl).toBeInTheDocument()
+    expect(instructionEl?.textContent).toMatch(/Find pairs where.*first \+ static = second/i)
+    expect(screen.getByRole('button', { name: /start/i })).toBeInTheDocument()
+
+    // Start the first exercise, then match the single pair (two cards both value 1, static 0)
+    await act(async () => {
+      screen.getByRole('button', { name: /start/i }).click()
+    })
+    await waitFor(() => expect(document.querySelector('.sumpair-playing')).toBeInTheDocument())
+    const cardButtons = document.querySelectorAll('.sumpair-card')
+    expect(cardButtons.length).toBe(2)
+    await act(async () => { (cardButtons[0] as HTMLElement).click() })
+    await act(async () => { (cardButtons[1] as HTMLElement).click() })
+
+    // Wait for next exercise to load
+    await waitFor(
+      () => expect(screen.getByText(secondPrompt)).toBeInTheDocument(),
+      { timeout: POST_EXERCISE_TIMEOUT }
+    )
+
+    // Second exercise: instruction paragraph must NOT be shown (only at beginning of ladder)
+    expect(document.querySelector('.sumpair-instruction')).not.toBeInTheDocument()
+    // But prompt and Start must still be there
+    expect(screen.getByText(secondPrompt)).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /start/i })).toBeInTheDocument()
+  }, 10000)
 })

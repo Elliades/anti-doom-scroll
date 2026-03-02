@@ -19,4 +19,5 @@ class LadderController(private val ladderPort: LadderPort) {
         ladderPort.listAll().map { LadderSummaryDto(it.code, it.name, it.levelCount) }
 
     data class LadderSummaryDto(val code: String, val name: String?, val levelCount: Int)
+    data class LadderMixSummaryDto(val code: String, val name: String?, val ladderCodes: List<String>)
 }

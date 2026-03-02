@@ -1,6 +1,5 @@
 import type { JourneyDto, JourneyStepContentDto } from '../types/api'
-
-const API_BASE = '/api'
+import { API_BASE, ensureJsonResponse } from './config'
 
 function journeyErrorMessage(status: number): string {
   if (status === 404) return 'Journey not found. Check backend config (app.journey in application.yml).'
@@ -12,6 +11,7 @@ function journeyErrorMessage(status: number): string {
 export async function getJourney(code: string = 'default'): Promise<JourneyDto> {
   try {
     const res = await fetch(`${API_BASE}/journey?code=${encodeURIComponent(code)}`)
+    ensureJsonResponse(res)
     if (!res.ok) throw new Error(journeyErrorMessage(res.status))
     return res.json()
   } catch (e) {
@@ -33,6 +33,7 @@ export async function getJourneyStepContent(
   const res = await fetch(
     `${API_BASE}/journey/steps/${stepIndex}/content?${params.toString()}`
   )
+  ensureJsonResponse(res)
   if (!res.ok) throw new Error(`Step content failed: ${res.status}`)
   return res.json()
 }

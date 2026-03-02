@@ -5,6 +5,7 @@ import type { ExerciseResult } from '../../types/exercise'
 export interface AnagramExerciseProps {
   exercise: ExerciseDto
   onComplete?: (result: ExerciseResult | number) => void
+  showInstruction?: boolean
 }
 
 /**
@@ -13,7 +14,7 @@ export interface AnagramExerciseProps {
  * Hint every N seconds (from params); each letter/backspace restarts the timer.
  * letterColorHint: green/red per slot (another kind of hint when enabled).
  */
-export function AnagramExercise({ exercise, onComplete }: AnagramExerciseProps) {
+export function AnagramExercise({ exercise, onComplete, showInstruction = true }: AnagramExerciseProps) {
   const params = exercise.anagramParams
   if (!params?.scrambledLetters?.length || !params.answer) {
     return <p className="error">Invalid anagram exercise: missing letters or answer.</p>
@@ -131,13 +132,15 @@ export function AnagramExercise({ exercise, onComplete }: AnagramExerciseProps) 
     return (
       <div className="anagram-intro">
         <p className="prompt">{exercise.prompt}</p>
-        <p className="anagram-instruction">
-          Recomposez le mot à partir des lettres mélangées.
-          {hintIntervalSeconds > 0
-            ? ` Un indice apparaît après ${hintIntervalSeconds} secondes sans saisie.`
-            : ' Aucun indice automatique.'}
-          {letterColorHint && ' Les lettres vertes/rouges indiquent correct/incorrect.'}
-        </p>
+        {showInstruction && (
+          <p className="anagram-instruction">
+            Recomposez le mot à partir des lettres mélangées.
+            {hintIntervalSeconds > 0
+              ? ` Un indice apparaît après ${hintIntervalSeconds} secondes sans saisie.`
+              : ' Aucun indice automatique.'}
+            {letterColorHint && ' Les lettres vertes/rouges indiquent correct/incorrect.'}
+          </p>
+        )}
         <button type="button" onClick={startGame} className="anagram-start-btn">
           Commencer
         </button>
@@ -173,21 +176,32 @@ export function AnagramExercise({ exercise, onComplete }: AnagramExerciseProps) 
           </div>
         ))}
       </div>
-      {/* Keyboard: only anagram letters (each distinct letter shown once) */}
+      {/* Keyboard: only anagram letters (each distinct letter shown once; counter when multiple) */}
       <div className="anagram-keyboard">
         {letters
           .filter((c, i) => letters.indexOf(c) === i)
-          .map((c) => (
-          <button
-            key={c}
-            type="button"
-            className="anagram-key"
-            onClick={() => handleLetter(c)}
-            disabled={!canAdd(c)}
-          >
-            {c.toUpperCase()}
-          </button>
-        ))}
+          .map((c) => {
+            const total = letterCounts[c] ?? 0
+            const used = usedLetterCounts[c] ?? 0
+            const remaining = total - used
+            const showCount = total > 1
+            return (
+              <button
+                key={c}
+                type="button"
+                className="anagram-key"
+                onClick={() => handleLetter(c)}
+                disabled={!canAdd(c)}
+              >
+                {c.toUpperCase()}
+                {showCount && (
+                  <span className="anagram-key-count" title={`${remaining} restante(s) sur ${total}`}>
+                    {remaining}/{total}
+                  </span>
+                )}
+              </button>
+            )
+          })}
         <button
           type="button"
           className="anagram-key anagram-key-back"

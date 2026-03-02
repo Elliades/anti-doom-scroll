@@ -5,6 +5,7 @@ import type { ExerciseResult } from '../../types/exercise'
 export interface MemoryCardExerciseProps {
   exercise: ExerciseDto
   onComplete?: (result: ExerciseResult | number) => void
+  showInstruction?: boolean
 }
 
 type CardState = 'hidden' | 'revealed' | 'matched'
@@ -19,7 +20,7 @@ interface Card {
  * Memory card game: display n pairs of cards face-down; user flips two at a time to find pairs.
  * Deck is built from exercise.memoryCardParams (pairCount + symbols), shuffled once.
  */
-export function MemoryCardExercise({ exercise, onComplete }: MemoryCardExerciseProps) {
+export function MemoryCardExercise({ exercise, onComplete, showInstruction = true }: MemoryCardExerciseProps) {
   const params = exercise.memoryCardParams
   if (!params) {
     return <p className="error">Invalid memory card exercise: missing params.</p>
@@ -124,10 +125,12 @@ export function MemoryCardExercise({ exercise, onComplete }: MemoryCardExerciseP
     return (
       <div className="memory-intro">
         <p className="prompt">{exercise.prompt}</p>
-        <p className="memory-instruction">
-          You will see {params.pairCount * 2} cards. Find the {params.pairCount} pairs by flipping
-          two cards at a time.
-        </p>
+        {showInstruction && (
+          <p className="memory-instruction">
+            You will see {params.pairCount * 2} cards. Find the {params.pairCount} pairs by flipping
+            two cards at a time.
+          </p>
+        )}
         <button type="button" onClick={startGame} className="memory-start-btn">
           Start
         </button>

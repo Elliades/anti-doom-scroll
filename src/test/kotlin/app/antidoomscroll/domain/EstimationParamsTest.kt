@@ -162,6 +162,30 @@ class EstimationParamsTest {
         assertNull(p.hint)
     }
 
+    @Test
+    fun `estimationParams timeWeightHigher defaults to false when absent`() {
+        val ex = makeExercise(
+            mapOf("correctAnswer" to 100.0, "unit" to "", "toleranceFactor" to 1.2, "category" to "math")
+        )
+        val p = ex.estimationParams()!!
+        assertEquals(false, p.timeWeightHigher)
+    }
+
+    @Test
+    fun `estimationParams parses timeWeightHigher true`() {
+        val ex = makeExercise(
+            mapOf(
+                "correctAnswer" to 124.0,
+                "unit" to "",
+                "toleranceFactor" to 1.1,
+                "category" to "math",
+                "timeWeightHigher" to true
+            )
+        )
+        val p = ex.estimationParams()!!
+        assertEquals(true, p.timeWeightHigher)
+    }
+
     // -------------------------------------------------------------------------
     // Logarithmic scoring formula validation (client-side formula, unit-tested here)
     // -------------------------------------------------------------------------

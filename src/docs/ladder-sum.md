@@ -34,4 +34,4 @@ Math ladder progression from addition (ultra easy) through subtraction, multipli
 
 ## Configuration
 
-Defined in `application.yml` under `app.ladder.ladders.sum`. Levels use `mathOperations` to filter FLASHCARD_QA exercises by operation (ADD, SUBTRACT, MULTIPLY, DIVIDE).
+Defined in `application.yml` under `app.ladder.ladders.sum`. Levels use `exerciseParamFilter.operation` to filter FLASHCARD_QA exercises by operation (ADD, SUBTRACT, MULTIPLY, DIVIDE). Each level's `allowedDifficulties` (e.g. ULTRA_EASY, EASY) drive which exercises are selected; when a math problem is generated, its human arithmetic complexity is targeted to fall within that difficulty's band (see [human_arithmetic_complexity_model.md](human_arithmetic_complexity_model.md)).

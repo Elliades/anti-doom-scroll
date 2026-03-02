@@ -6,13 +6,14 @@ import { NBackCardDisplay } from './NBackCardDisplay'
 interface DualNBackCardExerciseProps {
   exercise: ExerciseDto
   onComplete?: (result: ExerciseResult | number) => void
+  showInstruction?: boolean
 }
 
 /**
  * Dual Card N-Back: Cards shown one-by-one. User taps "Match Color" (suit) or "Match Number" (rank)
  * when that attribute matches N steps back.
  */
-export function DualNBackCardExercise({ exercise, onComplete }: DualNBackCardExerciseProps) {
+export function DualNBackCardExercise({ exercise, onComplete, showInstruction = true }: DualNBackCardExerciseProps) {
   const params = exercise.dualNBackCardParams ?? exercise.dualNbackCardParams
   if (!params || !params.sequence?.length) {
     return <p className="error">Invalid Dual Card N-Back exercise: missing sequence.</p>
@@ -92,10 +93,12 @@ export function DualNBackCardExercise({ exercise, onComplete }: DualNBackCardExe
           {n}-Back
         </div>
         <p className="prompt">{exercise.prompt}</p>
-        <p className="nback-instruction">
-          Cards will appear one by one. Tap &quot;Match Color&quot; when the suit matches, or
-          &quot;Match Number&quot; when the rank matches, {params.n} step(s) back.
-        </p>
+        {showInstruction && (
+          <p className="nback-instruction">
+            Cards will appear one by one. Tap &quot;Match Color&quot; when the suit matches, or
+            &quot;Match Number&quot; when the rank matches, {params.n} step(s) back.
+          </p>
+        )}
         <button onClick={handleStart} className="nback-start-btn">
           Start
         </button>

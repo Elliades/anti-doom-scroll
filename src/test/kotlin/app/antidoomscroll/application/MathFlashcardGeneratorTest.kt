@@ -1,5 +1,6 @@
 package app.antidoomscroll.application
 
+import app.antidoomscroll.domain.Difficulty
 import app.antidoomscroll.domain.MathFlashcardParams
 import app.antidoomscroll.domain.MathOperation
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -143,5 +144,27 @@ class MathFlashcardGeneratorTest {
                 secondValues = emptyList()
             )
         }
+    }
+
+    @Test
+    fun `generate with ULTRA_EASY returns result with complexity in 0-5 band when params allow`() {
+        val params = MathFlashcardParams(operation = MathOperation.ADD, firstMax = 9, secondMax = 9)
+        val random = Random(12345)
+        repeat(15) {
+            val result = generator.generate(params, Difficulty.ULTRA_EASY, random)
+            assertTrue(result.prompt.contains(" + "))
+            assertTrue(result.complexityScore in 0.0..5.5) { "Expected complexity in 0-5 band, got ${result.complexityScore}" }
+            val parts = result.prompt.removePrefix("What is ").removeSuffix("?").split(" + ")
+            assertEquals((parts[0].trim().toInt() + parts[1].trim().toInt()).toString(), result.expectedAnswer)
+        }
+    }
+
+    @Test
+    fun `generate with difficulty returns MathFlashcardResult with all fields`() {
+        val params = MathFlashcardParams(operation = MathOperation.MULTIPLY, firstMin = 1, firstMax = 9, secondMin = 1, secondMax = 12)
+        val result = generator.generate(params, Difficulty.EASY, Random(7))
+        assertTrue(result.prompt.contains(" × "))
+        assertTrue(result.complexityScore >= 0.0)
+        assertTrue(result.expectedAnswer.toIntOrNull() != null)
     }
 }

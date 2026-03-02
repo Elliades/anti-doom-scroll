@@ -215,12 +215,14 @@ data class Exercise(
                 val toleranceFactor = (p["toleranceFactor"] as? Number)?.toDouble() ?: return@runCatching null
                 val category = (p["category"] as? String) ?: return@runCatching null
                 val hint = p["hint"] as? String
+                val timeWeightHigher = (p["timeWeightHigher"] as? Boolean) ?: false
                 EstimationParams(
                     correctAnswer = correctAnswer,
                     unit = unit,
                     toleranceFactor = toleranceFactor,
                     category = category,
-                    hint = hint
+                    hint = hint,
+                    timeWeightHigher = timeWeightHigher
                 )
             }
             else -> null

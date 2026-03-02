@@ -75,7 +75,10 @@ export function NBackCardCarousel({
       onCompleteRef.current?.()
       return
     }
-    onCardShowRef.current?.(seqIdxRef.current)
+    // Notify only for the first card here; subsequent cards are notified in t3 when they appear in center
+    if (seqIdxRef.current === 0) {
+      onCardShowRef.current?.(seqIdxRef.current)
+    }
 
     setPhase('flipFace')
     setCards((prev) =>
@@ -108,6 +111,8 @@ export function NBackCardCarousel({
         return
       }
       const nextCode = sequenceRef.current[seqIdxRef.current]
+      // Notify parent as soon as the new card is shown in center so button/scoring stays in sync
+      onCardShowRef.current?.(seqIdxRef.current)
       setCards((prev) => {
         const withoutExit = prev.filter((c) => !c.exiting)
         // Card nearest to center on the LEFT (end of left queue) flips and moves to center

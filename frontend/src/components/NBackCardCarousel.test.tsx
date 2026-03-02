@@ -1,0 +1,60 @@
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
+import { render, act } from '@testing-library/react'
+import { NBackCardCarousel } from './NBackCardCarousel'
+
+// Timing from NBackCardCarousel: INITIAL_DELAY_MS=500, FLIP_MS=320, FACE_DISPLAY_MS=1000, MOVE_MS=450
+// First card: onCardShow(0) at 500ms (start of first advance)
+// Second card: onCardShow(1) at 500 + 1770 = 2270ms (t3)
+// Third card: onCardShow(2) at 500 + 3220 + 1770 = 5490ms (t3 of second advance)
+const INITIAL_DELAY_MS = 500
+const T3_OFFSET_MS = 320 + 1000 + 450 // FLIP_MS + FACE_DISPLAY_MS + MOVE_MS = 1770
+const CYCLE_MS = 320 + 1000 + 450 * 2 + 1000 // time until next advance() = 3220
+
+describe('NBackCardCarousel', () => {
+  beforeEach(() => {
+    vi.useFakeTimers()
+  })
+  afterEach(() => {
+    vi.useRealTimers()
+  })
+
+  it('calls onCardShow with current index when each new card is shown (sync with animation)', () => {
+    const onCardShow = vi.fn()
+    const sequence = ['AC', '2D', '3H', '4C']
+
+    render(
+      <NBackCardCarousel
+        n={1}
+        sequence={sequence}
+        onCardShow={onCardShow}
+      />
+    )
+
+    // Before initial delay: no card shown yet
+    expect(onCardShow).not.toHaveBeenCalled()
+
+    // After initial delay: first card (index 0) is shown
+    act(() => { vi.advanceTimersByTime(INITIAL_DELAY_MS) })
+    expect(onCardShow).toHaveBeenCalledTimes(1)
+    expect(onCardShow).toHaveBeenLastCalledWith(0)
+
+    // When t3 runs: second card (index 1) appears in center → onCardShow(1)
+    act(() => { vi.advanceTimersByTime(T3_OFFSET_MS) })
+    expect(onCardShow).toHaveBeenCalledTimes(2)
+    expect(onCardShow).toHaveBeenLastCalledWith(1)
+
+    // Next cycle t3: third card (index 2)
+    act(() => { vi.advanceTimersByTime(CYCLE_MS) })
+    expect(onCardShow).toHaveBeenCalledTimes(3)
+    expect(onCardShow).toHaveBeenLastCalledWith(2)
+
+    // Next cycle t3: fourth card (index 3)
+    act(() => { vi.advanceTimersByTime(CYCLE_MS) })
+    expect(onCardShow).toHaveBeenCalledTimes(4)
+    expect(onCardShow).toHaveBeenLastCalledWith(3)
+
+    // Sequence complete; no more onCardShow for new cards (onComplete is called instead)
+    act(() => { vi.advanceTimersByTime(CYCLE_MS + 1000) })
+    expect(onCardShow).toHaveBeenCalledTimes(4)
+  })
+})
