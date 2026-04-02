@@ -6,7 +6,9 @@ import com.fasterxml.jackson.module.kotlin.readValue
 import org.springframework.core.io.ClassPathResource
 import org.springframework.stereotype.Component
 import kotlin.random.Random
+import java.text.BreakIterator
 import java.text.Normalizer
+import java.util.Locale
 
 data class AnagramResult(
     val scrambledLetters: List<String>,
@@ -26,17 +28,40 @@ class AnagramGenerator {
     fun generate(params: AnagramParams, random: Random = Random.Default): AnagramResult? {
         val words = loadWords(params.language) ?: return null
         var filtered = words.filter { w ->
-            val len = w.length
+            val len = graphemeCount(w)
             len in params.minLetters..params.maxLetters
         }
         if (filtered.isEmpty()) {
-            filtered = words.filter { it.length >= params.minLetters }
+            // No exact [min,max] hits: prefer the shortest word ≥ minLetters (user-perceived length).
+            val atLeastMin = words.filter { graphemeCount(it) >= params.minLetters }
+            if (atLeastMin.isNotEmpty()) {
+                val lenCap = atLeastMin.minOf { graphemeCount(it) }
+                filtered = atLeastMin.filter { graphemeCount(it) == lenCap }
+            }
         }
         if (filtered.isEmpty()) return null
         val raw = filtered.random(random)
         val answer = Normalizer.normalize(raw, Normalizer.Form.NFC)
-        val scrambled = answer.toList().shuffled(random).map { it.toString() }
+        val graphemes = graphemeList(answer)
+        val scrambled = graphemes.shuffled(random)
         return AnagramResult(scrambledLetters = scrambled, answer = answer)
+    }
+
+    private fun graphemeCount(s: String): Int = graphemeList(s).size
+
+    /** One string per user-perceived character (handles combining marks, e.g. é as e + acute). */
+    private fun graphemeList(s: String): List<String> {
+        val bi = BreakIterator.getCharacterInstance(Locale.ROOT)
+        bi.setText(s)
+        val out = mutableListOf<String>()
+        var start = bi.first()
+        var end = bi.next()
+        while (end != BreakIterator.DONE) {
+            out.add(s.substring(start, end))
+            start = end
+            end = bi.next()
+        }
+        return out
     }
 
     private fun loadWords(lang: String): List<String>? {

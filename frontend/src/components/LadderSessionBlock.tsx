@@ -16,6 +16,11 @@ const ANSWERS_NEEDED = 5
  */
 const POST_EXERCISE_DELAY_MS = 1200
 
+/** Hub URL when the player opened a named ladder from the ladder list (any code except the default ladder). */
+function ladderHubBackUrl(ladderCode: string): string {
+  return ladderCode === 'default' ? '/' : '/ladder'
+}
+
 export interface LadderSessionBlockProps {
   ladderCode?: string
 }
@@ -129,12 +134,12 @@ export function LadderSessionBlock({ ladderCode = 'default' }: LadderSessionBloc
       <div className="screen center">
         <p className="error">{inlineError ?? 'No exercise available.'}</p>
         <button onClick={loadInitial}>Retry</button>
-        <Link to={ladderCode === 'sum' ? '/ladder' : '/'}>Back</Link>
+        <Link to={ladderHubBackUrl(ladderCode)}>Back</Link>
       </div>
     )
   }
 
-  const backUrl = ladderCode === 'sum' ? '/ladder' : '/'
+  const backUrl = ladderHubBackUrl(ladderCode)
 
   const currentScoreRaw =
     ladderState && ladderState.recentScores.length > 0
@@ -162,7 +167,13 @@ export function LadderSessionBlock({ ladderCode = 'default' }: LadderSessionBloc
         <Link to={backUrl} className="back-link" style={{ marginRight: 'auto' }}>
           ← Back
         </Link>
-        <span className="badge">{ladderCode === 'sum' ? 'Sum Ladder' : 'Ladder'}</span>
+        <span className="badge">
+          {ladderCode === 'default'
+            ? 'Ladder'
+            : ladderCode === 'sum'
+              ? 'Sum Ladder'
+              : `${ladderCode.replace(/-/g, ' ')} ladder`}
+        </span>
       </header>
 
       <div className="ladder-metrics" aria-label="Ladder progress">
