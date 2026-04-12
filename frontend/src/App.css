@@ -1675,11 +1675,12 @@ body {
 }
 
 .ds-tiles--correct {
-  animation: ds-correct-pulse 0.5s ease;
+  animation: ds-correct-pulse 0.6s ease;
 }
 @keyframes ds-correct-pulse {
   0% { transform: scale(1); }
-  50% { transform: scale(1.04); }
+  30% { transform: scale(1.06); }
+  60% { transform: scale(1.02); }
   100% { transform: scale(1); }
 }
 

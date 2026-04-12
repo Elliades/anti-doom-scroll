@@ -131,7 +131,7 @@ export function DigitSpanExercise({ exercise, onComplete }: DigitSpanExercisePro
     const t = setTimeout(() => {
       setInputDigits([])
       setPhase('input')
-    }, 1200)
+    }, 1500)
     return () => clearTimeout(t)
   }, [phase])
 
@@ -141,13 +141,11 @@ export function DigitSpanExercise({ exercise, onComplete }: DigitSpanExercisePro
     if (phase !== 'correct_flash') return
     const t = setTimeout(() => {
       if (afterFlashRef.current === 'challenge') {
-        // Forward was correct → show a challenge
         const next = pickChallenge(digits)
         setChallenge(next)
         setInputDigits([])
         setPhase('goal_reveal')
       } else {
-        // Challenge was correct → new memorize round
         const nextLen = digitLength + 1
         if (nextLen > maxLength) {
           finishExercise()
@@ -155,7 +153,7 @@ export function DigitSpanExercise({ exercise, onComplete }: DigitSpanExercisePro
         }
         startMemorize(nextLen, roundIndex + 1)
       }
-    }, 500)
+    }, 700)
     return () => clearTimeout(t)
   }, [phase, digits, digitLength, maxLength, roundIndex, startMemorize])
 
