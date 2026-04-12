@@ -91,6 +91,12 @@ export interface WordleParamsDto {
   language?: string
 }
 
+export interface DigitSpanParamsDto {
+  startLength: number
+  displayTimeMs: number
+  maxLength: number
+}
+
 export interface ExerciseDto {
   id: string
   subjectId: string
@@ -121,6 +127,7 @@ export interface ExerciseDto {
   imagePairDeck?: ImagePairCardDto[] | null
   anagramParams?: AnagramParamsDto | null
   wordleParams?: WordleParamsDto | null
+  digitSpanParams?: DigitSpanParamsDto | null
 }
 
 export interface SessionStepDto {

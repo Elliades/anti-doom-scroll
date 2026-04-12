@@ -9,7 +9,8 @@ VALUES
     ('b0000000-0000-0000-0000-000000000004', 'B1', 'N-back', 'Working memory', '{}', CURRENT_TIMESTAMP),
     ('b0000000-0000-0000-0000-000000000008', 'MEMORY', 'Memory', 'Memory games', '{}', CURRENT_TIMESTAMP),
     ('b0000000-0000-0000-0000-000000000010', 'WORD', 'Word', 'Word games', '{"accuracyType":"BINARY","speedTargetMs":30000,"confidenceWeight":0.1,"streakBonusCap":0.1}', CURRENT_TIMESTAMP),
-    ('b0000000-0000-0000-0000-000000000013', 'ESTIMATION', 'Estimation', 'Approximate numerical answers', '{"accuracyType":"PARTIAL","speedTargetMs":15000,"confidenceWeight":0.0,"streakBonusCap":0.1}', CURRENT_TIMESTAMP);
+    ('b0000000-0000-0000-0000-000000000013', 'ESTIMATION', 'Estimation', 'Approximate numerical answers', '{"accuracyType":"PARTIAL","speedTargetMs":15000,"confidenceWeight":0.0,"streakBonusCap":0.1}', CURRENT_TIMESTAMP),
+    ('b0000000-0000-0000-0000-000000000014', 'DIGIT_SPAN', 'Digit Span', 'Working memory: digit recall with challenge modes', '{"accuracyType":"BINARY","speedTargetMs":10000,"confidenceWeight":0,"streakBonusCap":0.1}', CURRENT_TIMESTAMP);
 
 -- One ultra-easy ADD exercise for integration tests (H2, sum ladder level 0)
 INSERT INTO exercise (id, subject_id, type, difficulty, prompt, expected_answers, time_limit_seconds, exercise_params, created_at)
@@ -369,3 +370,22 @@ VALUES
     ('a0000000-0000-0000-0000-000000000102', 'b0000000-0000-0000-0000-000000000010', 'ANAGRAM', 'MEDIUM', 'Trouvez le mot.', '[]', 150, '{"minLetters":4,"maxLetters":5,"language":"fr"}', CURRENT_TIMESTAMP),
     ('a0000000-0000-0000-0000-000000000103', 'b0000000-0000-0000-0000-000000000010', 'ANAGRAM', 'HARD', 'Trouvez le mot.', '[]', 180, '{"minLetters":6,"maxLetters":7,"language":"fr"}', CURRENT_TIMESTAMP),
     ('a0000000-0000-0000-0000-000000000104', 'b0000000-0000-0000-0000-000000000010', 'ANAGRAM', 'VERY_HARD', 'Trouvez le mot.', '[]', 210, '{"minLetters":8,"maxLetters":15,"language":"fr","hintIntervalSeconds":15,"letterColorHint":false}', CURRENT_TIMESTAMP);
+
+-- DIGIT_SPAN exercises for integration tests
+INSERT INTO exercise (id, subject_id, type, difficulty, prompt, expected_answers, time_limit_seconds, exercise_params, created_at)
+VALUES
+    ('f2000000-0000-0000-0000-000000000001', 'b0000000-0000-0000-0000-000000000014', 'DIGIT_SPAN', 'ULTRA_EASY',
+     'Memorize the digits, then type them back.', '[]', 300,
+     '{"startLength":3,"displayTimeMs":3000,"maxLength":15}', CURRENT_TIMESTAMP),
+    ('f2000000-0000-0000-0000-000000000002', 'b0000000-0000-0000-0000-000000000014', 'DIGIT_SPAN', 'EASY',
+     'Memorize the digits, then type them back.', '[]', 300,
+     '{"startLength":4,"displayTimeMs":3000,"maxLength":15}', CURRENT_TIMESTAMP),
+    ('f2000000-0000-0000-0000-000000000003', 'b0000000-0000-0000-0000-000000000014', 'DIGIT_SPAN', 'MEDIUM',
+     'Memorize the digits, then type them back.', '[]', 300,
+     '{"startLength":5,"displayTimeMs":2500,"maxLength":15}', CURRENT_TIMESTAMP),
+    ('f2000000-0000-0000-0000-000000000004', 'b0000000-0000-0000-0000-000000000014', 'DIGIT_SPAN', 'HARD',
+     'Memorize the digits, then type them back.', '[]', 300,
+     '{"startLength":6,"displayTimeMs":2000,"maxLength":15}', CURRENT_TIMESTAMP),
+    ('f2000000-0000-0000-0000-000000000005', 'b0000000-0000-0000-0000-000000000014', 'DIGIT_SPAN', 'VERY_HARD',
+     'Memorize the digits, then type them back.', '[]', 300,
+     '{"startLength":7,"displayTimeMs":1500,"maxLength":15}', CURRENT_TIMESTAMP);

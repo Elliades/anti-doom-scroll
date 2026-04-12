@@ -1537,6 +1537,268 @@ body {
   margin: 0;
 }
 
+/* ── Digit Span (fluid single-screen) ────────────────── */
+.ds {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+  min-height: 20rem;
+}
+
+.ds-header {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--accent);
+  text-align: center;
+  transition: color 0.3s;
+}
+.ds-header--correct { color: var(--correct, #4ade80); }
+.ds-header--fail { color: #f87171; }
+
+.ds-span-badge {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-dim);
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
+  padding: 0.15rem 0.6rem;
+  border-radius: 999px;
+}
+
+.ds-instructions {
+  font-size: 0.95rem;
+  color: var(--text-dim);
+  text-align: center;
+  line-height: 1.6;
+}
+.ds-instructions p { margin: 0.2rem 0; }
+
+.ds-start-btn, .ds-end-btn {
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  border: 2px solid var(--accent);
+  background: transparent;
+  color: var(--accent);
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+.ds-start-btn:hover, .ds-end-btn:hover {
+  background: var(--accent);
+  color: #fff;
+}
+
+.ds-stage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 10rem;
+  width: 100%;
+}
+
+/* ── Tiles (shared between memorize, input, fail) ───── */
+.ds-tiles {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.ds-tile {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 3rem;
+  border-radius: 0.4rem;
+  border: 2px solid var(--text-dim);
+  font-size: 1.6rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--text);
+  background: var(--surface);
+  transition: border-color 0.2s, background 0.2s, color 0.2s, transform 0.15s;
+}
+
+.ds-tile--show {
+  border-color: var(--accent);
+  color: var(--text);
+}
+
+.ds-tile--filled {
+  border-color: var(--text);
+  animation: ds-pop 0.1s ease;
+}
+
+.ds-tile--active {
+  border-color: var(--accent);
+}
+
+.ds-tile--correct {
+  background: var(--correct, #4ade80);
+  border-color: var(--correct, #4ade80);
+  color: #fff;
+}
+
+.ds-tile--fail {
+  background: #f87171;
+  border-color: #f87171;
+  color: #fff;
+}
+
+@keyframes ds-pop {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
+/* ── Blink during memorize ──────────────────────────── */
+.ds-blink {
+  animation: ds-blink-anim 1s ease-in-out;
+}
+.ds-blink-last {
+  animation: ds-blink-fade 1s ease-in-out forwards;
+}
+
+@keyframes ds-blink-anim {
+  0%, 100% { opacity: 1; }
+  40% { opacity: 0.3; }
+}
+@keyframes ds-blink-fade {
+  0% { opacity: 1; }
+  40% { opacity: 0.3; }
+  70% { opacity: 1; }
+  100% { opacity: 0; transform: scale(0.95); }
+}
+
+.ds-tiles--correct {
+  animation: ds-correct-pulse 0.6s ease;
+}
+@keyframes ds-correct-pulse {
+  0% { transform: scale(1); }
+  30% { transform: scale(1.06); }
+  60% { transform: scale(1.02); }
+  100% { transform: scale(1); }
+}
+
+/* ── Goal reveal (challenge label) ──────────────────── */
+.ds-goal-reveal {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: ds-goal-in 0.4s ease-out;
+}
+.ds-goal-label {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--accent);
+  text-align: center;
+}
+@keyframes ds-goal-in {
+  0% { opacity: 0; transform: translateY(8px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Input area ─────────────────────────────────────── */
+.ds-input-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  animation: ds-input-in 0.35s ease-out;
+}
+@keyframes ds-input-in {
+  0% { opacity: 0; transform: translateY(6px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+.ds-challenge-tag {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 10%, transparent);
+  padding: 0.15rem 0.7rem;
+  border-radius: 999px;
+}
+
+/* ── Shake on incomplete submit ─────────────────────── */
+.ds-shake {
+  animation: ds-shake-anim 0.4s ease;
+}
+@keyframes ds-shake-anim {
+  0%  { transform: translateX(0); }
+  25% { transform: translateX(-6px); }
+  50% { transform: translateX(6px); }
+  75% { transform: translateX(-4px); }
+  100%{ transform: translateX(0); }
+}
+
+/* ── Digit keyboard (Wordle-consistent) ─────────────── */
+.ds-keyboard {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  align-items: center;
+  margin-top: 0.5rem;
+}
+.ds-keyboard-row {
+  display: flex;
+  gap: 0.35rem;
+  justify-content: center;
+}
+.ds-key {
+  height: 2.5rem;
+  border: 1px solid var(--text-dim);
+  border-radius: 4px;
+  background: var(--surface);
+  color: var(--text);
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+  transition: background 0.15s, border-color 0.15s;
+}
+.ds-key--digit {
+  width: 2.75rem;
+  font-size: 1.2rem;
+}
+.ds-key--action {
+  padding: 0 0.8rem;
+  font-size: 1rem;
+}
+.ds-key--enter {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+  font-size: 1.1rem;
+}
+.ds-key:hover:not(.ds-key--enter) {
+  border-color: var(--accent);
+  background: rgba(233, 69, 96, 0.1);
+}
+.ds-key--enter:hover {
+  opacity: 0.85;
+}
+.ds-key:active {
+  transform: scale(0.95);
+}
+
+/* ── Fail / stats ───────────────────────────────────── */
+.ds-fail-text {
+  font-size: 0.95rem;
+  color: var(--text-dim);
+  margin: 0;
+}
+.ds-stats {
+  font-size: 1rem;
+  color: var(--text-dim);
+}
+
 @media (prefers-color-scheme: light) {
   :root {
     --bg: #f5f5f8;

@@ -13,6 +13,7 @@ import { GenericTextExercise } from './exercises/GenericTextExercise'
 import { MemoryCardExercise } from './exercises/MemoryCardExercise'
 import { ImagePairExercise } from './exercises/ImagePairExercise'
 import { SumPairExercise } from './exercises/SumPairExercise'
+import { DigitSpanExercise } from './exercises/DigitSpanExercise'
 
 export interface ExercisePlayerProps {
   exercise: ExerciseDto
@@ -49,6 +50,9 @@ const EXERCISE_TYPE_COMPONENTS: Record<string, React.ComponentType<{ exercise: E
   ),
   WORDLE: ({ exercise, onComplete }) => (
     <WordleExercise exercise={exercise} onComplete={onComplete} />
+  ),
+  DIGIT_SPAN: ({ exercise, onComplete }) => (
+    <DigitSpanExercise exercise={exercise} onComplete={onComplete} />
   ),
 }
 

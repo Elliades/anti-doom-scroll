@@ -18,5 +18,6 @@ enum class ExerciseType {
     IMAGE_PAIR,
     ANAGRAM,
     WORDLE,
-    ESTIMATION
+    ESTIMATION,
+    DIGIT_SPAN
 }

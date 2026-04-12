@@ -18,6 +18,7 @@ import app.antidoomscroll.domain.Exercise
 import app.antidoomscroll.domain.ExerciseType
 import app.antidoomscroll.domain.NBackParams
 import app.antidoomscroll.web.dto.AnagramParamsDto
+import app.antidoomscroll.web.dto.DigitSpanParamsDto
 import app.antidoomscroll.web.dto.EstimationParamsDto
 import app.antidoomscroll.web.dto.WordleParamsDto
 import app.antidoomscroll.web.dto.DualNBackCardParamsDto
@@ -88,6 +89,13 @@ class ExerciseDtoMapper(
                 toleranceFactor = p.toleranceFactor,
                 category = p.category,
                 hint = p.hint
+            )
+        }
+        val digitSpanParams = exerciseWithParams.digitSpanParams()?.let { p ->
+            DigitSpanParamsDto(
+                startLength = p.startLength,
+                displayTimeMs = p.displayTimeMs,
+                maxLength = p.maxLength
             )
         }
         val wordleParams = WordleParamsResolver.resolve(exerciseWithParams)?.let { p ->
@@ -162,7 +170,8 @@ class ExerciseDtoMapper(
             },
             anagramParams = anagramParams,
             wordleParams = wordleParams,
-            estimationParams = estimationParams
+            estimationParams = estimationParams,
+            digitSpanParams = digitSpanParams
         )
     }
 
