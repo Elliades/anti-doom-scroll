@@ -327,6 +327,20 @@ VALUES (
     CURRENT_TIMESTAMP
 );
 
+INSERT INTO exercise (id, subject_id, type, difficulty, prompt, expected_answers, time_limit_seconds, exercise_params, created_at) VALUES
+    ('f2000000-0000-0000-0000-000000000002', 'b0000000-0000-0000-0000-000000000008', 'DIGIT_SPAN', 'EASY',
+     'Digit span EASY (test).', '[]', 300,
+     '{"length":3,"minDigit":0,"maxDigit":9,"displaySeconds":3,"progressive":true,"maxLength":7,"tasks":["FORWARD_ORDER","ASCENDING"]}', CURRENT_TIMESTAMP),
+    ('f2000000-0000-0000-0000-000000000003', 'b0000000-0000-0000-0000-000000000008', 'DIGIT_SPAN', 'MEDIUM',
+     'Digit span MEDIUM (test).', '[]', 300,
+     '{"length":4,"minDigit":0,"maxDigit":9,"displaySeconds":3,"progressive":true,"maxLength":8,"tasks":["FORWARD_ORDER","ASCENDING","DESCENDING"]}', CURRENT_TIMESTAMP),
+    ('f2000000-0000-0000-0000-000000000004', 'b0000000-0000-0000-0000-000000000008', 'DIGIT_SPAN', 'HARD',
+     'Digit span HARD (test).', '[]', 300,
+     '{"length":4,"minDigit":0,"maxDigit":9,"displaySeconds":3,"progressive":true,"maxLength":10,"tasks":["FORWARD_ORDER","ASCENDING","DESCENDING","EVEN_THEN_ODD"]}', CURRENT_TIMESTAMP),
+    ('f2000000-0000-0000-0000-000000000005', 'b0000000-0000-0000-0000-000000000008', 'DIGIT_SPAN', 'VERY_HARD',
+     'Digit span VERY_HARD (test).', '[]', 420,
+     '{"length":4,"minDigit":0,"maxDigit":9,"displaySeconds":3,"progressive":true,"maxLength":12,"tasks":["FORWARD_ORDER","ASCENDING","DESCENDING","EVEN_THEN_ODD","EVERY_OTHER_FROM_FIRST"]}', CURRENT_TIMESTAMP);
+
 -- N_BACK ladder exercises: additional parametric card variants
 -- These three fill the gaps for suitCount values not covered by existing test exercises (c001/c002/c003 have no suitCount key)
 INSERT INTO exercise (id, subject_id, type, difficulty, prompt, expected_answers, time_limit_seconds, exercise_params, created_at) VALUES

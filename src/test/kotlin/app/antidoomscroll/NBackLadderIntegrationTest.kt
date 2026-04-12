@@ -16,12 +16,13 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
 /**
- * Integration tests for the 30-level N-Back ladder.
+ * Integration tests for the 35-level N-Back ladder.
  *
  * Ladder structure (as configured in application-test.yml):
- *   L0-L9   Phase 1 — Card N-Back (N_BACK)
- *   L10-L19 Phase 2 — Grid Position N-Back (N_BACK_GRID)
- *   L20-L29 Phase 3 — Dual N-Back (DUAL_NBACK_CARD / DUAL_NBACK_GRID)
+ *   L0-L4   Phase 0 — Digit span (DIGIT_SPAN / MEMORY)
+ *   L5-L14  Phase 1 — Card N-Back (N_BACK)
+ *   L15-L24 Phase 2 — Grid Position N-Back (N_BACK_GRID)
+ *   L25-L34 Phase 3 — Dual N-Back (DUAL_NBACK_CARD / DUAL_NBACK_GRID)
  *
  * Note on JSON key casing:
  *   Jackson serializes Kotlin field `nBackParams` → JSON key `nbackParams`
@@ -90,6 +91,8 @@ class NBackLadderIntegrationTest {
     /** Normalizes JSON key: Jackson serializes nBackGridParams as nbackGridParams */
     private fun JsonNode.nbackGridParams(): JsonNode? = get("nbackGridParams") ?: get("nBackGridParams")
 
+    private fun JsonNode.digitSpanParams(): JsonNode? = get("digitSpanParams")
+
     // ──────────────────────────────────────────────────────────────────────────
     // Ladder discovery
     // ──────────────────────────────────────────────────────────────────────────
@@ -105,104 +108,105 @@ class NBackLadderIntegrationTest {
         assertAll(
             { assert(nbackLadder != null) { "nback ladder must appear in /api/ladders" } },
             { assert(nbackLadder!!.get("name")?.asText() == "N-Back Ladder") { "ladder name mismatch" } },
-            { assert(nbackLadder!!.get("levelCount")?.asInt() == 30) { "nback ladder should have 30 levels" } }
+            { assert(nbackLadder!!.get("levelCount")?.asInt() == 35) { "nback ladder should have 35 levels" } }
         )
     }
 
     // ──────────────────────────────────────────────────────────────────────────
-    // Phase 1: Card N-Back (levels 0-9)
+    // Phase 0: Digit span (levels 0-4)
     // ──────────────────────────────────────────────────────────────────────────
 
     @Test
-    fun startNbackLadder_level0_returnsNBackCardExercise() {
+    fun startNbackLadder_level0_returnsDigitSpanExercise() {
         val resp = startLadder()
         val exercise = resp.get("exercise")
-        val nbackParams = exercise?.nbackParams()
+        val dsp = exercise?.digitSpanParams()
         assertAll(
             { assert(resp.get("ladderState").get("ladderCode").asText() == "nback") },
             { assert(resp.get("ladderState").get("currentLevelIndex").asInt() == 0) },
             { assert(exercise != null && !exercise.isNull) { "exercise must be present at level 0" } },
-            { assert(exercise!!.get("type").asText() == "N_BACK") { "Level 0 must be N_BACK type" } },
-            { assert(nbackParams != null && !nbackParams.isNull) { "nbackParams must not be null for N_BACK" } },
-            { assert(nbackParams!!.get("n").asInt() == 1) { "Level 0 must be 1-back" } },
+            { assert(exercise!!.get("type").asText() == "DIGIT_SPAN") { "Level 0 must be DIGIT_SPAN" } },
+            { assert(dsp != null && !dsp.isNull) { "digitSpanParams must not be null" } },
             {
-                val seq = nbackParams!!.get("sequence")
-                assert(seq != null && seq.size() >= 3) { "sequence must have at least 3 items" }
+                val seq = dsp!!.get("sequence")
+                assert(seq != null && seq.isArray && seq.size() >= 3) { "sequence must have at least 3 digits" }
             }
         )
     }
 
     @Test
-    fun nbackLadder_level0to1_suitCountIncreases() {
+    fun nbackLadder_level0to1_staysDigitSpan() {
         val resp = nextExercise(
             levelIndex = 0,
             recentScores = listOf(0.8, 0.85, 0.9, 0.8, 0.88),
             overallScoreSum = 4.23, overallTotal = 5, lastScore = 0.88
         )
         val exercise = resp.get("exercise")
-        val nbackParams = exercise?.nbackParams()
         assertAll(
             { assert(resp.get("ladderState").get("currentLevelIndex").asInt() == 1) { "should advance to level 1" } },
-            { assert(exercise!!.get("type").asText() == "N_BACK") { "level 1 must be N_BACK" } },
-            { assert(nbackParams != null) { "nbackParams must not be null at level 1" } },
-            { assert(nbackParams!!.get("n").asInt() == 1) { "level 1 still 1-back" } }
+            { assert(exercise!!.get("type").asText() == "DIGIT_SPAN") { "level 1 must be DIGIT_SPAN" } },
+            { assert(exercise.digitSpanParams() != null) { "digitSpanParams must not be null at level 1" } }
         )
     }
 
+    // ──────────────────────────────────────────────────────────────────────────
+    // Phase 1: Card N-Back (levels 5-14)
+    // ──────────────────────────────────────────────────────────────────────────
+
     @Test
-    fun nbackLadder_level4_returns2BackExercise() {
+    fun nbackLadder_level9_returns2BackExercise() {
         val resp = nextExercise(
-            levelIndex = 3,
+            levelIndex = 8,
             recentScores = listOf(0.8, 0.85, 0.9, 0.8, 0.88),
             overallScoreSum = 4.23, overallTotal = 5, lastScore = 0.88
         )
         val exercise = resp.get("exercise")
         val nbackParams = exercise?.nbackParams()
         assertAll(
-            { assert(resp.get("ladderState").get("currentLevelIndex").asInt() == 4) { "should advance to level 4" } },
-            { assert(exercise!!.get("type").asText() == "N_BACK") { "level 4 must be N_BACK" } },
-            { assert(nbackParams != null) { "nbackParams must not be null at level 4" } },
-            { assert(nbackParams!!.get("n").asInt() == 2) { "level 4 must be 2-back" } }
+            { assert(resp.get("ladderState").get("currentLevelIndex").asInt() == 9) { "should advance to level 9" } },
+            { assert(exercise!!.get("type").asText() == "N_BACK") { "level 9 must be N_BACK" } },
+            { assert(nbackParams != null) { "nbackParams must not be null at level 9" } },
+            { assert(nbackParams!!.get("n").asInt() == 2) { "level 9 must be 2-back" } }
         )
     }
 
     @Test
-    fun nbackLadder_level8_returns3BackExercise() {
+    fun nbackLadder_level13_returns3BackExercise() {
         val resp = nextExercise(
-            levelIndex = 7,
+            levelIndex = 12,
             recentScores = listOf(0.8, 0.85, 0.9, 0.8, 0.88),
             overallScoreSum = 4.23, overallTotal = 5, lastScore = 0.88
         )
         val exercise = resp.get("exercise")
         val nbackParams = exercise?.nbackParams()
         assertAll(
-            { assert(resp.get("ladderState").get("currentLevelIndex").asInt() == 8) { "should advance to level 8" } },
-            { assert(exercise!!.get("type").asText() == "N_BACK") { "level 8 must be N_BACK" } },
-            { assert(nbackParams != null) { "nbackParams must not be null at level 8" } },
-            { assert(nbackParams!!.get("n").asInt() == 3) { "level 8 must be 3-back" } }
+            { assert(resp.get("ladderState").get("currentLevelIndex").asInt() == 13) { "should advance to level 13" } },
+            { assert(exercise!!.get("type").asText() == "N_BACK") { "level 13 must be N_BACK" } },
+            { assert(nbackParams != null) { "nbackParams must not be null at level 13" } },
+            { assert(nbackParams!!.get("n").asInt() == 3) { "level 13 must be 3-back" } }
         )
     }
 
     // ──────────────────────────────────────────────────────────────────────────
-    // Phase 2: Grid Position N-Back (levels 10-19)
+    // Phase 2: Grid Position N-Back (levels 15-24)
     // ──────────────────────────────────────────────────────────────────────────
 
     @Test
-    fun nbackLadder_level10_returnsGridExercise() {
+    fun nbackLadder_level15_returnsGridExercise() {
         val resp = nextExercise(
-            levelIndex = 9,
+            levelIndex = 14,
             recentScores = listOf(0.8, 0.85, 0.9, 0.8, 0.88),
             overallScoreSum = 4.23, overallTotal = 5, lastScore = 0.88
         )
         val exercise = resp.get("exercise")
         val gridParams = exercise?.nbackGridParams()
         assertAll(
-            { assert(resp.get("ladderState").get("currentLevelIndex").asInt() == 10) { "should advance to level 10" } },
-            { assert(exercise != null && !exercise.isNull) { "exercise must be present at level 10" } },
-            { assert(exercise!!.get("type").asText() == "N_BACK_GRID") { "level 10 must be N_BACK_GRID" } },
+            { assert(resp.get("ladderState").get("currentLevelIndex").asInt() == 15) { "should advance to level 15" } },
+            { assert(exercise != null && !exercise.isNull) { "exercise must be present at level 15" } },
+            { assert(exercise!!.get("type").asText() == "N_BACK_GRID") { "level 15 must be N_BACK_GRID" } },
             { assert(gridParams != null && !gridParams.isNull) { "nbackGridParams must not be null" } },
-            { assert(gridParams!!.get("n").asInt() == 1) { "level 10 must be 1-back grid" } },
-            { assert(gridParams!!.get("gridSize").asInt() == 3) { "level 10 must be 3x3 grid" } },
+            { assert(gridParams!!.get("n").asInt() == 1) { "level 15 must be 1-back grid" } },
+            { assert(gridParams!!.get("gridSize").asInt() == 3) { "level 15 must be 3x3 grid" } },
             {
                 val seq = gridParams!!.get("sequence")
                 assert(seq != null && seq.size() >= 3) { "grid sequence must have at least 3 items" }
@@ -211,37 +215,37 @@ class NBackLadderIntegrationTest {
     }
 
     @Test
-    fun nbackLadder_level11_returns4x4GridExercise() {
+    fun nbackLadder_level16_returns4x4GridExercise() {
         val resp = nextExercise(
-            levelIndex = 10,
+            levelIndex = 15,
             recentScores = listOf(0.8, 0.85, 0.9, 0.8, 0.88),
             overallScoreSum = 4.23, overallTotal = 5, lastScore = 0.88
         )
         val exercise = resp.get("exercise")
         val gridParams = exercise?.nbackGridParams()
         assertAll(
-            { assert(resp.get("ladderState").get("currentLevelIndex").asInt() == 11) },
+            { assert(resp.get("ladderState").get("currentLevelIndex").asInt() == 16) },
             { assert(exercise!!.get("type").asText() == "N_BACK_GRID") },
-            { assert(gridParams != null) { "nbackGridParams must not be null at level 11" } },
-            { assert(gridParams!!.get("n").asInt() == 1) { "level 11 still 1-back" } },
-            { assert(gridParams!!.get("gridSize").asInt() == 4) { "level 11 must be 4x4 grid" } }
+            { assert(gridParams != null) { "nbackGridParams must not be null at level 16" } },
+            { assert(gridParams!!.get("n").asInt() == 1) { "level 16 still 1-back" } },
+            { assert(gridParams!!.get("gridSize").asInt() == 4) { "level 16 must be 4x4 grid" } }
         )
     }
 
     @Test
-    fun nbackLadder_level14_returns3BackGrid() {
+    fun nbackLadder_level19_returns3BackGrid() {
         val resp = nextExercise(
-            levelIndex = 13,
+            levelIndex = 18,
             recentScores = listOf(0.8, 0.85, 0.9, 0.8, 0.88),
             overallScoreSum = 4.23, overallTotal = 5, lastScore = 0.88
         )
         val exercise = resp.get("exercise")
         val gridParams = exercise?.nbackGridParams()
         assertAll(
-            { assert(resp.get("ladderState").get("currentLevelIndex").asInt() == 14) },
+            { assert(resp.get("ladderState").get("currentLevelIndex").asInt() == 19) },
             { assert(exercise!!.get("type").asText() == "N_BACK_GRID") },
-            { assert(gridParams != null) { "nbackGridParams must not be null at level 14" } },
-            { assert(gridParams!!.get("n").asInt() == 3) { "level 14 must be 3-back grid" } },
+            { assert(gridParams != null) { "nbackGridParams must not be null at level 19" } },
+            { assert(gridParams!!.get("n").asInt() == 3) { "level 19 must be 3-back grid" } },
             { assert(gridParams!!.get("gridSize").asInt() == 3) }
         )
     }
@@ -249,12 +253,12 @@ class NBackLadderIntegrationTest {
     @Test
     fun nbackGridExercise_sequenceIsGeneratedDynamically() {
         val resp1 = nextExercise(
-            levelIndex = 9,
+            levelIndex = 14,
             recentScores = listOf(0.8, 0.85, 0.9, 0.8, 0.88),
             overallScoreSum = 4.23, overallTotal = 5, lastScore = 0.88
         )
         val resp2 = nextExercise(
-            levelIndex = 9,
+            levelIndex = 14,
             recentScores = listOf(0.8, 0.85, 0.9, 0.8, 0.88),
             overallScoreSum = 4.23, overallTotal = 5, lastScore = 0.88
         )
@@ -267,24 +271,24 @@ class NBackLadderIntegrationTest {
     }
 
     // ──────────────────────────────────────────────────────────────────────────
-    // Phase 3: Dual N-Back (levels 20-29)
+    // Phase 3: Dual N-Back (levels 25-34)
     // ──────────────────────────────────────────────────────────────────────────
 
     @Test
-    fun nbackLadder_level20_returnsDualCardExercise() {
+    fun nbackLadder_level25_returnsDualCardExercise() {
         val resp = nextExercise(
-            levelIndex = 19,
+            levelIndex = 24,
             recentScores = listOf(0.8, 0.85, 0.9, 0.8, 0.88),
             overallScoreSum = 4.23, overallTotal = 5, lastScore = 0.88
         )
         val exercise = resp.get("exercise")
         val dualCardParams = exercise?.get("dualNBackCardParams")
         assertAll(
-            { assert(resp.get("ladderState").get("currentLevelIndex").asInt() == 20) { "should advance to level 20" } },
-            { assert(exercise != null && !exercise.isNull) { "exercise must be present at level 20" } },
-            { assert(exercise!!.get("type").asText() == "DUAL_NBACK_CARD") { "level 20 must be DUAL_NBACK_CARD" } },
+            { assert(resp.get("ladderState").get("currentLevelIndex").asInt() == 25) { "should advance to level 25" } },
+            { assert(exercise != null && !exercise.isNull) { "exercise must be present at level 25" } },
+            { assert(exercise!!.get("type").asText() == "DUAL_NBACK_CARD") { "level 25 must be DUAL_NBACK_CARD" } },
             { assert(dualCardParams != null && !dualCardParams.isNull) { "dualNBackCardParams must not be null" } },
-            { assert(dualCardParams!!.get("n").asInt() == 1) { "level 20 must be 1-back" } },
+            { assert(dualCardParams!!.get("n").asInt() == 1) { "level 25 must be 1-back" } },
             {
                 val seq = dualCardParams!!.get("sequence")
                 assert(seq != null && seq.size() >= 3) { "sequence must have at least 3 cards" }
@@ -293,17 +297,17 @@ class NBackLadderIntegrationTest {
     }
 
     @Test
-    fun nbackLadder_level21_returnsDualGridExercise() {
+    fun nbackLadder_level26_returnsDualGridExercise() {
         val resp = nextExercise(
-            levelIndex = 20,
+            levelIndex = 25,
             recentScores = listOf(0.8, 0.85, 0.9, 0.8, 0.88),
             overallScoreSum = 4.23, overallTotal = 5, lastScore = 0.88
         )
         val exercise = resp.get("exercise")
         val dualGridParams = exercise?.get("dualNBackGridParams")
         assertAll(
-            { assert(resp.get("ladderState").get("currentLevelIndex").asInt() == 21) { "should advance to level 21" } },
-            { assert(exercise!!.get("type").asText() == "DUAL_NBACK_GRID") { "level 21 must be DUAL_NBACK_GRID" } },
+            { assert(resp.get("ladderState").get("currentLevelIndex").asInt() == 26) { "should advance to level 26" } },
+            { assert(exercise!!.get("type").asText() == "DUAL_NBACK_GRID") { "level 26 must be DUAL_NBACK_GRID" } },
             { assert(dualGridParams != null && !dualGridParams.isNull) { "dualNBackGridParams must not be null" } },
             { assert(dualGridParams!!.get("n").asInt() == 1) },
             {
@@ -315,57 +319,57 @@ class NBackLadderIntegrationTest {
     }
 
     @Test
-    fun nbackLadder_level26_returnsDual3BackCard() {
+    fun nbackLadder_level31_returnsDual3BackCard() {
         val resp = nextExercise(
-            levelIndex = 25,
+            levelIndex = 30,
             recentScores = listOf(0.8, 0.85, 0.9, 0.8, 0.88),
             overallScoreSum = 4.23, overallTotal = 5, lastScore = 0.88
         )
         val exercise = resp.get("exercise")
         val dualCardParams = exercise?.get("dualNBackCardParams")
         assertAll(
-            { assert(resp.get("ladderState").get("currentLevelIndex").asInt() == 26) { "should advance to level 26" } },
-            { assert(exercise!!.get("type").asText() == "DUAL_NBACK_CARD") { "level 26 must be DUAL_NBACK_CARD" } },
+            { assert(resp.get("ladderState").get("currentLevelIndex").asInt() == 31) { "should advance to level 31" } },
+            { assert(exercise!!.get("type").asText() == "DUAL_NBACK_CARD") { "level 31 must be DUAL_NBACK_CARD" } },
             { assert(dualCardParams != null && !dualCardParams.isNull) { "dualNBackCardParams must not be null" } },
-            { assert(dualCardParams!!.get("n").asInt() == 3) { "level 26 must be 3-back" } }
+            { assert(dualCardParams!!.get("n").asInt() == 3) { "level 31 must be 3-back" } }
         )
     }
 
     @Test
-    fun nbackLadder_level29_returnsHardDualExercise() {
+    fun nbackLadder_level34_returnsHardDualExercise() {
         val resp = nextExercise(
-            levelIndex = 28,
+            levelIndex = 33,
             recentScores = listOf(0.8, 0.85, 0.9, 0.8, 0.88),
             overallScoreSum = 4.23, overallTotal = 5, lastScore = 0.88
         )
         val exercise = resp.get("exercise")
         assertAll(
-            { assert(resp.get("ladderState").get("currentLevelIndex").asInt() == 29) { "should advance to level 29" } },
-            { assert(exercise != null && !exercise.isNull) { "exercise must be present at level 29" } },
-            { assert(exercise!!.get("difficulty").asText() == "HARD") { "level 29 must be HARD difficulty" } },
+            { assert(resp.get("ladderState").get("currentLevelIndex").asInt() == 34) { "should advance to level 34" } },
+            { assert(exercise != null && !exercise.isNull) { "exercise must be present at level 34" } },
+            { assert(exercise!!.get("difficulty").asText() == "HARD") { "level 34 must be HARD difficulty" } },
             {
                 val type = exercise!!.get("type").asText()
                 assert(type == "DUAL_NBACK_CARD" || type == "DUAL_NBACK_GRID") {
-                    "level 29 must be a dual n-back type, got: $type"
+                    "level 34 must be a dual n-back type, got: $type"
                 }
             }
         )
     }
 
     // ──────────────────────────────────────────────────────────────────────────
-    // Level capping at 29
+    // Level capping at 34
     // ──────────────────────────────────────────────────────────────────────────
 
     @Test
-    fun nbackLadder_atLevel29_doesNotAdvanceBeyond() {
+    fun nbackLadder_atLevel34_doesNotAdvanceBeyond() {
         val resp = nextExercise(
-            levelIndex = 29,
+            levelIndex = 34,
             recentScores = listOf(0.9, 0.95, 0.9, 0.95, 0.9),
             overallScoreSum = 4.6, overallTotal = 5, lastScore = 0.9
         )
         assertAll(
             { assert(resp.get("exercise") != null && !resp.get("exercise").isNull) { "exercise must be present at max level" } },
-            { assert(resp.get("ladderState").get("currentLevelIndex").asInt() == 29) { "level must not exceed 29" } }
+            { assert(resp.get("ladderState").get("currentLevelIndex").asInt() == 34) { "level must not exceed 34" } }
         )
     }
 
@@ -376,15 +380,15 @@ class NBackLadderIntegrationTest {
     @Test
     fun nbackLadder_lowScore_demotesFromGridToCard() {
         val resp = nextExercise(
-            levelIndex = 10,
+            levelIndex = 15,
             recentScores = listOf(0.2, 0.15, 0.25, 0.2, 0.1),
             overallScoreSum = 0.9, overallTotal = 5, lastScore = 0.2
         )
         val exercise = resp.get("exercise")
         assertAll(
-            { assert(resp.get("ladderState").get("currentLevelIndex").asInt() == 9) { "should demote to level 9" } },
+            { assert(resp.get("ladderState").get("currentLevelIndex").asInt() == 14) { "should demote to level 14" } },
             { assert(exercise != null && !exercise.isNull) { "exercise must be present after demotion" } },
-            { assert(exercise!!.get("type").asText() == "N_BACK") { "level 9 must be N_BACK card" } },
+            { assert(exercise!!.get("type").asText() == "N_BACK") { "level 14 must be N_BACK card" } },
             { assert(resp.get("levelChanged").get("direction").asText() == "down") }
         )
     }
@@ -396,7 +400,7 @@ class NBackLadderIntegrationTest {
     @Test
     fun dualNBackCard_parametric_sequenceHasValidCardCodes() {
         val resp = nextExercise(
-            levelIndex = 19,
+            levelIndex = 24,
             recentScores = listOf(0.8, 0.85, 0.9, 0.8, 0.88),
             overallScoreSum = 4.23, overallTotal = 5, lastScore = 0.88
         )
@@ -415,7 +419,7 @@ class NBackLadderIntegrationTest {
     @Test
     fun dualNBackGrid_parametric_sequenceHasValidPositionsAndColors() {
         val resp = nextExercise(
-            levelIndex = 20,
+            levelIndex = 25,
             recentScores = listOf(0.8, 0.85, 0.9, 0.8, 0.88),
             overallScoreSum = 4.23, overallTotal = 5, lastScore = 0.88
         )

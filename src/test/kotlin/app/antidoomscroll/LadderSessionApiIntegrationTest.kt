@@ -209,7 +209,7 @@ class LadderSessionApiIntegrationTest {
     // ------------------------------------------------------------------
 
     @Test
-    fun startNBackLadderSession_returnsNBackTypeOnly() {
+    fun startNBackLadderSession_returnsDigitSpanAtLevel0() {
         mvc.perform(
             get("/api/session/start")
                 .param("mode", "ladder")
@@ -218,7 +218,7 @@ class LadderSessionApiIntegrationTest {
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.ladderState.ladderCode").value("nback"))
             .andExpect(jsonPath("$.exercise").exists())
-            .andExpect(jsonPath("$.exercise.type").value("N_BACK"))
+            .andExpect(jsonPath("$.exercise.type").value("DIGIT_SPAN"))
     }
 
     // ------------------------------------------------------------------
@@ -234,7 +234,7 @@ class LadderSessionApiIntegrationTest {
             .andExpect(jsonPath("$[?(@.code == 'sum')]").exists())
             .andExpect(jsonPath("$[?(@.code == 'combo')]").exists())
             .andExpect(jsonPath("$[?(@.code == 'nback')]").exists())
-            .andExpect(jsonPath("$[?(@.code == 'nback')].levelCount").value(30))
+            .andExpect(jsonPath("$[?(@.code == 'nback')].levelCount").value(35))
     }
 
     @Test
@@ -254,6 +254,6 @@ class LadderSessionApiIntegrationTest {
         val nbackLadder = tree.find { it.get("code")?.asText() == "nback" }
         assert(nbackLadder != null) { "nback ladder not found in response" }
         assert(nbackLadder!!.get("name")?.asText() == "N-Back Ladder") { "nback ladder name mismatch" }
-        assert(nbackLadder.get("levelCount")?.asInt() == 30) { "nback ladder should have 30 levels" }
+        assert(nbackLadder.get("levelCount")?.asInt() == 35) { "nback ladder should have 35 levels" }
     }
 }

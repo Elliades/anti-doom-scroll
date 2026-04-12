@@ -162,8 +162,9 @@ class ExerciseControllerIntegrationTest {
         val tree = com.fasterxml.jackson.databind.ObjectMapper().readTree(res)
         val scrambled = tree.get("anagramParams").get("scrambledLetters")
         val answer = tree.get("anagramParams").get("answer").asText()
+        val answerCpCount = answer.codePointCount(0, answer.length)
         org.junit.jupiter.api.Assertions.assertTrue(scrambled.size() in 2..3) { "ULTRA_EASY: 2-3 letters, got ${scrambled.size()}" }
-        org.junit.jupiter.api.Assertions.assertEquals(scrambled.size(), answer.length) { "scrambledLetters length must match answer" }
+        org.junit.jupiter.api.Assertions.assertEquals(scrambled.size(), answerCpCount) { "scrambledLetters length must match answer code point count" }
     }
 
     @Test
@@ -196,8 +197,9 @@ class ExerciseControllerIntegrationTest {
         val tree = com.fasterxml.jackson.databind.ObjectMapper().readTree(res)
         val answer = tree.get("anagramParams").get("answer").asText()
         val scrambled = tree.get("anagramParams").get("scrambledLetters")
-        org.junit.jupiter.api.Assertions.assertTrue(answer.length >= 8) { "VERY_HARD: 8+ letters, got ${answer.length}" }
-        org.junit.jupiter.api.Assertions.assertEquals(scrambled.size(), answer.length) { "scrambledLetters length must match answer" }
+        val answerCpCount = answer.codePointCount(0, answer.length)
+        org.junit.jupiter.api.Assertions.assertTrue(answerCpCount >= 8) { "VERY_HARD: 8+ code points, got $answerCpCount" }
+        org.junit.jupiter.api.Assertions.assertEquals(scrambled.size(), answerCpCount) { "scrambledLetters length must match answer code point count" }
     }
 
     @Test
