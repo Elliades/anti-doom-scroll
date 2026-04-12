@@ -15,8 +15,8 @@ function App() {
       <Routes>
         <Route path="/" element={<JourneyPage />} />
         <Route path="/ladder" element={<LadderListPage />} />
-        <Route path="/ladder/:code" element={<LadderPage />} />
         <Route path="/ladder/mix/:mixCode" element={<LadderMixPage />} />
+        <Route path="/ladder/:code" element={<LadderPage />} />
         <Route path="/subjects" element={<SubjectsListPage />} />
         <Route path="/subjects/:code" element={<SubjectDetailPage />} />
         <Route path="/exercises" element={<ExercisesListPage />} />

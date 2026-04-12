@@ -32,4 +32,4 @@ server:
 
 app:
   cors:
-    origins: https://anti-domscroll.web.app,https://anti-domscroll.firebaseapp.com
+    origins: https://anti-doom-scroll.web.app,https://anti-doom-scroll.firebaseapp.com

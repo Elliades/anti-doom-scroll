@@ -58,7 +58,7 @@ export interface EstimationExerciseProps {
  * Estimation exercise: numeric input, scored by relative error and response time.
  * Displays precision, time, overall score and result band (Success / Medium / Fail).
  */
-export function EstimationExercise({ exercise, onComplete }: EstimationExerciseProps) {
+export function EstimationExercise({ exercise, onComplete, showInstruction = true }: EstimationExerciseProps) {
   const params = exercise.estimationParams
   const [answer, setAnswer] = useState('')
   const [revealed, setRevealed] = useState(false)
@@ -101,6 +101,11 @@ export function EstimationExercise({ exercise, onComplete }: EstimationExerciseP
   return (
     <>
       <p className="prompt">{exercise.prompt}</p>
+      {showInstruction && (
+        <p className="nback-instruction">
+          Your score combines how close your estimate is to the correct answer and how quickly you respond.
+        </p>
+      )}
       {hint != null && hint !== '' && (
         <p className="estimation-hint" aria-label="Hint">{hint}</p>
       )}
