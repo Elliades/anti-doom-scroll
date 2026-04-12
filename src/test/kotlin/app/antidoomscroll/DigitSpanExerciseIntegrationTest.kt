@@ -1,5 +1,6 @@
 package app.antidoomscroll
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
@@ -43,6 +44,19 @@ class DigitSpanExerciseIntegrationTest {
             .andExpect(status().isOk)
             .andReturn().response.contentAsString
         assertTrue(res.contains("DIGIT_SPAN")) { "MEMORY subject should list DIGIT_SPAN exercises" }
+    }
+
+    @Test
+    fun `GET exercise DIGIT_SPAN returns same sequence on repeated requests`() {
+        val id = "f2000000-0000-0000-0000-000000000001"
+        val mapper = ObjectMapper()
+        val seq1 = mapper.readTree(
+            mvc.perform(get("/api/exercises/$id")).andExpect(status().isOk).andReturn().response.contentAsString
+        ).path("digitSpanParams").path("sequence").toString()
+        val seq2 = mapper.readTree(
+            mvc.perform(get("/api/exercises/$id")).andExpect(status().isOk).andReturn().response.contentAsString
+        ).path("digitSpanParams").path("sequence").toString()
+        assertEquals(seq1, seq2) { "Parametric digit span must be stable per exercise id (list → play, refresh)" }
     }
 
     @Test

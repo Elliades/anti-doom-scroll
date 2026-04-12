@@ -199,7 +199,7 @@ class ExerciseDtoMapper(
             length = length,
             minDigit = minDigit,
             maxDigit = maxDigit,
-            seed = kotlin.random.Random.Default.nextInt()
+            seed = DigitSpanSequenceGenerator.seedForExerciseId(ex.id)
         )
         return DigitSpanParamsDto(
             sequence = sequence,

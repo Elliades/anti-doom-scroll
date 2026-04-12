@@ -35,7 +35,15 @@ class AnagramGenerator {
         if (filtered.isEmpty()) return null
         val raw = filtered.random(random)
         val answer = Normalizer.normalize(raw, Normalizer.Form.NFC)
-        val scrambled = answer.toList().shuffled(random).map { it.toString() }
+        val codePoints = buildList {
+            var i = 0
+            while (i < answer.length) {
+                val cp = answer.codePointAt(i)
+                add(cp)
+                i += Character.charCount(cp)
+            }
+        }
+        val scrambled = codePoints.shuffled(random).map { cp -> String(Character.toChars(cp)) }
         return AnagramResult(scrambledLetters = scrambled, answer = answer)
     }
 

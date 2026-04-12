@@ -1,8 +1,19 @@
 package app.antidoomscroll.application
 
+import java.util.UUID
 import kotlin.random.Random
 
 object DigitSpanSequenceGenerator {
+
+    /**
+     * Stable seed so the same exercise id always yields the same parametric sequence
+     * across GET /api/exercises/{id} calls (list → play, refresh, parallel clients).
+     */
+    fun seedForExerciseId(id: UUID): Int {
+        val msb = id.mostSignificantBits
+        val lsb = id.leastSignificantBits
+        return (msb xor lsb xor (msb ushr 32) xor (lsb ushr 32)).toInt()
+    }
 
     /**
      * Unique digits in the inclusive min/max range when possible; otherwise random digits in range.
