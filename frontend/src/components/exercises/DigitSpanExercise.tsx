@@ -7,83 +7,71 @@ export interface DigitSpanExerciseProps {
   onComplete?: (result: ExerciseResult | number) => void
 }
 
-type ChallengeMode = 'ascending' | 'descending' | 'even_odd' | 'odd_even' | 'every_other'
-
-interface RoundState {
-  digits: number[]
-  length: number
-  roundIndex: number
-}
-
-type Phase =
-  | 'intro'
-  | 'showing'
-  | 'hiding'
-  | 'forward_input'
-  | 'forward_correct'
-  | 'challenge_prompt'
-  | 'challenge_input'
-  | 'challenge_correct'
-  | 'round_fail'
-  | 'done'
+type ChallengeMode = 'forward' | 'ascending' | 'descending' | 'even_odd' | 'odd_even' | 'every_other'
 
 const CHALLENGE_LABELS: Record<ChallengeMode, string> = {
-  ascending: 'Ascending order (smallest to largest)',
-  descending: 'Descending order (largest to smallest)',
-  even_odd: 'Even numbers first, then odd numbers',
-  odd_even: 'Odd numbers first, then even numbers',
-  every_other: 'Every other digit (1st, 3rd, 5th…)',
+  forward: 'Original order',
+  ascending: 'Ascending',
+  descending: 'Descending',
+  even_odd: 'Even first',
+  odd_even: 'Odd first',
+  every_other: 'Every other (1st, 3rd…)',
 }
 
+const NUM_KEYBOARD_ROWS = [
+  [1, 2, 3],
+  [4, 5, 6],
+  [7, 8, 9],
+  [0],
+]
+
 function generateDigits(length: number): number[] {
-  const digits: number[] = []
-  for (let i = 0; i < length; i++) {
-    digits.push(Math.floor(Math.random() * 10))
-  }
-  return digits
+  const out: number[] = []
+  for (let i = 0; i < length; i++) out.push(Math.floor(Math.random() * 10))
+  return out
 }
 
 function pickChallenge(digits: number[]): ChallengeMode {
   const modes: ChallengeMode[] = ['ascending', 'descending', 'even_odd', 'odd_even', 'every_other']
   const hasEven = digits.some((d) => d % 2 === 0)
   const hasOdd = digits.some((d) => d % 2 !== 0)
-  const available = modes.filter((m) => {
+  const avail = modes.filter((m) => {
     if ((m === 'even_odd' || m === 'odd_even') && (!hasEven || !hasOdd)) return false
     return true
   })
-  return available[Math.floor(Math.random() * available.length)]
+  return avail[Math.floor(Math.random() * avail.length)]
 }
 
-function getExpectedChallenge(digits: number[], mode: ChallengeMode): number[] {
+function getExpected(digits: number[], mode: ChallengeMode): number[] {
   switch (mode) {
-    case 'ascending':
-      return [...digits].sort((a, b) => a - b)
-    case 'descending':
-      return [...digits].sort((a, b) => b - a)
-    case 'even_odd':
-      return [...digits.filter((d) => d % 2 === 0), ...digits.filter((d) => d % 2 !== 0)]
-    case 'odd_even':
-      return [...digits.filter((d) => d % 2 !== 0), ...digits.filter((d) => d % 2 === 0)]
-    case 'every_other':
-      return digits.filter((_, i) => i % 2 === 0)
+    case 'forward':      return [...digits]
+    case 'ascending':    return [...digits].sort((a, b) => a - b)
+    case 'descending':   return [...digits].sort((a, b) => b - a)
+    case 'even_odd':     return [...digits.filter((d) => d % 2 === 0), ...digits.filter((d) => d % 2 !== 0)]
+    case 'odd_even':     return [...digits.filter((d) => d % 2 !== 0), ...digits.filter((d) => d % 2 === 0)]
+    case 'every_other':  return digits.filter((_, i) => i % 2 === 0)
   }
 }
 
-/**
- * Parse user input into an array of single digits.
- * Accepts "1 1 8", "1,1,8", or "118" (contiguous single-digit numbers).
- * For multi-digit numbers in challenge modes (e.g. ascending "1 3 8"),
- * spaces/commas separate values; bare strings are split char-by-char.
+/*
+ * Fluid single-screen digit span.
+ *
+ * Phase machine:
+ *   intro → memorize (blink 3×) → goal_reveal ("Original order") → input
+ *   correct → correct_flash (tiles green 0.5s)
+ *     if forward: → goal_reveal (next challenge) → input
+ *     if challenge: → memorize (next round, +1 digit)
+ *   wrong → fail → done
  */
-function parseDigitInput(raw: string): number[] {
-  const trimmed = raw.trim()
-  if (!trimmed) return []
-  const parts = trimmed.split(/[\s,]+/).filter(Boolean)
-  if (parts.length === 1 && parts[0].length > 1 && /^\d+$/.test(parts[0])) {
-    return parts[0].split('').map(Number)
-  }
-  return parts.map(Number).filter((n) => !isNaN(n))
-}
+
+type Phase =
+  | 'intro'
+  | 'memorize'
+  | 'goal_reveal'
+  | 'input'
+  | 'correct_flash'
+  | 'fail'
+  | 'done'
 
 export function DigitSpanExercise({ exercise, onComplete }: DigitSpanExerciseProps) {
   const params = exercise.digitSpanParams
@@ -92,116 +80,154 @@ export function DigitSpanExercise({ exercise, onComplete }: DigitSpanExercisePro
   const maxLength = params?.maxLength ?? 15
 
   const [phase, setPhase] = useState<Phase>('intro')
-  const [round, setRound] = useState<RoundState>({ digits: [], length: startLength, roundIndex: 0 })
-  const [userInput, setUserInput] = useState<string>('')
-  const [countdown, setCountdown] = useState(0)
-  const [challenge, setChallenge] = useState<ChallengeMode | null>(null)
-  const [feedback, setFeedback] = useState<string>('')
-  const [maxReached, setMaxReached] = useState(0)
-  const [totalRounds, setTotalRounds] = useState(0)
-  const [totalChallenges, setTotalChallenges] = useState(0)
-  const [challengesPassed, setChallengesPassed] = useState(0)
+  const [digits, setDigits] = useState<number[]>([])
+  const [digitLength, setDigitLength] = useState(startLength)
+  const [roundIndex, setRoundIndex] = useState(0)
+  const [challenge, setChallenge] = useState<ChallengeMode>('forward')
+  const [inputDigits, setInputDigits] = useState<number[]>([])
+  const [blinkCount, setBlinkCount] = useState(0)
+  const [feedback, setFeedback] = useState('')
+  const [shaking, setShaking] = useState(false)
+
   const completedRef = useRef(false)
-  const inputRef = useRef<HTMLInputElement>(null)
   const statsRef = useRef({ maxReached: 0, totalRounds: 0, totalChallenges: 0, challengesPassed: 0 })
+  // What to do after correct_flash finishes
+  const afterFlashRef = useRef<'challenge' | 'next_round'>('challenge')
+
+  const expected = useMemo(() => getExpected(digits, challenge), [digits, challenge])
+  const inputSlotCount = expected.length
+
+  // ─── Start a memorize round ─────────────────────────────────
+
+  const startMemorize = useCallback((length: number, rIdx: number) => {
+    const d = generateDigits(length)
+    setDigits(d)
+    setDigitLength(length)
+    setRoundIndex(rIdx)
+    setChallenge('forward')
+    setInputDigits([])
+    setFeedback('')
+    setBlinkCount(0)
+    setPhase('memorize')
+  }, [])
+
+  // ─── Memorize blink timer ───────────────────────────────────
 
   useEffect(() => {
-    statsRef.current = { maxReached, totalRounds, totalChallenges, challengesPassed }
-  }, [maxReached, totalRounds, totalChallenges, challengesPassed])
-
-  const expectedForward = useMemo(() => round.digits, [round.digits])
-  const expectedChallenge = useMemo(
-    () => (challenge ? getExpectedChallenge(round.digits, challenge) : []),
-    [round.digits, challenge]
-  )
-
-  const startRound = useCallback(
-    (length: number, roundIdx: number) => {
-      const digits = generateDigits(length)
-      setRound({ digits, length, roundIndex: roundIdx })
-      setUserInput('')
-      setFeedback('')
-      setChallenge(null)
-      setPhase('showing')
-      setCountdown(Math.ceil(displayTimeMs / 1000))
-    },
-    [displayTimeMs]
-  )
-
-  // countdown timer during 'showing' phase
-  useEffect(() => {
-    if (phase !== 'showing') return
-    if (countdown <= 0) {
-      setPhase('hiding')
+    if (phase !== 'memorize') return
+    const totalBlinks = Math.ceil(displayTimeMs / 1000)
+    if (blinkCount >= totalBlinks) {
+      setPhase('goal_reveal')
       return
     }
-    const t = setTimeout(() => setCountdown((c) => c - 1), 1000)
+    const t = setTimeout(() => setBlinkCount((c) => c + 1), 1000)
     return () => clearTimeout(t)
-  }, [phase, countdown])
+  }, [phase, blinkCount, displayTimeMs])
 
-  // hiding animation: brief 600ms transition
+  // ─── Goal reveal → input ────────────────────────────────────
+
   useEffect(() => {
-    if (phase !== 'hiding') return
+    if (phase !== 'goal_reveal') return
     const t = setTimeout(() => {
-      setPhase('forward_input')
-    }, 600)
+      setInputDigits([])
+      setPhase('input')
+    }, 1200)
     return () => clearTimeout(t)
   }, [phase])
 
-  // auto-focus input when entering input phases
-  useEffect(() => {
-    if (phase === 'forward_input' || phase === 'challenge_input') {
-      setTimeout(() => inputRef.current?.focus(), 50)
-    }
-  }, [phase])
-
-  // brief pauses for correct/fail feedback
-  useEffect(() => {
-    if (phase === 'forward_correct') {
-      const t = setTimeout(() => {
-        const mode = pickChallenge(round.digits)
-        setChallenge(mode)
-        setUserInput('')
-        setPhase('challenge_prompt')
-      }, 1200)
-      return () => clearTimeout(t)
-    }
-  }, [phase, round.digits])
+  // ─── Correct flash → next action ────────────────────────────
 
   useEffect(() => {
-    if (phase === 'challenge_prompt') {
-      const t = setTimeout(() => {
-        setPhase('challenge_input')
-      }, 2000)
-      return () => clearTimeout(t)
-    }
-  }, [phase])
-
-  useEffect(() => {
-    if (phase === 'challenge_correct') {
-      const nextLength = round.length + 1
-      if (nextLength > maxLength) {
-        finishExercise()
-        return
+    if (phase !== 'correct_flash') return
+    const t = setTimeout(() => {
+      if (afterFlashRef.current === 'challenge') {
+        // Forward was correct → show a challenge
+        const next = pickChallenge(digits)
+        setChallenge(next)
+        setInputDigits([])
+        setPhase('goal_reveal')
+      } else {
+        // Challenge was correct → new memorize round
+        const nextLen = digitLength + 1
+        if (nextLen > maxLength) {
+          finishExercise()
+          return
+        }
+        startMemorize(nextLen, roundIndex + 1)
       }
-      const t = setTimeout(() => {
-        startRound(nextLength, round.roundIndex + 1)
-      }, 1200)
-      return () => clearTimeout(t)
+    }, 500)
+    return () => clearTimeout(t)
+  }, [phase, digits, digitLength, maxLength, roundIndex, startMemorize])
+
+  // ─── Numpad input ───────────────────────────────────────────
+
+  const handleDigitPress = useCallback((d: number) => {
+    if (phase !== 'input') return
+    setInputDigits((prev) => prev.length < inputSlotCount ? [...prev, d] : prev)
+  }, [phase, inputSlotCount])
+
+  const handleBackspace = useCallback(() => {
+    if (phase !== 'input') return
+    setInputDigits((prev) => prev.slice(0, -1))
+  }, [phase])
+
+  const handleSubmit = useCallback(() => {
+    if (phase !== 'input') return
+    if (inputDigits.length !== inputSlotCount) {
+      setShaking(true)
+      setTimeout(() => setShaking(false), 500)
+      return
     }
-  }, [phase, round.length, round.roundIndex, maxLength, startRound])
+
+    const correct = inputDigits.every((d, i) => d === expected[i])
+
+    if (challenge === 'forward') {
+      statsRef.current.totalRounds++
+      if (correct) {
+        statsRef.current.maxReached = Math.max(statsRef.current.maxReached, digitLength)
+        afterFlashRef.current = 'challenge'
+        setPhase('correct_flash')
+      } else {
+        statsRef.current.maxReached = Math.max(statsRef.current.maxReached, digitLength - 1)
+        setFeedback(`Expected: ${expected.join(' ')}`)
+        setPhase('fail')
+      }
+    } else {
+      statsRef.current.totalChallenges++
+      if (correct) {
+        statsRef.current.challengesPassed++
+        afterFlashRef.current = 'next_round'
+        setPhase('correct_flash')
+      } else {
+        setFeedback(`Expected: ${expected.join(' ')}`)
+        setPhase('fail')
+      }
+    }
+  }, [phase, inputDigits, inputSlotCount, expected, challenge, digitLength])
+
+  // Physical keyboard
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.ctrlKey || e.altKey || e.metaKey) return
+      if (phase !== 'input') return
+      if (e.key >= '0' && e.key <= '9') handleDigitPress(parseInt(e.key))
+      else if (e.key === 'Backspace') handleBackspace()
+      else if (e.key === 'Enter') handleSubmit()
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [phase, handleDigitPress, handleBackspace, handleSubmit])
+
+  // ─── Finish ─────────────────────────────────────────────────
 
   const finishExercise = useCallback(() => {
     if (completedRef.current) return
     completedRef.current = true
     setPhase('done')
     const s = statsRef.current
-    const startL = startLength
-    const rawScore = s.maxReached <= startL ? 0 : (s.maxReached - startL) / (maxLength - startL)
-    const score = Math.max(0, Math.min(1, rawScore))
-
+    const rawScore = s.maxReached <= startLength ? 0 : (s.maxReached - startLength) / (maxLength - startLength)
     onComplete?.({
-      score,
+      score: Math.max(0, Math.min(1, rawScore)),
       subscores: [
         { label: 'Max span', value: s.maxReached },
         { label: 'Rounds', value: s.totalRounds },
@@ -210,191 +236,19 @@ export function DigitSpanExercise({ exercise, onComplete }: DigitSpanExercisePro
     })
   }, [startLength, maxLength, onComplete])
 
-  const handleForwardSubmit = useCallback(() => {
-    const entered = parseDigitInput(userInput)
-    const correct =
-      entered.length === expectedForward.length && entered.every((d, i) => d === expectedForward[i])
-
-    setTotalRounds((r) => r + 1)
-
-    if (correct) {
-      setMaxReached((m) => Math.max(m, round.length))
-      setFeedback('Correct! Now for the challenge...')
-      setPhase('forward_correct')
-    } else {
-      setFeedback(`Wrong! Expected: ${expectedForward.join(' ')}`)
-      setMaxReached((m) => Math.max(m, round.length - 1))
-      setPhase('round_fail')
-    }
-  }, [userInput, expectedForward, round.length])
-
-  const handleChallengeSubmit = useCallback(() => {
-    const entered = parseDigitInput(userInput)
-    const correct =
-      entered.length === expectedChallenge.length &&
-      entered.every((d, i) => d === expectedChallenge[i])
-
-    setTotalChallenges((c) => c + 1)
-
-    if (correct) {
-      setChallengesPassed((c) => c + 1)
-      setFeedback('Challenge passed!')
-      setPhase('challenge_correct')
-    } else {
-      setFeedback(`Wrong! Expected: ${expectedChallenge.join(' ')}`)
-      setPhase('round_fail')
-    }
-  }, [userInput, expectedChallenge])
-
-  const handleKeyDown = useCallback(
-    (e: React.KeyboardEvent) => {
-      if (e.key === 'Enter') {
-        if (phase === 'forward_input') handleForwardSubmit()
-        else if (phase === 'challenge_input') handleChallengeSubmit()
-      }
-    },
-    [phase, handleForwardSubmit, handleChallengeSubmit]
-  )
-
-  const handleRoundFailContinue = useCallback(() => {
-    finishExercise()
-  }, [finishExercise])
-
-  // ----- Render -----
+  // ─── Render ─────────────────────────────────────────────────
 
   if (phase === 'intro') {
     return (
-      <div className="digit-span-intro">
-        <p className="prompt">{exercise.prompt}</p>
-        <div className="digit-span-instructions">
-          <p>A sequence of digits will flash on screen.</p>
-          <p>Memorize them, then type them back in order.</p>
-          <p>If correct, you'll get a challenge (sort, filter, etc.).</p>
-          <p>The sequence grows with each success!</p>
+      <div className="ds">
+        <div className="ds-header">Digit Span</div>
+        <div className="ds-instructions">
+          <p>Digits will flash on screen — memorize them!</p>
+          <p>Recall in order, then take on a challenge.</p>
+          <p>The sequence grows with each success.</p>
         </div>
-        <button type="button" className="digit-span-start-btn" onClick={() => startRound(startLength, 0)}>
+        <button type="button" className="ds-start-btn" onClick={() => startMemorize(startLength, 0)}>
           Start
-        </button>
-      </div>
-    )
-  }
-
-  if (phase === 'showing') {
-    return (
-      <div className="digit-span-showing">
-        <p className="digit-span-countdown">Remember these digits! ({countdown}s)</p>
-        <div className={`digit-span-digits ${countdown <= 1 ? 'blink' : ''}`}>
-          {round.digits.map((d, i) => (
-            <span key={i} className="digit-span-digit">
-              {d}
-            </span>
-          ))}
-        </div>
-      </div>
-    )
-  }
-
-  if (phase === 'hiding') {
-    return (
-      <div className="digit-span-hiding">
-        <div className="digit-span-digits fade-out">
-          {round.digits.map((_, i) => (
-            <span key={i} className="digit-span-digit hidden-digit">
-              ?
-            </span>
-          ))}
-        </div>
-      </div>
-    )
-  }
-
-  if (phase === 'forward_input') {
-    return (
-      <div className="digit-span-input">
-        <p className="digit-span-prompt">Type the {round.length} digits in order:</p>
-        <input
-          ref={inputRef}
-          type="text"
-          inputMode="numeric"
-          className="digit-span-input-field"
-          value={userInput}
-          onChange={(e) => setUserInput(e.target.value)}
-          onKeyDown={handleKeyDown}
-          placeholder={`e.g. ${round.digits.map(() => '0').join('')} or ${round.digits.map(() => '0').join(' ')}`}
-          autoFocus
-        />
-        <button type="button" className="digit-span-submit-btn" onClick={handleForwardSubmit}>
-          Submit
-        </button>
-      </div>
-    )
-  }
-
-  if (phase === 'forward_correct') {
-    return (
-      <div className="digit-span-feedback correct">
-        <p className="digit-span-feedback-text">{feedback}</p>
-      </div>
-    )
-  }
-
-  if (phase === 'challenge_prompt') {
-    return (
-      <div className="digit-span-challenge-prompt">
-        <p className="digit-span-challenge-title">Challenge!</p>
-        <p className="digit-span-challenge-desc">
-          {challenge ? CHALLENGE_LABELS[challenge] : ''}
-        </p>
-        <p className="digit-span-challenge-digits">
-          Original digits: <strong>{round.digits.join(' ')}</strong>
-        </p>
-      </div>
-    )
-  }
-
-  if (phase === 'challenge_input') {
-    return (
-      <div className="digit-span-input">
-        <p className="digit-span-prompt">
-          {challenge ? CHALLENGE_LABELS[challenge] : 'Challenge'}
-        </p>
-        <p className="digit-span-challenge-reminder">
-          Digits were: <strong>{round.digits.join(' ')}</strong>
-        </p>
-        <input
-          ref={inputRef}
-          type="text"
-          inputMode="numeric"
-          className="digit-span-input-field"
-          value={userInput}
-          onChange={(e) => setUserInput(e.target.value)}
-          onKeyDown={handleKeyDown}
-          placeholder={`${expectedChallenge.length} digits, e.g. ${expectedChallenge.map(() => '0').join('')}`}
-          autoFocus
-        />
-        <button type="button" className="digit-span-submit-btn" onClick={handleChallengeSubmit}>
-          Submit
-        </button>
-      </div>
-    )
-  }
-
-  if (phase === 'challenge_correct') {
-    return (
-      <div className="digit-span-feedback correct">
-        <p className="digit-span-feedback-text">{feedback}</p>
-        <p className="digit-span-next-hint">Next: {round.length + 1} digits...</p>
-      </div>
-    )
-  }
-
-  if (phase === 'round_fail') {
-    return (
-      <div className="digit-span-feedback fail">
-        <p className="digit-span-feedback-text">{feedback}</p>
-        <p className="digit-span-max-span">Your max span: {Math.max(maxReached, round.length - 1)}</p>
-        <button type="button" className="digit-span-end-btn" onClick={handleRoundFailContinue}>
-          End Exercise
         </button>
       </div>
     )
@@ -402,14 +256,106 @@ export function DigitSpanExercise({ exercise, onComplete }: DigitSpanExercisePro
 
   if (phase === 'done') {
     return (
-      <div className="digit-span-done">
-        <p className="digit-span-result">Exercise complete!</p>
-        <p className="digit-span-stats">
-          Max span reached: {maxReached} digits
-        </p>
+      <div className="ds">
+        <div className="ds-header">Done!</div>
+        <p className="ds-stats">Max span: {statsRef.current.maxReached} digits</p>
       </div>
     )
   }
 
-  return null
+  if (phase === 'fail') {
+    return (
+      <div className="ds">
+        <div className="ds-header ds-header--fail">Wrong!</div>
+        <div className="ds-tiles">
+          {expected.map((d, i) => (
+            <div key={i} className="ds-tile ds-tile--fail">{d}</div>
+          ))}
+        </div>
+        <p className="ds-fail-text">{feedback}</p>
+        <p className="ds-stats">Max span: {statsRef.current.maxReached}</p>
+        <button type="button" className="ds-end-btn" onClick={finishExercise}>
+          End Exercise
+        </button>
+      </div>
+    )
+  }
+
+  // ── Active gameplay phases (memorize / goal_reveal / input / correct_flash) ──
+
+  const isMemorizing = phase === 'memorize'
+  const showGoal = phase === 'goal_reveal'
+  const showInput = phase === 'input' || phase === 'correct_flash'
+  const isLastBlink = isMemorizing && blinkCount >= Math.ceil(displayTimeMs / 1000) - 1
+
+  return (
+    <div className="ds">
+      {/* Header */}
+      <div className={`ds-header ${phase === 'correct_flash' ? 'ds-header--correct' : ''}`}>
+        {isMemorizing ? 'Memorize' : 'List them'}
+      </div>
+
+      <div className="ds-span-badge">{digitLength} digits</div>
+
+      <div className="ds-stage">
+        {/* Memorize: digit tiles blinking */}
+        {isMemorizing && (
+          <div key={`mem-${roundIndex}`} className={`ds-tiles ds-tiles--memorize ${isLastBlink ? 'ds-blink-last' : 'ds-blink'}`}>
+            {digits.map((d, i) => (
+              <div key={i} className="ds-tile ds-tile--show">{d}</div>
+            ))}
+          </div>
+        )}
+
+        {/* Goal reveal */}
+        {showGoal && (
+          <div key={`goal-${challenge}`} className="ds-goal-reveal">
+            <span className="ds-goal-label">{CHALLENGE_LABELS[challenge]}</span>
+          </div>
+        )}
+
+        {/* Input tiles + numpad */}
+        {showInput && (
+          <div key={`inp-${challenge}`} className="ds-input-area">
+            <div className="ds-challenge-tag">{CHALLENGE_LABELS[challenge]}</div>
+
+            <div className={`ds-tiles ${shaking ? 'ds-shake' : ''} ${phase === 'correct_flash' ? 'ds-tiles--correct' : ''}`}>
+              {Array.from({ length: inputSlotCount }, (_, i) => {
+                const filled = i < inputDigits.length
+                const isActive = i === inputDigits.length && phase === 'input'
+                return (
+                  <div
+                    key={i}
+                    className={`ds-tile ${filled ? 'ds-tile--filled' : ''} ${isActive ? 'ds-tile--active' : ''} ${phase === 'correct_flash' && filled ? 'ds-tile--correct' : ''}`}
+                  >
+                    {filled ? inputDigits[i] : ''}
+                  </div>
+                )
+              })}
+            </div>
+
+            {phase === 'input' && (
+              <div className="ds-keyboard">
+                {NUM_KEYBOARD_ROWS.map((row, rIdx) => (
+                  <div key={rIdx} className="ds-keyboard-row">
+                    {rIdx === NUM_KEYBOARD_ROWS.length - 1 && (
+                      <button type="button" className="ds-key ds-key--action" onClick={handleBackspace}>⌫</button>
+                    )}
+                    {row.map((d) => (
+                      <button key={d} type="button" className="ds-key ds-key--digit" onClick={() => handleDigitPress(d)}>
+                        {d}
+                      </button>
+                    ))}
+                    {rIdx === NUM_KEYBOARD_ROWS.length - 1 && (
+                      <button type="button" className="ds-key ds-key--action ds-key--enter" onClick={handleSubmit}>✓</button>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+    </div>
+  )
 }

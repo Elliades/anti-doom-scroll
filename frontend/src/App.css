@@ -1537,28 +1537,44 @@ body {
   margin: 0;
 }
 
-/* Digit Span exercise */
-.digit-span-intro {
+/* ── Digit Span (fluid single-screen) ────────────────── */
+.ds {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
   align-items: center;
-  text-align: center;
+  gap: 1rem;
+  width: 100%;
+  min-height: 20rem;
 }
 
-.digit-span-instructions {
+.ds-header {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--accent);
+  text-align: center;
+  transition: color 0.3s;
+}
+.ds-header--correct { color: var(--correct, #4ade80); }
+.ds-header--fail { color: #f87171; }
+
+.ds-span-badge {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-dim);
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
+  padding: 0.15rem 0.6rem;
+  border-radius: 999px;
+}
+
+.ds-instructions {
   font-size: 0.95rem;
   color: var(--text-dim);
+  text-align: center;
   line-height: 1.6;
 }
+.ds-instructions p { margin: 0.2rem 0; }
 
-.digit-span-instructions p {
-  margin: 0.25rem 0;
-}
-
-.digit-span-start-btn,
-.digit-span-submit-btn,
-.digit-span-end-btn {
+.ds-start-btn, .ds-end-btn {
   padding: 0.75rem 1.5rem;
   border-radius: 0.5rem;
   border: 2px solid var(--accent);
@@ -1569,190 +1585,215 @@ body {
   cursor: pointer;
   transition: background 0.2s, color 0.2s;
 }
-
-.digit-span-start-btn:hover,
-.digit-span-submit-btn:hover,
-.digit-span-end-btn:hover {
+.ds-start-btn:hover, .ds-end-btn:hover {
   background: var(--accent);
   color: #fff;
 }
 
-.digit-span-showing,
-.digit-span-hiding {
+.ds-stage {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1.5rem;
+  justify-content: center;
+  min-height: 10rem;
+  width: 100%;
 }
 
-.digit-span-countdown {
-  font-size: 1.1rem;
-  color: var(--text-dim);
-  font-weight: 600;
-}
-
-.digit-span-digits {
+/* ── Tiles (shared between memorize, input, fail) ───── */
+.ds-tiles {
   display: flex;
-  gap: 0.75rem;
+  gap: 0.5rem;
   justify-content: center;
   flex-wrap: wrap;
-  transition: opacity 0.5s ease-out;
 }
 
-.digit-span-digits.fade-out {
-  opacity: 0;
-}
-
-.digit-span-digits.blink {
-  animation: digit-blink 0.5s ease-in-out infinite;
-}
-
-@keyframes digit-blink {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.4; }
-}
-
-.digit-span-digit {
+.ds-tile {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 3rem;
-  height: 3.5rem;
-  border-radius: 0.5rem;
-  background: var(--surface);
-  border: 2px solid var(--accent);
-  font-size: 1.8rem;
-  font-weight: 700;
-  color: var(--text);
-  font-variant-numeric: tabular-nums;
-}
-
-.hidden-digit {
-  color: var(--text-dim);
-  border-color: var(--text-dim);
-  opacity: 0.5;
-}
-
-.digit-span-input {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1rem;
-}
-
-.digit-span-prompt {
-  font-size: 1.1rem;
-  font-weight: 600;
-  color: var(--text);
-  text-align: center;
-}
-
-.digit-span-input-field {
-  padding: 0.75rem 1rem;
-  font-size: 1.4rem;
-  font-variant-numeric: tabular-nums;
+  width: 2.75rem;
+  height: 3rem;
+  border-radius: 0.4rem;
   border: 2px solid var(--text-dim);
-  border-radius: 0.5rem;
-  background: var(--surface);
+  font-size: 1.6rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
   color: var(--text);
-  text-align: center;
-  width: 100%;
-  max-width: 20rem;
-  letter-spacing: 0.25rem;
+  background: var(--surface);
+  transition: border-color 0.2s, background 0.2s, color 0.2s, transform 0.15s;
 }
 
-.digit-span-input-field:focus {
+.ds-tile--show {
   border-color: var(--accent);
-  outline: none;
+  color: var(--text);
 }
 
-.digit-span-challenge-prompt {
+.ds-tile--filled {
+  border-color: var(--text);
+  animation: ds-pop 0.1s ease;
+}
+
+.ds-tile--active {
+  border-color: var(--accent);
+}
+
+.ds-tile--correct {
+  background: var(--correct, #4ade80);
+  border-color: var(--correct, #4ade80);
+  color: #fff;
+}
+
+.ds-tile--fail {
+  background: #f87171;
+  border-color: #f87171;
+  color: #fff;
+}
+
+@keyframes ds-pop {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
+/* ── Blink during memorize ──────────────────────────── */
+.ds-blink {
+  animation: ds-blink-anim 1s ease-in-out;
+}
+.ds-blink-last {
+  animation: ds-blink-fade 1s ease-in-out forwards;
+}
+
+@keyframes ds-blink-anim {
+  0%, 100% { opacity: 1; }
+  40% { opacity: 0.3; }
+}
+@keyframes ds-blink-fade {
+  0% { opacity: 1; }
+  40% { opacity: 0.3; }
+  70% { opacity: 1; }
+  100% { opacity: 0; transform: scale(0.95); }
+}
+
+.ds-tiles--correct {
+  animation: ds-correct-pulse 0.5s ease;
+}
+@keyframes ds-correct-pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.04); }
+  100% { transform: scale(1); }
+}
+
+/* ── Goal reveal (challenge label) ──────────────────── */
+.ds-goal-reveal {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: ds-goal-in 0.4s ease-out;
+}
+.ds-goal-label {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--accent);
+  text-align: center;
+}
+@keyframes ds-goal-in {
+  0% { opacity: 0; transform: translateY(8px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Input area ─────────────────────────────────────── */
+.ds-input-area {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 0.75rem;
-  text-align: center;
+  animation: ds-input-in 0.35s ease-out;
+}
+@keyframes ds-input-in {
+  0% { opacity: 0; transform: translateY(6px); }
+  100% { opacity: 1; transform: translateY(0); }
 }
 
-.digit-span-challenge-title {
-  font-size: 1.5rem;
-  font-weight: 700;
+.ds-challenge-tag {
+  font-size: 0.85rem;
+  font-weight: 600;
   color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 10%, transparent);
+  padding: 0.15rem 0.7rem;
+  border-radius: 999px;
 }
 
-.digit-span-challenge-desc {
-  font-size: 1.1rem;
+/* ── Shake on incomplete submit ─────────────────────── */
+.ds-shake {
+  animation: ds-shake-anim 0.4s ease;
+}
+@keyframes ds-shake-anim {
+  0%  { transform: translateX(0); }
+  25% { transform: translateX(-6px); }
+  50% { transform: translateX(6px); }
+  75% { transform: translateX(-4px); }
+  100%{ transform: translateX(0); }
+}
+
+/* ── Digit keyboard (Wordle-consistent) ─────────────── */
+.ds-keyboard {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  align-items: center;
+  margin-top: 0.5rem;
+}
+.ds-keyboard-row {
+  display: flex;
+  gap: 0.35rem;
+  justify-content: center;
+}
+.ds-key {
+  height: 2.5rem;
+  border: 1px solid var(--text-dim);
+  border-radius: 4px;
+  background: var(--surface);
   color: var(--text);
   font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+  transition: background 0.15s, border-color 0.15s;
 }
-
-.digit-span-challenge-digits {
+.ds-key--digit {
+  width: 2.75rem;
+  font-size: 1.2rem;
+}
+.ds-key--action {
+  padding: 0 0.8rem;
   font-size: 1rem;
-  color: var(--text-dim);
+}
+.ds-key--enter {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+  font-size: 1.1rem;
+}
+.ds-key:hover:not(.ds-key--enter) {
+  border-color: var(--accent);
+  background: rgba(233, 69, 96, 0.1);
+}
+.ds-key--enter:hover {
+  opacity: 0.85;
+}
+.ds-key:active {
+  transform: scale(0.95);
 }
 
-.digit-span-challenge-reminder {
+/* ── Fail / stats ───────────────────────────────────── */
+.ds-fail-text {
   font-size: 0.95rem;
   color: var(--text-dim);
   margin: 0;
 }
-
-.digit-span-feedback {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.75rem;
-  text-align: center;
-  padding: 1.5rem;
-  border-radius: 0.75rem;
-}
-
-.digit-span-feedback.correct {
-  background: rgba(74, 222, 128, 0.1);
-}
-
-.digit-span-feedback.fail {
-  background: rgba(248, 113, 113, 0.1);
-}
-
-.digit-span-feedback-text {
-  font-size: 1.2rem;
-  font-weight: 600;
-}
-
-.digit-span-feedback.correct .digit-span-feedback-text {
-  color: var(--correct, #4ade80);
-}
-
-.digit-span-feedback.fail .digit-span-feedback-text {
-  color: #f87171;
-}
-
-.digit-span-next-hint {
-  font-size: 1rem;
-  color: var(--text-dim);
-}
-
-.digit-span-max-span {
-  font-size: 1rem;
-  color: var(--text-dim);
-}
-
-.digit-span-done {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.5rem;
-  text-align: center;
-}
-
-.digit-span-result {
-  font-size: 1.3rem;
-  font-weight: 700;
-  color: var(--accent);
-}
-
-.digit-span-stats {
+.ds-stats {
   font-size: 1rem;
   color: var(--text-dim);
 }
