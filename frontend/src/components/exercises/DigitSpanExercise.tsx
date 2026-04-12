@@ -69,6 +69,22 @@ function getExpectedChallenge(digits: number[], mode: ChallengeMode): number[] {
   }
 }
 
+/**
+ * Parse user input into an array of single digits.
+ * Accepts "1 1 8", "1,1,8", or "118" (contiguous single-digit numbers).
+ * For multi-digit numbers in challenge modes (e.g. ascending "1 3 8"),
+ * spaces/commas separate values; bare strings are split char-by-char.
+ */
+function parseDigitInput(raw: string): number[] {
+  const trimmed = raw.trim()
+  if (!trimmed) return []
+  const parts = trimmed.split(/[\s,]+/).filter(Boolean)
+  if (parts.length === 1 && parts[0].length > 1 && /^\d+$/.test(parts[0])) {
+    return parts[0].split('').map(Number)
+  }
+  return parts.map(Number).filter((n) => !isNaN(n))
+}
+
 export function DigitSpanExercise({ exercise, onComplete }: DigitSpanExerciseProps) {
   const params = exercise.digitSpanParams
   const startLength = params?.startLength ?? 3
@@ -87,6 +103,11 @@ export function DigitSpanExercise({ exercise, onComplete }: DigitSpanExercisePro
   const [challengesPassed, setChallengesPassed] = useState(0)
   const completedRef = useRef(false)
   const inputRef = useRef<HTMLInputElement>(null)
+  const statsRef = useRef({ maxReached: 0, totalRounds: 0, totalChallenges: 0, challengesPassed: 0 })
+
+  useEffect(() => {
+    statsRef.current = { maxReached, totalRounds, totalChallenges, challengesPassed }
+  }, [maxReached, totalRounds, totalChallenges, challengesPassed])
 
   const expectedForward = useMemo(() => round.digits, [round.digits])
   const expectedChallenge = useMemo(
@@ -174,27 +195,23 @@ export function DigitSpanExercise({ exercise, onComplete }: DigitSpanExercisePro
     if (completedRef.current) return
     completedRef.current = true
     setPhase('done')
-    const spanReached = maxReached
+    const s = statsRef.current
     const startL = startLength
-    const rawScore = spanReached <= startL ? 0 : (spanReached - startL) / (maxLength - startL)
+    const rawScore = s.maxReached <= startL ? 0 : (s.maxReached - startL) / (maxLength - startL)
     const score = Math.max(0, Math.min(1, rawScore))
 
     onComplete?.({
       score,
       subscores: [
-        { label: 'Max span', value: spanReached },
-        { label: 'Rounds', value: totalRounds },
-        { label: 'Challenges passed', value: `${challengesPassed}/${totalChallenges}` },
+        { label: 'Max span', value: s.maxReached },
+        { label: 'Rounds', value: s.totalRounds },
+        { label: 'Challenges passed', value: `${s.challengesPassed}/${s.totalChallenges}` },
       ],
     })
-  }, [maxReached, startLength, maxLength, totalRounds, totalChallenges, challengesPassed, onComplete])
+  }, [startLength, maxLength, onComplete])
 
   const handleForwardSubmit = useCallback(() => {
-    const entered = userInput
-      .trim()
-      .split(/[\s,]+/)
-      .filter(Boolean)
-      .map(Number)
+    const entered = parseDigitInput(userInput)
     const correct =
       entered.length === expectedForward.length && entered.every((d, i) => d === expectedForward[i])
 
@@ -212,11 +229,7 @@ export function DigitSpanExercise({ exercise, onComplete }: DigitSpanExercisePro
   }, [userInput, expectedForward, round.length])
 
   const handleChallengeSubmit = useCallback(() => {
-    const entered = userInput
-      .trim()
-      .split(/[\s,]+/)
-      .filter(Boolean)
-      .map(Number)
+    const entered = parseDigitInput(userInput)
     const correct =
       entered.length === expectedChallenge.length &&
       entered.every((d, i) => d === expectedChallenge[i])
@@ -307,7 +320,7 @@ export function DigitSpanExercise({ exercise, onComplete }: DigitSpanExercisePro
           value={userInput}
           onChange={(e) => setUserInput(e.target.value)}
           onKeyDown={handleKeyDown}
-          placeholder={`e.g. ${round.digits.map(() => '_').join(' ')}`}
+          placeholder={`e.g. ${round.digits.map(() => '0').join('')} or ${round.digits.map(() => '0').join(' ')}`}
           autoFocus
         />
         <button type="button" className="digit-span-submit-btn" onClick={handleForwardSubmit}>
@@ -356,7 +369,7 @@ export function DigitSpanExercise({ exercise, onComplete }: DigitSpanExercisePro
           value={userInput}
           onChange={(e) => setUserInput(e.target.value)}
           onKeyDown={handleKeyDown}
-          placeholder={`Expected ${expectedChallenge.length} numbers`}
+          placeholder={`${expectedChallenge.length} digits, e.g. ${expectedChallenge.map(() => '0').join('')}`}
           autoFocus
         />
         <button type="button" className="digit-span-submit-btn" onClick={handleChallengeSubmit}>
