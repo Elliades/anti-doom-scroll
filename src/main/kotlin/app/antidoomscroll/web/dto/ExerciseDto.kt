@@ -40,7 +40,21 @@ data class ExerciseDto(
     /** WORDLE: secret answer + word length + max attempts, generated at response time. */
     val wordleParams: WordleParamsDto? = null,
     /** ESTIMATION: correct answer, unit, tolerance factor and category for logarithmic scoring. */
-    val estimationParams: EstimationParamsDto? = null
+    val estimationParams: EstimationParamsDto? = null,
+    /** DIGIT_SPAN: memorized sequence + display time + ordered recall tasks (generated per request). */
+    val digitSpanParams: DigitSpanParamsDto? = null
+)
+
+data class DigitSpanParamsDto(
+    val sequence: List<Int>,
+    val displaySeconds: Int,
+    /** Task kinds in order; typically starts with FORWARD_ORDER. */
+    val tasks: List<String>,
+    /** When true, after all tasks succeed, add one digit and repeat until failure or maxLength. */
+    val progressive: Boolean = false,
+    val maxLength: Int? = null,
+    val minDigit: Int? = null,
+    val maxDigit: Int? = null
 )
 
 data class ImagePairParamsDto(

@@ -313,6 +313,20 @@ VALUES
      'What is the estimated age of the universe (in billions of years)?', '["13.8"]', 35,
      '{"correctAnswer":13.8,"unit":"billion years","toleranceFactor":1.3,"category":"science","hint":"Measured from the cosmic microwave background radiation."}', CURRENT_TIMESTAMP);
 
+-- DIGIT_SPAN (working memory) — parametric; sequence generated per request
+INSERT INTO exercise (id, subject_id, type, difficulty, prompt, expected_answers, time_limit_seconds, exercise_params, created_at)
+VALUES (
+    'f2000000-0000-0000-0000-000000000001',
+    'b0000000-0000-0000-0000-000000000008',
+    'DIGIT_SPAN',
+    'ULTRA_EASY',
+    'Memorize digits then recall (integration test).',
+    '[]',
+    300,
+    '{"length":3,"minDigit":0,"maxDigit":9,"displaySeconds":3,"progressive":true,"maxLength":6,"tasks":["FORWARD_ORDER","ASCENDING"]}',
+    CURRENT_TIMESTAMP
+);
+
 -- N_BACK ladder exercises: additional parametric card variants
 -- These three fill the gaps for suitCount values not covered by existing test exercises (c001/c002/c003 have no suitCount key)
 INSERT INTO exercise (id, subject_id, type, difficulty, prompt, expected_answers, time_limit_seconds, exercise_params, created_at) VALUES

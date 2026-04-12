@@ -150,7 +150,7 @@ class ExerciseControllerIntegrationTest {
 
     @Test
     fun getExerciseById_ANAGRAM_ULTRA_EASY_returnsAnagramParams() {
-        mvc.perform(get("/api/exercises/a0000000-0000-0000-0000-000000000100"))
+        val res = mvc.perform(get("/api/exercises/a0000000-0000-0000-0000-000000000100"))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.type").value("ANAGRAM"))
             .andExpect(jsonPath("$.difficulty").value("ULTRA_EASY"))
@@ -158,7 +158,7 @@ class ExerciseControllerIntegrationTest {
             .andExpect(jsonPath("$.anagramParams.answer").exists())
             .andExpect(jsonPath("$.anagramParams.hintIntervalSeconds").value(10))
             .andExpect(jsonPath("$.anagramParams.letterColorHint").value(true))
-        val res = mvc.perform(get("/api/exercises/a0000000-0000-0000-0000-000000000100")).andReturn().response.contentAsString
+            .andReturn().response.contentAsString
         val tree = com.fasterxml.jackson.databind.ObjectMapper().readTree(res)
         val scrambled = tree.get("anagramParams").get("scrambledLetters")
         val answer = tree.get("anagramParams").get("answer").asText()
@@ -168,13 +168,13 @@ class ExerciseControllerIntegrationTest {
 
     @Test
     fun getExerciseById_ANAGRAM_HARD_returnsAnagramParams() {
-        mvc.perform(get("/api/exercises/a0000000-0000-0000-0000-000000000103"))
+        val res = mvc.perform(get("/api/exercises/a0000000-0000-0000-0000-000000000103"))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.type").value("ANAGRAM"))
             .andExpect(jsonPath("$.difficulty").value("HARD"))
             .andExpect(jsonPath("$.anagramParams.scrambledLetters").isArray())
             .andExpect(jsonPath("$.anagramParams.answer").exists())
-        val res = mvc.perform(get("/api/exercises/a0000000-0000-0000-0000-000000000103")).andReturn().response.contentAsString
+            .andReturn().response.contentAsString
         val tree = com.fasterxml.jackson.databind.ObjectMapper().readTree(res)
         val answer = tree.get("anagramParams").get("answer").asText()
         val scrambled = tree.get("anagramParams").get("scrambledLetters")
@@ -184,7 +184,7 @@ class ExerciseControllerIntegrationTest {
 
     @Test
     fun getExerciseById_ANAGRAM_VERY_HARD_returnsAnagramParams() {
-        mvc.perform(get("/api/exercises/a0000000-0000-0000-0000-000000000104"))
+        val res = mvc.perform(get("/api/exercises/a0000000-0000-0000-0000-000000000104"))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.type").value("ANAGRAM"))
             .andExpect(jsonPath("$.difficulty").value("VERY_HARD"))
@@ -192,7 +192,7 @@ class ExerciseControllerIntegrationTest {
             .andExpect(jsonPath("$.anagramParams.answer").exists())
             .andExpect(jsonPath("$.anagramParams.hintIntervalSeconds").value(15))
             .andExpect(jsonPath("$.anagramParams.letterColorHint").value(false))
-        val res = mvc.perform(get("/api/exercises/a0000000-0000-0000-0000-000000000104")).andReturn().response.contentAsString
+            .andReturn().response.contentAsString
         val tree = com.fasterxml.jackson.databind.ObjectMapper().readTree(res)
         val answer = tree.get("anagramParams").get("answer").asText()
         val scrambled = tree.get("anagramParams").get("scrambledLetters")

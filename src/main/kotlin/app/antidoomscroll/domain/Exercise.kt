@@ -248,4 +248,24 @@ data class Exercise(
             else -> null
         }
     }.getOrNull()
+
+    fun digitSpanParams(): DigitSpanParams? = runCatching {
+        when (type) {
+            ExerciseType.DIGIT_SPAN -> {
+                val p = exerciseParams ?: return@runCatching null
+                @Suppress("UNCHECKED_CAST")
+                val sequence = (p["sequence"] as? List<*>)?.mapNotNull { (it as? Number)?.toInt() } ?: return@runCatching null
+                if (sequence.isEmpty()) return@runCatching null
+                val displaySeconds = (p["displaySeconds"] as? Number)?.toInt() ?: 3
+                @Suppress("UNCHECKED_CAST")
+                val taskNames = (p["tasks"] as? List<*>)?.mapNotNull { it?.toString() } ?: return@runCatching null
+                val tasks = taskNames.mapNotNull { name ->
+                    runCatching { DigitSpanTaskKind.valueOf(name) }.getOrNull()
+                }
+                if (tasks.size != taskNames.size || tasks.isEmpty()) return@runCatching null
+                DigitSpanParams(sequence = sequence, displaySeconds = displaySeconds, tasks = tasks)
+            }
+            else -> null
+        }
+    }.getOrNull()
 }

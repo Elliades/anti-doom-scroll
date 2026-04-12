@@ -18,5 +18,7 @@ enum class ExerciseType {
     IMAGE_PAIR,
     ANAGRAM,
     WORDLE,
-    ESTIMATION
+    ESTIMATION,
+    /** Digit span: memorize digits, recall order + extra transformations */
+    DIGIT_SPAN
 }

@@ -501,4 +501,58 @@ class ExerciseDtoMapperTest {
         assertNull(dto.anagramParams)
         assertNull(dto.wordleParams)
     }
+
+    @Test
+    fun `when DIGIT_SPAN exercise is parametric then DTO has digitSpanParams with sequence and tasks`() {
+        val memorySubjectId = UUID.fromString("b0000000-0000-0000-0000-000000000008")
+        val exercise = Exercise(
+            id = UUID.fromString("f2000000-0000-0000-0000-000000000099"),
+            subjectId = memorySubjectId,
+            type = ExerciseType.DIGIT_SPAN,
+            difficulty = Difficulty.EASY,
+            prompt = "Test digit span",
+            expectedAnswers = emptyList(),
+            timeLimitSeconds = 120,
+            exerciseParams = mapOf(
+                "length" to 3,
+                "minDigit" to 0,
+                "maxDigit" to 9,
+                "displaySeconds" to 3,
+                "progressive" to true,
+                "maxLength" to 8,
+                "tasks" to listOf("FORWARD_ORDER", "ASCENDING")
+            )
+        )
+        val dto = mapper().toExerciseDto(exercise, "MEMORY")
+        assertEquals("DIGIT_SPAN", dto.type)
+        assertNotNull(dto.digitSpanParams)
+        assertEquals(3, dto.digitSpanParams!!.sequence.size)
+        assertEquals(3, dto.digitSpanParams!!.displaySeconds)
+        assertEquals(listOf("FORWARD_ORDER", "ASCENDING"), dto.digitSpanParams!!.tasks)
+        assertTrue(dto.digitSpanParams!!.progressive)
+        assertEquals(8, dto.digitSpanParams!!.maxLength)
+    }
+
+    @Test
+    fun `when DIGIT_SPAN exercise has static sequence then DTO uses stored sequence`() {
+        val memorySubjectId = UUID.fromString("b0000000-0000-0000-0000-000000000008")
+        val exercise = Exercise(
+            id = UUID.fromString("f2000000-0000-0000-0000-000000000098"),
+            subjectId = memorySubjectId,
+            type = ExerciseType.DIGIT_SPAN,
+            difficulty = Difficulty.MEDIUM,
+            prompt = "Static",
+            expectedAnswers = emptyList(),
+            timeLimitSeconds = 60,
+            exerciseParams = mapOf(
+                "sequence" to listOf(7, 1, 4),
+                "displaySeconds" to 2,
+                "tasks" to listOf("FORWARD_ORDER")
+            )
+        )
+        val dto = mapper().toExerciseDto(exercise, "MEMORY")
+        assertNotNull(dto.digitSpanParams)
+        assertEquals(listOf(7, 1, 4), dto.digitSpanParams!!.sequence)
+        assertEquals(2, dto.digitSpanParams!!.displaySeconds)
+    }
 }

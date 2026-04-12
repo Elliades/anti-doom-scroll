@@ -20,6 +20,7 @@ export function getExerciseTypeLabel(ex: ExerciseDto): string {
     DUAL_NBACK_GRID: 'Dual N-Back (Grid)',
     DUAL_NBACK_CARD: 'Dual N-Back (Card)',
     MEMORY_CARD_PAIRS: 'Memory Pairs',
+    DIGIT_SPAN: 'Digit span',
     SUM_PAIR: 'Sum Pair',
     ANAGRAM: 'Anagram',
   }

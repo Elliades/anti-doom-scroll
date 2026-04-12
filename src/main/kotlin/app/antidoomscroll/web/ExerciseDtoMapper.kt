@@ -7,6 +7,7 @@ import app.antidoomscroll.application.DualNBackGridSequenceGenerator
 import app.antidoomscroll.application.NBackGridSequenceGenerator
 import app.antidoomscroll.application.WordleGenerator
 import app.antidoomscroll.application.WordleParamsResolver
+import app.antidoomscroll.application.DigitSpanSequenceGenerator
 import app.antidoomscroll.application.MathFlashcardGenerator
 import app.antidoomscroll.application.NBackSequenceGenerator
 import app.antidoomscroll.application.ImagePairDeckCache
@@ -16,8 +17,10 @@ import app.antidoomscroll.application.SumPairRoundsCache
 import app.antidoomscroll.application.port.ExercisePort
 import app.antidoomscroll.domain.Exercise
 import app.antidoomscroll.domain.ExerciseType
+import app.antidoomscroll.domain.DigitSpanTaskKind
 import app.antidoomscroll.domain.NBackParams
 import app.antidoomscroll.web.dto.AnagramParamsDto
+import app.antidoomscroll.web.dto.DigitSpanParamsDto
 import app.antidoomscroll.web.dto.EstimationParamsDto
 import app.antidoomscroll.web.dto.WordleParamsDto
 import app.antidoomscroll.web.dto.DualNBackCardParamsDto
@@ -100,6 +103,7 @@ class ExerciseDtoMapper(
                 )
             }
         }
+        val digitSpanParams = resolveDigitSpanParams(exerciseWithParams)
         val memoryCardShuffledDeck = memoryCardParams?.let { p ->
             memoryCardDeckCache.getOrGenerate(exerciseWithParams.id.toString(), p)
         }
@@ -162,7 +166,49 @@ class ExerciseDtoMapper(
             },
             anagramParams = anagramParams,
             wordleParams = wordleParams,
-            estimationParams = estimationParams
+            estimationParams = estimationParams,
+            digitSpanParams = digitSpanParams
+        )
+    }
+
+    /**
+     * DIGIT_SPAN: full static sequence in DB, or parametric length + digit range + task list (generated each call).
+     */
+    private fun resolveDigitSpanParams(ex: Exercise): DigitSpanParamsDto? {
+        if (ex.type != ExerciseType.DIGIT_SPAN) return null
+        val stored = ex.digitSpanParams()
+        if (stored != null) {
+            return DigitSpanParamsDto(
+                sequence = stored.sequence,
+                displaySeconds = stored.displaySeconds,
+                tasks = stored.tasks.map { it.name }
+            )
+        }
+        val p = ex.exerciseParams ?: return null
+        val length = (p["length"] as? Number)?.toInt() ?: return null
+        val minDigit = (p["minDigit"] as? Number)?.toInt() ?: 0
+        val maxDigit = (p["maxDigit"] as? Number)?.toInt() ?: 9
+        val displaySeconds = (p["displaySeconds"] as? Number)?.toInt() ?: 3
+        val progressive = (p["progressive"] as? Boolean) ?: false
+        val maxLength = (p["maxLength"] as? Number)?.toInt()
+        @Suppress("UNCHECKED_CAST")
+        val taskNames = (p["tasks"] as? List<*>)?.mapNotNull { it?.toString() } ?: return null
+        val tasks = taskNames.mapNotNull { name -> runCatching { DigitSpanTaskKind.valueOf(name) }.getOrNull() }
+        if (tasks.isEmpty() || tasks.size != taskNames.size) return null
+        val sequence = DigitSpanSequenceGenerator.generate(
+            length = length,
+            minDigit = minDigit,
+            maxDigit = maxDigit,
+            seed = kotlin.random.Random.Default.nextInt()
+        )
+        return DigitSpanParamsDto(
+            sequence = sequence,
+            displaySeconds = displaySeconds,
+            tasks = tasks.map { it.name },
+            progressive = progressive,
+            maxLength = maxLength,
+            minDigit = minDigit,
+            maxDigit = maxDigit
         )
     }
 

@@ -781,6 +781,97 @@ class LocalDataSeeder(
                     "maxDigits" to 2
                 )
             },
+            // DIGIT_SPAN (working memory)
+            ExerciseEntity().apply {
+                id = UUID.fromString("f2000000-0000-0000-0000-000000000001")
+                subjectId = memoryId
+                type = "DIGIT_SPAN"
+                difficulty = "ULTRA_EASY"
+                prompt = "Mémorisez les chiffres, puis saisissez-les dans l'ordre. La série s'allonge après chaque réussite complète."
+                expectedAnswers = emptyList()
+                timeLimitSeconds = 300
+                exerciseParams = mapOf(
+                    "length" to 3,
+                    "minDigit" to 0,
+                    "maxDigit" to 9,
+                    "displaySeconds" to 3,
+                    "progressive" to true,
+                    "maxLength" to 6,
+                    "tasks" to listOf("FORWARD_ORDER")
+                )
+            },
+            ExerciseEntity().apply {
+                id = UUID.fromString("f2000000-0000-0000-0000-000000000002")
+                subjectId = memoryId
+                type = "DIGIT_SPAN"
+                difficulty = "EASY"
+                prompt = "Mémorisez les chiffres, puis deux rappels : ordre d'affichage, puis ordre croissant."
+                expectedAnswers = emptyList()
+                timeLimitSeconds = 300
+                exerciseParams = mapOf(
+                    "length" to 3,
+                    "minDigit" to 0,
+                    "maxDigit" to 9,
+                    "displaySeconds" to 3,
+                    "progressive" to true,
+                    "maxLength" to 7,
+                    "tasks" to listOf("FORWARD_ORDER", "ASCENDING")
+                )
+            },
+            ExerciseEntity().apply {
+                id = UUID.fromString("f2000000-0000-0000-0000-000000000003")
+                subjectId = memoryId
+                type = "DIGIT_SPAN"
+                difficulty = "MEDIUM"
+                prompt = "Trois rappels : ordre, croissant, décroissant — puis la série grandit."
+                expectedAnswers = emptyList()
+                timeLimitSeconds = 300
+                exerciseParams = mapOf(
+                    "length" to 4,
+                    "minDigit" to 0,
+                    "maxDigit" to 9,
+                    "displaySeconds" to 3,
+                    "progressive" to true,
+                    "maxLength" to 8,
+                    "tasks" to listOf("FORWARD_ORDER", "ASCENDING", "DESCENDING")
+                )
+            },
+            ExerciseEntity().apply {
+                id = UUID.fromString("f2000000-0000-0000-0000-000000000004")
+                subjectId = memoryId
+                type = "DIGIT_SPAN"
+                difficulty = "HARD"
+                prompt = "Quatre modes de rappel : ordre, croissant, décroissant, puis pairs puis impairs."
+                expectedAnswers = emptyList()
+                timeLimitSeconds = 300
+                exerciseParams = mapOf(
+                    "length" to 4,
+                    "minDigit" to 0,
+                    "maxDigit" to 9,
+                    "displaySeconds" to 3,
+                    "progressive" to true,
+                    "maxLength" to 10,
+                    "tasks" to listOf("FORWARD_ORDER", "ASCENDING", "DESCENDING", "EVEN_THEN_ODD")
+                )
+            },
+            ExerciseEntity().apply {
+                id = UUID.fromString("f2000000-0000-0000-0000-000000000005")
+                subjectId = memoryId
+                type = "DIGIT_SPAN"
+                difficulty = "VERY_HARD"
+                prompt = "Cinq rappels dont un sur deux — la série continue jusqu'à erreur ou limite."
+                expectedAnswers = emptyList()
+                timeLimitSeconds = 420
+                exerciseParams = mapOf(
+                    "length" to 4,
+                    "minDigit" to 0,
+                    "maxDigit" to 9,
+                    "displaySeconds" to 3,
+                    "progressive" to true,
+                    "maxLength" to 12,
+                    "tasks" to listOf("FORWARD_ORDER", "ASCENDING", "DESCENDING", "EVEN_THEN_ODD", "EVERY_OTHER_FROM_FIRST")
+                )
+            },
             // ANAGRAM (French) — under WORD category, accessible from WORD and all 30 sub-subjects
             ExerciseEntity().apply {
                 id = UUID.fromString("f0000000-0000-0000-0000-000000000001")
