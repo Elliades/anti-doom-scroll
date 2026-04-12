@@ -256,6 +256,11 @@ $env:NEON_DB_PASSWORD = "your-neon-password"
 .\scripts\deploy-production.ps1
 ```
 
+**If deployment fails with "container failed to start and listen on the port"**
+
+- The backend image uses **lazy initialization**: the HTTP server listens on `PORT` immediately; the DB (and Flyway) initializes on first request. That avoids Cloud Run killing the container before the JVM is ready.
+- Ensure **`SPRING_DATASOURCE_PASSWORD`** is set on the Cloud Run service (Console → your service → Edit → Variables). If you deploy from a trigger/Console instead of the script, set this env var once so new revisions can connect to Neon.
+
 ## Config (backend)
 
 - `application.yml`: DB URL, JPA, Flyway, `app.session-default-seconds`, `app.low-battery-mode-seconds`, `app.anonymous-profile-enabled`.
