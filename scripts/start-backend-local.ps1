@@ -8,6 +8,6 @@ $projectRoot = Split-Path -Parent $scriptDir
 # Free port 5173 (stops any existing backend instance)
 & "$scriptDir\free-port-5173.ps1" -Kill
 
-# Start backend
+# Start backend (clean build ensures stale Gradle cache doesn't serve old classes)
 Set-Location $projectRoot
-.\gradlew.bat bootRun --args='--spring.profiles.active=local'
+.\gradlew.bat clean bootRun --args='--spring.profiles.active=local'
