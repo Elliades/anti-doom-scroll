@@ -10,7 +10,7 @@
 |---------|------|-----------|
 | **Default** | `default` | FLASHCARD_QA ADD (4: ULTRA_EASY, EASY, MEDIUM, HARD), FLASHCARD_QA SUBTRACT (4), FLASHCARD_QA MULTIPLY (4), FLASHCARD_QA DIVIDE (4) |
 | **N-back** | `B1` | N_BACK (3: 1-back, 2-back, 3-back), N_BACK_GRID (2), DUAL_NBACK_GRID (1), DUAL_NBACK_CARD (1) |
-| **Memory** | `MEMORY` | MEMORY_CARD_PAIRS (3), SUM_PAIR (5), IMAGE_PAIR (2) |
+| **Memory & Working Memory** | `MEMORY` | MEMORY_CARD_PAIRS (3), SUM_PAIR (5), IMAGE_PAIR (2), DIGIT_SPAN (5: ULTRA_EASY-VERY_HARD) |
 | **Anagrammes (FR)** | `ANAGRAM_FR` | ANAGRAM (4: ULTRA_EASY, EASY, MEDIUM, HARD) |
 | **Wordle (FR)** | `WORDLE_FR` | WORDLE (4: EASY=3 letters, MEDIUM=5, HARD=6, VERY_HARD=7) |
 | **Wordle (EN)** | `WORDLE_EN` | WORDLE (4: EASY=3 letters, MEDIUM=5, HARD=6, VERY_HARD=7) |
@@ -365,4 +365,52 @@
 
 ---
 
+## 16. DIGIT_SPAN (working memory)
+
+- **Subject code:** `MEMORY` (subject name: "Memory & Working Memory")
+- **Goal:** Memorize a sequence of digits, then recall them in one or more transformed orders.
+- **Type:** `DIGIT_SPAN`
+- **API params returned (`digitSpanParams`); generated per request:**
+
+  | Field | Type | Description |
+  |-------|------|-------------|
+  | `sequence` | `List<Int>` | Digits to memorize (e.g. `[4, 7, 1, 9]`). Seeded from exercise UUID — stable across calls for the same exercise. |
+  | `displaySeconds` | `Int` | Seconds digits are shown before hiding (default 3). |
+  | `tasks` | `List<String>` | Recall task kinds, in order (see below). |
+  | `progressive` | `Boolean` | When `true`, the sequence grows by 1 digit after every full success, until failure or `maxLength`. |
+  | `maxLength` | `Int?` | Maximum sequence length when progressive (e.g. 6–12). |
+  | `minDigit` | `Int?` | Minimum digit value (default 0). |
+  | `maxDigit` | `Int?` | Maximum digit value (default 9). |
+
+- **Task kinds** (`tasks` field values):
+
+  | Kind | Description |
+  |------|-------------|
+  | `FORWARD_ORDER` | Recall in original order (always first). |
+  | `ASCENDING` | Recall sorted ascending. |
+  | `DESCENDING` | Recall sorted descending. |
+  | `EVEN_THEN_ODD` | Even digits ascending, then odd digits ascending. |
+  | `ODD_THEN_EVEN` | Odd digits ascending, then even digits ascending. |
+  | `EVERY_OTHER_FROM_FIRST` | Digits at positions 0, 2, 4, … |
+  | `EVERY_OTHER_FROM_SECOND` | Digits at positions 1, 3, 5, … |
+
+- **Difficulty mapping:**
+
+  | Difficulty | Length | Tasks | Max length |
+  |------------|--------|-------|------------|
+  | ULTRA_EASY | 3 | FORWARD_ORDER | 6 |
+  | EASY | 3 | FORWARD_ORDER, ASCENDING | 7 |
+  | MEDIUM | 4 | FORWARD_ORDER, ASCENDING, DESCENDING | 8 |
+  | HARD | 4 | FORWARD_ORDER, ASCENDING, DESCENDING, EVEN_THEN_ODD | 10 |
+  | VERY_HARD | 4 | FORWARD_ORDER, ASCENDING, DESCENDING, EVEN_THEN_ODD, EVERY_OTHER_FROM_FIRST | 12 |
+
+- **Progressive mode:** after completing all tasks for the current sequence, add 1 digit and repeat. Scoring = `longestCompleted / maxLength`. Failure (wrong recall) ends the round and scores proportionally.
+- **Scoring:** binary (1.0) per task for non-progressive; for progressive = fraction of max length reached.
+- **Access:** [api/subjects/MEMORY/exercises](http://localhost:5173/api/subjects/MEMORY/exercises) — look for `"type":"DIGIT_SPAN"` entries.
+- **N-Back ladder (Phase 0):** DIGIT_SPAN exercises are the first 5 levels (L0–L4) of the `nback` ladder, before card N-back (L5–L14), grid N-back (L15–L24), and dual N-back (L25–L34). Start: `GET /api/session/start?mode=ladder&ladderCode=nback`
+
+---
+
 *When adding or changing exercise types or params, update this index and any type-specific doc (e.g. `exercise-sum-pair.md`).*
+
+

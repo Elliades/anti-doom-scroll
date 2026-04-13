@@ -7,7 +7,7 @@ INSERT INTO subject (id, code, name, description, scoring_config, created_at)
 VALUES
     ('b0000000-0000-0000-0000-000000000001', 'default', 'Default', 'Default subject', '{"accuracyType":"BINARY","speedTargetMs":10000,"confidenceWeight":0,"streakBonusCap":0.1}', CURRENT_TIMESTAMP),
     ('b0000000-0000-0000-0000-000000000004', 'B1', 'N-back', 'Working memory', '{}', CURRENT_TIMESTAMP),
-    ('b0000000-0000-0000-0000-000000000008', 'MEMORY', 'Memory', 'Memory games', '{}', CURRENT_TIMESTAMP),
+    ('b0000000-0000-0000-0000-000000000008', 'MEMORY', 'Memory & Working Memory', 'Visual memory (card pairs) and working memory (digit span): memorize, recall, transform sequences.', '{}', CURRENT_TIMESTAMP),
     ('b0000000-0000-0000-0000-000000000010', 'WORD', 'Word', 'Word games', '{"accuracyType":"BINARY","speedTargetMs":30000,"confidenceWeight":0.1,"streakBonusCap":0.1}', CURRENT_TIMESTAMP),
     ('b0000000-0000-0000-0000-000000000013', 'ESTIMATION', 'Estimation', 'Approximate numerical answers', '{"accuracyType":"PARTIAL","speedTargetMs":15000,"confidenceWeight":0.0,"streakBonusCap":0.1}', CURRENT_TIMESTAMP);
 

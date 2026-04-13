@@ -48,8 +48,8 @@ class LocalDataSeeder(
         val subjectMemory = SubjectEntity().apply {
             id = UUID.fromString("b0000000-0000-0000-0000-000000000008")
             code = "MEMORY"
-            name = "Memory"
-            description = "Memory games: find matching pairs"
+            name = "Memory & Working Memory"
+            description = "Visual memory (card pairs) and working memory (digit span): memorize, recall, transform sequences."
             scoringConfig = defaultScoring
         }
         val subjectWord = SubjectEntity().apply {
