@@ -1,6 +1,8 @@
-import { useState, useCallback, useEffect } from 'react'
+import { useState, useCallback, useEffect, useMemo } from 'react'
 import type { ExerciseDto } from '../../types/api'
 import type { ExerciseResult } from '../../types/exercise'
+import wordleWordsEn from '../../data/wordle_en.json'
+import wordleWordsFr from '../../data/wordle_fr.json'
 
 export interface WordleExerciseProps {
   exercise: ExerciseDto
@@ -21,6 +23,22 @@ const KEYBOARD_ROWS_AZERTY = [
   ['w', 'x', 'c', 'v', 'b', 'n'],
 ]
 const FR_ACCENTS = ['é', 'è', 'ê', 'à', 'â', 'ù', 'û', 'î', 'ô', 'ç', 'œ']
+
+/** NFC + lowercase — matches backend WordleGenerator normalization. */
+function normalizeWord(s: string): string {
+  return s.normalize('NFC').toLowerCase()
+}
+
+function buildValidWordSet(language: string, wordLength: number, answer: string): Set<string> {
+  const words = language === 'en' ? wordleWordsEn : wordleWordsFr
+  const set = new Set<string>()
+  for (const w of words) {
+    const n = normalizeWord(w)
+    if (n.length === wordLength) set.add(n)
+  }
+  set.add(normalizeWord(answer))
+  return set
+}
 
 function getTileStates(guess: string, answer: string): TileState[] {
   const len = answer.length
@@ -55,7 +73,7 @@ export function WordleExercise({ exercise, onComplete }: WordleExerciseProps) {
     return <p className="error">Invalid wordle exercise: missing answer.</p>
   }
 
-  const answer = params.answer.toLowerCase()
+  const answer = normalizeWord(params.answer)
   const wordLength = params.wordLength
   const maxAttempts = params.maxAttempts ?? 6
   const language = params.language ?? 'fr'
@@ -64,8 +82,13 @@ export function WordleExercise({ exercise, onComplete }: WordleExerciseProps) {
   const [guesses, setGuesses] = useState<string[]>([])
   const [currentLetters, setCurrentLetters] = useState<string[]>([])
   const [phase, setPhase] = useState<'playing' | 'won' | 'lost'>('playing')
-  const [shakeRow, setShakeRow] = useState(false)
+  const [rowShake, setRowShake] = useState<'none' | 'incomplete' | 'invalid'>('none')
   const [revealRow, setRevealRow] = useState<number | null>(null)
+
+  const validWordSet = useMemo(
+    () => buildValidWordSet(language, wordLength, answer),
+    [language, wordLength, answer]
+  )
 
   const letterHints: Record<string, LetterHint> = {}
   for (const g of guesses) {
@@ -82,7 +105,7 @@ export function WordleExercise({ exercise, onComplete }: WordleExerciseProps) {
 
   const submitGuess = useCallback(
     (letters: string[]) => {
-      const guess = letters.join('')
+      const guess = normalizeWord(letters.join(''))
       const newGuesses = [...guesses, guess]
       const rowIdx = guesses.length
       setGuesses(newGuesses)
@@ -130,12 +153,18 @@ export function WordleExercise({ exercise, onComplete }: WordleExerciseProps) {
   const handleEnter = useCallback(() => {
     if (phase !== 'playing') return
     if (currentLetters.length !== wordLength) {
-      setShakeRow(true)
-      setTimeout(() => setShakeRow(false), 500)
+      setRowShake('incomplete')
+      setTimeout(() => setRowShake('none'), 500)
+      return
+    }
+    const candidate = normalizeWord(currentLetters.join(''))
+    if (!validWordSet.has(candidate)) {
+      setRowShake('invalid')
+      setTimeout(() => setRowShake('none'), 550)
       return
     }
     submitGuess(currentLetters)
-  }, [phase, currentLetters, wordLength, submitGuess])
+  }, [phase, currentLetters, wordLength, submitGuess, validWordSet])
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -166,7 +195,7 @@ export function WordleExercise({ exercise, onComplete }: WordleExerciseProps) {
           return (
             <div
               key={rowIdx}
-              className={`wordle-row ${isCurrent && shakeRow ? 'shake' : ''}`}
+              className={`wordle-row${isCurrent && rowShake !== 'none' ? ` wordle-row--${rowShake}` : ''}`}
             >
               {Array.from({ length: wordLength }, (_, colIdx) => {
                 const char = guess[colIdx] ?? ''

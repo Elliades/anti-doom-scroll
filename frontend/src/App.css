@@ -1378,8 +1378,18 @@ body {
   gap: 0.35rem;
 }
 
-.wordle-row.shake {
+.wordle-row--incomplete {
   animation: wordle-shake 0.4s ease;
+}
+
+.wordle-row--invalid {
+  animation: wordle-invalid 0.55s ease;
+}
+
+.wordle-row--invalid .wordle-tile.active {
+  border-color: #ef4444;
+  background: color-mix(in srgb, #ef4444 16%, transparent);
+  color: var(--text);
 }
 
 @keyframes wordle-shake {
@@ -1387,6 +1397,14 @@ body {
   15% { transform: translateX(-6px); }
   45% { transform: translateX(6px); }
   75% { transform: translateX(-4px); }
+}
+
+@keyframes wordle-invalid {
+  0%, 100% { transform: translateX(0) rotate(0deg); }
+  18% { transform: translateX(-6px) rotate(-3deg); }
+  36% { transform: translateX(6px) rotate(3deg); }
+  54% { transform: translateX(-5px) rotate(-2deg); }
+  72% { transform: translateX(4px) rotate(2deg); }
 }
 
 .wordle-tile {
