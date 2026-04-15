@@ -47,6 +47,7 @@ class StartLadderSessionUseCase(
                 overallScoreSum = 0.0,
                 overallTotal = 0
             ),
+            levelCount = config.levels.size,
             sessionDefaultSeconds = profile.sessionDefaultSeconds,
             lowBatteryModeSeconds = profile.lowBatteryModeSeconds
         )
@@ -57,6 +58,7 @@ class StartLadderSessionUseCase(
         val exercise: Exercise,
         val subjectCode: String?,
         val ladderState: LadderState,
+        val levelCount: Int,
         val sessionDefaultSeconds: Int,
         val lowBatteryModeSeconds: Int
     )

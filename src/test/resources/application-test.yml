@@ -17,6 +17,11 @@ spring:
 
 app:
   anonymous-profile-enabled: true
+  # Ladder mode: score-based level progression (40% stay, 75% advance)
+  # Advancement thresholds:
+  # - Levels 0-4: require only 1 exercise to evaluate advancement
+  # - Level 5+: require 5 exercises (default threshold) to evaluate advancement
+  # - n-back and pair ladders: always require only 1 exercise regardless of level
   ladder:
     defaultCode: default
     ladders:
@@ -362,6 +367,9 @@ app:
             allowedDifficulties: [EASY, MEDIUM]
             subjectCodes: [WORD]
           - levelIndex: 4
+            allowedDifficulties: [MEDIUM]
+            subjectCodes: [WORD]
+          - levelIndex: 5
             allowedDifficulties: [MEDIUM]
             subjectCodes: [WORD]
     mixes:

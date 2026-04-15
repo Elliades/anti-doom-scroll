@@ -21,6 +21,8 @@ export interface ExercisePlayerProps {
   /** When false, exercise intro screens omit the instruction paragraph (e.g. ladder: show only on first exercise). Default true. */
   showInstruction?: boolean
   onComplete?: (result: ExerciseResult, elapsedMs?: number) => void
+  /** Optional skip action rendered next to the timer. */
+  onSkip?: () => void
 }
 
 /** Exercise components accept onComplete with ExerciseResult | number for backward compat */
@@ -73,7 +75,7 @@ const EXERCISE_TYPE_COMPONENTS: Record<string, React.ComponentType<ExerciseCompo
  * Result display is decoupled — the parent (LadderSessionBlock, SessionExerciseBlock,
  * PlayExercisePage) owns showing the score and action buttons.
  */
-export function ExercisePlayer({ exercise, showInstruction = true, onComplete }: ExercisePlayerProps) {
+export function ExercisePlayer({ exercise, showInstruction = true, onComplete, onSkip }: ExercisePlayerProps) {
   const [elapsedMs, setElapsedMs] = useState(0)
   const completedRef = useRef(false)
   const startRef = useRef(Date.now())
@@ -98,6 +100,11 @@ export function ExercisePlayer({ exercise, showInstruction = true, onComplete }:
   return (
     <div className="exercise-with-chronometer">
       <div className="exercise-chronometer-row">
+        {onSkip && (
+          <button type="button" className="ladder-skip-btn" onClick={onSkip} aria-label="Skip exercise">
+            Skip ▸
+          </button>
+        )}
         <Chronometer elapsedMs={elapsedMs} className="timer" />
       </div>
       <ExerciseComponent

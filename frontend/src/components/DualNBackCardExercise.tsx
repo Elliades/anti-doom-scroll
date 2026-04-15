@@ -45,6 +45,16 @@ export function DualNBackCardExercise({ exercise, onComplete, showInstruction = 
   }, [phase, index, matchNumberSet])
 
   useEffect(() => {
+    if (phase !== 'playing') return
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'c' || e.key === 'C') { handleColorMatch(); return }
+      if (e.key === 'n' || e.key === 'N') { handleNumberMatch(); return }
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [phase, handleColorMatch, handleNumberMatch])
+
+  useEffect(() => {
     if (phase !== 'playing' || index >= params.sequence.length) return
     const t = setTimeout(() => setIndex((i) => i + 1), intervalMs)
     return () => clearTimeout(t)
@@ -99,7 +109,7 @@ export function DualNBackCardExercise({ exercise, onComplete, showInstruction = 
             &quot;Match Number&quot; when the rank matches, {params.n} step(s) back.
           </p>
         )}
-        <button onClick={handleStart} className="nback-start-btn">
+        <button onClick={handleStart} className="nback-start-btn" autoFocus>
           Start
         </button>
       </div>

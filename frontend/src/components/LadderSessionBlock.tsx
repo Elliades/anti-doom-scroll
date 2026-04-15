@@ -10,10 +10,6 @@ function formatPercent(v: number): string {
 }
 
 const ANSWERS_NEEDED = 5
-/**
- * How long to wait after an exercise completes before loading the next one.
- * Gives the player time to see the inline ✓ / ✗ feedback inside the exercise.
- */
 const POST_EXERCISE_DELAY_MS = 1200
 
 export interface LadderSessionBlockProps {
@@ -25,27 +21,18 @@ export function LadderSessionBlock({ ladderCode = 'default' }: LadderSessionBloc
   const [inlineError, setInlineError] = useState<string | null>(null)
   const [exercise, setExercise] = useState<ExerciseDto | null>(null)
   const [ladderState, setLadderState] = useState<LadderStateDto | null>(null)
-  /**
-   * Counter that forces ExercisePlayer to remount on every new exercise, even when
-   * the backend returns the same exercise entity ID (e.g. math exercises generated
-   * from the same DB row).  Without this, key={exercise.id} would remain unchanged
-   * and the player would stay stuck in the answered state.
-   */
+  const [levelCount, setLevelCount] = useState(0)
   const [exerciseKey, setExerciseKey] = useState(0)
-  /** Non-blocking toast shown when the player changes level. Auto-dismissed after 3 s. */
   const [levelToast, setLevelToast] = useState<{ from: number; to: number; direction: string } | null>(null)
-  /** True only for the very first exercise of the ladder; used to show instruction once. */
   const [isFirstExerciseInLadder, setIsFirstExerciseInLadder] = useState(true)
 
-  /**
-   * Use refs for values that must be read at async-call time, not captured in closures.
-   * This avoids stale-closure bugs without adding them to useCallback deps.
-   */
   const ladderStateRef = useRef<LadderStateDto | null>(null)
+  const levelCountRef = useRef(0)
   const transitioningRef = useRef(false)
   const toastTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   useEffect(() => { ladderStateRef.current = ladderState }, [ladderState])
+  useEffect(() => { levelCountRef.current = levelCount }, [levelCount])
 
   const clearToastTimer = () => {
     if (toastTimerRef.current) clearTimeout(toastTimerRef.current)
@@ -62,6 +49,7 @@ export function LadderSessionBlock({ ladderCode = 'default' }: LadderSessionBloc
       const data: LadderSessionResponseDto = await startLadderSession(undefined, ladderCode)
       setExercise(data.exercise)
       setLadderState(data.ladderState)
+      setLevelCount(data.levelCount ?? 0)
       setExerciseKey(k => k + 1)
     } catch (e) {
       setInlineError(e instanceof Error ? e.message : 'Failed to start ladder')
@@ -75,13 +63,6 @@ export function LadderSessionBlock({ ladderCode = 'default' }: LadderSessionBloc
     return clearToastTimer
   }, [loadInitial])
 
-  /**
-   * Called by ExercisePlayer when the player completes an exercise.
-   *
-   * Reads ladder state from a ref (never stale), waits briefly so the player sees
-   * the ✓ / ✗ inline feedback, then fetches the next exercise and transitions
-   * smoothly — no blocking score screen, no "Continue" button.
-   */
   const handleComplete = useCallback(async (result: ExerciseResult) => {
     if (transitioningRef.current) return
     const state = ladderStateRef.current
@@ -107,8 +88,6 @@ export function LadderSessionBlock({ ladderCode = 'default' }: LadderSessionBloc
       if (next.exercise) {
         setExercise(next.exercise)
         setIsFirstExerciseInLadder(false)
-        // Always increment the key so ExercisePlayer remounts even when the
-        // backend returns the same exercise entity ID (math exercises, etc.)
         setExerciseKey(k => k + 1)
       } else {
         setInlineError('No exercise available at this level — try again.')
@@ -118,7 +97,71 @@ export function LadderSessionBlock({ ladderCode = 'default' }: LadderSessionBloc
     } finally {
       transitioningRef.current = false
     }
-  }, []) // stable: reads state from refs, never needs re-creation
+  }, [])
+
+  const handleSkip = useCallback(async () => {
+    if (transitioningRef.current) return
+    const state = ladderStateRef.current
+    if (!state) return
+
+    transitioningRef.current = true
+    setInlineError(null)
+
+    try {
+      const next = await getNextLadderExercise(state, 0.5)
+      // Keep the original state — skip doesn't record a score
+      if (next.exercise) {
+        setExercise(next.exercise)
+        setExerciseKey(k => k + 1)
+      } else {
+        setInlineError('No exercise available at this level — try again.')
+      }
+    } catch (e) {
+      setInlineError(e instanceof Error ? e.message : 'Failed to skip exercise')
+    } finally {
+      transitioningRef.current = false
+    }
+  }, [])
+
+  const handleLevelChange = useCallback(async (delta: number) => {
+    if (transitioningRef.current) return
+    const state = ladderStateRef.current
+    if (!state) return
+    const maxLevel = levelCountRef.current - 1
+    const newLevel = Math.max(0, Math.min(maxLevel, state.currentLevelIndex + delta))
+    if (newLevel === state.currentLevelIndex) return
+
+    transitioningRef.current = true
+    setInlineError(null)
+
+    const from = state.currentLevelIndex
+    const adjustedState: LadderStateDto = {
+      ...state,
+      currentLevelIndex: newLevel,
+      recentScores: [],
+    }
+    setLadderState(adjustedState)
+    ladderStateRef.current = adjustedState
+
+    clearToastTimer()
+    setLevelToast({ from, to: newLevel, direction: delta > 0 ? 'up' : 'down' })
+    toastTimerRef.current = setTimeout(() => setLevelToast(null), 3000)
+
+    try {
+      const next = await getNextLadderExercise(adjustedState, 0.5)
+      // Keep our adjusted state — level change doesn't record a score
+      if (next.exercise) {
+        setExercise(next.exercise)
+        setExerciseKey(k => k + 1)
+      } else {
+        setInlineError('No exercise available at this level — try again.')
+      }
+    } catch (e) {
+      setInlineError(e instanceof Error ? e.message : 'Failed to get next exercise')
+    } finally {
+      transitioningRef.current = false
+    }
+  }, [])
 
   if (loading) {
     return (
@@ -139,6 +182,8 @@ export function LadderSessionBlock({ ladderCode = 'default' }: LadderSessionBloc
   }
 
   const backUrl = ladderCode === 'sum' ? '/ladder' : '/'
+  const maxLevel = levelCount - 1
+  const currentLevel = ladderState?.currentLevelIndex ?? 0
 
   const currentScoreRaw =
     ladderState && ladderState.recentScores.length > 0
@@ -172,9 +217,25 @@ export function LadderSessionBlock({ ladderCode = 'default' }: LadderSessionBloc
       <div className="ladder-metrics" aria-label="Ladder progress">
         <div className="ladder-metric">
           <span className="ladder-metric-label">Level</span>
-          <span className="ladder-metric-value ladder-metric-level">
-            {ladderState?.currentLevelIndex ?? 0}
-          </span>
+          <div className="ladder-level-row">
+            <button
+              type="button"
+              className="ladder-level-btn"
+              disabled={currentLevel <= 0}
+              onClick={() => void handleLevelChange(-1)}
+              aria-label="Level down"
+            >−</button>
+            <span className="ladder-metric-value ladder-metric-level">
+              {currentLevel}
+            </span>
+            <button
+              type="button"
+              className="ladder-level-btn"
+              disabled={currentLevel >= maxLevel}
+              onClick={() => void handleLevelChange(1)}
+              aria-label="Level up"
+            >+</button>
+          </div>
         </div>
 
         <div className="ladder-metric ladder-metric--mid">
@@ -221,6 +282,7 @@ export function LadderSessionBlock({ ladderCode = 'default' }: LadderSessionBloc
             key={`${exercise.id}-${exerciseKey}`}
             exercise={exercise}
             showInstruction={isFirstExerciseInLadder}
+            onSkip={handleSkip}
             onComplete={(result, _elapsed) => {
               void handleComplete(typeof result === 'number' ? { score: result } : result)
             }}

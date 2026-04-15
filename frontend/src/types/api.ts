@@ -203,6 +203,7 @@ export interface LadderSessionResponseDto {
   mode: string
   exercise: ExerciseDto
   ladderState: LadderStateDto
+  levelCount: number
   sessionDefaultSeconds: number
   lowBatteryModeSeconds: number
 }
@@ -233,6 +234,7 @@ export interface LadderMixSessionResponseDto {
   mode: string
   exercise: ExerciseDto
   ladderMixState: LadderMixStateDto
+  levelCount: number
   sessionDefaultSeconds: number
   lowBatteryModeSeconds: number
 }

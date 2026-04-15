@@ -131,7 +131,7 @@ export function ImagePairExercise({ exercise, onComplete, showInstruction = true
             Find pairs: same <strong>background</strong> and same <strong>image</strong>.
           </p>
         )}
-        <button type="button" onClick={startGame} className="imagepair-start-btn">
+        <button type="button" onClick={startGame} className="imagepair-start-btn" autoFocus>
           Start
         </button>
       </div>

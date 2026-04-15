@@ -36,16 +36,19 @@ export function LadderMixSessionBlock({ mixCode = 'mix' }: LadderMixSessionBlock
   const [inlineError, setInlineError] = useState<string | null>(null)
   const [exercise, setExercise] = useState<ExerciseDto | null>(null)
   const [ladderMixState, setLadderMixState] = useState<LadderMixStateDto | null>(null)
+  const [levelCount, setLevelCount] = useState(0)
   const [exerciseKey, setExerciseKey] = useState(0)
   const [levelToast, setLevelToast] = useState<{ from: number; to: number; direction: string } | null>(null)
   const [isFirstExerciseInLadder, setIsFirstExerciseInLadder] = useState(true)
 
   const ladderMixStateRef = useRef<LadderMixStateDto | null>(null)
+  const levelCountRef = useRef(0)
   const currentLadderCodeRef = useRef<string | null>(null)
   const transitioningRef = useRef(false)
   const toastTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   useEffect(() => { ladderMixStateRef.current = ladderMixState }, [ladderMixState])
+  useEffect(() => { levelCountRef.current = levelCount }, [levelCount])
 
   const clearToastTimer = () => {
     if (toastTimerRef.current) clearTimeout(toastTimerRef.current)
@@ -62,6 +65,7 @@ export function LadderMixSessionBlock({ mixCode = 'mix' }: LadderMixSessionBlock
       const data: LadderMixSessionResponseDto = await startLadderMixSession(undefined, mixCode)
       setExercise(data.exercise)
       setLadderMixState(data.ladderMixState)
+      setLevelCount(data.levelCount ?? 0)
       currentLadderCodeRef.current = data.ladderMixState.ladderCodes[data.ladderMixState.nextLadderIndex]
       setExerciseKey(k => k + 1)
     } catch (e) {
@@ -114,6 +118,79 @@ export function LadderMixSessionBlock({ mixCode = 'mix' }: LadderMixSessionBlock
     }
   }, [])
 
+  const handleSkip = useCallback(async () => {
+    if (transitioningRef.current) return
+    const state = ladderMixStateRef.current
+    const lastCompletedLadderCode = currentLadderCodeRef.current
+    if (!state || !lastCompletedLadderCode) return
+
+    transitioningRef.current = true
+    setInlineError(null)
+
+    try {
+      const next = await getNextLadderMixExercise(state, lastCompletedLadderCode, 0.5)
+      // Keep the original state — skip doesn't record a score
+      currentLadderCodeRef.current = next.ladderMixState.ladderCodes[next.ladderMixState.nextLadderIndex]
+      if (next.exercise) {
+        setExercise(next.exercise)
+        setExerciseKey(k => k + 1)
+      } else {
+        setInlineError('No exercise available at this level — try again.')
+      }
+    } catch (e) {
+      setInlineError(e instanceof Error ? e.message : 'Failed to skip exercise')
+    } finally {
+      transitioningRef.current = false
+    }
+  }, [])
+
+  const handleLevelChange = useCallback(async (delta: number) => {
+    if (transitioningRef.current) return
+    const state = ladderMixStateRef.current
+    const lastCompletedLadderCode = currentLadderCodeRef.current
+    if (!state || !lastCompletedLadderCode) return
+    const maxLevel = levelCountRef.current - 1
+    const newLevel = Math.max(0, Math.min(maxLevel, state.currentLevelIndex + delta))
+    if (newLevel === state.currentLevelIndex) return
+
+    transitioningRef.current = true
+    setInlineError(null)
+
+    const from = state.currentLevelIndex
+    const adjustedState: LadderMixStateDto = {
+      ...state,
+      currentLevelIndex: newLevel,
+      perLadderStates: Object.fromEntries(
+        Object.entries(state.perLadderStates).map(([code, s]) => [
+          code,
+          { ...s, recentScores: [] },
+        ])
+      ),
+    }
+    setLadderMixState(adjustedState)
+    ladderMixStateRef.current = adjustedState
+
+    clearToastTimer()
+    setLevelToast({ from, to: newLevel, direction: delta > 0 ? 'up' : 'down' })
+    toastTimerRef.current = setTimeout(() => setLevelToast(null), 3000)
+
+    try {
+      const next = await getNextLadderMixExercise(adjustedState, lastCompletedLadderCode, 0.5)
+      // Keep our adjusted state — level change doesn't record a score
+      currentLadderCodeRef.current = next.ladderMixState.ladderCodes[next.ladderMixState.nextLadderIndex]
+      if (next.exercise) {
+        setExercise(next.exercise)
+        setExerciseKey(k => k + 1)
+      } else {
+        setInlineError('No exercise available at this level — try again.')
+      }
+    } catch (e) {
+      setInlineError(e instanceof Error ? e.message : 'Failed to get next exercise')
+    } finally {
+      transitioningRef.current = false
+    }
+  }, [])
+
   if (loading) {
     return (
       <div className="screen center">
@@ -131,6 +208,9 @@ export function LadderMixSessionBlock({ mixCode = 'mix' }: LadderMixSessionBlock
       </div>
     )
   }
+
+  const maxLevel = levelCount - 1
+  const currentLevel = ladderMixState?.currentLevelIndex ?? 0
 
   const overallScoreSum = ladderMixState
     ? Object.values(ladderMixState.perLadderStates).reduce((a, s) => a + s.overallScoreSum, 0)
@@ -156,9 +236,25 @@ export function LadderMixSessionBlock({ mixCode = 'mix' }: LadderMixSessionBlock
       <div className="ladder-metrics" aria-label="Ladder mix progress">
         <div className="ladder-metric">
           <span className="ladder-metric-label">Level</span>
-          <span className="ladder-metric-value ladder-metric-level">
-            {ladderMixState?.currentLevelIndex ?? 0}
-          </span>
+          <div className="ladder-level-row">
+            <button
+              type="button"
+              className="ladder-level-btn"
+              disabled={currentLevel <= 0}
+              onClick={() => void handleLevelChange(-1)}
+              aria-label="Level down"
+            >−</button>
+            <span className="ladder-metric-value ladder-metric-level">
+              {currentLevel}
+            </span>
+            <button
+              type="button"
+              className="ladder-level-btn"
+              disabled={currentLevel >= maxLevel}
+              onClick={() => void handleLevelChange(1)}
+              aria-label="Level up"
+            >+</button>
+          </div>
         </div>
 
         <div className="ladder-metric ladder-metric--mid">
@@ -206,7 +302,7 @@ export function LadderMixSessionBlock({ mixCode = 'mix' }: LadderMixSessionBlock
           aria-live="polite"
         >
           {levelToast.direction === 'up'
-            ? `↑ Level ${levelToast.to} — both ladders passed!`
+            ? `↑ Level ${levelToast.to} — all ladders passed!`
             : `↓ Level ${levelToast.to} — keep going!`}
         </div>
       )}
@@ -223,6 +319,7 @@ export function LadderMixSessionBlock({ mixCode = 'mix' }: LadderMixSessionBlock
             key={`${exercise.id}-${exerciseKey}`}
             exercise={exercise}
             showInstruction={isFirstExerciseInLadder}
+            onSkip={handleSkip}
             onComplete={(result, _elapsed) => {
               void handleComplete(typeof result === 'number' ? { score: result } : result)
             }}

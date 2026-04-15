@@ -22,9 +22,8 @@ const KEYBOARD_ROWS_AZERTY = [
   ['q', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'm'],
   ['w', 'x', 'c', 'v', 'b', 'n'],
 ]
-const FR_ACCENTS = ['é', 'è', 'ê', 'à', 'â', 'ù', 'û', 'î', 'ô', 'ç', 'œ']
 
-/** Strip accents for comparison so base letters match accented answers (tests + gameplay). */
+/** Lowercase, strip accents, œ→oe æ→ae — canonical form for answers, guesses, and word lists (matches backend). */
 export function normalizeForCompare(str: string): string {
   const nfd = str
     .toLowerCase()
@@ -33,19 +32,14 @@ export function normalizeForCompare(str: string): string {
   return nfd.replace(/\u0153/g, 'oe').replace(/\u00e6/g, 'ae')
 }
 
-/** NFC + lowercase — matches backend WordleGenerator normalization. */
-function normalizeWord(s: string): string {
-  return s.normalize('NFC').toLowerCase()
-}
-
 function buildValidWordSet(language: string, wordLength: number, answer: string): Set<string> {
   const words = language === 'en' ? wordleWordsEn : wordleWordsFr
   const set = new Set<string>()
   for (const w of words) {
-    const n = normalizeWord(w)
+    const n = normalizeForCompare(w)
     if (n.length === wordLength) set.add(n)
   }
-  set.add(normalizeWord(answer))
+  set.add(normalizeForCompare(answer))
   return set
 }
 
@@ -81,7 +75,7 @@ function isAllowedGuess(candidate: string, answer: string, validWordSet: Set<str
 /**
  * Classic Wordle: guess a word of N letters in up to maxAttempts tries.
  * Green = correct position, yellow = present but wrong position, gray = absent.
- * Supports French (AZERTY + accents) and English (QWERTY) keyboards.
+ * Supports French (AZERTY) and English (QWERTY) keyboards; words are unaccented.
  */
 export function WordleExercise({ exercise, onComplete }: WordleExerciseProps) {
   const params = exercise.wordleParams
@@ -89,7 +83,7 @@ export function WordleExercise({ exercise, onComplete }: WordleExerciseProps) {
     return <p className="error">Invalid wordle exercise: missing answer.</p>
   }
 
-  const answer = normalizeWord(params.answer)
+  const answer = normalizeForCompare(params.answer)
   const wordLength = params.wordLength
   const maxAttempts = params.maxAttempts ?? 6
   const language = params.language ?? 'fr'
@@ -121,7 +115,7 @@ export function WordleExercise({ exercise, onComplete }: WordleExerciseProps) {
 
   const submitGuess = useCallback(
     (letters: string[]) => {
-      const guess = normalizeWord(letters.join(''))
+      const guess = normalizeForCompare(letters.join(''))
       const newGuesses = [...guesses, guess]
       const rowIdx = guesses.length
       setGuesses(newGuesses)
@@ -173,7 +167,7 @@ export function WordleExercise({ exercise, onComplete }: WordleExerciseProps) {
       setTimeout(() => setRowShake('none'), 500)
       return
     }
-    const candidate = normalizeWord(currentLetters.join(''))
+    const candidate = normalizeForCompare(currentLetters.join(''))
     if (!isAllowedGuess(candidate, answer, validWordSet)) {
       setRowShake('invalid')
       setTimeout(() => setRowShake('none'), 550)
@@ -187,7 +181,7 @@ export function WordleExercise({ exercise, onComplete }: WordleExerciseProps) {
       if (e.ctrlKey || e.altKey || e.metaKey) return
       if (e.key === 'Backspace') handleBackspace()
       else if (e.key === 'Enter') handleEnter()
-      else if (e.key.length === 1 && /[a-zA-ZÀ-ÿœæ]/u.test(e.key)) handleLetter(e.key)
+      else if (e.key.length === 1 && /[a-zA-Z]/u.test(e.key)) handleLetter(e.key)
     }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
@@ -279,20 +273,6 @@ export function WordleExercise({ exercise, onComplete }: WordleExerciseProps) {
             )}
           </div>
         ))}
-        {isFrench && (
-          <div className="wordle-keyboard-row wordle-keyboard-row--accents">
-            {FR_ACCENTS.map((c) => (
-              <button
-                key={c}
-                type="button"
-                className={`wordle-key wordle-key--letter ${letterHints[c] ?? ''}`}
-                onClick={() => handleLetter(c)}
-              >
-                {c.toUpperCase()}
-              </button>
-            ))}
-          </div>
-        )}
       </div>
 
       <p className="wordle-hint-text">

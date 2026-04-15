@@ -19,6 +19,7 @@ data class LadderSessionResponseDto(
     val mode: String = "ladder",
     val exercise: ExerciseDto,
     val ladderState: LadderStateDto,
+    val levelCount: Int,
     val sessionDefaultSeconds: Int,
     val lowBatteryModeSeconds: Int
 )
@@ -68,6 +69,7 @@ data class LadderMixSessionResponseDto(
     val mode: String = "ladderMix",
     val exercise: ExerciseDto,
     val ladderMixState: LadderMixStateDto,
+    val levelCount: Int,
     val sessionDefaultSeconds: Int,
     val lowBatteryModeSeconds: Int
 )

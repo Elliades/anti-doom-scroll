@@ -245,7 +245,7 @@ export function DigitSpanExercise({ exercise, onComplete }: DigitSpanExercisePro
           <p>Recall in order, then take on a challenge.</p>
           <p>The sequence grows with each success.</p>
         </div>
-        <button type="button" className="ds-start-btn" onClick={() => startMemorize(startLength, 0)}>
+        <button type="button" className="ds-start-btn" onClick={() => startMemorize(startLength, 0)} autoFocus>
           Start
         </button>
       </div>

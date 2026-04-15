@@ -123,6 +123,7 @@ class SessionController(
             profileId = result.profileId,
             exercise = exerciseDtoMapper.toExerciseDto(result.exercise, result.subjectCode),
             ladderState = toLadderStateDto(result.ladderState),
+            levelCount = result.levelCount,
             sessionDefaultSeconds = result.sessionDefaultSeconds,
             lowBatteryModeSeconds = result.lowBatteryModeSeconds
         )
@@ -150,6 +151,7 @@ class SessionController(
             profileId = result.profileId,
             exercise = exerciseDtoMapper.toExerciseDto(result.exercise, result.subjectCode),
             ladderMixState = toLadderMixStateDto(result.ladderMixState),
+            levelCount = result.levelCount,
             sessionDefaultSeconds = result.sessionDefaultSeconds,
             lowBatteryModeSeconds = result.lowBatteryModeSeconds
         )

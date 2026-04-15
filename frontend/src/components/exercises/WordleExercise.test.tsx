@@ -90,11 +90,10 @@ describe('WordleExercise', () => {
     expect(screen.getByRole('button', { name: /entrée|enter/i })).toBeInTheDocument()
   })
 
-  it('shows accents row (é, è, à, etc.) on French keyboard', () => {
+  it('does not show accent keys on French keyboard (words are unaccented)', () => {
     render(<WordleExercise exercise={wordleExercise({ language: 'fr' })} />)
-    expect(screen.getByRole('button', { name: 'É' })).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: 'È' })).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: 'À' })).toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: 'É' })).not.toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: 'À' })).not.toBeInTheDocument()
   })
 
   it('submits when Enter is pressed after a full valid word (e.g. 3 letters)', async () => {

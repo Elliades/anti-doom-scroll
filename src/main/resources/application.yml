@@ -34,7 +34,11 @@ app:
   low-battery-mode-seconds: 45
   cors:
     origins: http://localhost:5173, http://localhost:5174
-  # Ladder mode: score-based level progression (40% stay, 75% advance, last 5 answers)
+  # Ladder mode: score-based level progression (40% stay, 75% advance)
+  # Advancement thresholds:
+  # - Levels 0-4: require only 1 exercise to evaluate advancement
+  # - Level 5+: require 5 exercises (default threshold) to evaluate advancement
+  # - n-back and pair ladders: always require only 1 exercise regardless of level
   ladder:
     defaultCode: default
     ladders:
@@ -45,6 +49,7 @@ app:
           minScoreToAdvance: 0.75
           answersNeededToAdvance: 5
         levels:
+          # ── Phase 1: Math (levels 0-4) ──────────────────────────────────────
           - levelIndex: 0
             allowedDifficulties: [ULTRA_EASY]
             subjectCodes: [default]
@@ -60,6 +65,95 @@ app:
           - levelIndex: 4
             allowedDifficulties: [MEDIUM]
             subjectCodes: [default]
+          # ── Phase 2: Anagrams (levels 5-9) ──────────────────────────────────
+          - levelIndex: 5
+            allowedDifficulties: [ULTRA_EASY]
+            subjectCodes: [WORD]
+          - levelIndex: 6
+            allowedDifficulties: [ULTRA_EASY, EASY]
+            subjectCodes: [WORD]
+          - levelIndex: 7
+            allowedDifficulties: [EASY]
+            subjectCodes: [WORD]
+          - levelIndex: 8
+            allowedDifficulties: [EASY, MEDIUM]
+            subjectCodes: [WORD]
+          - levelIndex: 9
+            allowedDifficulties: [MEDIUM]
+            subjectCodes: [WORD]
+          # ── Phase 3: Memory pairs (levels 10-14) ────────────────────────────
+          - levelIndex: 10
+            allowedDifficulties: [ULTRA_EASY]
+            subjectCodes: [MEMORY]
+            allowedTypes: [MEMORY_CARD_PAIRS]
+          - levelIndex: 11
+            allowedDifficulties: [ULTRA_EASY, EASY]
+            subjectCodes: [MEMORY]
+            allowedTypes: [MEMORY_CARD_PAIRS]
+          - levelIndex: 12
+            allowedDifficulties: [EASY]
+            subjectCodes: [MEMORY]
+            allowedTypes: [MEMORY_CARD_PAIRS, SUM_PAIR]
+          - levelIndex: 13
+            allowedDifficulties: [EASY, MEDIUM]
+            subjectCodes: [MEMORY]
+          - levelIndex: 14
+            allowedDifficulties: [MEDIUM]
+            subjectCodes: [MEMORY]
+          # ── Phase 4: Estimation (levels 15-19) ──────────────────────────────
+          - levelIndex: 15
+            allowedDifficulties: [ULTRA_EASY]
+            subjectCodes: [ESTIMATION]
+          - levelIndex: 16
+            allowedDifficulties: [ULTRA_EASY, EASY]
+            subjectCodes: [ESTIMATION]
+          - levelIndex: 17
+            allowedDifficulties: [EASY]
+            subjectCodes: [ESTIMATION]
+          - levelIndex: 18
+            allowedDifficulties: [EASY, MEDIUM]
+            subjectCodes: [ESTIMATION]
+          - levelIndex: 19
+            allowedDifficulties: [MEDIUM]
+            subjectCodes: [ESTIMATION]
+          # ── Phase 5: N-Back (levels 20-24) ──────────────────────────────────
+          - levelIndex: 20
+            allowedDifficulties: [ULTRA_EASY]
+            subjectCodes: [B1]
+            allowedTypes: [N_BACK]
+            exerciseParamFilter:
+              n: ["1"]
+          - levelIndex: 21
+            allowedDifficulties: [ULTRA_EASY, EASY]
+            subjectCodes: [B1]
+            allowedTypes: [N_BACK]
+          - levelIndex: 22
+            allowedDifficulties: [EASY]
+            subjectCodes: [B1]
+            allowedTypes: [N_BACK, N_BACK_GRID]
+          - levelIndex: 23
+            allowedDifficulties: [EASY, MEDIUM]
+            subjectCodes: [B1]
+            allowedTypes: [N_BACK, N_BACK_GRID]
+          - levelIndex: 24
+            allowedDifficulties: [MEDIUM]
+            subjectCodes: [B1]
+          # ── Phase 6: Cross-subject mix (levels 25-29) ───────────────────────
+          - levelIndex: 25
+            allowedDifficulties: [EASY, MEDIUM]
+            subjectCodes: [default, WORD, MEMORY, ESTIMATION]
+          - levelIndex: 26
+            allowedDifficulties: [MEDIUM]
+            subjectCodes: [default, WORD, MEMORY, ESTIMATION, B1]
+          - levelIndex: 27
+            allowedDifficulties: [MEDIUM, HARD]
+            subjectCodes: [default, WORD, MEMORY, ESTIMATION, B1]
+          - levelIndex: 28
+            allowedDifficulties: [HARD]
+            subjectCodes: [default, WORD, MEMORY, ESTIMATION, B1]
+          - levelIndex: 29
+            allowedDifficulties: [HARD, VERY_HARD]
+            subjectCodes: [default, WORD, MEMORY, ESTIMATION, B1]
       # Sum ladder: addition → subtraction → mult/div, levels 0-25
       sum:
         name: "Math Sum Ladder"

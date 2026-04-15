@@ -58,11 +58,16 @@ class StartLadderMixSessionUseCase(
 
         val subjectCode = subjectPort.findById(exercise.subjectId)?.code
 
+        val levelCount = ladderCodes.minOfOrNull { code ->
+            ladderPort.getByCode(code)?.levels?.size ?: 0
+        } ?: 0
+
         return LadderMixSessionResult(
             profileId = profile.id.toString(),
             exercise = exercise,
             subjectCode = subjectCode,
             ladderMixState = state,
+            levelCount = levelCount,
             sessionDefaultSeconds = profile.sessionDefaultSeconds,
             lowBatteryModeSeconds = profile.lowBatteryModeSeconds
         )
@@ -73,6 +78,7 @@ class StartLadderMixSessionUseCase(
         val exercise: Exercise,
         val subjectCode: String?,
         val ladderMixState: LadderMixState,
+        val levelCount: Int,
         val sessionDefaultSeconds: Int,
         val lowBatteryModeSeconds: Int
     )

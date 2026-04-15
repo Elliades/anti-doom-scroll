@@ -2,8 +2,8 @@
  * N-Back card carousel: 2n+1 slots, center spaced.
  * Flow:
  * 0. All backs, center spaced out
- * 1. After 0.5s: center flips to face (shows current card)
- * 2. After 1s: center flips to back, moves right; right shift; rightmost exits
+ * 1. After initial delay: center flips to face (shows current card)
+ * 2. After face display: center flips to back, moves right; right shift; rightmost exits
  * 3. Left-neighbor of center (end of left queue) flips to face, moves to center with next card;
  *    new card enters at start of left queue (furthest left)
  */
@@ -11,10 +11,10 @@ import { useEffect, useState, useRef, useCallback } from 'react'
 import { NBackCardDisplay } from './NBackCardDisplay'
 
 const SLOT_WIDTH = 90
-const INITIAL_DELAY_MS = 500
-const FACE_DISPLAY_MS = 1000
-const MOVE_MS = 450
-const FLIP_MS = 320
+const INITIAL_DELAY_MS = 400
+const FACE_DISPLAY_MS = 500
+const MOVE_MS = 360
+const FLIP_MS = 256
 
 function CardBack() {
   return <div className="nback-card-back" />
@@ -208,7 +208,7 @@ export function NBackCardCarousel({
               } ${card.entering ? 'nback-card-enter' : ''}`}
               style={{
                 left: `${left}px`,
-                transition: `left ${MOVE_MS}ms cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.4s ease-out`,
+                transition: `left ${MOVE_MS}ms cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.32s ease-out`,
                 opacity: card.entering && card.pos < 0 ? 0 : 1,
               }}
             >

@@ -25,11 +25,15 @@ class GetNextLadderExerciseUseCase(
         val config = ladderPort.getByCode(state.ladderCode) ?: return null
         val thresholds = config.thresholds
 
-        var newState = state.withScoreAdded(lastScore, thresholds.answersNeededToAdvance)
+        // Get the threshold for the current level (may be 1 for early levels or special ladders)
+        val answersNeededForCurrentLevel = config.getAnswersNeededToAdvance(state.currentLevelIndex)
+        // Store scores using the maximum threshold to avoid losing data when level changes
+        val maxThreshold = config.thresholds.answersNeededToAdvance
+        var newState = state.withScoreAdded(lastScore, maxThreshold)
         var levelChanged: LevelChange? = null
 
         val recent = newState.recentScores
-        val canEvaluate = recent.size >= thresholds.answersNeededToAdvance
+        val canEvaluate = recent.size >= answersNeededForCurrentLevel
         if (canEvaluate) {
             val avg = recent.average()
             val maxLevel = config.levels.maxOfOrNull { it.levelIndex } ?: 0

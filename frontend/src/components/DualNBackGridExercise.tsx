@@ -46,6 +46,16 @@ export function DualNBackGridExercise({ exercise, onComplete, showInstruction = 
   }, [phase, index, matchColorSet])
 
   useEffect(() => {
+    if (phase !== 'playing') return
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'p' || e.key === 'P') { handlePositionMatch(); return }
+      if (e.key === 'c' || e.key === 'C') { handleColorMatch(); return }
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [phase, handlePositionMatch, handleColorMatch])
+
+  useEffect(() => {
     if (phase !== 'playing' || index >= params.sequence.length) return
     const t = setTimeout(() => setIndex((i) => i + 1), intervalMs)
     return () => clearTimeout(t)
@@ -100,7 +110,7 @@ export function DualNBackGridExercise({ exercise, onComplete, showInstruction = 
             again, or &quot;Match Color&quot; when the same color appears, {params.n} step(s) back.
           </p>
         )}
-        <button onClick={handleStart} className="nback-start-btn">
+        <button onClick={handleStart} className="nback-start-btn" autoFocus>
           Start
         </button>
       </div>

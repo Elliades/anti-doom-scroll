@@ -116,7 +116,9 @@ body {
 
 .exercise-chronometer-row {
   display: flex;
-  justify-content: flex-end;
+  justify-content: center;
+  align-items: center;
+  gap: 0.75rem;
 }
 
 .exercise-chronometer-row .timer {
@@ -575,6 +577,77 @@ body {
   50%       { opacity: 0.8; width: 4rem; }
 }
 
+/* Level +/- buttons flanking the level number */
+.ladder-level-row {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.ladder-level-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-dim);
+  font-size: 1rem;
+  font-weight: 700;
+  width: 1.8rem;
+  height: 1.8rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: color 0.15s;
+  -webkit-tap-highlight-color: transparent;
+  padding: 0;
+  line-height: 1;
+}
+
+.ladder-level-btn:active:not(:disabled) {
+  color: var(--text);
+}
+
+.ladder-level-btn:disabled {
+  opacity: 0.2;
+  cursor: default;
+}
+
+/* Skip button next to the timer */
+.ladder-skip-btn {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: var(--text-dim);
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 0.2rem 0.7rem;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+  -webkit-tap-highlight-color: transparent;
+  white-space: nowrap;
+}
+
+.ladder-skip-btn:active {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text);
+}
+
+@media (prefers-color-scheme: light) {
+  .ladder-level-btn {
+    color: var(--text-dim);
+  }
+  .ladder-level-btn:active:not(:disabled) {
+    color: var(--text);
+  }
+  .ladder-skip-btn {
+    border-color: rgba(0, 0, 0, 0.12);
+    color: var(--text-dim);
+  }
+  .ladder-skip-btn:active {
+    background: rgba(0, 0, 0, 0.06);
+    color: var(--text);
+  }
+}
+
 .footer .link-btn {
   display: inline-block;
   padding: 0.75rem 1.25rem;
@@ -828,16 +901,16 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  transition: left 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transition: left 0.36s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 .nback-carousel-card-v2.nback-card-exit {
   opacity: 0;
-  transition: left 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-    opacity 0.4s ease-out;
+  transition: left 0.36s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    opacity 0.32s ease-out;
 }
 .nback-carousel-card-v2.nback-card-enter {
-  transition: left 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-    opacity 0.4s ease-out;
+  transition: left 0.36s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    opacity 0.32s ease-out;
 }
 
 /* Flip card v2 */
@@ -851,7 +924,7 @@ body {
   width: 100%;
   height: 100%;
   transform-style: preserve-3d;
-  transition: transform 0.32s ease-in-out;
+  transition: transform 0.256s ease-in-out;
 }
 .nback-flip-card-v2.nback-flip-face .nback-flip-inner-v2 {
   transform: rotateY(0deg);

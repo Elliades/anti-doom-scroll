@@ -161,7 +161,7 @@ export function SumPairExercise({ exercise, onComplete, showInstruction = true }
               ' Each static is colored — match only cards of the same color.'}
           </p>
         )}
-        <button type="button" onClick={startGame} className="sumpair-start-btn">
+        <button type="button" onClick={startGame} className="sumpair-start-btn" autoFocus>
           Start
         </button>
       </div>

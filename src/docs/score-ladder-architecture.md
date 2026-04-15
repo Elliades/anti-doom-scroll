@@ -70,14 +70,18 @@ data class LadderState(
 
 ### Advancement Logic
 
-Advancement is based **only on the last 5 answers at the current level**:
+Advancement is based on recent answers at the current level, with per-level thresholds:
 
 1. After each answer, append `score` to `recentScores` (keep last N, default 5).
-2. When `recentScores.size >= answersNeededToAdvance` (5), compute average:
+2. The number of answers needed to evaluate advancement depends on the level:
+   - **Levels 0-4**: require only **1 exercise** to evaluate advancement
+   - **Level 5+**: require **5 exercises** (default threshold) to evaluate advancement
+   - **n-back and pair ladders**: always require only **1 exercise** regardless of level
+3. When `recentScores.size >= answersNeededToAdvance` for the current level, compute average:
    - **Advance** if average ≥ `minScoreToAdvance` (75%) and not at max level.
    - **Demote** if average < `minScoreToStay` (40%) and `currentLevelIndex > 0`.
    - **Stay** otherwise (40% ≤ average < 75%).
-3. **Reset on level change:** When advancing or demoting, `recentScores` is cleared. The next level starts with a fresh evaluation window of 5 answers.
+4. **Reset on level change:** When advancing or demoting, `recentScores` is cleared. The next level starts with a fresh evaluation window.
 
 ### Score Display
 

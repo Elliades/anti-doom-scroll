@@ -39,41 +39,6 @@ export function AnagramExercise({ exercise, onComplete, showInstruction = true }
 
   const restartHintTimer = useCallback(() => setHintResetKey((k) => k + 1), [])
 
-  // Hint after N seconds of inactivity; typing/backspace restarts the timer
-  useEffect(() => {
-    if (phase !== 'playing') return
-    const id = setTimeout(() => {
-      setHintIndex((prev) => {
-        if (prev >= len) return prev
-        const next = prev + 1
-        setSlots((s) => {
-          const nextSlots = [...s]
-          nextSlots[prev] = answer[prev]
-          return nextSlots
-        })
-        return next
-      })
-    }, hintIntervalMs)
-    return () => clearTimeout(id)
-  }, [phase, len, answer, hintResetKey, hintIntervalMs])
-
-  // Success when all slots match answer
-  useEffect(() => {
-    if (phase !== 'playing' || !isCorrect) return
-    setPhase('done')
-    const hintsUsed = hintIndex
-    const penalty = hintsUsed * 0.15 + wrongPlacements * 0.08
-    const score = Math.max(0.3, 1 - penalty)
-    onComplete?.({
-      score,
-      subscores: [
-        { label: 'Hints', value: hintsUsed },
-        { label: 'Wrong tries', value: wrongPlacements },
-        { label: 'Letters', value: len },
-      ],
-    })
-  }, [phase, isCorrect, hintIndex, wrongPlacements, len, onComplete])
-
   const letterCounts = letters.reduce<Record<string, number>>((acc, c) => {
     acc[c] = (acc[c] ?? 0) + 1
     return acc
@@ -83,11 +48,14 @@ export function AnagramExercise({ exercise, onComplete, showInstruction = true }
     return acc
   }, {})
 
-  const canAdd = (char: string) => {
-    const used = usedLetterCounts[char] ?? 0
-    const max = letterCounts[char] ?? 0
-    return used < max
-  }
+  const canAdd = useCallback(
+    (char: string) => {
+      const used = usedLetterCounts[char] ?? 0
+      const max = letterCounts[char] ?? 0
+      return used < max
+    },
+    [usedLetterCounts, letterCounts]
+  )
 
   const handleLetter = useCallback(
     (char: string) => {
@@ -128,6 +96,53 @@ export function AnagramExercise({ exercise, onComplete, showInstruction = true }
     startRef.current = Date.now()
   }, [len])
 
+  useEffect(() => {
+    if (phase !== 'playing') return
+    const id = setTimeout(() => {
+      setHintIndex((prev) => {
+        if (prev >= len) return prev
+        const next = prev + 1
+        setSlots((s) => {
+          const nextSlots = [...s]
+          nextSlots[prev] = answer[prev]
+          return nextSlots
+        })
+        return next
+      })
+    }, hintIntervalMs)
+    return () => clearTimeout(id)
+  }, [phase, len, answer, hintResetKey, hintIntervalMs])
+
+  useEffect(() => {
+    if (phase !== 'playing') return
+    const onKey = (e: KeyboardEvent) => {
+      if (e.ctrlKey || e.altKey || e.metaKey) return
+      if (e.key === 'Backspace') { handleBackspace(); return }
+      if (e.key.length === 1) {
+        const ch = e.key.toLowerCase()
+        if (/[a-zà-ÿœæ]/u.test(ch)) handleLetter(ch)
+      }
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [phase, handleLetter, handleBackspace])
+
+  useEffect(() => {
+    if (phase !== 'playing' || !isCorrect) return
+    setPhase('done')
+    const hintsUsed = hintIndex
+    const penalty = hintsUsed * 0.15 + wrongPlacements * 0.08
+    const score = Math.max(0.3, 1 - penalty)
+    onComplete?.({
+      score,
+      subscores: [
+        { label: 'Hints', value: hintsUsed },
+        { label: 'Wrong tries', value: wrongPlacements },
+        { label: 'Letters', value: len },
+      ],
+    })
+  }, [phase, isCorrect, hintIndex, wrongPlacements, len, onComplete])
+
   if (phase === 'intro') {
     return (
       <div className="anagram-intro">
@@ -141,7 +156,7 @@ export function AnagramExercise({ exercise, onComplete, showInstruction = true }
             {letterColorHint && ' Les lettres vertes/rouges indiquent correct/incorrect.'}
           </p>
         )}
-        <button type="button" onClick={startGame} className="anagram-start-btn">
+        <button type="button" onClick={startGame} className="anagram-start-btn" autoFocus>
           Commencer
         </button>
       </div>

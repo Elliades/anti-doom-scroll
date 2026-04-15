@@ -86,6 +86,7 @@ describe('LadderSessionBlock – continuous play (no blocking score screen)', ()
       mode: 'ladder',
       exercise: makeExercise('ex-1', 'What is 2 + 2?'),
       ladderState: makeState(),
+      levelCount: 30,
       sessionDefaultSeconds: 60,
       lowBatteryModeSeconds: 30,
     } satisfies LadderSessionResponseDto)
@@ -104,6 +105,7 @@ describe('LadderSessionBlock – continuous play (no blocking score screen)', ()
       mode: 'ladder',
       exercise: makeExercise('ex-1', 'First question'),
       ladderState: makeState(0, [], 0),
+      levelCount: 30,
       sessionDefaultSeconds: 60,
       lowBatteryModeSeconds: 30,
     } satisfies LadderSessionResponseDto)
@@ -138,6 +140,7 @@ describe('LadderSessionBlock – continuous play (no blocking score screen)', ()
       mode: 'ladder',
       exercise: makeExercise(SAME_ID, 'What is 3 + 5?'),
       ladderState: makeState(0, [], 0),
+      levelCount: 30,
       sessionDefaultSeconds: 60,
       lowBatteryModeSeconds: 30,
     } satisfies LadderSessionResponseDto)
@@ -171,6 +174,7 @@ describe('LadderSessionBlock – continuous play (no blocking score screen)', ()
       mode: 'ladder',
       exercise: makeExercise('ex-1', 'Level 0 question'),
       ladderState: makeState(0, [1, 1, 1, 1], 4),
+      levelCount: 30,
       sessionDefaultSeconds: 60,
       lowBatteryModeSeconds: 30,
     } satisfies LadderSessionResponseDto)
@@ -205,6 +209,7 @@ describe('LadderSessionBlock – continuous play (no blocking score screen)', ()
       mode: 'ladder',
       exercise: makeExercise('ex-1', 'Focus question'),
       ladderState: makeState(),
+      levelCount: 30,
       sessionDefaultSeconds: 60,
       lowBatteryModeSeconds: 30,
     } satisfies LadderSessionResponseDto)
@@ -238,6 +243,7 @@ describe('LadderSessionBlock – continuous play (no blocking score screen)', ()
       mode: 'ladder',
       exercise: makeSumPairExercise('sumpair-1', firstPrompt),
       ladderState: makeState(0, [], 0),
+      levelCount: 30,
       sessionDefaultSeconds: 60,
       lowBatteryModeSeconds: 30,
     } satisfies LadderSessionResponseDto)

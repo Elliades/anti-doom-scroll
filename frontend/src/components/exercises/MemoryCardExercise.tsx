@@ -131,7 +131,7 @@ export function MemoryCardExercise({ exercise, onComplete, showInstruction = tru
             two cards at a time.
           </p>
         )}
-        <button type="button" onClick={startGame} className="memory-start-btn">
+        <button type="button" onClick={startGame} className="memory-start-btn" autoFocus>
           Start
         </button>
       </div>
