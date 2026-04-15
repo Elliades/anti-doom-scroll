@@ -922,27 +922,6 @@ class LocalDataSeeder(
                 timeLimitSeconds = 300
                 exerciseParams = mapOf("language" to "en", "maxAttempts" to 6)
             },
-            // IMAGE_PAIR: pair matching by same background + same image
-            ExerciseEntity().apply {
-                id = UUID.fromString("f1000000-0000-0000-0000-000000000001")
-                subjectId = memoryId
-                type = "IMAGE_PAIR"
-                difficulty = "EASY"
-                prompt = "Find pairs with the same background and the same image."
-                expectedAnswers = emptyList()
-                timeLimitSeconds = 120
-                exerciseParams = mapOf("pairCount" to 4, "maxPairsPerBackground" to 2, "colorCount" to 1)
-            },
-            ExerciseEntity().apply {
-                id = UUID.fromString("f1000000-0000-0000-0000-000000000002")
-                subjectId = memoryId
-                type = "IMAGE_PAIR"
-                difficulty = "MEDIUM"
-                prompt = "Match cards: same background and same animal."
-                expectedAnswers = emptyList()
-                timeLimitSeconds = 180
-                exerciseParams = mapOf("pairCount" to 6, "maxPairsPerBackground" to 2, "colorCount" to 2)
-            },
             // ESTIMATION: approximate numerical answers — ULTRA_EASY (everyday knowledge)
             ExerciseEntity().apply {
                 id = UUID.fromString("a0000000-0000-0000-0000-000000000300")
