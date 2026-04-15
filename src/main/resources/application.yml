@@ -298,9 +298,9 @@ app:
             subjectCodes: [default]
             exerciseParamFilter:
               operation: [MULTIPLY, DIVIDE]
-      # Anagram ladder: 30 levels progressing through word length (2-3 → 8+ letters)
+      # Anagram ladder: 30 levels progressing through word length (3 → 8+ letters)
       # Phase structure: 4-level pure tiers + 2-level bridges between each phase
-      # ULTRA_EASY=2-3 letters, EASY=3-4, MEDIUM=4-5, HARD=6-7, VERY_HARD=8-15
+      # ULTRA_EASY=3 letters, EASY=3-4, MEDIUM=4-5, HARD=6-7, VERY_HARD=8-15
       anagram:
         name: "Anagram Ladder"
         thresholds:
@@ -308,7 +308,7 @@ app:
           minScoreToAdvance: 0.75
           answersNeededToAdvance: 5
         levels:
-          # Phase 1: ULTRA_EASY — 2-3 letter words (levels 0-3)
+          # Phase 1: ULTRA_EASY — 3-letter words (levels 0-3)
           - levelIndex: 0
             allowedDifficulties: [ULTRA_EASY]
             subjectCodes: [WORD]

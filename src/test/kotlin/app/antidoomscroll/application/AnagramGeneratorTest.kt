@@ -12,13 +12,13 @@ class AnagramGeneratorTest {
     private val generator = AnagramGenerator()
 
     @Test
-    fun `generate returns valid anagram for ULTRA_EASY 2-3 letters`() {
-        val params = AnagramParams(minLetters = 2, maxLetters = 3, language = "fr")
+    fun `generate returns valid anagram for ULTRA_EASY 3 letters`() {
+        val params = AnagramParams(minLetters = 3, maxLetters = 3, language = "fr")
         repeat(10) {
             val result = generator.generate(params, Random(it))
-            assertNotNull(result) { "Should always find words for 2-3 letters" }
+            assertNotNull(result) { "Should always find words for 3 letters" }
             assertNotNull(result!!.answer)
-            assertTrue(result.answer.length in 2..3) { "Answer length: ${result.answer.length}" }
+            assertTrue(result.answer.length == 3) { "Answer length: ${result.answer.length}" }
             assertEquals(result.answer.length, result.scrambledLetters.size) { "Scrambled must match answer length" }
         }
     }
@@ -49,7 +49,7 @@ class AnagramGeneratorTest {
 
     @Test
     fun `generate returns different words with different random seeds`() {
-        val params = AnagramParams(minLetters = 2, maxLetters = 3, language = "fr")
+        val params = AnagramParams(minLetters = 3, maxLetters = 3, language = "fr")
         val results = (0..19).map { generator.generate(params, Random(it))!!.answer }.toSet()
         assertTrue(results.size > 1) { "Different seeds should produce different words, got ${results.size} unique" }
     }
