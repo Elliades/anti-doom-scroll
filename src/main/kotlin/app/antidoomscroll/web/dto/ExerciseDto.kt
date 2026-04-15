@@ -42,7 +42,9 @@ data class ExerciseDto(
     /** WORDLE: secret answer + word length + max attempts, generated at response time. */
     val wordleParams: WordleParamsDto? = null,
     /** ESTIMATION: correct answer, unit, tolerance factor and category for logarithmic scoring. */
-    val estimationParams: EstimationParamsDto? = null
+    val estimationParams: EstimationParamsDto? = null,
+    /** DIGIT_SPAN: progressive digit recall with challenge modes. */
+    val digitSpanParams: DigitSpanParamsDto? = null
 )
 
 data class ImagePairParamsDto(
@@ -138,4 +140,14 @@ data class EstimationParamsDto(
     val category: String,
     val hint: String? = null,
     val timeWeightHigher: Boolean = false
+)
+
+/**
+ * Params for DIGIT_SPAN exercise.
+ * The exercise is fully client-driven; the backend provides timing and length config.
+ */
+data class DigitSpanParamsDto(
+    val startLength: Int,
+    val displayTimeMs: Int,
+    val maxLength: Int
 )

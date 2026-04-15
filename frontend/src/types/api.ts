@@ -101,6 +101,12 @@ export interface EstimationParamsDto {
   timeWeightHigher?: boolean
 }
 
+export interface DigitSpanParamsDto {
+  startLength: number
+  displayTimeMs: number
+  maxLength: number
+}
+
 export interface ExerciseDto {
   id: string
   subjectId: string
@@ -135,6 +141,7 @@ export interface ExerciseDto {
   wordleParams?: WordleParamsDto | null
   /** ESTIMATION: correctAnswer, unit, toleranceFactor, category, hint */
   estimationParams?: EstimationParamsDto | null
+  digitSpanParams?: DigitSpanParamsDto | null
 }
 
 export interface SessionStepDto {

@@ -14,6 +14,7 @@ import { EstimationExercise } from './exercises/EstimationExercise'
 import { MemoryCardExercise } from './exercises/MemoryCardExercise'
 import { ImagePairExercise } from './exercises/ImagePairExercise'
 import { SumPairExercise } from './exercises/SumPairExercise'
+import { DigitSpanExercise } from './exercises/DigitSpanExercise'
 
 export interface ExercisePlayerProps {
   exercise: ExerciseDto
@@ -61,6 +62,9 @@ const EXERCISE_TYPE_COMPONENTS: Record<string, React.ComponentType<ExerciseCompo
   ),
   ESTIMATION: ({ exercise, onComplete, showInstruction }) => (
     <EstimationExercise exercise={exercise} onComplete={onComplete} showInstruction={showInstruction} />
+  ),
+  DIGIT_SPAN: ({ exercise, onComplete }) => (
+    <DigitSpanExercise exercise={exercise} onComplete={onComplete} />
   ),
 }
 

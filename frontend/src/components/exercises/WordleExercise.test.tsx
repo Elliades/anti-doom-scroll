@@ -85,19 +85,19 @@ describe('WordleExercise', () => {
     vi.useFakeTimers()
   })
 
-  it('does not show Enter/Entrée button on keyboard', () => {
+  it('shows Enter/Entrée button on keyboard', () => {
     render(<WordleExercise exercise={wordleExercise()} />)
-    expect(screen.queryByRole('button', { name: /entrée|enter/i })).not.toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /entrée|enter/i })).toBeInTheDocument()
   })
 
-  it('does not show accents row (é, è, à, etc.) on keyboard', () => {
+  it('shows accents row (é, è, à, etc.) on French keyboard', () => {
     render(<WordleExercise exercise={wordleExercise({ language: 'fr' })} />)
-    expect(screen.queryByRole('button', { name: 'É' })).not.toBeInTheDocument()
-    expect(screen.queryByRole('button', { name: 'È' })).not.toBeInTheDocument()
-    expect(screen.queryByRole('button', { name: 'À' })).not.toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'É' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'È' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'À' })).toBeInTheDocument()
   })
 
-  it('auto-submits when word length is reached (e.g. 3 letters for 3-letter word)', async () => {
+  it('submits when Enter is pressed after a full valid word (e.g. 3 letters)', async () => {
     const onComplete = vi.fn()
     render(
       <WordleExercise
@@ -114,6 +114,9 @@ describe('WordleExercise', () => {
     expect(onComplete).not.toHaveBeenCalled()
     await act(() => {
       fireEvent.click(screen.getByRole('button', { name: 'I' }))
+    })
+    await act(() => {
+      fireEvent.click(screen.getByRole('button', { name: /entrée|enter/i }))
     })
     await act(() => {
       vi.advanceTimersByTime(2000)
@@ -145,6 +148,9 @@ describe('WordleExercise', () => {
     })
     await act(() => {
       fireEvent.click(screen.getByRole('button', { name: 'E' }))
+    })
+    await act(() => {
+      fireEvent.click(screen.getByRole('button', { name: /entrée|enter/i }))
     })
     await act(() => {
       vi.runAllTimers()
