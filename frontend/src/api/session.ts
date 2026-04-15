@@ -1,5 +1,6 @@
 import type { ExerciseDto, SessionResponseDto } from '../types/api'
 import { API_BASE, ensureJsonResponse } from './config'
+import { getOfflineExerciseById, isCatalogOfflineMode } from './offlineCatalog'
 
 export async function startSession(
   profileId?: string,
@@ -20,6 +21,11 @@ export async function startSession(
 
 /** Fetch N-back exercise by level (1, 2, or 3). Requires backend running; use with dev server so /api is proxied to :5173. */
 export async function getNBackByLevel(level: number): Promise<ExerciseDto | null> {
+  if (isCatalogOfflineMode()) {
+    const id = LEVEL_TO_NBACK_ID[level]
+    if (!id) return null
+    return getOfflineExerciseById(id)
+  }
   const res = await fetch(`${API_BASE}/nback/${level}`)
   if (res.status === 404) return null
   ensureJsonResponse(res)
@@ -34,8 +40,17 @@ const NBACK_ID_TO_LEVEL: Record<string, number> = {
   'c0000000-0000-0000-0000-000000000003': 3,
 }
 
+const LEVEL_TO_NBACK_ID: Record<number, string> = {
+  1: 'c0000000-0000-0000-0000-000000000001',
+  2: 'c0000000-0000-0000-0000-000000000002',
+  3: 'c0000000-0000-0000-0000-000000000003',
+}
+
 /** Fetch a single exercise by ID for dedicated play page. */
 export async function getExerciseById(id: string): Promise<ExerciseDto | null> {
+  if (isCatalogOfflineMode()) {
+    return getOfflineExerciseById(id)
+  }
   const res = await fetch(`${API_BASE}/exercises/${encodeURIComponent(id)}?_=${Date.now()}`)
   if (res.status === 404) return null
   ensureJsonResponse(res)

@@ -29,7 +29,7 @@ export default mergeConfig(base, defineConfig({
                 ],
             },
             workbox: {
-                globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}'],
+                globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2,json}'],
             },
         }),
     ],

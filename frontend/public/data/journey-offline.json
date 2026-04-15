@@ -1,0 +1,314 @@
+{
+  "journey": {
+    "code": "default",
+    "name": "Default journey",
+    "steps": [
+      {
+        "stepIndex": 0,
+        "type": "OPEN_APP",
+        "config": {
+          "exerciseCount": 3
+        }
+      },
+      {
+        "stepIndex": 1,
+        "type": "REFLECTION",
+        "config": {
+          "contentKey": "why-doom-scrolling"
+        }
+      },
+      {
+        "stepIndex": 2,
+        "type": "CHAPTER_EXERCISES",
+        "config": {
+          "subjectCodes": {
+            "0": "default",
+            "1": "B1"
+          }
+        }
+      }
+    ]
+  },
+  "stepContents": {
+    "0": {
+      "stepIndex": 0,
+      "type": "OPEN_APP",
+      "session": {
+        "profileId": "00000000-0000-0000-0000-000000000000",
+        "steps": [
+          {
+            "stepIndex": 1,
+            "difficulty": "ULTRA_EASY",
+            "exercise": {
+              "id": "c0000000-0000-0000-0000-000000000031",
+              "subjectId": "b0000000-0000-0000-0000-000000000004",
+              "subjectCode": "B1",
+              "type": "N_BACK_GRID",
+              "difficulty": "ULTRA_EASY",
+              "prompt": "Grid 1-Back: Tap Match when the highlighted cell matches 1 step back. (4×4)",
+              "expectedAnswers": [],
+              "timeLimitSeconds": 55,
+              "mathOperation": null,
+              "mathComplexityScore": null,
+              "dualNBackGridParams": null,
+              "dualNBackCardParams": null,
+              "memoryCardParams": null,
+              "sumPairParams": null,
+              "sumPairRounds": null,
+              "sumPairGroups": null,
+              "sumPairDeck": null,
+              "imagePairParams": null,
+              "imagePairDeck": null,
+              "anagramParams": null,
+              "wordleParams": null,
+              "estimationParams": null,
+              "digitSpanParams": null,
+              "nbackGridParams": {
+                "n": 1,
+                "sequence": [
+                  6,
+                  0,
+                  1,
+                  8,
+                  13,
+                  12,
+                  6,
+                  6,
+                  6,
+                  5
+                ],
+                "matchIndices": [
+                  7,
+                  8
+                ],
+                "gridSize": 4
+              },
+              "nbackParams": null
+            }
+          },
+          {
+            "stepIndex": 2,
+            "difficulty": "EASY",
+            "exercise": {
+              "id": "a0000000-0000-0000-0000-000000000021",
+              "subjectId": "b0000000-0000-0000-0000-000000000001",
+              "subjectCode": "default",
+              "type": "FLASHCARD_QA",
+              "difficulty": "EASY",
+              "prompt": "What is 40 − 8?",
+              "expectedAnswers": [
+                "32"
+              ],
+              "timeLimitSeconds": 45,
+              "mathOperation": "SUBTRACT",
+              "mathComplexityScore": 8.5,
+              "dualNBackGridParams": null,
+              "dualNBackCardParams": null,
+              "memoryCardParams": null,
+              "sumPairParams": null,
+              "sumPairRounds": null,
+              "sumPairGroups": null,
+              "sumPairDeck": null,
+              "imagePairParams": null,
+              "imagePairDeck": null,
+              "anagramParams": null,
+              "wordleParams": null,
+              "estimationParams": null,
+              "digitSpanParams": null,
+              "nbackGridParams": null,
+              "nbackParams": null
+            }
+          },
+          {
+            "stepIndex": 3,
+            "difficulty": "EASY",
+            "exercise": {
+              "id": "c0000000-0000-0000-0000-000000000032",
+              "subjectId": "b0000000-0000-0000-0000-000000000004",
+              "subjectCode": "B1",
+              "type": "N_BACK_GRID",
+              "difficulty": "EASY",
+              "prompt": "Grid 2-Back: Tap Match when the cell matches 2 steps back. (3×3)",
+              "expectedAnswers": [],
+              "timeLimitSeconds": 55,
+              "mathOperation": null,
+              "mathComplexityScore": null,
+              "dualNBackGridParams": null,
+              "dualNBackCardParams": null,
+              "memoryCardParams": null,
+              "sumPairParams": null,
+              "sumPairRounds": null,
+              "sumPairGroups": null,
+              "sumPairDeck": null,
+              "imagePairParams": null,
+              "imagePairDeck": null,
+              "anagramParams": null,
+              "wordleParams": null,
+              "estimationParams": null,
+              "digitSpanParams": null,
+              "nbackGridParams": {
+                "n": 2,
+                "sequence": [
+                  6,
+                  1,
+                  3,
+                  4,
+                  3,
+                  6,
+                  5,
+                  3,
+                  5,
+                  1
+                ],
+                "matchIndices": [
+                  4,
+                  8
+                ],
+                "gridSize": 3
+              },
+              "nbackParams": null
+            }
+          }
+        ],
+        "sessionDefaultSeconds": 180,
+        "lowBatteryModeSeconds": 45
+      },
+      "reflection": null,
+      "chapterSeries": null
+    },
+    "1": {
+      "stepIndex": 1,
+      "type": "REFLECTION",
+      "session": null,
+      "reflection": {
+        "title": "Why am I doom scrolling?",
+        "body": "Pause. You opened the app—that's the first step. Before more exercises, take a breath. Notice what you were avoiding or seeking. No judgment. When you're ready, continue to exercises by chapter."
+      },
+      "chapterSeries": null
+    },
+    "2-0": {
+      "stepIndex": 2,
+      "type": "CHAPTER_EXERCISES",
+      "session": null,
+      "reflection": null,
+      "chapterSeries": {
+        "chapters": [
+          "default",
+          "B1"
+        ],
+        "currentChapterIndex": 0,
+        "session": {
+          "profileId": "00000000-0000-0000-0000-000000000000",
+          "steps": [
+            {
+              "stepIndex": 1,
+              "difficulty": "ULTRA_EASY",
+              "exercise": {
+                "id": "a0000000-0000-0000-0000-000000000001",
+                "subjectId": "b0000000-0000-0000-0000-000000000001",
+                "subjectCode": "default",
+                "type": "FLASHCARD_QA",
+                "difficulty": "ULTRA_EASY",
+                "prompt": "What is 1 + 63?",
+                "expectedAnswers": [
+                  "64"
+                ],
+                "timeLimitSeconds": 30,
+                "mathOperation": "ADD",
+                "mathComplexityScore": 3.7,
+                "dualNBackGridParams": null,
+                "dualNBackCardParams": null,
+                "memoryCardParams": null,
+                "sumPairParams": null,
+                "sumPairRounds": null,
+                "sumPairGroups": null,
+                "sumPairDeck": null,
+                "imagePairParams": null,
+                "imagePairDeck": null,
+                "anagramParams": null,
+                "wordleParams": null,
+                "estimationParams": null,
+                "digitSpanParams": null,
+                "nbackGridParams": null,
+                "nbackParams": null
+              }
+            }
+          ],
+          "sessionDefaultSeconds": 180,
+          "lowBatteryModeSeconds": 45
+        }
+      }
+    },
+    "2-1": {
+      "stepIndex": 2,
+      "type": "CHAPTER_EXERCISES",
+      "session": null,
+      "reflection": null,
+      "chapterSeries": {
+        "chapters": [
+          "default",
+          "B1"
+        ],
+        "currentChapterIndex": 1,
+        "session": {
+          "profileId": "00000000-0000-0000-0000-000000000000",
+          "steps": [
+            {
+              "stepIndex": 1,
+              "difficulty": "ULTRA_EASY",
+              "exercise": {
+                "id": "c0000000-0000-0000-0000-000000000001",
+                "subjectId": "b0000000-0000-0000-0000-000000000004",
+                "subjectCode": "B1",
+                "type": "N_BACK",
+                "difficulty": "ULTRA_EASY",
+                "prompt": "1-Back: Tap when the card matches the previous one.",
+                "expectedAnswers": [],
+                "timeLimitSeconds": 30,
+                "mathOperation": null,
+                "mathComplexityScore": null,
+                "dualNBackGridParams": null,
+                "dualNBackCardParams": null,
+                "memoryCardParams": null,
+                "sumPairParams": null,
+                "sumPairRounds": null,
+                "sumPairGroups": null,
+                "sumPairDeck": null,
+                "imagePairParams": null,
+                "imagePairDeck": null,
+                "anagramParams": null,
+                "wordleParams": null,
+                "estimationParams": null,
+                "digitSpanParams": null,
+                "nbackGridParams": null,
+                "nbackParams": {
+                  "n": 1,
+                  "sequence": [
+                    "4C",
+                    "2C",
+                    "AC",
+                    "8C",
+                    "JC",
+                    "JC",
+                    "QC",
+                    "QC",
+                    "4C",
+                    "3C",
+                    "4C",
+                    "10C"
+                  ],
+                  "matchIndices": [
+                    5,
+                    7
+                  ]
+                }
+              }
+            }
+          ],
+          "sessionDefaultSeconds": 180,
+          "lowBatteryModeSeconds": 45
+        }
+      }
+    }
+  }
+}

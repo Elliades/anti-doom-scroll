@@ -172,6 +172,14 @@ App: http://localhost:5174
 - `npm run build` then `npm run preview` to test production build.
 - Add `public/icon-192.png` and `public/icon-512.png` for install icons (optional).
 
+### Android install (phone, standalone)
+
+The app can be installed as a **debug APK** via Capacitor; the web UI uses the same **standalone** display mode as the PWA. Full checklist, `.env.android`, offline vs API-on-LAN, and troubleshooting:
+
+**[src/docs/android-standalone-publish.md](src/docs/android-standalone-publish.md)**
+
+Quick install (from `frontend/` with a device connected): `npm run android:install` after copying `frontend/.env.android.example` → `frontend/.env.android`.
+
 ## Config (backend)
 
 - `application.yml`: DB URL, JPA, Flyway, `app.session-default-seconds`, `app.low-battery-mode-seconds`, `app.anonymous-profile-enabled`.
