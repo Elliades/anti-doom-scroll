@@ -12,7 +12,7 @@ object AnagramParamsResolver {
         val p = exercise.exerciseParams
         val language = (p?.get("language") as? String)?.lowercase() ?: "fr"
         val (minLetters, maxLetters) = when (exercise.difficulty) {
-            Difficulty.ULTRA_EASY -> 2 to 3
+            Difficulty.ULTRA_EASY -> 3 to 3
             Difficulty.EASY -> 3 to 4
             Difficulty.MEDIUM -> 4 to 5
             Difficulty.HARD -> 6 to 7

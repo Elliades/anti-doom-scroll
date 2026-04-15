@@ -17,7 +17,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
  * Integration tests for the anagram ladder (ladderCode=anagram).
  *
  * Test config: 5 levels mirroring the production 30-level structure:
- *   0: ULTRA_EASY       (2-3 letter words)
+ *   0: ULTRA_EASY       (3-letter words)
  *   1: ULTRA_EASY+EASY  (bridge)
  *   2: EASY             (3-4 letter words)
  *   3: EASY+MEDIUM      (bridge)
