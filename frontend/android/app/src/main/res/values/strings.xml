@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Anti-Doom Scroll</string>
+    <string name="title_activity_main">Anti-Doom Scroll</string>
+    <string name="package_name">app.antidoomscroll</string>
+    <string name="custom_url_scheme">app.antidoomscroll</string>
+</resources>
