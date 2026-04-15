@@ -751,6 +751,45 @@ body {
   overflow: visible;
 }
 
+/* Letter-mode N-back: quick glow on hit/miss (replaces Correct!/Incorrect text) */
+.nback-stimulus--feedback-correct {
+  border-radius: 18px;
+  animation: nback-stimulus-feedback-glow-correct 0.65s ease-out;
+}
+
+.nback-stimulus--feedback-wrong {
+  border-radius: 18px;
+  animation: nback-stimulus-feedback-glow-wrong 0.65s ease-out;
+}
+
+@keyframes nback-stimulus-feedback-glow-correct {
+  0% {
+    box-shadow: 0 0 0 0 transparent;
+  }
+  40% {
+    box-shadow:
+      0 0 0 3px color-mix(in srgb, var(--correct) 75%, transparent),
+      0 0 32px color-mix(in srgb, var(--correct) 40%, transparent);
+  }
+  100% {
+    box-shadow: 0 0 0 0 transparent;
+  }
+}
+
+@keyframes nback-stimulus-feedback-glow-wrong {
+  0% {
+    box-shadow: 0 0 0 0 transparent;
+  }
+  40% {
+    box-shadow:
+      0 0 0 3px color-mix(in srgb, var(--incorrect) 80%, transparent),
+      0 0 28px color-mix(in srgb, var(--incorrect) 38%, transparent);
+  }
+  100% {
+    box-shadow: 0 0 0 0 transparent;
+  }
+}
+
 .nback-letter {
   font-size: 4rem;
   font-weight: 700;
@@ -857,18 +896,6 @@ body {
   color: white;
 }
 
-.nback-match-btn.nback-match-correct {
-  background: var(--correct);
-  border-color: var(--correct);
-  color: var(--bg);
-}
-
-.nback-match-btn.nback-match-wrong {
-  background: var(--incorrect);
-  border-color: var(--incorrect);
-  color: white;
-}
-
 .nback-match-btn:disabled {
   opacity: 0.7;
   cursor: default;
@@ -911,6 +938,46 @@ body {
 .nback-carousel-card-v2.nback-card-enter {
   transition: left 0.36s cubic-bezier(0.25, 0.46, 0.45, 0.94),
     opacity 0.32s ease-out;
+}
+
+.nback-carousel-card-v2.nback-card-feedback {
+  border-radius: 12px;
+}
+
+.nback-carousel-card-v2.nback-card-feedback--correct {
+  animation: nback-card-feedback-glow-correct 0.65s ease-out;
+}
+
+.nback-carousel-card-v2.nback-card-feedback--wrong {
+  animation: nback-card-feedback-glow-wrong 0.65s ease-out;
+}
+
+@keyframes nback-card-feedback-glow-correct {
+  0% {
+    box-shadow: 0 0 0 0 transparent;
+  }
+  40% {
+    box-shadow:
+      0 0 0 4px color-mix(in srgb, var(--correct) 70%, transparent),
+      0 0 36px color-mix(in srgb, var(--correct) 45%, transparent);
+  }
+  100% {
+    box-shadow: 0 0 0 0 transparent;
+  }
+}
+
+@keyframes nback-card-feedback-glow-wrong {
+  0% {
+    box-shadow: 0 0 0 0 transparent;
+  }
+  40% {
+    box-shadow:
+      0 0 0 4px color-mix(in srgb, var(--incorrect) 75%, transparent),
+      0 0 32px color-mix(in srgb, var(--incorrect) 40%, transparent);
+  }
+  100% {
+    box-shadow: 0 0 0 0 transparent;
+  }
 }
 
 /* Flip card v2 */

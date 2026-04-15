@@ -49,6 +49,8 @@ export interface NBackCardCarouselProps {
   sequence: string[]
   onCardShow?: (index: number) => void
   onComplete?: () => void
+  /** Brief correct/wrong highlight on the center card (no button text). */
+  matchFeedback?: 'correct' | 'wrong' | null
 }
 
 export function NBackCardCarousel({
@@ -56,6 +58,7 @@ export function NBackCardCarousel({
   sequence,
   onCardShow,
   onComplete,
+  matchFeedback = null,
 }: NBackCardCarouselProps) {
   const slotCount = 2 * n + 1
   const centerIdx = n
@@ -200,12 +203,17 @@ export function NBackCardCarousel({
                 ? centerSpacing * 2
                 : 0
           const left = card.pos * SLOT_WIDTH + off
+          const isCenter = card.pos === centerIdx
+          const feedbackClass =
+            isCenter && matchFeedback
+              ? ` nback-card-feedback nback-card-feedback--${matchFeedback}`
+              : ''
           return (
             <div
               key={card.id}
               className={`nback-carousel-card-v2 ${
                 card.exiting ? 'nback-card-exit' : ''
-              } ${card.entering ? 'nback-card-enter' : ''}`}
+              } ${card.entering ? 'nback-card-enter' : ''}${feedbackClass}`}
               style={{
                 left: `${left}px`,
                 transition: `left ${MOVE_MS}ms cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.32s ease-out`,
