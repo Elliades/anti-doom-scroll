@@ -255,7 +255,10 @@ class LadderSessionApiIntegrationTest {
             .andExpect(jsonPath("$.ladderMixState.mixCode").value("mix"))
             .andExpect(jsonPath("$.ladderMixState.ladderCodes").isArray())
             .andExpect(jsonPath("$.ladderMixState.ladderCodes[0]").value("sum"))
-            .andExpect(jsonPath("$.ladderMixState.ladderCodes[1]").value("anagram"))
+            .andExpect(jsonPath("$.ladderMixState.ladderCodes[1]").value("word"))
+            .andExpect(jsonPath("$.ladderMixState.ladderCodes[2]").value("memory"))
+            .andExpect(jsonPath("$.ladderMixState.ladderCodes[3]").value("working_memory"))
+            .andExpect(jsonPath("$.ladderMixState.ladderCodes[4]").value("estimation"))
             .andExpect(jsonPath("$.ladderMixState.currentLevelIndex").value(0))
             .andExpect(jsonPath("$.ladderMixState.nextLadderIndex").value(0))
             .andExpect(jsonPath("$.ladderMixState.perLadderStates").exists())
@@ -275,11 +278,14 @@ class LadderSessionApiIntegrationTest {
             {
                 "ladderMixState": {
                     "mixCode": "mix",
-                    "ladderCodes": ["sum", "anagram"],
+                    "ladderCodes": ["sum", "word", "memory", "working_memory", "estimation"],
                     "currentLevelIndex": 0,
                     "perLadderStates": {
-                        "sum": {"recentScores": [0.8, 0.9, 0.85, 0.9, 0.88], "overallScoreSum": 4.33, "overallTotal": 5},
-                        "anagram": {"recentScores": [0.8, 0.85, 0.9, 0.88, 0.82], "overallScoreSum": 4.25, "overallTotal": 5}
+                        "sum": {"recentScores": [0.8, 0.9, 0.85], "overallScoreSum": 2.55, "overallTotal": 3},
+                        "word": {"recentScores": [0.8, 0.85, 0.9], "overallScoreSum": 2.55, "overallTotal": 3},
+                        "memory": {"recentScores": [0.82, 0.88, 0.86], "overallScoreSum": 2.56, "overallTotal": 3},
+                        "working_memory": {"recentScores": [0.8, 0.9, 0.85], "overallScoreSum": 2.55, "overallTotal": 3},
+                        "estimation": {"recentScores": [0.85, 0.88, 0.9], "overallScoreSum": 2.63, "overallTotal": 3}
                     },
                     "nextLadderIndex": 1
                 },
@@ -297,7 +303,10 @@ class LadderSessionApiIntegrationTest {
             .andExpect(jsonPath("$.exercise").exists())
             .andExpect(jsonPath("$.ladderMixState.currentLevelIndex").value(1))
             .andExpect(jsonPath("$.ladderMixState.perLadderStates.sum.recentScores").isEmpty)
-            .andExpect(jsonPath("$.ladderMixState.perLadderStates.anagram.recentScores").isEmpty)
+            .andExpect(jsonPath("$.ladderMixState.perLadderStates.word.recentScores").isEmpty)
+            .andExpect(jsonPath("$.ladderMixState.perLadderStates.memory.recentScores").isEmpty)
+            .andExpect(jsonPath("$.ladderMixState.perLadderStates.working_memory.recentScores").isEmpty)
+            .andExpect(jsonPath("$.ladderMixState.perLadderStates.estimation.recentScores").isEmpty)
             .andExpect(jsonPath("$.levelChanged.direction").value("up"))
     }
 
@@ -527,21 +536,24 @@ class LadderSessionApiIntegrationTest {
 
     @Test
     fun ladderMixNext_level0_advancesWithSingleScorePerLadder() {
-        // At level 0, both sum and anagram should need only 1 score each
+        // At level 0, each track needs only 1 score to evaluate (per getAnswersNeededToAdvance)
         val nextBody = """
             {
                 "ladderMixState": {
                     "mixCode": "mix",
-                    "ladderCodes": ["sum", "anagram"],
+                    "ladderCodes": ["sum", "word", "memory", "working_memory", "estimation"],
                     "currentLevelIndex": 0,
                     "perLadderStates": {
                         "sum": {"recentScores": [0.8], "overallScoreSum": 0.8, "overallTotal": 1},
-                        "anagram": {"recentScores": [0.85], "overallScoreSum": 0.85, "overallTotal": 1}
+                        "word": {"recentScores": [0.85], "overallScoreSum": 0.85, "overallTotal": 1},
+                        "memory": {"recentScores": [0.82], "overallScoreSum": 0.82, "overallTotal": 1},
+                        "working_memory": {"recentScores": [0.88], "overallScoreSum": 0.88, "overallTotal": 1},
+                        "estimation": {"recentScores": [0.9], "overallScoreSum": 0.9, "overallTotal": 1}
                     },
-                    "nextLadderIndex": 1
+                    "nextLadderIndex": 0
                 },
-                "lastCompletedLadderCode": "anagram",
-                "lastScore": 0.85
+                "lastCompletedLadderCode": "estimation",
+                "lastScore": 0.92
             }
         """.trimIndent()
 
@@ -554,7 +566,10 @@ class LadderSessionApiIntegrationTest {
             .andExpect(jsonPath("$.exercise").exists())
             .andExpect(jsonPath("$.ladderMixState.currentLevelIndex").value(1))
             .andExpect(jsonPath("$.ladderMixState.perLadderStates.sum.recentScores").isEmpty)
-            .andExpect(jsonPath("$.ladderMixState.perLadderStates.anagram.recentScores").isEmpty)
+            .andExpect(jsonPath("$.ladderMixState.perLadderStates.word.recentScores").isEmpty)
+            .andExpect(jsonPath("$.ladderMixState.perLadderStates.memory.recentScores").isEmpty)
+            .andExpect(jsonPath("$.ladderMixState.perLadderStates.working_memory.recentScores").isEmpty)
+            .andExpect(jsonPath("$.ladderMixState.perLadderStates.estimation.recentScores").isEmpty)
             .andExpect(jsonPath("$.levelChanged.direction").value("up"))
     }
 
@@ -603,17 +618,19 @@ class LadderSessionApiIntegrationTest {
 
     @Test
     fun ladderMixNext_level0_oneLadderNeedsMore_doesNotAdvance() {
-        // If one ladder has 1 score but the other needs more, don't advance
-        // This tests that each ladder is checked individually
+        // If any track has no score yet, do not evaluate level-up (all tracks must have enough)
         val nextBody = """
             {
                 "ladderMixState": {
                     "mixCode": "mix",
-                    "ladderCodes": ["sum", "anagram"],
+                    "ladderCodes": ["sum", "word", "memory", "working_memory", "estimation"],
                     "currentLevelIndex": 0,
                     "perLadderStates": {
                         "sum": {"recentScores": [0.8], "overallScoreSum": 0.8, "overallTotal": 1},
-                        "anagram": {"recentScores": [], "overallScoreSum": 0.0, "overallTotal": 0}
+                        "word": {"recentScores": [], "overallScoreSum": 0.0, "overallTotal": 0},
+                        "memory": {"recentScores": [0.82], "overallScoreSum": 0.82, "overallTotal": 1},
+                        "working_memory": {"recentScores": [0.88], "overallScoreSum": 0.88, "overallTotal": 1},
+                        "estimation": {"recentScores": [0.9], "overallScoreSum": 0.9, "overallTotal": 1}
                     },
                     "nextLadderIndex": 0
                 },

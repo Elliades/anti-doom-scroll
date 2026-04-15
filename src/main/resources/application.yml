@@ -862,14 +862,494 @@ app:
           - levelIndex: 29
             allowedDifficulties: [VERY_HARD]
             subjectCodes: [ESTIMATION]
-    # Single mix ladder: alternates through all ladders; advance when all pass their level
+      # Word ladder: Anagram + Wordle (WORD + WORDLE_FR + WORDLE_EN); same arc as anagram ladder
+      word:
+        name: "Word Ladder"
+        thresholds:
+          minScoreToStay: 0.40
+          minScoreToAdvance: 0.75
+          answersNeededToAdvance: 5
+        levels:
+          - levelIndex: 0
+            allowedDifficulties: [ULTRA_EASY]
+            subjectCodes: [WORD, WORDLE_FR, WORDLE_EN]
+            allowedTypes: [ANAGRAM, WORDLE]
+          - levelIndex: 1
+            allowedDifficulties: [ULTRA_EASY]
+            subjectCodes: [WORD, WORDLE_FR, WORDLE_EN]
+            allowedTypes: [ANAGRAM, WORDLE]
+          - levelIndex: 2
+            allowedDifficulties: [ULTRA_EASY]
+            subjectCodes: [WORD, WORDLE_FR, WORDLE_EN]
+            allowedTypes: [ANAGRAM, WORDLE]
+          - levelIndex: 3
+            allowedDifficulties: [ULTRA_EASY]
+            subjectCodes: [WORD, WORDLE_FR, WORDLE_EN]
+            allowedTypes: [ANAGRAM, WORDLE]
+          - levelIndex: 4
+            allowedDifficulties: [ULTRA_EASY, EASY]
+            subjectCodes: [WORD, WORDLE_FR, WORDLE_EN]
+            allowedTypes: [ANAGRAM, WORDLE]
+          - levelIndex: 5
+            allowedDifficulties: [ULTRA_EASY, EASY]
+            subjectCodes: [WORD, WORDLE_FR, WORDLE_EN]
+            allowedTypes: [ANAGRAM, WORDLE]
+          - levelIndex: 6
+            allowedDifficulties: [EASY]
+            subjectCodes: [WORD, WORDLE_FR, WORDLE_EN]
+            allowedTypes: [ANAGRAM, WORDLE]
+          - levelIndex: 7
+            allowedDifficulties: [EASY]
+            subjectCodes: [WORD, WORDLE_FR, WORDLE_EN]
+            allowedTypes: [ANAGRAM, WORDLE]
+          - levelIndex: 8
+            allowedDifficulties: [EASY]
+            subjectCodes: [WORD, WORDLE_FR, WORDLE_EN]
+            allowedTypes: [ANAGRAM, WORDLE]
+          - levelIndex: 9
+            allowedDifficulties: [EASY]
+            subjectCodes: [WORD, WORDLE_FR, WORDLE_EN]
+            allowedTypes: [ANAGRAM, WORDLE]
+          - levelIndex: 10
+            allowedDifficulties: [EASY]
+            subjectCodes: [WORD, WORDLE_FR, WORDLE_EN]
+            allowedTypes: [ANAGRAM, WORDLE]
+          - levelIndex: 11
+            allowedDifficulties: [EASY, MEDIUM]
+            subjectCodes: [WORD, WORDLE_FR, WORDLE_EN]
+            allowedTypes: [ANAGRAM, WORDLE]
+          - levelIndex: 12
+            allowedDifficulties: [EASY, MEDIUM]
+            subjectCodes: [WORD, WORDLE_FR, WORDLE_EN]
+            allowedTypes: [ANAGRAM, WORDLE]
+          - levelIndex: 13
+            allowedDifficulties: [MEDIUM]
+            subjectCodes: [WORD, WORDLE_FR, WORDLE_EN]
+            allowedTypes: [ANAGRAM, WORDLE]
+          - levelIndex: 14
+            allowedDifficulties: [MEDIUM]
+            subjectCodes: [WORD, WORDLE_FR, WORDLE_EN]
+            allowedTypes: [ANAGRAM, WORDLE]
+          - levelIndex: 15
+            allowedDifficulties: [MEDIUM]
+            subjectCodes: [WORD, WORDLE_FR, WORDLE_EN]
+            allowedTypes: [ANAGRAM, WORDLE]
+          - levelIndex: 16
+            allowedDifficulties: [MEDIUM]
+            subjectCodes: [WORD, WORDLE_FR, WORDLE_EN]
+            allowedTypes: [ANAGRAM, WORDLE]
+          - levelIndex: 17
+            allowedDifficulties: [MEDIUM]
+            subjectCodes: [WORD, WORDLE_FR, WORDLE_EN]
+            allowedTypes: [ANAGRAM, WORDLE]
+          - levelIndex: 18
+            allowedDifficulties: [MEDIUM, HARD]
+            subjectCodes: [WORD, WORDLE_FR, WORDLE_EN]
+            allowedTypes: [ANAGRAM, WORDLE]
+          - levelIndex: 19
+            allowedDifficulties: [MEDIUM, HARD]
+            subjectCodes: [WORD, WORDLE_FR, WORDLE_EN]
+            allowedTypes: [ANAGRAM, WORDLE]
+          - levelIndex: 20
+            allowedDifficulties: [HARD]
+            subjectCodes: [WORD, WORDLE_FR, WORDLE_EN]
+            allowedTypes: [ANAGRAM, WORDLE]
+          - levelIndex: 21
+            allowedDifficulties: [HARD]
+            subjectCodes: [WORD, WORDLE_FR, WORDLE_EN]
+            allowedTypes: [ANAGRAM, WORDLE]
+          - levelIndex: 22
+            allowedDifficulties: [HARD]
+            subjectCodes: [WORD, WORDLE_FR, WORDLE_EN]
+            allowedTypes: [ANAGRAM, WORDLE]
+          - levelIndex: 23
+            allowedDifficulties: [HARD]
+            subjectCodes: [WORD, WORDLE_FR, WORDLE_EN]
+            allowedTypes: [ANAGRAM, WORDLE]
+          - levelIndex: 24
+            allowedDifficulties: [HARD]
+            subjectCodes: [WORD, WORDLE_FR, WORDLE_EN]
+            allowedTypes: [ANAGRAM, WORDLE]
+          - levelIndex: 25
+            allowedDifficulties: [HARD, VERY_HARD]
+            subjectCodes: [WORD, WORDLE_FR, WORDLE_EN]
+            allowedTypes: [ANAGRAM, WORDLE]
+          - levelIndex: 26
+            allowedDifficulties: [HARD, VERY_HARD]
+            subjectCodes: [WORD, WORDLE_FR, WORDLE_EN]
+            allowedTypes: [ANAGRAM, WORDLE]
+          - levelIndex: 27
+            allowedDifficulties: [VERY_HARD]
+            subjectCodes: [WORD, WORDLE_FR, WORDLE_EN]
+            allowedTypes: [ANAGRAM, WORDLE]
+          - levelIndex: 28
+            allowedDifficulties: [VERY_HARD]
+            subjectCodes: [WORD, WORDLE_FR, WORDLE_EN]
+            allowedTypes: [ANAGRAM, WORDLE]
+          - levelIndex: 29
+            allowedDifficulties: [VERY_HARD]
+            subjectCodes: [WORD, WORDLE_FR, WORDLE_EN]
+            allowedTypes: [ANAGRAM, WORDLE]
+      # Memory ladder: card pairs then n-back (pairs + spatial/sequential memory)
+      memory:
+        name: "Memory Ladder"
+        thresholds:
+          minScoreToStay: 0.40
+          minScoreToAdvance: 0.75
+          answersNeededToAdvance: 5
+        levels:
+          - levelIndex: 0
+            allowedDifficulties: [ULTRA_EASY]
+            subjectCodes: [MEMORY]
+            allowedTypes: [MEMORY_CARD_PAIRS]
+
+          - levelIndex: 1
+            allowedDifficulties: [ULTRA_EASY]
+            subjectCodes: [MEMORY]
+            allowedTypes: [MEMORY_CARD_PAIRS]
+
+          - levelIndex: 2
+            allowedDifficulties: [ULTRA_EASY]
+            subjectCodes: [MEMORY]
+            allowedTypes: [MEMORY_CARD_PAIRS]
+
+          - levelIndex: 3
+            allowedDifficulties: [ULTRA_EASY, EASY]
+            subjectCodes: [MEMORY]
+            allowedTypes: [MEMORY_CARD_PAIRS]
+
+          - levelIndex: 4
+            allowedDifficulties: [ULTRA_EASY, EASY]
+            subjectCodes: [MEMORY]
+            allowedTypes: [MEMORY_CARD_PAIRS]
+          # EASY: 4 pairs (8 cards). One more pair to track.
+
+          - levelIndex: 5
+            allowedDifficulties: [EASY]
+            subjectCodes: [MEMORY]
+            allowedTypes: [MEMORY_CARD_PAIRS]
+
+          - levelIndex: 6
+            allowedDifficulties: [EASY]
+            subjectCodes: [MEMORY]
+            allowedTypes: [MEMORY_CARD_PAIRS]
+
+          - levelIndex: 7
+            allowedDifficulties: [EASY]
+            subjectCodes: [MEMORY]
+            allowedTypes: [MEMORY_CARD_PAIRS]
+
+          - levelIndex: 8
+            allowedDifficulties: [EASY, MEDIUM]
+            subjectCodes: [MEMORY]
+            allowedTypes: [MEMORY_CARD_PAIRS]
+
+          - levelIndex: 9
+            allowedDifficulties: [EASY, MEDIUM]
+            subjectCodes: [MEMORY]
+            allowedTypes: [MEMORY_CARD_PAIRS]
+          # MEDIUM: 6 pairs (12 cards). Full memory challenge.
+
+          - levelIndex: 10
+            allowedDifficulties: [MEDIUM]
+            subjectCodes: [MEMORY]
+            allowedTypes: [MEMORY_CARD_PAIRS]
+
+          - levelIndex: 11
+            allowedDifficulties: [MEDIUM]
+            subjectCodes: [MEMORY]
+            allowedTypes: [MEMORY_CARD_PAIRS]
+
+          - levelIndex: 12
+            allowedDifficulties: [MEDIUM]
+            subjectCodes: [MEMORY]
+            allowedTypes: [MEMORY_CARD_PAIRS]
+
+          - levelIndex: 13
+            allowedDifficulties: [MEDIUM]
+            subjectCodes: [MEMORY]
+            allowedTypes: [MEMORY_CARD_PAIRS]
+
+          - levelIndex: 14
+            allowedDifficulties: [MEDIUM]
+            subjectCodes: [MEMORY]
+            allowedTypes: [MEMORY_CARD_PAIRS]
+          # --- Phase 2: SUM_PAIR ---
+          # ULTRA_EASY: static=2, 3 pairs per round, range 1-30. Arithmetic intro.
+
+          - levelIndex: 15
+            allowedDifficulties: [ULTRA_EASY]
+            subjectCodes: [B1]
+            allowedTypes: [N_BACK]
+            exerciseParamFilter:
+              n: ["1"]
+              suitCount: ["1"]
+
+          - levelIndex: 16
+            allowedDifficulties: [ULTRA_EASY]
+            subjectCodes: [B1]
+            allowedTypes: [N_BACK]
+            exerciseParamFilter:
+              n: ["1"]
+              suitCount: ["2"]
+
+          - levelIndex: 17
+            allowedDifficulties: [ULTRA_EASY]
+            subjectCodes: [B1]
+            allowedTypes: [N_BACK]
+            exerciseParamFilter:
+              n: ["1"]
+              suitCount: ["3"]
+
+          - levelIndex: 18
+            allowedDifficulties: [ULTRA_EASY]
+            subjectCodes: [B1]
+            allowedTypes: [N_BACK]
+            exerciseParamFilter:
+              n: ["1"]
+              suitCount: ["4"]
+
+          - levelIndex: 19
+            allowedDifficulties: [EASY]
+            subjectCodes: [B1]
+            allowedTypes: [N_BACK]
+            exerciseParamFilter:
+              n: ["2"]
+              suitCount: ["1"]
+
+          - levelIndex: 20
+            allowedDifficulties: [EASY]
+            subjectCodes: [B1]
+            allowedTypes: [N_BACK]
+            exerciseParamFilter:
+              n: ["2"]
+              suitCount: ["2"]
+
+          - levelIndex: 21
+            allowedDifficulties: [EASY]
+            subjectCodes: [B1]
+            allowedTypes: [N_BACK]
+            exerciseParamFilter:
+              n: ["2"]
+              suitCount: ["3"]
+
+          - levelIndex: 22
+            allowedDifficulties: [EASY]
+            subjectCodes: [B1]
+            allowedTypes: [N_BACK]
+            exerciseParamFilter:
+              n: ["2"]
+              suitCount: ["4"]
+
+          - levelIndex: 23
+            allowedDifficulties: [MEDIUM]
+            subjectCodes: [B1]
+            allowedTypes: [N_BACK]
+            exerciseParamFilter:
+              n: ["3"]
+              suitCount: ["2"]
+
+          - levelIndex: 24
+            allowedDifficulties: [MEDIUM]
+            subjectCodes: [B1]
+            allowedTypes: [N_BACK]
+            exerciseParamFilter:
+              n: ["3"]
+              suitCount: ["4"]
+          # ── Phase 2: Grid Position N-Back ────────────────────────────────────
+
+          - levelIndex: 25
+            allowedDifficulties: [ULTRA_EASY]
+            subjectCodes: [B1]
+            allowedTypes: [N_BACK_GRID]
+            exerciseParamFilter:
+              n: ["1"]
+              gridSize: ["3"]
+
+          - levelIndex: 26
+            allowedDifficulties: [ULTRA_EASY]
+            subjectCodes: [B1]
+            allowedTypes: [N_BACK_GRID]
+            exerciseParamFilter:
+              n: ["1"]
+              gridSize: ["4"]
+
+          - levelIndex: 27
+            allowedDifficulties: [EASY]
+            subjectCodes: [B1]
+            allowedTypes: [N_BACK_GRID]
+            exerciseParamFilter:
+              n: ["2"]
+              gridSize: ["3"]
+
+          - levelIndex: 28
+            allowedDifficulties: [EASY]
+            subjectCodes: [B1]
+            allowedTypes: [N_BACK_GRID]
+            exerciseParamFilter:
+              n: ["2"]
+              gridSize: ["4"]
+
+          - levelIndex: 29
+            allowedDifficulties: [MEDIUM]
+            subjectCodes: [B1]
+            allowedTypes: [N_BACK_GRID]
+            exerciseParamFilter:
+              n: ["3"]
+              gridSize: ["3"]
+
+      # Working memory ladder: sum pairs then digit span
+      working_memory:
+        name: "Working Memory Ladder"
+        thresholds:
+          minScoreToStay: 0.40
+          minScoreToAdvance: 0.75
+          answersNeededToAdvance: 5
+        levels:
+          - levelIndex: 0
+            allowedDifficulties: [ULTRA_EASY]
+            subjectCodes: [MEMORY]
+            allowedTypes: [SUM_PAIR]
+
+          - levelIndex: 1
+            allowedDifficulties: [ULTRA_EASY]
+            subjectCodes: [MEMORY]
+            allowedTypes: [SUM_PAIR]
+
+          - levelIndex: 2
+            allowedDifficulties: [ULTRA_EASY, EASY]
+            subjectCodes: [MEMORY]
+            allowedTypes: [SUM_PAIR]
+          # EASY: static=5, 4 pairs per round, range 1-50 or 1-2 digit numbers.
+
+          - levelIndex: 3
+            allowedDifficulties: [EASY]
+            subjectCodes: [MEMORY]
+            allowedTypes: [SUM_PAIR]
+
+          - levelIndex: 4
+            allowedDifficulties: [EASY]
+            subjectCodes: [MEMORY]
+            allowedTypes: [SUM_PAIR]
+
+          - levelIndex: 5
+            allowedDifficulties: [EASY]
+            subjectCodes: [MEMORY]
+            allowedTypes: [SUM_PAIR]
+
+          - levelIndex: 6
+            allowedDifficulties: [EASY, MEDIUM]
+            subjectCodes: [MEMORY]
+            allowedTypes: [SUM_PAIR]
+          # MEDIUM: 2 statics (fixed or random), 3 pairs per round, range 1-99.
+
+          - levelIndex: 7
+            allowedDifficulties: [MEDIUM]
+            subjectCodes: [MEMORY]
+            allowedTypes: [SUM_PAIR]
+
+          - levelIndex: 8
+            allowedDifficulties: [MEDIUM]
+            subjectCodes: [MEMORY]
+            allowedTypes: [SUM_PAIR]
+
+          - levelIndex: 9
+            allowedDifficulties: [MEDIUM]
+            subjectCodes: [MEMORY]
+            allowedTypes: [SUM_PAIR]
+
+          - levelIndex: 10
+            allowedDifficulties: [MEDIUM, HARD]
+            subjectCodes: [MEMORY]
+            allowedTypes: [SUM_PAIR]
+          # HARD: 3 statics [2, 5, 10], 4 pairs per round, range 1-99. Peak challenge.
+
+          - levelIndex: 11
+            allowedDifficulties: [HARD]
+            subjectCodes: [MEMORY]
+            allowedTypes: [SUM_PAIR]
+
+          - levelIndex: 12
+            allowedDifficulties: [HARD]
+            subjectCodes: [MEMORY]
+            allowedTypes: [SUM_PAIR]
+
+          - levelIndex: 13
+            allowedDifficulties: [HARD]
+            subjectCodes: [MEMORY]
+            allowedTypes: [SUM_PAIR]
+
+          - levelIndex: 14
+            allowedDifficulties: [HARD]
+            subjectCodes: [MEMORY]
+            allowedTypes: [SUM_PAIR]
+          - levelIndex: 15
+            allowedDifficulties: [ULTRA_EASY]
+            subjectCodes: [DIGIT_SPAN]
+            allowedTypes: [DIGIT_SPAN]
+          - levelIndex: 16
+            allowedDifficulties: [ULTRA_EASY]
+            subjectCodes: [DIGIT_SPAN]
+            allowedTypes: [DIGIT_SPAN]
+          - levelIndex: 17
+            allowedDifficulties: [ULTRA_EASY]
+            subjectCodes: [DIGIT_SPAN]
+            allowedTypes: [DIGIT_SPAN]
+          - levelIndex: 18
+            allowedDifficulties: [ULTRA_EASY, EASY]
+            subjectCodes: [DIGIT_SPAN]
+            allowedTypes: [DIGIT_SPAN]
+          - levelIndex: 19
+            allowedDifficulties: [ULTRA_EASY, EASY]
+            subjectCodes: [DIGIT_SPAN]
+            allowedTypes: [DIGIT_SPAN]
+          - levelIndex: 20
+            allowedDifficulties: [EASY]
+            subjectCodes: [DIGIT_SPAN]
+            allowedTypes: [DIGIT_SPAN]
+          - levelIndex: 21
+            allowedDifficulties: [EASY]
+            subjectCodes: [DIGIT_SPAN]
+            allowedTypes: [DIGIT_SPAN]
+          - levelIndex: 22
+            allowedDifficulties: [EASY]
+            subjectCodes: [DIGIT_SPAN]
+            allowedTypes: [DIGIT_SPAN]
+          - levelIndex: 23
+            allowedDifficulties: [EASY, MEDIUM]
+            subjectCodes: [DIGIT_SPAN]
+            allowedTypes: [DIGIT_SPAN]
+          - levelIndex: 24
+            allowedDifficulties: [EASY, MEDIUM]
+            subjectCodes: [DIGIT_SPAN]
+            allowedTypes: [DIGIT_SPAN]
+          - levelIndex: 25
+            allowedDifficulties: [MEDIUM]
+            subjectCodes: [DIGIT_SPAN]
+            allowedTypes: [DIGIT_SPAN]
+          - levelIndex: 26
+            allowedDifficulties: [MEDIUM]
+            subjectCodes: [DIGIT_SPAN]
+            allowedTypes: [DIGIT_SPAN]
+          - levelIndex: 27
+            allowedDifficulties: [MEDIUM]
+            subjectCodes: [DIGIT_SPAN]
+            allowedTypes: [DIGIT_SPAN]
+          - levelIndex: 28
+            allowedDifficulties: [MEDIUM, HARD]
+            subjectCodes: [DIGIT_SPAN]
+            allowedTypes: [DIGIT_SPAN]
+          - levelIndex: 29
+            allowedDifficulties: [MEDIUM, HARD]
+            subjectCodes: [DIGIT_SPAN]
+            allowedTypes: [DIGIT_SPAN]
+    # Mix ladder: alternates by subject track (math, word, memory, working memory, estimation)
     mixes:
       mix:
-        - default
         - sum
-        - anagram
-        - pair
-        - nback
+        - word
+        - memory
+        - working_memory
         - estimation
   # Journey: scalable step sequence; add steps or go to any step by index
   journey:

@@ -6,6 +6,9 @@ import type { LadderSummaryDto, LadderMixSummaryDto } from '../api/ladder'
 const LADDER_ICONS: Record<string, string> = {
   default: '🎯',
   sum: '🔢',
+  word: '🔤',
+  memory: '🃏',
+  working_memory: '➕',
   anagram: '🔤',
   pair: '🃏',
   nback: '🧠',

@@ -177,7 +177,7 @@ class AnagramLadderIntegrationTest {
             .andExpect(status().isOk())
             .andExpect(jsonPath("$[?(@.code == 'anagram')]").exists())
             .andExpect(jsonPath("$[?(@.code == 'anagram')].name").value("Anagram Ladder"))
-            .andExpect(jsonPath("$[?(@.code == 'anagram')].levelCount").value(5))
+            .andExpect(jsonPath("$[?(@.code == 'anagram')].levelCount").value(6))
     }
 
     // ------------------------------------------------------------------

@@ -20,11 +20,15 @@ const ANSWERS_NEEDED = 5
 const POST_EXERCISE_DELAY_MS = 1200
 
 const LADDER_LABELS: Record<string, string> = {
-  sum: 'Sum',
+  sum: 'Math',
+  word: 'Word',
+  memory: 'Memory',
+  working_memory: 'Working memory',
+  estimation: 'Estimation',
   anagram: 'Anagram',
   pair: 'Pair',
-  estimation: 'Estimation',
   default: 'Default',
+  nback: 'N-Back',
 }
 
 export interface LadderMixSessionBlockProps {
