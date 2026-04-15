@@ -39,8 +39,8 @@ import org.springframework.stereotype.Component
 /**
  * Maps Exercise to ExerciseDto. When an N_BACK exercise has no nBackParams (e.g. from cache),
  * re-fetches by level so the API always returns sequence for the app.
- * Sum Pair rounds are cached per exercise ID so all rounds stay the same for a session
- * (e.g. list → play, or multiple requests for same exercise).
+ * Sum pair rounds and memory card deck order are generated on each mapping; [SumPairRoundsCache]
+ * and [MemoryCardDeckCache] use `@Cacheable(condition = "false")` so Spring does not cache them.
  */
 @Component
 class ExerciseDtoMapper(

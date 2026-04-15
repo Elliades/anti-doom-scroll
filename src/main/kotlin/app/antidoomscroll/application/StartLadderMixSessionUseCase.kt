@@ -66,7 +66,7 @@ class StartLadderMixSessionUseCase(
             profileId = profile.id.toString(),
             exercise = exercise,
             subjectCode = subjectCode,
-            ladderMixState = state,
+            ladderMixState = state.withRecentExercisePlayed(exercise.id),
             levelCount = levelCount,
             sessionDefaultSeconds = profile.sessionDefaultSeconds,
             lowBatteryModeSeconds = profile.lowBatteryModeSeconds

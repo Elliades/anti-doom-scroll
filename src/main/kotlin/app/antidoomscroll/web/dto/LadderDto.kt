@@ -61,7 +61,9 @@ data class LadderMixStateDto(
     val ladderCodes: List<String>,
     val currentLevelIndex: Int,
     val perLadderStates: Map<String, PerLadderStateDto>,
-    val nextLadderIndex: Int
+    val nextLadderIndex: Int,
+    /** Recently served exercise IDs (newest last); used by the server to reduce back-to-back repeats. */
+    val recentExerciseIds: List<String> = emptyList()
 )
 
 data class LadderMixSessionResponseDto(

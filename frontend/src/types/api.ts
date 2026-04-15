@@ -227,6 +227,8 @@ export interface LadderMixStateDto {
   currentLevelIndex: number
   perLadderStates: Record<string, PerLadderStateDto>
   nextLadderIndex: number
+  /** Recently served exercise IDs (newest last); echoed from API for repeat avoidance. */
+  recentExerciseIds?: string[]
 }
 
 export interface LadderMixSessionResponseDto {
