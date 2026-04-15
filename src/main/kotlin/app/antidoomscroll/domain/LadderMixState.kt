@@ -1,5 +1,7 @@
 package app.antidoomscroll.domain
 
+import java.util.UUID
+
 /**
  * State for a ladder mix session: alternates exercises between multiple ladders.
  * Advancement requires BOTH ladders to pass their level (avg >= minScoreToAdvance).
@@ -11,7 +13,12 @@ data class LadderMixState(
     val currentLevelIndex: Int,
     val perLadderStates: Map<String, PerLadderState>,
     /** Index of the ladder to pick the next exercise from (0-based). */
-    val nextLadderIndex: Int
+    val nextLadderIndex: Int,
+    /**
+     * Recently served exercise IDs (newest last). Used server-side to avoid picking the same DB row
+     * back-to-back when the candidate pool is small; pairs with parametrically generated exercises.
+     */
+    val recentExerciseIds: List<UUID> = emptyList()
 ) {
     init {
         require(ladderCodes.size >= 2) { "ladderCodes must have at least 2 ladders" }
@@ -48,6 +55,10 @@ data class LadderMixState(
             currentLevelIndex = (currentLevelIndex - 1).coerceAtLeast(0),
             perLadderStates = perLadderStates.mapValues { (_, s) -> s.withRecentCleared() }
         )
+
+    /** Append an exercise id after serving it; trim to [maxKeep] so the picker can deprioritize repeats. */
+    fun withRecentExercisePlayed(exerciseId: UUID, maxKeep: Int = 12): LadderMixState =
+        copy(recentExerciseIds = (recentExerciseIds + exerciseId).takeLast(maxKeep))
 
     data class PerLadderState(
         val recentScores: List<Double>,

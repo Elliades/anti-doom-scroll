@@ -102,13 +102,18 @@ class GetNextLadderMixExerciseUseCase(
             (nextConfig.levels.maxOfOrNull { it.levelIndex } ?: 0)
         )
         val level = nextConfig.levelAt(levelIndex) ?: return null
-        val exercise = ladderExercisePicker.pick(nextConfig, level)
+        val exercise = ladderExercisePicker.pick(
+            nextConfig,
+            level,
+            newState.recentExerciseIds.toSet()
+        )
         val subjectCode = exercise?.let { subjectPort.findById(it.subjectId)?.code }
+        val stateWithRecent = exercise?.let { newState.withRecentExercisePlayed(it.id) } ?: newState
 
         return LadderMixNextResult(
             exercise = exercise,
             subjectCode = subjectCode,
-            ladderMixState = newState,
+            ladderMixState = stateWithRecent,
             levelChanged = levelChanged
         )
     }

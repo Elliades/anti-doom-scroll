@@ -133,9 +133,10 @@ export function LadderMixSessionBlock({ mixCode = 'mix' }: LadderMixSessionBlock
 
     try {
       const next = await getNextLadderMixExercise(state, lastCompletedLadderCode, 0.5)
-      // Keep the original state — skip doesn't record a score
       currentLadderCodeRef.current = next.ladderMixState.ladderCodes[next.ladderMixState.nextLadderIndex]
       if (next.exercise) {
+        setLadderMixState(next.ladderMixState)
+        ladderMixStateRef.current = next.ladderMixState
         setExercise(next.exercise)
         setExerciseKey(k => k + 1)
       } else {
@@ -180,9 +181,10 @@ export function LadderMixSessionBlock({ mixCode = 'mix' }: LadderMixSessionBlock
 
     try {
       const next = await getNextLadderMixExercise(adjustedState, lastCompletedLadderCode, 0.5)
-      // Keep our adjusted state — level change doesn't record a score
       currentLadderCodeRef.current = next.ladderMixState.ladderCodes[next.ladderMixState.nextLadderIndex]
       if (next.exercise) {
+        setLadderMixState(next.ladderMixState)
+        ladderMixStateRef.current = next.ladderMixState
         setExercise(next.exercise)
         setExerciseKey(k => k + 1)
       } else {
