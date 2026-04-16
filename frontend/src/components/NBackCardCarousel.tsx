@@ -10,7 +10,7 @@
 import { useEffect, useState, useRef, useCallback } from 'react'
 import { NBackCardDisplay } from './NBackCardDisplay'
 
-const SLOT_WIDTH = 90
+const SLOT_WIDTH = 110
 const INITIAL_DELAY_MS = 400
 const FACE_DISPLAY_MS = 500
 const MOVE_MS = 360
@@ -44,13 +44,19 @@ interface CardItem {
   entering?: boolean
 }
 
+const FEEDBACK_LABELS: Record<string, string> = {
+  correct: 'Success!',
+  wrong: 'Fail!',
+  miss: 'Miss!',
+}
+
 export interface NBackCardCarouselProps {
   n: number
   sequence: string[]
   onCardShow?: (index: number) => void
   onComplete?: () => void
-  /** Brief correct/wrong highlight on the center card (no button text). */
-  matchFeedback?: 'correct' | 'wrong' | null
+  /** Brief correct/wrong/miss highlight on the center card. */
+  matchFeedback?: 'correct' | 'wrong' | 'miss' | null
 }
 
 export function NBackCardCarousel({
@@ -204,9 +210,10 @@ export function NBackCardCarousel({
                 : 0
           const left = card.pos * SLOT_WIDTH + off
           const isCenter = card.pos === centerIdx
+          const glowType = matchFeedback === 'miss' ? 'wrong' : matchFeedback
           const feedbackClass =
-            isCenter && matchFeedback
-              ? ` nback-card-feedback nback-card-feedback--${matchFeedback}`
+            isCenter && glowType
+              ? ` nback-card-feedback--${glowType}`
               : ''
           return (
             <div
@@ -239,6 +246,14 @@ export function NBackCardCarousel({
                   </div>
                 </div>
               </div>
+              {isCenter && matchFeedback && (
+                <span
+                  key={`fb-${Date.now()}`}
+                  className={`nback-card-popup nback-card-popup--${matchFeedback}`}
+                >
+                  {FEEDBACK_LABELS[matchFeedback]}
+                </span>
+              )}
             </div>
           )
         })}

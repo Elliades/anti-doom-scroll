@@ -26,9 +26,10 @@ export function NBackExercise({ exercise, onComplete, showInstruction = true }: 
   const [phase, setPhase] = useState<'intro' | 'playing' | 'done'>('intro')
   const [index, setIndex] = useState(0)
   const [userMatches, setUserMatches] = useState<Set<number>>(new Set())
-  const [showMatchFeedback, setShowMatchFeedback] = useState<'correct' | 'wrong' | null>(null)
+  const [showMatchFeedback, setShowMatchFeedback] = useState<'correct' | 'wrong' | 'miss' | null>(null)
   const [showCanMatchNotice, setShowCanMatchNotice] = useState(false)
   const matchFeedbackLockRef = useRef(false)
+  const prevIndexRef = useRef(-1)
 
   const intervalMs = 2500 // ultra-easy: slow speed
   const matchIndicesSet = new Set(params.matchIndices ?? [])
@@ -39,7 +40,7 @@ export function NBackExercise({ exercise, onComplete, showInstruction = true }: 
     [params.sequence]
   )
 
-  const FEEDBACK_MS = 650
+  const FEEDBACK_MS = 750
 
   const handleMatchTap = useCallback(() => {
     if (phase !== 'playing' || matchDisabled) return
@@ -77,6 +78,22 @@ export function NBackExercise({ exercise, onComplete, showInstruction = true }: 
       setPhase('done')
     }
   }, [phase, index, params.sequence.length])
+
+  // Detect miss: previous index was a match target the user never tapped
+  useEffect(() => {
+    if (phase !== 'playing') return
+    const prev = prevIndexRef.current
+    prevIndexRef.current = index
+    if (prev < 0 || prev === index) return
+    if (matchIndicesSet.has(prev) && !userMatches.has(prev) && !matchFeedbackLockRef.current) {
+      matchFeedbackLockRef.current = true
+      setShowMatchFeedback('miss')
+      setTimeout(() => {
+        setShowMatchFeedback(null)
+        matchFeedbackLockRef.current = false
+      }, FEEDBACK_MS)
+    }
+  }, [phase, index])
 
   // When first card with a match target appears (index === n), show "Match is now active!"
   useEffect(() => {
@@ -148,7 +165,7 @@ export function NBackExercise({ exercise, onComplete, showInstruction = true }: 
           className={[
             'nback-stimulus',
             !useCards && showMatchFeedback
-              ? `nback-stimulus--feedback nback-stimulus--feedback-${showMatchFeedback}`
+              ? `nback-stimulus--feedback nback-stimulus--feedback-${showMatchFeedback === 'miss' ? 'wrong' : showMatchFeedback}`
               : '',
           ]
             .filter(Boolean)
@@ -163,7 +180,18 @@ export function NBackExercise({ exercise, onComplete, showInstruction = true }: 
               matchFeedback={showMatchFeedback}
             />
           ) : (
-            <span className="nback-letter">{currentItem}</span>
+            <>
+              <span className="nback-letter">{currentItem}</span>
+              {showMatchFeedback && (
+                <span
+                  key={`lfb-${Date.now()}`}
+                  className={`nback-card-popup nback-card-popup--${showMatchFeedback}`}
+                  style={{ bottom: '80%' }}
+                >
+                  {showMatchFeedback === 'correct' ? 'Success!' : showMatchFeedback === 'miss' ? 'Miss!' : 'Fail!'}
+                </span>
+              )}
+            </>
           )}
         </div>
         {matchDisabled && (

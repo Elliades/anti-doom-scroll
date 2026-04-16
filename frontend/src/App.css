@@ -744,6 +744,7 @@ body {
 }
 
 .nback-stimulus {
+  position: relative;
   min-height: 12rem;
   display: flex;
   align-items: center;
@@ -751,25 +752,30 @@ body {
   overflow: visible;
 }
 
-/* Letter-mode N-back: quick glow on hit/miss (replaces Correct!/Incorrect text) */
+/* Letter-mode N-back: quick glow on hit/miss */
 .nback-stimulus--feedback-correct {
   border-radius: 18px;
-  animation: nback-stimulus-feedback-glow-correct 0.65s ease-out;
+  animation: nback-stimulus-feedback-glow-correct 0.75s ease-out;
 }
 
 .nback-stimulus--feedback-wrong {
   border-radius: 18px;
-  animation: nback-stimulus-feedback-glow-wrong 0.65s ease-out;
+  animation: nback-stimulus-feedback-glow-wrong 0.75s ease-out;
 }
 
 @keyframes nback-stimulus-feedback-glow-correct {
   0% {
     box-shadow: 0 0 0 0 transparent;
   }
-  40% {
+  20% {
     box-shadow:
-      0 0 0 3px color-mix(in srgb, var(--correct) 75%, transparent),
-      0 0 32px color-mix(in srgb, var(--correct) 40%, transparent);
+      0 0 0 5px var(--correct),
+      0 0 48px 8px color-mix(in srgb, var(--correct) 65%, transparent);
+  }
+  60% {
+    box-shadow:
+      0 0 0 4px color-mix(in srgb, var(--correct) 85%, transparent),
+      0 0 40px 4px color-mix(in srgb, var(--correct) 50%, transparent);
   }
   100% {
     box-shadow: 0 0 0 0 transparent;
@@ -780,10 +786,15 @@ body {
   0% {
     box-shadow: 0 0 0 0 transparent;
   }
-  40% {
+  20% {
     box-shadow:
-      0 0 0 3px color-mix(in srgb, var(--incorrect) 80%, transparent),
-      0 0 28px color-mix(in srgb, var(--incorrect) 38%, transparent);
+      0 0 0 5px var(--incorrect),
+      0 0 48px 8px color-mix(in srgb, var(--incorrect) 65%, transparent);
+  }
+  60% {
+    box-shadow:
+      0 0 0 4px color-mix(in srgb, var(--incorrect) 85%, transparent),
+      0 0 40px 4px color-mix(in srgb, var(--incorrect) 50%, transparent);
   }
   100% {
     box-shadow: 0 0 0 0 transparent;
@@ -909,7 +920,7 @@ body {
 /* N-Back card carousel v2: absolute-positioned cards, flip + move animations */
 .nback-carousel-v2 {
   position: relative;
-  height: 200px;
+  height: 220px;
   margin: 1.5rem auto;
   overflow: visible;
   padding: 0.5rem 0;
@@ -923,8 +934,8 @@ body {
 }
 .nback-carousel-card-v2 {
   position: absolute;
-  width: 90px;
-  height: 130px;
+  width: 110px;
+  height: 154px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -940,26 +951,31 @@ body {
     opacity 0.32s ease-out;
 }
 
-.nback-carousel-card-v2.nback-card-feedback {
-  border-radius: 12px;
+/* Glow feedback targets the visible card face inside the slot, not the outer slot wrapper.
+   This keeps the halo tightly around the card the user actually sees. */
+.nback-carousel-card-v2.nback-card-feedback--correct .nback-card-back,
+.nback-carousel-card-v2.nback-card-feedback--correct .playingCards .card {
+  animation: nback-card-feedback-glow-correct 0.75s ease-out;
 }
 
-.nback-carousel-card-v2.nback-card-feedback--correct {
-  animation: nback-card-feedback-glow-correct 0.65s ease-out;
-}
-
-.nback-carousel-card-v2.nback-card-feedback--wrong {
-  animation: nback-card-feedback-glow-wrong 0.65s ease-out;
+.nback-carousel-card-v2.nback-card-feedback--wrong .nback-card-back,
+.nback-carousel-card-v2.nback-card-feedback--wrong .playingCards .card {
+  animation: nback-card-feedback-glow-wrong 0.75s ease-out;
 }
 
 @keyframes nback-card-feedback-glow-correct {
   0% {
     box-shadow: 0 0 0 0 transparent;
   }
-  40% {
+  20% {
     box-shadow:
-      0 0 0 4px color-mix(in srgb, var(--correct) 70%, transparent),
-      0 0 36px color-mix(in srgb, var(--correct) 45%, transparent);
+      0 0 0 5px var(--correct),
+      0 0 48px 8px color-mix(in srgb, var(--correct) 65%, transparent);
+  }
+  60% {
+    box-shadow:
+      0 0 0 4px color-mix(in srgb, var(--correct) 85%, transparent),
+      0 0 40px 4px color-mix(in srgb, var(--correct) 50%, transparent);
   }
   100% {
     box-shadow: 0 0 0 0 transparent;
@@ -970,13 +986,57 @@ body {
   0% {
     box-shadow: 0 0 0 0 transparent;
   }
-  40% {
+  20% {
     box-shadow:
-      0 0 0 4px color-mix(in srgb, var(--incorrect) 75%, transparent),
-      0 0 32px color-mix(in srgb, var(--incorrect) 40%, transparent);
+      0 0 0 5px var(--incorrect),
+      0 0 48px 8px color-mix(in srgb, var(--incorrect) 65%, transparent);
+  }
+  60% {
+    box-shadow:
+      0 0 0 4px color-mix(in srgb, var(--incorrect) 85%, transparent),
+      0 0 40px 4px color-mix(in srgb, var(--incorrect) 50%, transparent);
   }
   100% {
     box-shadow: 0 0 0 0 transparent;
+  }
+}
+
+/* Floating popup text that rises from the card and fades out */
+.nback-card-popup {
+  position: absolute;
+  left: 50%;
+  bottom: 100%;
+  transform: translateX(-50%) translateY(0);
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  white-space: nowrap;
+  pointer-events: none;
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.6);
+  animation: nback-popup-rise 0.7s ease-out forwards;
+}
+.nback-card-popup--correct {
+  color: var(--correct);
+}
+.nback-card-popup--wrong {
+  color: var(--incorrect);
+}
+.nback-card-popup--miss {
+  color: var(--incorrect);
+}
+
+@keyframes nback-popup-rise {
+  0% {
+    opacity: 1;
+    transform: translateX(-50%) translateY(4px);
+  }
+  30% {
+    opacity: 1;
+    transform: translateX(-50%) translateY(-18px);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-44px);
   }
 }
 
@@ -1021,7 +1081,7 @@ body {
 
 /* Carousel cards: fit in slot, center slightly larger */
 .nback-carousel-v2 .nback-card-face-wrapper .playingCards .card {
-  font-size: 1.8em;
+  font-size: 2.2em;
 }
 .nback-carousel-v2 .nback-flip-inner-v2 {
   transform-origin: center center;
@@ -1029,9 +1089,9 @@ body {
 
 /* Custom card back - clean design (replaces CSS Playing Cards .card.back) */
 .nback-card-back {
-  width: 72px;
-  height: 100px;
-  border-radius: 8px;
+  width: 88px;
+  height: 122px;
+  border-radius: 10px;
   background: linear-gradient(145deg, #2a2a40 0%, #1e1e32 50%, #252538 100%);
   border: 2px solid rgba(233, 69, 96, 0.35);
   box-shadow:
@@ -1043,8 +1103,8 @@ body {
 }
 .nback-card-back::before {
   content: '';
-  width: 44px;
-  height: 60px;
+  width: 54px;
+  height: 74px;
   border-radius: 4px;
   border: 2px solid rgba(233, 69, 96, 0.2);
   background: repeating-linear-gradient(
