@@ -1,14 +1,17 @@
 package app.antidoomscroll.web
 
+import org.springframework.context.annotation.Profile
 import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RestController
 
 /**
  * Handles GET / so users who open the API root see a helpful message instead of a 404/500.
- * The app UI is served by the frontend (Vite) on port 5174.
+ * Only active when the frontend runs separately (local dev). On railway/prod the SPA
+ * static files serve the React app at / via SpaForwardingConfig.
  */
 @RestController
+@Profile("!railway")
 class RootController {
 
     @GetMapping("/", produces = [MediaType.TEXT_HTML_VALUE])
