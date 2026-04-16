@@ -1,16 +1,22 @@
 # Railway deployment: single service (backend + static frontend).
 # Activate with SPRING_PROFILES_ACTIVE=railway (set in Dockerfile).
 #
-# Railway PostgreSQL plugin auto-provides: PGHOST, PGPORT, PGUSER, PGPASSWORD, PGDATABASE.
-# If using external DB (e.g. Neon), set SPRING_DATASOURCE_URL / USERNAME / PASSWORD instead.
+# DATABASE SETUP — on the anti-doom-scroll service in Railway dashboard,
+# add these Variable References pointing to the Postgres plugin:
+#   PGHOST       = ${{Postgres.PGHOST}}
+#   PGPORT       = ${{Postgres.PGPORT}}
+#   PGUSER       = ${{Postgres.PGUSER}}
+#   PGPASSWORD   = ${{Postgres.PGPASSWORD}}
+#   PGDATABASE   = ${{Postgres.PGDATABASE}}
+#
 # PORT is auto-provided by Railway.
 spring:
   main:
     lazy-initialization: true
   datasource:
-    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://${PGHOST:localhost}:${PGPORT:5432}/${PGDATABASE:antidoomscroll}}
-    username: ${SPRING_DATASOURCE_USERNAME:${PGUSER:antidoomscroll}}
-    password: ${SPRING_DATASOURCE_PASSWORD:${PGPASSWORD:}}
+    url: jdbc:postgresql://${PGHOST}:${PGPORT}/${PGDATABASE}
+    username: ${PGUSER}
+    password: ${PGPASSWORD}
     driver-class-name: org.postgresql.Driver
     hikari:
       maximum-pool-size: 5
