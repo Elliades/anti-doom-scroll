@@ -20,6 +20,7 @@ logs/
 .env.*
 !.env.example
 !.env.android.example
+!frontend/.env.production
 
 # --- Java / Kotlin / Gradle / Spring Boot ---
 build/
