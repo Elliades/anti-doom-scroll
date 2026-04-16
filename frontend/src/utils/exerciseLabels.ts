@@ -23,6 +23,7 @@ export function getExerciseTypeLabel(ex: ExerciseDto): string {
     SUM_PAIR: 'Sum Pair',
     ANAGRAM: 'Anagram',
     DIGIT_SPAN: 'Digit Span',
+    MATH_CHAIN: 'Math Chain',
   }
   return labels[ex.type] ?? ex.type
 }

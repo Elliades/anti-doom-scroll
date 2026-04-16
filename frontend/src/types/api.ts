@@ -107,6 +107,21 @@ export interface DigitSpanParamsDto {
   maxLength: number
 }
 
+/** MATH_CHAIN: step in a sequential mental arithmetic chain. */
+export interface MathChainStepDto {
+  operation: string
+  operand: number
+  complexity: number
+}
+
+/** MATH_CHAIN: starting number + sequential operations, user computes final result. */
+export interface MathChainParamsDto {
+  startNumber: number
+  steps: MathChainStepDto[]
+  expectedAnswer: number
+  totalComplexity: number
+}
+
 export interface ExerciseDto {
   id: string
   subjectId: string
@@ -142,6 +157,7 @@ export interface ExerciseDto {
   /** ESTIMATION: correctAnswer, unit, toleranceFactor, category, hint */
   estimationParams?: EstimationParamsDto | null
   digitSpanParams?: DigitSpanParamsDto | null
+  mathChainParams?: MathChainParamsDto | null
 }
 
 export interface SessionStepDto {

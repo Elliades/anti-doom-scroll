@@ -1198,6 +1198,138 @@ app:
               n: ["3"]
               gridSize: ["3"]
 
+      # Math Chain ladder: sequential mental arithmetic (30 levels)
+      # Prefer more simple steps over fewer complex ones.
+      # Phase 1 (L0-9): ULTRA_EASY→EASY (+, - only, 2 steps)
+      # Phase 2 (L10-19): EASY→MEDIUM (all ops, 3-4 steps)
+      # Phase 3 (L20-29): HARD→VERY_HARD (all ops, 4-7 steps)
+      chainmath:
+        name: "Math Chain Ladder"
+        thresholds:
+          minScoreToStay: 0.40
+          minScoreToAdvance: 0.75
+          answersNeededToAdvance: 5
+        levels:
+          - levelIndex: 0
+            allowedDifficulties: [ULTRA_EASY]
+            subjectCodes: [default]
+            allowedTypes: [MATH_CHAIN]
+          - levelIndex: 1
+            allowedDifficulties: [ULTRA_EASY]
+            subjectCodes: [default]
+            allowedTypes: [MATH_CHAIN]
+          - levelIndex: 2
+            allowedDifficulties: [ULTRA_EASY]
+            subjectCodes: [default]
+            allowedTypes: [MATH_CHAIN]
+          - levelIndex: 3
+            allowedDifficulties: [ULTRA_EASY]
+            subjectCodes: [default]
+            allowedTypes: [MATH_CHAIN]
+          - levelIndex: 4
+            allowedDifficulties: [ULTRA_EASY, EASY]
+            subjectCodes: [default]
+            allowedTypes: [MATH_CHAIN]
+          - levelIndex: 5
+            allowedDifficulties: [ULTRA_EASY, EASY]
+            subjectCodes: [default]
+            allowedTypes: [MATH_CHAIN]
+          - levelIndex: 6
+            allowedDifficulties: [EASY]
+            subjectCodes: [default]
+            allowedTypes: [MATH_CHAIN]
+          - levelIndex: 7
+            allowedDifficulties: [EASY]
+            subjectCodes: [default]
+            allowedTypes: [MATH_CHAIN]
+          - levelIndex: 8
+            allowedDifficulties: [EASY]
+            subjectCodes: [default]
+            allowedTypes: [MATH_CHAIN]
+          - levelIndex: 9
+            allowedDifficulties: [EASY]
+            subjectCodes: [default]
+            allowedTypes: [MATH_CHAIN]
+          - levelIndex: 10
+            allowedDifficulties: [EASY, MEDIUM]
+            subjectCodes: [default]
+            allowedTypes: [MATH_CHAIN]
+          - levelIndex: 11
+            allowedDifficulties: [EASY, MEDIUM]
+            subjectCodes: [default]
+            allowedTypes: [MATH_CHAIN]
+          - levelIndex: 12
+            allowedDifficulties: [MEDIUM]
+            subjectCodes: [default]
+            allowedTypes: [MATH_CHAIN]
+          - levelIndex: 13
+            allowedDifficulties: [MEDIUM]
+            subjectCodes: [default]
+            allowedTypes: [MATH_CHAIN]
+          - levelIndex: 14
+            allowedDifficulties: [MEDIUM]
+            subjectCodes: [default]
+            allowedTypes: [MATH_CHAIN]
+          - levelIndex: 15
+            allowedDifficulties: [MEDIUM]
+            subjectCodes: [default]
+            allowedTypes: [MATH_CHAIN]
+          - levelIndex: 16
+            allowedDifficulties: [MEDIUM]
+            subjectCodes: [default]
+            allowedTypes: [MATH_CHAIN]
+          - levelIndex: 17
+            allowedDifficulties: [MEDIUM]
+            subjectCodes: [default]
+            allowedTypes: [MATH_CHAIN]
+          - levelIndex: 18
+            allowedDifficulties: [MEDIUM, HARD]
+            subjectCodes: [default]
+            allowedTypes: [MATH_CHAIN]
+          - levelIndex: 19
+            allowedDifficulties: [MEDIUM, HARD]
+            subjectCodes: [default]
+            allowedTypes: [MATH_CHAIN]
+          - levelIndex: 20
+            allowedDifficulties: [HARD]
+            subjectCodes: [default]
+            allowedTypes: [MATH_CHAIN]
+          - levelIndex: 21
+            allowedDifficulties: [HARD]
+            subjectCodes: [default]
+            allowedTypes: [MATH_CHAIN]
+          - levelIndex: 22
+            allowedDifficulties: [HARD]
+            subjectCodes: [default]
+            allowedTypes: [MATH_CHAIN]
+          - levelIndex: 23
+            allowedDifficulties: [HARD]
+            subjectCodes: [default]
+            allowedTypes: [MATH_CHAIN]
+          - levelIndex: 24
+            allowedDifficulties: [HARD]
+            subjectCodes: [default]
+            allowedTypes: [MATH_CHAIN]
+          - levelIndex: 25
+            allowedDifficulties: [HARD, VERY_HARD]
+            subjectCodes: [default]
+            allowedTypes: [MATH_CHAIN]
+          - levelIndex: 26
+            allowedDifficulties: [HARD, VERY_HARD]
+            subjectCodes: [default]
+            allowedTypes: [MATH_CHAIN]
+          - levelIndex: 27
+            allowedDifficulties: [VERY_HARD]
+            subjectCodes: [default]
+            allowedTypes: [MATH_CHAIN]
+          - levelIndex: 28
+            allowedDifficulties: [VERY_HARD]
+            subjectCodes: [default]
+            allowedTypes: [MATH_CHAIN]
+          - levelIndex: 29
+            allowedDifficulties: [VERY_HARD]
+            subjectCodes: [default]
+            allowedTypes: [MATH_CHAIN]
       # Working memory ladder: sum pairs then digit span
       working_memory:
         name: "Working Memory Ladder"
@@ -1351,6 +1483,7 @@ app:
         - memory
         - working_memory
         - estimation
+        - chainmath
   # Journey: scalable step sequence; add steps or go to any step by index
   journey:
     code: default

@@ -44,7 +44,9 @@ data class ExerciseDto(
     /** ESTIMATION: correct answer, unit, tolerance factor and category for logarithmic scoring. */
     val estimationParams: EstimationParamsDto? = null,
     /** DIGIT_SPAN: progressive digit recall with challenge modes. */
-    val digitSpanParams: DigitSpanParamsDto? = null
+    val digitSpanParams: DigitSpanParamsDto? = null,
+    /** MATH_CHAIN: sequential operations starting from a number. */
+    val mathChainParams: MathChainParamsDto? = null
 )
 
 data class ImagePairParamsDto(
@@ -150,4 +152,21 @@ data class DigitSpanParamsDto(
     val startLength: Int,
     val displayTimeMs: Int,
     val maxLength: Int
+)
+
+/**
+ * Params for MATH_CHAIN exercise: sequential operations on a starting number.
+ * User sees operations one at a time, then types the final result.
+ */
+data class MathChainParamsDto(
+    val startNumber: Int,
+    val steps: List<MathChainStepDto>,
+    val expectedAnswer: Int,
+    val totalComplexity: Double
+)
+
+data class MathChainStepDto(
+    val operation: String,
+    val operand: Int,
+    val complexity: Double
 )

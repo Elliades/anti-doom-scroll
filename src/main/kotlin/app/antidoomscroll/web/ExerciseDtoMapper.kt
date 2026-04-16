@@ -7,6 +7,7 @@ import app.antidoomscroll.application.DualNBackGridSequenceGenerator
 import app.antidoomscroll.application.NBackGridSequenceGenerator
 import app.antidoomscroll.application.WordleGenerator
 import app.antidoomscroll.application.WordleParamsResolver
+import app.antidoomscroll.application.MathChainGenerator
 import app.antidoomscroll.application.MathFlashcardGenerator
 import app.antidoomscroll.application.NBackSequenceGenerator
 import app.antidoomscroll.application.ImagePairDeckCache
@@ -31,6 +32,8 @@ import app.antidoomscroll.web.dto.MemoryCardParamsDto
 import app.antidoomscroll.web.dto.NBackGridParamsDto
 import app.antidoomscroll.web.dto.NBackParamsDto
 import app.antidoomscroll.application.SumPairResult
+import app.antidoomscroll.web.dto.MathChainParamsDto
+import app.antidoomscroll.web.dto.MathChainStepDto
 import app.antidoomscroll.web.dto.SumPairCardDto
 import app.antidoomscroll.web.dto.SumPairGroupDto
 import app.antidoomscroll.web.dto.SumPairParamsDto
@@ -49,6 +52,7 @@ class ExerciseDtoMapper(
     private val memoryCardDeckCache: MemoryCardDeckCache,
     private val imagePairDeckCache: ImagePairDeckCache,
     private val mathFlashcardGenerator: MathFlashcardGenerator,
+    private val mathChainGenerator: MathChainGenerator,
     private val anagramGenerator: AnagramGenerator,
     private val wordleGenerator: WordleGenerator
 ) {
@@ -99,6 +103,21 @@ class ExerciseDtoMapper(
                 maxLength = p.maxLength
             )
         }
+        val mathChainParams = if (exerciseWithParams.type == ExerciseType.MATH_CHAIN) {
+            val chainResult = mathChainGenerator.generate(exerciseWithParams.difficulty)
+            MathChainParamsDto(
+                startNumber = chainResult.startNumber,
+                steps = chainResult.steps.map { s ->
+                    MathChainStepDto(
+                        operation = s.operation.name,
+                        operand = s.operand,
+                        complexity = s.complexity
+                    )
+                },
+                expectedAnswer = chainResult.expectedAnswer,
+                totalComplexity = chainResult.totalComplexity
+            )
+        } else null
         val wordleParams = WordleParamsResolver.resolve(exerciseWithParams)?.let { p ->
             wordleGenerator.generate(p)?.let { r ->
                 WordleParamsDto(
@@ -173,7 +192,8 @@ class ExerciseDtoMapper(
             anagramParams = anagramParams,
             wordleParams = wordleParams,
             estimationParams = estimationParams,
-            digitSpanParams = digitSpanParams
+            digitSpanParams = digitSpanParams,
+            mathChainParams = mathChainParams
         )
     }
 

@@ -2074,6 +2074,129 @@ body {
   color: var(--text-dim);
 }
 
+/* ═══════════════════════════════════════════════════════
+   MATH CHAIN EXERCISE
+   ═══════════════════════════════════════════════════════ */
+
+.mc {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.2rem;
+  padding: 1rem 0;
+  width: 100%;
+}
+
+.mc-header {
+  font-size: 1.3rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-align: center;
+}
+.mc-header--correct { color: var(--correct); }
+.mc-header--fail { color: var(--incorrect); }
+
+.mc-instructions {
+  text-align: center;
+  color: var(--text-dim);
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+.mc-instructions p { margin: 0.3rem 0; }
+
+.mc-start-btn, .mc-continue-btn {
+  padding: 0.7rem 2rem;
+  border: none;
+  border-radius: 0.7rem;
+  background: var(--accent);
+  color: #fff;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.15s, transform 0.1s;
+}
+.mc-start-btn:hover, .mc-continue-btn:hover {
+  opacity: 0.85;
+}
+.mc-start-btn:active, .mc-continue-btn:active {
+  transform: scale(0.97);
+}
+
+/* ── Number display ───────────────────────────────────── */
+.mc-number {
+  font-size: 3.5rem;
+  font-weight: 800;
+  color: var(--accent);
+  text-align: center;
+  padding: 1.5rem 0;
+}
+.mc-number--appear {
+  animation: mc-pop-in 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* ── Operation display ────────────────────────────────── */
+.mc-operation {
+  font-size: 2.8rem;
+  font-weight: 700;
+  text-align: center;
+  padding: 1rem 0;
+  color: var(--text);
+}
+.mc-operation--appear {
+  animation: mc-slide-in 0.35s ease-out;
+}
+
+@keyframes mc-pop-in {
+  0% { transform: scale(0.5); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes mc-slide-in {
+  0% { transform: translateY(1.5rem); opacity: 0; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+
+/* ── Progress bar ─────────────────────────────────────── */
+.mc-progress {
+  width: 100%;
+  max-width: 16rem;
+  text-align: center;
+}
+.mc-progress-text {
+  font-size: 0.9rem;
+  color: var(--text-dim);
+}
+.mc-progress-bar {
+  height: 0.35rem;
+  background: var(--surface);
+  border-radius: 0.2rem;
+  overflow: hidden;
+}
+.mc-progress-fill {
+  height: 100%;
+  background: var(--accent);
+  border-radius: 0.2rem;
+  transition: width 0.3s ease;
+}
+
+/* ── Chain summary (final screen) ─────────────────────── */
+.mc-chain-summary {
+  font-size: 1.3rem;
+  font-weight: 600;
+  text-align: center;
+  line-height: 1.6;
+  word-break: break-word;
+}
+.mc-chain-start {
+  color: var(--accent);
+}
+.mc-chain-op {
+  color: var(--text);
+}
+.mc-chain-eq {
+  color: var(--text-dim);
+}
+
 @media (prefers-color-scheme: light) {
   :root {
     --bg: #f5f5f8;
