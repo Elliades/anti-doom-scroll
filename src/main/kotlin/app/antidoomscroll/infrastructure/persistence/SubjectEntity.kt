@@ -27,7 +27,7 @@ class SubjectEntity {
     var parentSubjectId: UUID? = null
 
     @Convert(converter = SubjectScoringConfigConverter::class)
-    @Column(name = "scoring_config", nullable = false, length = 500)
+    @Column(name = "scoring_config", nullable = false, columnDefinition = "jsonb")
     var scoringConfig: SubjectScoringConfig = SubjectScoringConfig()
 
     @Column(name = "created_at", nullable = false, updatable = false)
