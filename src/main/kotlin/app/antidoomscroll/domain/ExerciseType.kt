@@ -19,5 +19,6 @@ enum class ExerciseType {
     ANAGRAM,
     WORDLE,
     ESTIMATION,
-    DIGIT_SPAN
+    DIGIT_SPAN,
+    MATH_CHAIN
 }

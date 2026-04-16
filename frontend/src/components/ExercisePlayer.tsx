@@ -15,6 +15,7 @@ import { MemoryCardExercise } from './exercises/MemoryCardExercise'
 import { ImagePairExercise } from './exercises/ImagePairExercise'
 import { SumPairExercise } from './exercises/SumPairExercise'
 import { DigitSpanExercise } from './exercises/DigitSpanExercise'
+import { MathChainExercise } from './exercises/MathChainExercise'
 
 export interface ExercisePlayerProps {
   exercise: ExerciseDto
@@ -67,6 +68,9 @@ const EXERCISE_TYPE_COMPONENTS: Record<string, React.ComponentType<ExerciseCompo
   ),
   DIGIT_SPAN: ({ exercise, onComplete }) => (
     <DigitSpanExercise exercise={exercise} onComplete={onComplete} />
+  ),
+  MATH_CHAIN: ({ exercise, onComplete, showInstruction }) => (
+    <MathChainExercise exercise={exercise} onComplete={onComplete} showInstruction={showInstruction} />
   ),
 }
 

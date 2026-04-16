@@ -38,7 +38,8 @@ class LadderExercisePicker(
             buildGeneratedEstimationPool(level) +
             buildGeneratedMemoryCardPool(level) +
             buildGeneratedSumPairPool(level) +
-            buildGeneratedMathFlashcardPool(level)
+            buildGeneratedMathFlashcardPool(level) +
+            buildGeneratedMathChainPool(level)
         val filtered = applyFilters(candidates, level)
         return chooseAvoidingRecent(filtered, excludeExerciseIds)
     }
@@ -194,6 +195,29 @@ class LadderExercisePicker(
                     "secondMin" to 1,
                     "secondMax" to sMax
                 )
+            )
+        }
+    }
+
+    /** Synthetic MATH_CHAIN exercises so the type has a wide ID pool in ladders. */
+    private fun buildGeneratedMathChainPool(level: LadderLevel): List<Exercise> {
+        if (level.exerciseIds != null && level.exerciseIds.isNotEmpty()) return emptyList()
+        if (!level.subjectCodes.contains("default")) return emptyList()
+        if (!allowsType(level, ExerciseType.MATH_CHAIN)) return emptyList()
+        val subject = subjectPort.findByCode("default") ?: return emptyList()
+        val difficulty = level.allowedDifficulties.firstOrNull() ?: return emptyList()
+        val baseSeed = Random.nextLong()
+        return (0 until 8).map { i ->
+            val id = UUID.nameUUIDFromBytes("mathchain-gen-${level.levelIndex}-${baseSeed}-$i".toByteArray())
+            Exercise(
+                id = id,
+                subjectId = subject.id,
+                type = ExerciseType.MATH_CHAIN,
+                difficulty = difficulty,
+                prompt = "Mental math chain",
+                expectedAnswers = listOf("0"),
+                timeLimitSeconds = 120,
+                exerciseParams = null
             )
         }
     }

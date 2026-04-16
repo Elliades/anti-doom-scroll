@@ -242,6 +242,13 @@ data class Exercise(
         }
     }.getOrNull()
 
+    fun mathChainDifficulty(): Difficulty? = runCatching {
+        when (type) {
+            ExerciseType.MATH_CHAIN -> difficulty
+            else -> null
+        }
+    }.getOrNull()
+
     fun dualNBackCardParams(): DualNBackCardParams? = runCatching {
         when (type) {
             ExerciseType.DUAL_NBACK_CARD -> {

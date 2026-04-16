@@ -3,6 +3,7 @@ package app.antidoomscroll.web
 import app.antidoomscroll.application.AnagramGenerator
 import app.antidoomscroll.application.ImagePairDeckCache
 import app.antidoomscroll.application.ImagePairGenerator
+import app.antidoomscroll.application.MathChainGenerator
 import app.antidoomscroll.application.MathFlashcardGenerator
 import app.antidoomscroll.application.MemoryCardDeckCache
 import app.antidoomscroll.application.SumPairGenerator
@@ -37,6 +38,7 @@ class ExerciseDtoMapperTest {
     private val memoryCardDeckCache = MemoryCardDeckCache()
     private val imagePairDeckCache = ImagePairDeckCache(ImagePairGenerator())
     private val mathFlashcardGenerator = MathFlashcardGenerator()
+    private val mathChainGenerator = MathChainGenerator()
     private val anagramGenerator = AnagramGenerator()
     private val wordleGenerator = WordleGenerator()
 
@@ -46,7 +48,7 @@ class ExerciseDtoMapperTest {
 
     private fun mapper() = ExerciseDtoMapper(
         exercisePort, sumPairRoundsCache, memoryCardDeckCache,
-        imagePairDeckCache, mathFlashcardGenerator, anagramGenerator, wordleGenerator
+        imagePairDeckCache, mathFlashcardGenerator, mathChainGenerator, anagramGenerator, wordleGenerator
     )
 
     @Test
