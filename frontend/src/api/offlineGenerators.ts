@@ -847,16 +847,6 @@ export function buildSyntheticSumPairPool(
   }).filter((e): e is ExerciseDto => e !== null)
 }
 
-function mathOperandMaxes(difficulties: string[]): { firstMax: number; secondMax: number } {
-  const set = new Set(difficulties)
-  let cap: number
-  if ([...set].every((d) => d === 'ULTRA_EASY')) cap = 9
-  else if (set.has('HARD') || set.has('VERY_HARD')) cap = 99
-  else if (set.has('MEDIUM')) cap = 30
-  else cap = 20
-  return { firstMax: randInt(4, cap), secondMax: randInt(4, cap) }
-}
-
 export function buildSyntheticMathFlashcardPool(
   difficulties: string[],
   subjectId: string,
@@ -870,7 +860,6 @@ export function buildSyntheticMathFlashcardPool(
 
   return Array.from({ length: count }, (_, i) => {
     const op = pickRandom(ops)
-    const { firstMax, secondMax } = mathOperandMaxes(difficulties)
     const result = generateMathFlashcard(op, difficulty)
     return {
       id: `math-gen-offline-${Date.now()}-${i}`,
