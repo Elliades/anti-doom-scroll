@@ -10,6 +10,12 @@ import type {
 } from '../types/api'
 import { bundledDataUrl } from '../utils/bundledDataUrl'
 import { loadCatalogOfflineBundle } from './offlineCatalog'
+import {
+  hydrateExercise,
+  buildSyntheticMemoryCardPool,
+  buildSyntheticSumPairPool,
+  buildSyntheticMathFlashcardPool,
+} from './offlineGenerators'
 
 const OFFLINE_PROFILE_ID = 'offline-local'
 const SESSION_DEFAULT_SECONDS = 180
@@ -123,7 +129,11 @@ function pickRandom<T>(arr: T[]): T | null {
   return arr[Math.floor(Math.random() * arr.length)]!
 }
 
-/** Mirrors backend [LadderExercisePicker.pick] (DB + filters; no generated ESTIMATION pool). */
+/**
+ * Mirrors backend [LadderExercisePicker.pick].
+ * Builds candidate pool from catalog + synthetic generated exercises,
+ * then applies filters and picks randomly.
+ */
 export function pickExerciseForLevel(
   level: OfflineLadderLevelDef,
   allExercises: ExerciseDto[]
@@ -134,7 +144,7 @@ export function pickExerciseForLevel(
     return pickRandom(pool)
   }
 
-  let pool = allExercises.filter((e) => {
+  const catalogPool = allExercises.filter((e) => {
     if (level.subjectCodes.length > 0) {
       const sc = e.subjectCode ?? ''
       if (!level.subjectCodes.includes(sc)) return false
@@ -142,6 +152,10 @@ export function pickExerciseForLevel(
     if (!level.allowedDifficulties.includes(e.difficulty)) return false
     return true
   })
+
+  const syntheticPool = buildSyntheticPools(level, allExercises)
+
+  let pool = [...catalogPool, ...syntheticPool]
 
   if (level.allowedTypes?.length) {
     pool = pool.filter((e) => level.allowedTypes!.includes(e.type))
@@ -151,6 +165,37 @@ export function pickExerciseForLevel(
   }
 
   return pickRandom(pool)
+}
+
+function allowsType(level: OfflineLadderLevelDef, type: string): boolean {
+  return !level.allowedTypes?.length || level.allowedTypes.includes(type)
+}
+
+function findSubjectId(allExercises: ExerciseDto[], subjectCode: string): string | null {
+  const ex = allExercises.find((e) => e.subjectCode === subjectCode)
+  return ex?.subjectId ?? null
+}
+
+function buildSyntheticPools(level: OfflineLadderLevelDef, allExercises: ExerciseDto[]): ExerciseDto[] {
+  const synthetic: ExerciseDto[] = []
+
+  if (level.subjectCodes.includes('MEMORY') && allowsType(level, 'MEMORY_CARD_PAIRS')) {
+    const sid = findSubjectId(allExercises, 'MEMORY')
+    if (sid) synthetic.push(...buildSyntheticMemoryCardPool(level.allowedDifficulties, sid))
+  }
+
+  if (level.subjectCodes.includes('MEMORY') && allowsType(level, 'SUM_PAIR')) {
+    const sid = findSubjectId(allExercises, 'MEMORY')
+    if (sid) synthetic.push(...buildSyntheticSumPairPool(level.allowedDifficulties, sid))
+  }
+
+  if (level.subjectCodes.includes('default') && allowsType(level, 'FLASHCARD_QA')) {
+    const sid = findSubjectId(allExercises, 'default')
+    const filterOps = level.exerciseParamFilter?.operation
+    if (sid) synthetic.push(...buildSyntheticMathFlashcardPool(level.allowedDifficulties, sid, filterOps))
+  }
+
+  return synthetic
 }
 
 export async function offlineStartLadderSession(ladderCode: string): Promise<LadderSessionResponseDto> {
@@ -164,8 +209,9 @@ export async function offlineStartLadderSession(ladderCode: string): Promise<Lad
   const level0 = cfg.levels.find((l) => l.levelIndex === 0)
   if (!level0) throw new Error(`Ladder "${resolvedCode}" has no level 0`)
 
-  const exercise = pickExerciseForLevel(level0, allExercises)
-  if (!exercise) throw new Error(`No exercise available for ladder "${resolvedCode}" level 0 (regenerate catalog-offline.json).`)
+  const picked = pickExerciseForLevel(level0, allExercises)
+  if (!picked) throw new Error(`No exercise available for ladder "${resolvedCode}" level 0 (regenerate catalog-offline.json).`)
+  const exercise = await hydrateExercise(picked)
 
   const ladderState: LadderStateDto = {
     ladderCode: resolvedCode,
@@ -241,7 +287,8 @@ export async function offlineGetNextLadderExercise(
     return { exercise: null, ladderState: newState, levelChanged }
   }
 
-  const exercise = pickExerciseForLevel(level, allExercises)
+  const picked = pickExerciseForLevel(level, allExercises)
+  const exercise = picked ? await hydrateExercise(picked) : null
   return { exercise, ladderState: newState, levelChanged }
 }
 
@@ -280,8 +327,9 @@ export async function offlineStartLadderMixSession(mixCode: string): Promise<Lad
   const level0 = config.levels.find((l) => l.levelIndex === 0)
   if (!level0) throw new Error(`Ladder ${firstLadderCode} has no level 0`)
 
-  const exercise = pickExerciseForLevel(level0, allExercises)
-  if (!exercise) throw new Error(`No exercise for ladder mix start (${firstLadderCode})`)
+  const picked = pickExerciseForLevel(level0, allExercises)
+  if (!picked) throw new Error(`No exercise for ladder mix start (${firstLadderCode})`)
+  const exercise = await hydrateExercise(picked)
 
   const levelCount = Math.min(...ladderCodes.map((c) => getConfig(bundle, c)?.levels.length ?? 0))
 
@@ -410,7 +458,8 @@ export async function offlineGetNextLadderMixExercise(
     return { exercise: null, ladderMixState: newState, levelChanged }
   }
 
-  const exercise = pickExerciseForLevel(level, allExercises)
+  const picked = pickExerciseForLevel(level, allExercises)
+  const exercise = picked ? await hydrateExercise(picked) : null
   return { exercise, ladderMixState: newState, levelChanged }
 }
 
