@@ -30,21 +30,20 @@ function makeExercise(id: string, prompt: string): ExerciseDto {
   }
 }
 
-/** SUM_PAIR exercise with one pair (two cards) so we can complete quickly and test instruction visibility. */
-function makeSumPairExercise(id: string, prompt: string): ExerciseDto {
+/** IMAGE_PAIR with one pair (two cards) so we can complete quickly and test instruction visibility. */
+function makeImagePairExercise(id: string, prompt: string): ExerciseDto {
   return {
     id,
     subjectId: 'sub-1',
-    subjectCode: 'sum',
-    type: 'SUM_PAIR',
+    subjectCode: 'MEMORY',
+    type: 'IMAGE_PAIR',
     difficulty: 'ULTRA_EASY',
     prompt,
     expectedAnswers: [],
     timeLimitSeconds: 60,
-    sumPairGroups: [{ static: 0, color: '#3b82f6', cards: [1, 1] }],
-    sumPairDeck: [
-      { value: 1, static: 0, color: '#3b82f6' },
-      { value: 1, static: 0, color: '#3b82f6' },
+    imagePairDeck: [
+      { backgroundId: 1, imageId: 'a', backgroundColorHex: '#94a3b8' },
+      { backgroundId: 1, imageId: 'a', backgroundColorHex: '#94a3b8' },
     ],
   }
 }
@@ -236,12 +235,12 @@ describe('LadderSessionBlock – continuous play (no blocking score screen)', ()
   }, 8000)
 
   it('shows instruction only on the first exercise of the ladder, not on subsequent exercises', async () => {
-    const firstPrompt = 'Sum-pair round 1'
-    const secondPrompt = 'Sum-pair round 2'
+    const firstPrompt = 'Image-pair round 1'
+    const secondPrompt = 'Image-pair round 2'
     vi.mocked(ladderApi.startLadderSession).mockResolvedValue({
       profileId: 'p1',
       mode: 'ladder',
-      exercise: makeSumPairExercise('sumpair-1', firstPrompt),
+      exercise: makeImagePairExercise('imgpair-1', firstPrompt),
       ladderState: makeState(0, [], 0),
       levelCount: 30,
       sessionDefaultSeconds: 60,
@@ -249,7 +248,7 @@ describe('LadderSessionBlock – continuous play (no blocking score screen)', ()
     } satisfies LadderSessionResponseDto)
 
     vi.mocked(ladderApi.getNextLadderExercise).mockResolvedValue({
-      exercise: makeSumPairExercise('sumpair-2', secondPrompt),
+      exercise: makeImagePairExercise('imgpair-2', secondPrompt),
       ladderState: makeState(0, [1], 1),
     } satisfies LadderNextResponseDto)
 
@@ -257,17 +256,17 @@ describe('LadderSessionBlock – continuous play (no blocking score screen)', ()
     await waitForExercise(firstPrompt)
 
     // First exercise: instruction paragraph must be visible (text is split by <strong>)
-    const instructionEl = document.querySelector('.sumpair-instruction')
+    const instructionEl = document.querySelector('.imagepair-instruction')
     expect(instructionEl).toBeInTheDocument()
-    expect(instructionEl?.textContent).toMatch(/Find pairs where.*first \+ static = second/i)
+    expect(instructionEl?.textContent).toMatch(/Find pairs/i)
     expect(screen.getByRole('button', { name: /start/i })).toBeInTheDocument()
 
-    // Start the first exercise, then match the single pair (two cards both value 1, static 0)
+    // Start the first exercise, then match the single pair (two identical cards)
     await act(async () => {
       screen.getByRole('button', { name: /start/i }).click()
     })
-    await waitFor(() => expect(document.querySelector('.sumpair-playing')).toBeInTheDocument())
-    const cardButtons = document.querySelectorAll('.sumpair-card')
+    await waitFor(() => expect(document.querySelector('.imagepair-playing')).toBeInTheDocument())
+    const cardButtons = document.querySelectorAll('.imagepair-card')
     expect(cardButtons.length).toBe(2)
     await act(async () => { (cardButtons[0] as HTMLElement).click() })
     await act(async () => { (cardButtons[1] as HTMLElement).click() })
@@ -279,7 +278,7 @@ describe('LadderSessionBlock – continuous play (no blocking score screen)', ()
     )
 
     // Second exercise: instruction paragraph must NOT be shown (only at beginning of ladder)
-    expect(document.querySelector('.sumpair-instruction')).not.toBeInTheDocument()
+    expect(document.querySelector('.imagepair-instruction')).not.toBeInTheDocument()
     // But prompt and Start must still be there
     expect(screen.getByText(secondPrompt)).toBeInTheDocument()
     expect(screen.getByRole('button', { name: /start/i })).toBeInTheDocument()
