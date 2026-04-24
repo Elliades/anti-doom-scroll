@@ -71,7 +71,7 @@ export function EstimationExercise({ exercise, onComplete }: EstimationExerciseP
     )
   }
 
-  const { correctAnswer, unit, toleranceFactor, hint, timeWeightHigher } = params
+  const { correctAnswer, unit, toleranceFactor, timeWeightHigher } = params
   /** Pure math: time matters more (w=0.4); word/geography: precision matters more (w=0.7). */
   const w = timeWeightHigher ? 0.4 : 0.7
   const numAnswer = Number(answer.trim().replace(/,/g, ''))
@@ -101,9 +101,6 @@ export function EstimationExercise({ exercise, onComplete }: EstimationExerciseP
   return (
     <>
       <p className="prompt">{exercise.prompt}</p>
-      {hint != null && hint !== '' && (
-        <p className="estimation-hint" aria-label="Hint">{hint}</p>
-      )}
       <div className="input-row">
         <input
           type="text"

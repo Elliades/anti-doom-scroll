@@ -27,7 +27,6 @@ export function NBackExercise({ exercise, onComplete, showInstruction = true }: 
   const [index, setIndex] = useState(0)
   const [userMatches, setUserMatches] = useState<Set<number>>(new Set())
   const [showMatchFeedback, setShowMatchFeedback] = useState<'correct' | 'wrong' | 'miss' | null>(null)
-  const [showCanMatchNotice, setShowCanMatchNotice] = useState(false)
   const matchFeedbackLockRef = useRef(false)
   const prevIndexRef = useRef(-1)
 
@@ -95,19 +94,6 @@ export function NBackExercise({ exercise, onComplete, showInstruction = true }: 
     }
   }, [phase, index])
 
-  // When first card with a match target appears (index === n), show "Match is now active!"
-  useEffect(() => {
-    if (phase !== 'playing') return
-    if (index > n) {
-      setShowCanMatchNotice(false)
-      return
-    }
-    if (index !== n) return
-    setShowCanMatchNotice(true)
-    const t = setTimeout(() => setShowCanMatchNotice(false), 2500)
-    return () => clearTimeout(t)
-  }, [phase, index, n])
-
   const score = computeScore(userMatches, matchIndicesSet)
   const hits = intersectionSize(userMatches, matchIndicesSet)
   const misses = matchIndicesSet.size - hits
@@ -155,7 +141,6 @@ export function NBackExercise({ exercise, onComplete, showInstruction = true }: 
 
   if (phase === 'playing') {
     const currentItem = params.sequence[index]
-    const exampleM = n + 1
     return (
       <div className="nback-playing">
         <div className="nback-n-badge" aria-label={`${n}-Back`}>
@@ -194,14 +179,6 @@ export function NBackExercise({ exercise, onComplete, showInstruction = true }: 
             </>
           )}
         </div>
-        {matchDisabled && (
-          <p className="nback-wait-hint">No match possible yet (first {n} cards)</p>
-        )}
-        {showCanMatchNotice && (
-          <p className="nback-can-match-notice" role="status">
-            Match is now active!
-          </p>
-        )}
         <button
           onClick={handleMatchTap}
           className="nback-match-btn"
@@ -209,9 +186,6 @@ export function NBackExercise({ exercise, onComplete, showInstruction = true }: 
         >
           Match
         </button>
-        <p className="nback-example">
-          Card m matches card m−{n} (e.g. card {exampleM} = card 1)
-        </p>
         <div className="nback-progress">
           {index + 1} / {params.sequence.length}
         </div>
