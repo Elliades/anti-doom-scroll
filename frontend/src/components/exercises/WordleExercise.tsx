@@ -309,6 +309,18 @@ export function WordleExercise({ exercise, onComplete }: WordleExerciseProps) {
           </div>
         ))}
       </div>
+
+      <p className="wordle-hint-text">
+        {dictStatus === 'loading'
+          ? isFrench
+            ? 'Chargement du dictionnaire…'
+            : 'Loading dictionary…'
+          : dictStatus === 'ready'
+            ? isFrench
+              ? `Essais restants : ${maxAttempts - guesses.length}`
+              : `Attempts left: ${maxAttempts - guesses.length}`
+            : ''}
+      </p>
     </div>
   )
 }

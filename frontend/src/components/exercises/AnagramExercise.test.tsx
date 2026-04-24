@@ -1,4 +1,4 @@
-import { describe, it, expect, vi } from 'vitest'
+import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { render, screen, fireEvent, act } from '@testing-library/react'
 import { AnagramExercise } from './AnagramExercise'
 import type { ExerciseDto } from '../../types/api'
@@ -18,11 +18,17 @@ const anagramExercise = (
     anagramParams: {
       scrambledLetters: ['c', 'h', 'a', 't'],
       answer: 'chat',
+      hintIntervalSeconds: 10,
+      letterColorHint: true,
       ...overrides,
     },
   }) as ExerciseDto
 
 describe('AnagramExercise', () => {
+  beforeEach(() => {
+    vi.useFakeTimers()
+  })
+
   it('renders error when params are missing', () => {
     const ex = { ...anagramExercise(), anagramParams: undefined } as ExerciseDto
     render(<AnagramExercise exercise={ex} />)
@@ -70,6 +76,7 @@ describe('AnagramExercise', () => {
       expect.objectContaining({
         score: expect.any(Number),
         subscores: expect.arrayContaining([
+          expect.objectContaining({ label: 'Hints', value: 0 }),
           expect.objectContaining({ label: 'Wrong tries', value: 0 }),
         ]),
       })
@@ -157,6 +164,21 @@ describe('AnagramExercise', () => {
         ]),
       })
     )
+  })
+
+  it('provides a hint after the hint interval elapses', async () => {
+    render(
+      <AnagramExercise exercise={anagramExercise({ hintIntervalSeconds: 5 })} />
+    )
+    await act(() => {
+      fireEvent.click(screen.getByRole('button', { name: /commencer/i }))
+    })
+    const filledBefore = document.querySelectorAll('.anagram-slot.filled').length
+    await act(() => {
+      vi.advanceTimersByTime(5000)
+    })
+    const filledAfter = document.querySelectorAll('.anagram-slot.filled').length
+    expect(filledAfter).toBe(filledBefore + 1)
   })
 
   it('shows duplicate letter count on keyboard', async () => {

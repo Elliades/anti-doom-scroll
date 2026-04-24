@@ -5,6 +5,7 @@ import type { ExerciseResult } from '../../types/exercise'
 export interface SumPairExerciseProps {
   exercise: ExerciseDto
   onComplete?: (result: ExerciseResult | number) => void
+  /** Kept for ExercisePlayer; intro rule text is not shown. */
   showInstruction?: boolean
 }
 
@@ -21,7 +22,7 @@ interface CardItem {
  * Sum-pair game: all cards on one board. Statics are colored; each static's pairs
  * have the same color. Match (a, b) only when a + static = b within the same group.
  */
-export function SumPairExercise({ exercise, onComplete, showInstruction = true }: SumPairExerciseProps) {
+export function SumPairExercise({ exercise, onComplete }: SumPairExerciseProps) {
   const groups = exercise.sumPairGroups ?? exercise.sumPairRounds?.map((r) => ({
     static: r.static,
     color: '#3b82f6',
@@ -54,8 +55,6 @@ export function SumPairExercise({ exercise, onComplete, showInstruction = true }
   const [cards, setCards] = useState<CardItem[]>([])
   const [moves, setMoves] = useState(0)
   const completedRef = useRef(false)
-
-  const isMultiStatic = (groups ?? []).length > 1
 
   const startGame = useCallback(() => {
     setCards(initialCards.map((c) => ({ ...c, state: 'hidden' as CardState })))
@@ -154,13 +153,6 @@ export function SumPairExercise({ exercise, onComplete, showInstruction = true }
     return (
       <div className="sumpair-intro">
         <p className="prompt">{exercise.prompt}</p>
-        {showInstruction && (
-          <p className="sumpair-instruction">
-            Cards show numbers. Find pairs where <strong>first + static = second</strong>.
-            {isMultiStatic &&
-              ' Each static is colored — match only cards of the same color.'}
-          </p>
-        )}
         <button type="button" onClick={startGame} className="sumpair-start-btn" autoFocus>
           Start
         </button>
