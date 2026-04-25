@@ -1,7 +1,8 @@
-import { useState, useCallback, useEffect } from 'react'
+import { useState, useCallback, useEffect, useMemo } from 'react'
 import type { ExerciseDto } from '../../types/api'
 import type { ExerciseResult } from '../../types/exercise'
 import { loadWordListWords } from '../../utils/wordleWordLoader'
+import { computeWordleComplexity } from '../../utils/wordleComplexity'
 
 export interface WordleExerciseProps {
   exercise: ExerciseDto
@@ -69,6 +70,12 @@ function isAllowedGuess(candidate: string, answer: string, validWordSet: Set<str
   return normalizeForCompare(candidate) === normalizeForCompare(answer)
 }
 
+function formatTimeBudget(seconds: number): string {
+  if (seconds < 60) return `${seconds}s`
+  const m = Math.round(seconds / 60)
+  return m <= 1 ? `1 min` : `${m} min`
+}
+
 /**
  * Classic Wordle: guess a word of N letters in up to maxAttempts tries.
  * Green = correct position, yellow = present but wrong position, gray = absent.
@@ -85,6 +92,26 @@ export function WordleExercise({ exercise, onComplete }: WordleExerciseProps) {
   const maxAttempts = params.maxAttempts ?? 6
   const language = params.language ?? 'fr'
   const isFrench = language === 'fr'
+
+  const wordleComplexity = useMemo(() => {
+    return (
+      exercise.wordleComplexity ??
+      computeWordleComplexity({
+        wordLength,
+        maxAttempts,
+        timeLimitSeconds: exercise.timeLimitSeconds,
+        language,
+      })
+    )
+  }, [exercise.wordleComplexity, exercise.timeLimitSeconds, wordLength, maxAttempts, language])
+
+  const complexityTitle = isFrench
+    ? `Indicateurs : entropie ≈ ${wordleComplexity.entropyBits.toFixed(1)} bits, espace log₁₀ ≈ ${wordleComplexity.searchSpaceLog10.toFixed(2)}, ${wordleComplexity.guessesPerLetter.toFixed(2)} essais par lettre, ${wordleComplexity.secondsPerGuessBudget.toFixed(0)} s par essai (budget).`
+    : `Indicators: entropy ≈ ${wordleComplexity.entropyBits.toFixed(1)} bits, search space log₁₀ ≈ ${wordleComplexity.searchSpaceLog10.toFixed(2)}, ${wordleComplexity.guessesPerLetter.toFixed(2)} guesses per letter, ${wordleComplexity.secondsPerGuessBudget.toFixed(0)} s per guess (budget).`
+
+  const complexityLine = isFrench
+    ? `Difficulté ${wordleComplexity.difficultyScore0To100}/100 · ${wordLength} lettres · ${maxAttempts} essais · ${formatTimeBudget(exercise.timeLimitSeconds)}`
+    : `Difficulty ${wordleComplexity.difficultyScore0To100}/100 · ${wordLength} letters · ${maxAttempts} tries · ${formatTimeBudget(exercise.timeLimitSeconds)}`
 
   const [guesses, setGuesses] = useState<string[]>([])
   const [currentLetters, setCurrentLetters] = useState<string[]>([])
@@ -209,6 +236,9 @@ export function WordleExercise({ exercise, onComplete }: WordleExerciseProps) {
   return (
     <div className="wordle" aria-busy={dictStatus === 'loading'}>
       <p className="wordle-prompt">{exercise.prompt}</p>
+      <p className="wordle-complexity" title={complexityTitle} aria-label={complexityTitle}>
+        {complexityLine}
+      </p>
       {dictStatus === 'error' && (
         <p className="wordle-status wordle-status--lost" role="alert">
           {isFrench
