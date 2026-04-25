@@ -91,6 +91,19 @@ export interface WordleParamsDto {
   language?: string
 }
 
+/** WORDLE: entropy / attempt budget / time pressure; difficultyScore0To100 0=easiest, 100=hardest. */
+export interface WordleComplexityDto {
+  wordLength: number
+  maxAttempts: number
+  timeLimitSeconds: number
+  effectiveAlphabetSize: number
+  searchSpaceLog10: number
+  entropyBits: number
+  guessesPerLetter: number
+  secondsPerGuessBudget: number
+  difficultyScore0To100: number
+}
+
 /** ESTIMATION: correct answer, unit, tolerance factor and category for scoring. When timeWeightHigher, time matters more than precision (pure math). */
 export interface EstimationParamsDto {
   correctAnswer: number
@@ -135,6 +148,8 @@ export interface ExerciseDto {
   mathOperation?: string | null
   /** Human arithmetic complexity score (0–5 very easy, 5–15 elementary, 15–30 intermediate, 30+ advanced). */
   mathComplexityScore?: number | null
+  /** WORDLE: structural difficulty (API / offline hydrate). */
+  wordleComplexity?: WordleComplexityDto | null
   /** API may return nBackParams or nbackParams (casing varies) */
   nBackParams?: NBackParamsDto | null
   nbackParams?: NBackParamsDto | null

@@ -415,6 +415,8 @@ describe('hydrateExercise', () => {
     const hydrated = await hydrateExercise(wordleEx)
     expect(hydrated.wordleParams?.answer).toBeTruthy()
     expect(hydrated.wordleParams?.wordLength).toBe(5)
+    expect(hydrated.wordleComplexity?.difficultyScore0To100).toBeDefined()
+    expect(hydrated.wordleComplexity?.wordLength).toBe(5)
   })
 
   it('returns unchanged exercise for unknown types', async () => {

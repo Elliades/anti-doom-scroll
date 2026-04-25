@@ -849,7 +849,12 @@ class LocalDataSeeder(
                 prompt = "Devinez le mot de 3 lettres en 6 essais."
                 expectedAnswers = emptyList()
                 timeLimitSeconds = 120
-                exerciseParams = mapOf("language" to "fr", "maxAttempts" to 6)
+                exerciseParams = mapOf(
+                    "language" to "fr",
+                    "maxAttempts" to 6,
+                    "wordLength" to 3,
+                    "wordleDifficultyScore0To100" to 25
+                )
             },
             ExerciseEntity().apply {
                 id = UUID.fromString("a0000000-0000-0000-0000-000000000201")
@@ -859,7 +864,12 @@ class LocalDataSeeder(
                 prompt = "Devinez le mot de 5 lettres en 6 essais."
                 expectedAnswers = emptyList()
                 timeLimitSeconds = 180
-                exerciseParams = mapOf("language" to "fr", "maxAttempts" to 6)
+                exerciseParams = mapOf(
+                    "language" to "fr",
+                    "maxAttempts" to 6,
+                    "wordLength" to 5,
+                    "wordleDifficultyScore0To100" to 43
+                )
             },
             ExerciseEntity().apply {
                 id = UUID.fromString("a0000000-0000-0000-0000-000000000202")
@@ -869,7 +879,12 @@ class LocalDataSeeder(
                 prompt = "Devinez le mot de 6 lettres en 6 essais."
                 expectedAnswers = emptyList()
                 timeLimitSeconds = 240
-                exerciseParams = mapOf("language" to "fr", "maxAttempts" to 6)
+                exerciseParams = mapOf(
+                    "language" to "fr",
+                    "maxAttempts" to 6,
+                    "wordLength" to 6,
+                    "wordleDifficultyScore0To100" to 48
+                )
             },
             ExerciseEntity().apply {
                 id = UUID.fromString("a0000000-0000-0000-0000-000000000203")
@@ -879,7 +894,12 @@ class LocalDataSeeder(
                 prompt = "Devinez le mot de 7 lettres en 6 essais."
                 expectedAnswers = emptyList()
                 timeLimitSeconds = 300
-                exerciseParams = mapOf("language" to "fr", "maxAttempts" to 6)
+                exerciseParams = mapOf(
+                    "language" to "fr",
+                    "maxAttempts" to 6,
+                    "wordLength" to 7,
+                    "wordleDifficultyScore0To100" to 53
+                )
             },
             // WORDLE_EN: EASY=3 letters, MEDIUM=5, HARD=6, VERY_HARD=7
             ExerciseEntity().apply {
@@ -890,7 +910,12 @@ class LocalDataSeeder(
                 prompt = "Guess the 3-letter word in 6 tries."
                 expectedAnswers = emptyList()
                 timeLimitSeconds = 120
-                exerciseParams = mapOf("language" to "en", "maxAttempts" to 6)
+                exerciseParams = mapOf(
+                    "language" to "en",
+                    "maxAttempts" to 6,
+                    "wordLength" to 3,
+                    "wordleDifficultyScore0To100" to 24
+                )
             },
             ExerciseEntity().apply {
                 id = UUID.fromString("a0000000-0000-0000-0000-000000000211")
@@ -900,7 +925,12 @@ class LocalDataSeeder(
                 prompt = "Guess the 5-letter word in 6 tries."
                 expectedAnswers = emptyList()
                 timeLimitSeconds = 180
-                exerciseParams = mapOf("language" to "en", "maxAttempts" to 6)
+                exerciseParams = mapOf(
+                    "language" to "en",
+                    "maxAttempts" to 6,
+                    "wordLength" to 5,
+                    "wordleDifficultyScore0To100" to 42
+                )
             },
             ExerciseEntity().apply {
                 id = UUID.fromString("a0000000-0000-0000-0000-000000000212")
@@ -910,7 +940,12 @@ class LocalDataSeeder(
                 prompt = "Guess the 6-letter word in 6 tries."
                 expectedAnswers = emptyList()
                 timeLimitSeconds = 240
-                exerciseParams = mapOf("language" to "en", "maxAttempts" to 6)
+                exerciseParams = mapOf(
+                    "language" to "en",
+                    "maxAttempts" to 6,
+                    "wordLength" to 6,
+                    "wordleDifficultyScore0To100" to 47
+                )
             },
             ExerciseEntity().apply {
                 id = UUID.fromString("a0000000-0000-0000-0000-000000000213")
@@ -920,7 +955,12 @@ class LocalDataSeeder(
                 prompt = "Guess the 7-letter word in 6 tries."
                 expectedAnswers = emptyList()
                 timeLimitSeconds = 300
-                exerciseParams = mapOf("language" to "en", "maxAttempts" to 6)
+                exerciseParams = mapOf(
+                    "language" to "en",
+                    "maxAttempts" to 6,
+                    "wordLength" to 7,
+                    "wordleDifficultyScore0To100" to 52
+                )
             },
             // ESTIMATION: approximate numerical answers — ULTRA_EASY (everyday knowledge)
             ExerciseEntity().apply {
