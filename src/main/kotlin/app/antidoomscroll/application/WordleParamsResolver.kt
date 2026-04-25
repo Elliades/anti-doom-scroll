@@ -17,13 +17,14 @@ object WordleParamsResolver {
         val p = exercise.exerciseParams
         val language = (p?.get("language") as? String)?.lowercase() ?: "fr"
         val maxAttempts = (p?.get("maxAttempts") as? Number)?.toInt() ?: 6
-        val wordLength = when (exercise.difficulty) {
-            Difficulty.EASY -> 3
-            Difficulty.MEDIUM -> 5
-            Difficulty.HARD -> 6
-            Difficulty.VERY_HARD -> 7
-            else -> 3
-        }
+        val wordLength = (p?.get("wordLength") as? Number)?.toInt()
+            ?: when (exercise.difficulty) {
+                Difficulty.EASY -> 3
+                Difficulty.MEDIUM -> 5
+                Difficulty.HARD -> 6
+                Difficulty.VERY_HARD -> 7
+                else -> 3
+            }
         WordleParams(wordLength = wordLength, language = language, maxAttempts = maxAttempts)
     }.getOrNull()
 }
