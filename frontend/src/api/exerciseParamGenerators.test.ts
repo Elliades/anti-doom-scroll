@@ -74,6 +74,7 @@ describe('exerciseParamGenerators', () => {
   it('generates easy WORDLE params for high target score', () => {
     const params = generateParamsFromScore('WORDLE', 0.82)
     expect(params.type).toBe('WORDLE')
+    if (params.type !== 'WORDLE') return
     expect(params.params.wordLength).toBeLessThanOrEqual(4)
     expect((params.params.maxAttempts ?? 6)).toBeGreaterThanOrEqual(6)
   })
@@ -81,6 +82,7 @@ describe('exerciseParamGenerators', () => {
   it('generates hard WORDLE params for low target score', () => {
     const params = generateParamsFromScore('WORDLE', 0.33)
     expect(params.type).toBe('WORDLE')
+    if (params.type !== 'WORDLE') return
     expect(params.params.wordLength).toBeGreaterThanOrEqual(6)
     expect((params.params.maxAttempts ?? 6)).toBeLessThanOrEqual(5)
   })
@@ -88,6 +90,7 @@ describe('exerciseParamGenerators', () => {
   it('generates easy ANAGRAM params for high target score', () => {
     const params = generateParamsFromScore('ANAGRAM', 0.8)
     expect(params.type).toBe('ANAGRAM')
+    if (params.type !== 'ANAGRAM') return
     expect(params.params.answer.length).toBeLessThanOrEqual(4)
     expect(params.params.scrambledLetters).toHaveLength(params.params.answer.length)
   })
@@ -95,6 +98,7 @@ describe('exerciseParamGenerators', () => {
   it('generates hard ANAGRAM params for low target score', () => {
     const params = generateParamsFromScore('ANAGRAM', 0.3)
     expect(params.type).toBe('ANAGRAM')
+    if (params.type !== 'ANAGRAM') return
     expect(params.params.answer.length).toBeGreaterThanOrEqual(6)
   })
 
@@ -112,6 +116,7 @@ describe('exerciseParamGenerators', () => {
     const hard = generateParamsFromScore('ESTIMATION', 0.2)
     expect(easy.type).toBe('ESTIMATION')
     expect(hard.type).toBe('ESTIMATION')
+    if (easy.type !== 'ESTIMATION' || hard.type !== 'ESTIMATION') return
     expect(hard.params.toleranceFactor).toBeLessThanOrEqual(easy.params.toleranceFactor)
   })
 

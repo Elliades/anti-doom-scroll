@@ -967,9 +967,10 @@ export function buildSyntheticMemoryCardPool(
   targetScore?: number,
   count = 8,
 ): ExerciseDto[] {
+  const generated = targetScore == null ? null : generateParamsFromScore('MEMORY_CARD_PAIRS', targetScore)
   const pairCount = targetScore == null
     ? memoryPairCount(difficulties)
-    : (generateParamsFromScore('MEMORY_CARD_PAIRS', targetScore).params.pairCount)
+    : (generated?.type === 'MEMORY_CARD_PAIRS' ? generated.params.pairCount : memoryPairCount(difficulties))
   const difficulty = difficulties[0] ?? 'EASY'
   return Array.from({ length: count }, (_, i) => {
     const symbols = pickDistinctEmojis(pairCount)
