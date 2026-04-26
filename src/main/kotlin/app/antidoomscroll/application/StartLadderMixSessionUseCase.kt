@@ -53,16 +53,22 @@ class StartLadderMixSessionUseCase(
         val level0 = config.levelAt(0)
             ?: throw IllegalStateException("Ladder $firstLadderCode has no level 0")
 
-        val exercise = ladderExercisePicker.pick(config, level0)
+        val targetScore = ladderExercisePicker.targetScoreForLevel(config, level0)
+        val exercise = ladderExercisePicker.pick(config, level0, targetScore = targetScore)
             ?: throw IllegalStateException("No exercise available for ladder $firstLadderCode level 0")
 
         val subjectCode = subjectPort.findById(exercise.subjectId)?.code
+
+        val levelCount = ladderCodes.minOfOrNull { code ->
+            ladderPort.getByCode(code)?.levels?.size ?: 0
+        } ?: 0
 
         return LadderMixSessionResult(
             profileId = profile.id.toString(),
             exercise = exercise,
             subjectCode = subjectCode,
-            ladderMixState = state,
+            ladderMixState = state.withRecentExercisePlayed(exercise.id),
+            levelCount = levelCount,
             sessionDefaultSeconds = profile.sessionDefaultSeconds,
             lowBatteryModeSeconds = profile.lowBatteryModeSeconds
         )
@@ -73,6 +79,7 @@ class StartLadderMixSessionUseCase(
         val exercise: Exercise,
         val subjectCode: String?,
         val ladderMixState: LadderMixState,
+        val levelCount: Int,
         val sessionDefaultSeconds: Int,
         val lowBatteryModeSeconds: Int
     )

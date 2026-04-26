@@ -7,7 +7,11 @@
 - API: REST JSON (OpenAPI generated)
 - Frontend: React + TypeScript + Vite
 - Auth: local email+password or passkeys (MVP can be anonymous local profile)
-- Mobile: PWA first (installable), later native wrapper if needed
+- Mobile: PWA (`display: standalone`) + **Capacitor Android** (`frontend/android/`). For publishing to your phone, env vars, offline journey, and troubleshooting, read **`src/docs/android-standalone-publish.md`** first.
+
+## Android / phone (standalone install)
+- **Single source of truth:** `src/docs/android-standalone-publish.md` — install steps, `.env.android`, `VITE_DATA_MODE` vs `VITE_API_URL`, port 5173, regenerating offline JSON (`npm run export:offline-data`), checklist.
+- Do not duplicate long procedures in chat; update that doc when the flow changes.
 
 ## Coding style
 - Prefer clean architecture boundaries:

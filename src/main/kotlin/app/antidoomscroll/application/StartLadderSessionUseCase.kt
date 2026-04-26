@@ -31,7 +31,8 @@ class StartLadderSessionUseCase(
             ?: throw IllegalArgumentException("Ladder config not found: $ladderCode")
 
         val level0 = config.levelAt(0) ?: throw IllegalStateException("Ladder has no level 0")
-        val exercise = ladderExercisePicker.pick(config, level0)
+        val targetScore = ladderExercisePicker.targetScoreForLevel(config, level0)
+        val exercise = ladderExercisePicker.pick(config, level0, targetScore = targetScore)
             ?: throw IllegalStateException("No exercise available for ladder level 0")
 
         val subjectCode = subjectPort.findById(exercise.subjectId)?.code
@@ -47,6 +48,7 @@ class StartLadderSessionUseCase(
                 overallScoreSum = 0.0,
                 overallTotal = 0
             ),
+            levelCount = config.levels.size,
             sessionDefaultSeconds = profile.sessionDefaultSeconds,
             lowBatteryModeSeconds = profile.lowBatteryModeSeconds
         )
@@ -57,6 +59,7 @@ class StartLadderSessionUseCase(
         val exercise: Exercise,
         val subjectCode: String?,
         val ladderState: LadderState,
+        val levelCount: Int,
         val sessionDefaultSeconds: Int,
         val lowBatteryModeSeconds: Int
     )

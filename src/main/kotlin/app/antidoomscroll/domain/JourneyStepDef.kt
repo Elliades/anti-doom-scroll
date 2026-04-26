@@ -12,8 +12,27 @@ data class JourneyStepDef(
     val config: Map<String, Any?> = emptyMap()
 ) {
     fun getContentKey(): String? = config["contentKey"] as? String
-    fun getSubjectCodes(): List<String> = (config["subjectCodes"] as? List<*>)
-        ?.mapNotNull { it?.toString() }
-        ?: emptyList()
+
+    /**
+     * Subject codes for CHAPTER_EXERCISES. YAML lists and JSON may arrive as a [List] or,
+     * after map-shaped binding/serialization, as an indexed map `{"0":"a","1":"b"}`.
+     */
+    fun getSubjectCodes(): List<String> {
+        val raw = config["subjectCodes"] ?: return emptyList()
+        if (raw is List<*>) return raw.mapNotNull { it?.toString() }
+        if (raw is Map<*, *>) {
+            return raw.entries
+                .sortedBy { (key) ->
+                    when (key) {
+                        is Number -> key.toInt()
+                        is String -> key.toIntOrNull() ?: 0
+                        else -> 0
+                    }
+                }
+                .map { it.value?.toString() ?: "" }
+                .filter { it.isNotEmpty() }
+        }
+        return emptyList()
+    }
     fun getExerciseCount(): Int = (config["exerciseCount"] as? Number)?.toInt() ?: 3
 }

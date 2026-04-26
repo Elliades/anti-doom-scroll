@@ -17,6 +17,11 @@ spring:
 
 app:
   anonymous-profile-enabled: true
+  # Ladder mode: score-based level progression (40% stay, 75% advance)
+  # Advancement thresholds:
+  # - Levels 0-4: require only 1 exercise to evaluate advancement
+  # - Level 5+: require 5 exercises (default threshold) to evaluate advancement
+  # - n-back and pair ladders: always require only 1 exercise regardless of level
   ladder:
     defaultCode: default
     ladders:
@@ -364,10 +369,80 @@ app:
           - levelIndex: 4
             allowedDifficulties: [MEDIUM]
             subjectCodes: [WORD]
+          - levelIndex: 5
+            allowedDifficulties: [MEDIUM]
+            subjectCodes: [WORD]
+      # Mix tracks (subset of prod): word, memory, working_memory
+      word:
+        name: "Word Ladder"
+        thresholds:
+          minScoreToStay: 0.40
+          minScoreToAdvance: 0.75
+          answersNeededToAdvance: 5
+        levels:
+          - levelIndex: 0
+            allowedDifficulties: [ULTRA_EASY]
+            subjectCodes: [WORD]
+            allowedTypes: [ANAGRAM, WORDLE]
+          - levelIndex: 1
+            allowedDifficulties: [ULTRA_EASY, EASY]
+            subjectCodes: [WORD]
+            allowedTypes: [ANAGRAM, WORDLE]
+          - levelIndex: 2
+            allowedDifficulties: [EASY]
+            subjectCodes: [WORD]
+            allowedTypes: [ANAGRAM, WORDLE]
+      memory:
+        name: "Memory Ladder"
+        thresholds:
+          minScoreToStay: 0.40
+          minScoreToAdvance: 0.75
+          answersNeededToAdvance: 5
+        levels:
+          - levelIndex: 0
+            allowedDifficulties: [ULTRA_EASY]
+            subjectCodes: [MEMORY]
+            allowedTypes: [MEMORY_CARD_PAIRS]
+          - levelIndex: 1
+            allowedDifficulties: [ULTRA_EASY]
+            subjectCodes: [B1]
+            allowedTypes: [N_BACK]
+            exerciseParamFilter:
+              n: ["1"]
+              suitCount: ["1"]
+          - levelIndex: 2
+            allowedDifficulties: [MEDIUM]
+            subjectCodes: [B1]
+            allowedTypes: [N_BACK]
+            exerciseParamFilter:
+              n: ["2"]
+              suitCount: ["2"]
+      working_memory:
+        name: "Working Memory Ladder"
+        thresholds:
+          minScoreToStay: 0.40
+          minScoreToAdvance: 0.75
+          answersNeededToAdvance: 5
+        levels:
+          - levelIndex: 0
+            allowedDifficulties: [ULTRA_EASY]
+            subjectCodes: [MEMORY]
+            allowedTypes: [SUM_PAIR]
+          - levelIndex: 1
+            allowedDifficulties: [EASY]
+            subjectCodes: [MEMORY]
+            allowedTypes: [SUM_PAIR]
+          - levelIndex: 2
+            allowedDifficulties: [ULTRA_EASY]
+            subjectCodes: [DIGIT_SPAN]
+            allowedTypes: [DIGIT_SPAN]
     mixes:
       mix:
         - sum
-        - anagram
+        - word
+        - memory
+        - working_memory
+        - estimation
   journey:
     code: default
     name: "Test journey"

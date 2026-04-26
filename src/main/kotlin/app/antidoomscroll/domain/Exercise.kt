@@ -229,6 +229,26 @@ data class Exercise(
         }
     }.getOrNull()
 
+    fun digitSpanParams(): DigitSpanParams? = runCatching {
+        when (type) {
+            ExerciseType.DIGIT_SPAN -> {
+                val p = exerciseParams ?: return@runCatching null
+                val startLength = (p["startLength"] as? Number)?.toInt() ?: return@runCatching null
+                val displayTimeMs = (p["displayTimeMs"] as? Number)?.toInt() ?: 3000
+                val maxLength = (p["maxLength"] as? Number)?.toInt() ?: 15
+                DigitSpanParams(startLength = startLength, displayTimeMs = displayTimeMs, maxLength = maxLength)
+            }
+            else -> null
+        }
+    }.getOrNull()
+
+    fun mathChainDifficulty(): Difficulty? = runCatching {
+        when (type) {
+            ExerciseType.MATH_CHAIN -> difficulty
+            else -> null
+        }
+    }.getOrNull()
+
     fun dualNBackCardParams(): DualNBackCardParams? = runCatching {
         when (type) {
             ExerciseType.DUAL_NBACK_CARD -> {

@@ -2,19 +2,19 @@
  * N-Back card carousel: 2n+1 slots, center spaced.
  * Flow:
  * 0. All backs, center spaced out
- * 1. After 0.5s: center flips to face (shows current card)
- * 2. After 1s: center flips to back, moves right; right shift; rightmost exits
+ * 1. After initial delay: center flips to face (shows current card)
+ * 2. After face display: center flips to back, moves right; right shift; rightmost exits
  * 3. Left-neighbor of center (end of left queue) flips to face, moves to center with next card;
  *    new card enters at start of left queue (furthest left)
  */
 import { useEffect, useState, useRef, useCallback } from 'react'
 import { NBackCardDisplay } from './NBackCardDisplay'
 
-const SLOT_WIDTH = 90
-const INITIAL_DELAY_MS = 500
-const FACE_DISPLAY_MS = 1000
-const MOVE_MS = 450
-const FLIP_MS = 320
+const SLOT_WIDTH = 110
+const INITIAL_DELAY_MS = 400
+const FACE_DISPLAY_MS = 500
+const MOVE_MS = 360
+const FLIP_MS = 256
 
 function CardBack() {
   return <div className="nback-card-back" />
@@ -44,11 +44,19 @@ interface CardItem {
   entering?: boolean
 }
 
+const FEEDBACK_LABELS: Record<string, string> = {
+  correct: 'Success!',
+  wrong: 'Fail!',
+  miss: 'Miss!',
+}
+
 export interface NBackCardCarouselProps {
   n: number
   sequence: string[]
   onCardShow?: (index: number) => void
   onComplete?: () => void
+  /** Brief correct/wrong/miss highlight on the center card. */
+  matchFeedback?: 'correct' | 'wrong' | 'miss' | null
 }
 
 export function NBackCardCarousel({
@@ -56,6 +64,7 @@ export function NBackCardCarousel({
   sequence,
   onCardShow,
   onComplete,
+  matchFeedback = null,
 }: NBackCardCarouselProps) {
   const slotCount = 2 * n + 1
   const centerIdx = n
@@ -200,15 +209,21 @@ export function NBackCardCarousel({
                 ? centerSpacing * 2
                 : 0
           const left = card.pos * SLOT_WIDTH + off
+          const isCenter = card.pos === centerIdx
+          const glowType = matchFeedback === 'miss' ? 'wrong' : matchFeedback
+          const feedbackClass =
+            isCenter && glowType
+              ? ` nback-card-feedback--${glowType}`
+              : ''
           return (
             <div
               key={card.id}
               className={`nback-carousel-card-v2 ${
                 card.exiting ? 'nback-card-exit' : ''
-              } ${card.entering ? 'nback-card-enter' : ''}`}
+              } ${card.entering ? 'nback-card-enter' : ''}${feedbackClass}`}
               style={{
                 left: `${left}px`,
-                transition: `left ${MOVE_MS}ms cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.4s ease-out`,
+                transition: `left ${MOVE_MS}ms cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.32s ease-out`,
                 opacity: card.entering && card.pos < 0 ? 0 : 1,
               }}
             >
@@ -231,6 +246,14 @@ export function NBackCardCarousel({
                   </div>
                 </div>
               </div>
+              {isCenter && matchFeedback && (
+                <span
+                  key={`fb-${Date.now()}`}
+                  className={`nback-card-popup nback-card-popup--${matchFeedback}`}
+                >
+                  {FEEDBACK_LABELS[matchFeedback]}
+                </span>
+              )}
             </div>
           )
         })}

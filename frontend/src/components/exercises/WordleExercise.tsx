@@ -1,6 +1,8 @@
 import { useState, useCallback, useEffect } from 'react'
 import type { ExerciseDto } from '../../types/api'
 import type { ExerciseResult } from '../../types/exercise'
+import { loadWordListWords } from '../../utils/wordleWordLoader'
+import { estimateWordleComplexityFromParams } from '../../utils/wordComplexity'
 
 export interface WordleExerciseProps {
   exercise: ExerciseDto
@@ -21,29 +23,39 @@ const KEYBOARD_ROWS_AZERTY = [
   ['w', 'x', 'c', 'v', 'b', 'n'],
 ]
 
-/** Normalize for comparison: é/è/ê → e, à/â → a, etc. so "e" matches "é". */
+/**
+ * Canonical form for answers, guesses, and word lists — matches Kotlin WordleGenerator.normalizeWordleWord
+ * (NFD → strip combining marks → lowercase → œ→oe æ→ae).
+ */
 export function normalizeForCompare(str: string): string {
-  const nfd = str
-    .toLowerCase()
-    .normalize('NFD')
-    .replace(/\p{Diacritic}/gu, '')
-  return nfd.replace(/\u0153/g, 'oe').replace(/\u00e6/g, 'ae')
+  const nfd = str.normalize('NFD')
+  const noMarks = nfd.replace(/\p{M}+/gu, '')
+  return noMarks.toLowerCase().replace(/\u0153/g, 'oe').replace(/\u00e6/g, 'ae')
 }
 
-export function getTileStates(guess: string, answerNormalized: string): TileState[] {
-  const len = answerNormalized.length
+function buildValidWordSet(words: string[], answer: string): Set<string> {
+  const set = new Set<string>()
+  for (const w of words) set.add(normalizeForCompare(w))
+  set.add(normalizeForCompare(answer))
+  return set
+}
+
+export function getTileStates(guess: string, answer: string): TileState[] {
+  const g = normalizeForCompare(guess)
+  const a = normalizeForCompare(answer)
+  const len = a.length
   const states: TileState[] = Array(len).fill('absent')
-  const remaining: (string | null)[] = answerNormalized.split('')
+  const remaining: (string | null)[] = a.split('')
 
   for (let i = 0; i < len; i++) {
-    if (guess[i] === answerNormalized[i]) {
+    if (g[i] === a[i]) {
       states[i] = 'correct'
       remaining[i] = null
     }
   }
   for (let i = 0; i < len; i++) {
     if (states[i] === 'correct') continue
-    const idx = remaining.indexOf(guess[i])
+    const idx = remaining.indexOf(g[i])
     if (idx >= 0) {
       states[i] = 'present'
       remaining[idx] = null
@@ -52,10 +64,16 @@ export function getTileStates(guess: string, answerNormalized: string): TileStat
   return states
 }
 
+function isAllowedGuess(candidate: string, answer: string, validWordSet: Set<string> | null): boolean {
+  if (!validWordSet) return false
+  if (validWordSet.has(candidate)) return true
+  return normalizeForCompare(candidate) === normalizeForCompare(answer)
+}
+
 /**
  * Classic Wordle: guess a word of N letters in up to maxAttempts tries.
  * Green = correct position, yellow = present but wrong position, gray = absent.
- * Supports French (AZERTY + accents) and English (QWERTY) keyboards.
+ * Supports French (AZERTY) and English (QWERTY) keyboards; words are unaccented.
  */
 export function WordleExercise({ exercise, onComplete }: WordleExerciseProps) {
   const params = exercise.wordleParams
@@ -63,22 +81,43 @@ export function WordleExercise({ exercise, onComplete }: WordleExerciseProps) {
     return <p className="error">Invalid wordle exercise: missing answer.</p>
   }
 
-  const answer = params.answer.toLowerCase()
-  const answerNormalized = normalizeForCompare(answer)
+  const answer = normalizeForCompare(params.answer)
   const wordLength = params.wordLength
   const maxAttempts = params.maxAttempts ?? 6
   const language = params.language ?? 'fr'
   const isFrench = language === 'fr'
+  const complexityScore = Math.round(estimateWordleComplexityFromParams(params))
 
   const [guesses, setGuesses] = useState<string[]>([])
   const [currentLetters, setCurrentLetters] = useState<string[]>([])
   const [phase, setPhase] = useState<'playing' | 'won' | 'lost'>('playing')
-  const [shakeRow, setShakeRow] = useState(false)
+  const [rowShake, setRowShake] = useState<'none' | 'incomplete' | 'invalid'>('none')
   const [revealRow, setRevealRow] = useState<number | null>(null)
+  const [validWordSet, setValidWordSet] = useState<Set<string> | null>(null)
+  const [dictStatus, setDictStatus] = useState<'loading' | 'ready' | 'error'>('loading')
+
+  useEffect(() => {
+    let cancelled = false
+    setDictStatus('loading')
+    setValidWordSet(null)
+    loadWordListWords(language, wordLength)
+      .then((words) => {
+        if (cancelled) return
+        setValidWordSet(buildValidWordSet(words, answer))
+        setDictStatus('ready')
+      })
+      .catch(() => {
+        if (cancelled) return
+        setDictStatus('error')
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [language, wordLength, answer])
 
   const letterHints: Record<string, LetterHint> = {}
   for (const g of guesses) {
-    const states = getTileStates(g, answerNormalized)
+    const states = getTileStates(g, answer)
     for (let i = 0; i < g.length; i++) {
       const c = g[i]
       const s = states[i] as LetterHint
@@ -91,19 +130,15 @@ export function WordleExercise({ exercise, onComplete }: WordleExerciseProps) {
 
   const submitGuess = useCallback(
     (letters: string[]) => {
-      const guess = letters.join('')
+      const guess = normalizeForCompare(letters.join(''))
       const newGuesses = [...guesses, guess]
       const rowIdx = guesses.length
       setGuesses(newGuesses)
       setCurrentLetters([])
       setRevealRow(rowIdx)
 
-      const won = guess === answerNormalized
+      const won = normalizeForCompare(guess) === normalizeForCompare(answer)
       const lost = !won && newGuesses.length >= maxAttempts
-      if (!won) {
-        setShakeRow(true)
-        setTimeout(() => setShakeRow(false), 500)
-      }
 
       setTimeout(() => {
         setRevealRow(null)
@@ -123,45 +158,66 @@ export function WordleExercise({ exercise, onComplete }: WordleExerciseProps) {
         }
       }, wordLength * 350 + 200)
     },
-    [guesses, answerNormalized, maxAttempts, wordLength, onComplete]
+    [guesses, answer, maxAttempts, wordLength, onComplete]
   )
 
   const handleLetter = useCallback(
     (char: string) => {
-      if (phase !== 'playing') return
+      if (phase !== 'playing' || dictStatus !== 'ready') return
       if (currentLetters.length >= wordLength) return
-      const normalized = normalizeForCompare(char)
-      if (!normalized) return
-      const next = [...currentLetters, normalized]
-      setCurrentLetters(next)
-      if (next.length === wordLength) {
-        submitGuess(next)
-      }
+      setCurrentLetters((prev) => [...prev, char.toLowerCase()])
     },
-    [phase, currentLetters, wordLength, submitGuess]
+    [phase, dictStatus, currentLetters.length, wordLength]
   )
 
   const handleBackspace = useCallback(() => {
-    if (phase !== 'playing') return
+    if (phase !== 'playing' || dictStatus !== 'ready') return
     setCurrentLetters((prev) => prev.slice(0, -1))
-  }, [phase])
+  }, [phase, dictStatus])
+
+  const handleEnter = useCallback(() => {
+    if (phase !== 'playing') return
+    if (dictStatus !== 'ready' || !validWordSet) return
+    if (currentLetters.length !== wordLength) {
+      setRowShake('incomplete')
+      setTimeout(() => setRowShake('none'), 500)
+      return
+    }
+    const candidate = normalizeForCompare(currentLetters.join(''))
+    if (!isAllowedGuess(candidate, answer, validWordSet)) {
+      setRowShake('invalid')
+      setTimeout(() => setRowShake('none'), 550)
+      return
+    }
+    submitGuess(currentLetters)
+  }, [phase, dictStatus, currentLetters, wordLength, submitGuess, validWordSet, answer])
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.ctrlKey || e.altKey || e.metaKey) return
+      if (dictStatus !== 'ready') return
       if (e.key === 'Backspace') handleBackspace()
-      else if (e.key === 'Enter' && currentLetters.length === wordLength) submitGuess(currentLetters)
-      else if (e.key.length === 1 && /[a-zA-ZÀ-ÿœæ]/u.test(e.key)) handleLetter(e.key)
+      else if (e.key === 'Enter') handleEnter()
+      else if (e.key.length === 1 && /[a-zA-Z]/u.test(e.key)) handleLetter(e.key)
     }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
-  }, [handleLetter, handleBackspace, submitGuess, currentLetters, wordLength])
+  }, [handleLetter, handleBackspace, handleEnter, dictStatus])
 
   const keyboardRows = isFrench ? KEYBOARD_ROWS_AZERTY : KEYBOARD_ROWS_QWERTY
 
+  const inputLocked = phase !== 'playing' || dictStatus !== 'ready'
+
   return (
-    <div className="wordle">
+    <div className="wordle" aria-busy={dictStatus === 'loading'}>
       <p className="wordle-prompt">{exercise.prompt}</p>
+      {dictStatus === 'error' && (
+        <p className="wordle-status wordle-status--lost" role="alert">
+          {isFrench
+            ? 'Impossible de charger le dictionnaire. Rechargez la page.'
+            : 'Could not load word list. Refresh the page.'}
+        </p>
+      )}
 
       {/* Grid */}
       <div className="wordle-grid" style={{ '--word-length': wordLength } as React.CSSProperties}>
@@ -169,13 +225,13 @@ export function WordleExercise({ exercise, onComplete }: WordleExerciseProps) {
           const isSubmitted = rowIdx < guesses.length
           const isCurrent = rowIdx === guesses.length && phase === 'playing'
           const guess = isSubmitted ? guesses[rowIdx] : isCurrent ? currentLetters.join('') : ''
-          const states = isSubmitted ? getTileStates(guesses[rowIdx], answerNormalized) : null
+          const states = isSubmitted ? getTileStates(guesses[rowIdx], answer) : null
           const isRevealing = revealRow === rowIdx
 
           return (
             <div
               key={rowIdx}
-              className={`wordle-row ${isCurrent && shakeRow ? 'shake' : ''}`}
+              className={`wordle-row${isCurrent && rowShake !== 'none' ? ` wordle-row--${rowShake}` : ''}`}
             >
               {Array.from({ length: wordLength }, (_, colIdx) => {
                 const char = guess[colIdx] ?? ''
@@ -221,18 +277,34 @@ export function WordleExercise({ exercise, onComplete }: WordleExerciseProps) {
       <div className="wordle-keyboard">
         {keyboardRows.map((row, rowIdx) => (
           <div key={rowIdx} className="wordle-keyboard-row">
+            {rowIdx === keyboardRows.length - 1 && (
+              <button
+                type="button"
+                className="wordle-key wordle-key--action"
+                onClick={handleEnter}
+                disabled={inputLocked}
+              >
+                {isFrench ? 'Entrée' : 'Enter'}
+              </button>
+            )}
             {row.map((key) => (
               <button
                 key={key}
                 type="button"
                 className={`wordle-key wordle-key--letter ${letterHints[key] ?? ''}`}
                 onClick={() => handleLetter(key)}
+                disabled={inputLocked}
               >
                 {key.toUpperCase()}
               </button>
             ))}
             {rowIdx === keyboardRows.length - 1 && (
-              <button type="button" className="wordle-key wordle-key--action" onClick={handleBackspace}>
+              <button
+                type="button"
+                className="wordle-key wordle-key--action"
+                onClick={handleBackspace}
+                disabled={inputLocked}
+              >
                 ⌫
               </button>
             )}
@@ -241,9 +313,18 @@ export function WordleExercise({ exercise, onComplete }: WordleExerciseProps) {
       </div>
 
       <p className="wordle-hint-text">
-        {isFrench
-          ? `Essais restants : ${maxAttempts - guesses.length}`
-          : `Attempts left: ${maxAttempts - guesses.length}`}
+        {dictStatus === 'loading'
+          ? isFrench
+            ? 'Chargement du dictionnaire…'
+            : 'Loading dictionary…'
+          : dictStatus === 'ready'
+            ? isFrench
+              ? `Essais restants : ${maxAttempts - guesses.length}`
+              : `Attempts left: ${maxAttempts - guesses.length}`
+            : ''}
+      </p>
+      <p className="exercise-complexity-indicator">
+        {isFrench ? `Complexité ${complexityScore}/100` : `Complexity ${complexityScore}/100`}
       </p>
     </div>
   )

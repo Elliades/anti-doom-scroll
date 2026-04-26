@@ -28,6 +28,7 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
+import java.util.UUID
 
 /**
  * REST controller: start session (reopen flow) and ladder mode.
@@ -123,6 +124,7 @@ class SessionController(
             profileId = result.profileId,
             exercise = exerciseDtoMapper.toExerciseDto(result.exercise, result.subjectCode),
             ladderState = toLadderStateDto(result.ladderState),
+            levelCount = result.levelCount,
             sessionDefaultSeconds = result.sessionDefaultSeconds,
             lowBatteryModeSeconds = result.lowBatteryModeSeconds
         )
@@ -150,6 +152,7 @@ class SessionController(
             profileId = result.profileId,
             exercise = exerciseDtoMapper.toExerciseDto(result.exercise, result.subjectCode),
             ladderMixState = toLadderMixStateDto(result.ladderMixState),
+            levelCount = result.levelCount,
             sessionDefaultSeconds = result.sessionDefaultSeconds,
             lowBatteryModeSeconds = result.lowBatteryModeSeconds
         )
@@ -166,7 +169,8 @@ class SessionController(
                     overallTotal = v.overallTotal
                 )
             },
-            nextLadderIndex = s.nextLadderIndex
+            nextLadderIndex = s.nextLadderIndex,
+            recentExerciseIds = s.recentExerciseIds.map { it.toString() }
         )
 
     private fun toLadderMixState(d: LadderMixStateDto): LadderMixState =
@@ -181,6 +185,9 @@ class SessionController(
                     overallTotal = v.overallTotal
                 )
             },
-            nextLadderIndex = d.nextLadderIndex
+            nextLadderIndex = d.nextLadderIndex,
+            recentExerciseIds = d.recentExerciseIds.mapNotNull { id ->
+                runCatching { UUID.fromString(id) }.getOrNull()
+            }
         )
 }

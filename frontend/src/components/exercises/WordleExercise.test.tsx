@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { render, screen, fireEvent, act } from '@testing-library/react'
+import { render, screen, fireEvent, act, waitFor } from '@testing-library/react'
 import { WordleExercise, normalizeForCompare, getTileStates } from './WordleExercise'
 import type { ExerciseDto } from '../../types/api'
 
@@ -85,80 +85,126 @@ describe('WordleExercise', () => {
     vi.useFakeTimers()
   })
 
-  it('does not show Enter/Entrée button on keyboard', () => {
+  it('shows Enter/Entrée button on keyboard', () => {
     render(<WordleExercise exercise={wordleExercise()} />)
-    expect(screen.queryByRole('button', { name: /entrée|enter/i })).not.toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /entrée|enter/i })).toBeInTheDocument()
   })
 
-  it('does not show accents row (é, è, à, etc.) on keyboard', () => {
+  it('does not show accent keys on French keyboard (words are unaccented)', () => {
     render(<WordleExercise exercise={wordleExercise({ language: 'fr' })} />)
     expect(screen.queryByRole('button', { name: 'É' })).not.toBeInTheDocument()
-    expect(screen.queryByRole('button', { name: 'È' })).not.toBeInTheDocument()
     expect(screen.queryByRole('button', { name: 'À' })).not.toBeInTheDocument()
   })
 
-  it('auto-submits when word length is reached (e.g. 3 letters for 3-letter word)', async () => {
-    const onComplete = vi.fn()
-    render(
-      <WordleExercise
-        exercise={wordleExercise({ answer: 'oui', wordLength: 3 })}
-        onComplete={onComplete}
-      />
-    )
-    await act(() => {
-      fireEvent.click(screen.getByRole('button', { name: 'O' }))
-    })
-    await act(() => {
-      fireEvent.click(screen.getByRole('button', { name: 'U' }))
-    })
-    expect(onComplete).not.toHaveBeenCalled()
-    await act(() => {
-      fireEvent.click(screen.getByRole('button', { name: 'I' }))
-    })
-    await act(() => {
-      vi.advanceTimersByTime(2000)
-    })
-    expect(onComplete).toHaveBeenCalledWith(
-      expect.objectContaining({
-        score: expect.any(Number),
-        subscores: expect.any(Array),
+  it('submits when Enter is pressed after a full valid word (e.g. 3 letters)', async () => {
+    vi.useRealTimers()
+    try {
+      const onComplete = vi.fn()
+      render(
+        <WordleExercise
+          exercise={wordleExercise({ answer: 'oui', wordLength: 3 })}
+          onComplete={onComplete}
+        />
+      )
+      await waitFor(() => expect(screen.getByRole('button', { name: 'O' })).not.toBeDisabled())
+      await act(() => {
+        fireEvent.click(screen.getByRole('button', { name: 'O' }))
       })
-    )
+      await act(() => {
+        fireEvent.click(screen.getByRole('button', { name: 'U' }))
+      })
+      expect(onComplete).not.toHaveBeenCalled()
+      await act(() => {
+        fireEvent.click(screen.getByRole('button', { name: 'I' }))
+      })
+      await act(() => {
+        fireEvent.click(screen.getByRole('button', { name: /entrée|enter/i }))
+      })
+      await waitFor(
+        () => {
+          expect(onComplete).toHaveBeenCalledWith(
+            expect.objectContaining({
+              score: expect.any(Number),
+              subscores: expect.any(Array),
+            })
+          )
+        },
+        { timeout: 5000 }
+      )
+    } finally {
+      vi.useFakeTimers()
+    }
   })
 
   it('treats base letter "e" as matching accented "é" in answer', async () => {
-    const onComplete = vi.fn()
-    render(
-      <WordleExercise
-        exercise={wordleExercise({ answer: 'café', wordLength: 4 })}
-        onComplete={onComplete}
-      />
-    )
-    await act(() => {
-      fireEvent.click(screen.getByRole('button', { name: 'C' }))
-    })
-    await act(() => {
-      fireEvent.click(screen.getByRole('button', { name: 'A' }))
-    })
-    await act(() => {
-      fireEvent.click(screen.getByRole('button', { name: 'F' }))
-    })
-    await act(() => {
-      fireEvent.click(screen.getByRole('button', { name: 'E' }))
-    })
-    await act(() => {
-      vi.runAllTimers()
-    })
-    expect(onComplete).toHaveBeenCalledWith(
-      expect.objectContaining({
-        score: expect.any(Number),
+    vi.useRealTimers()
+    try {
+      const onComplete = vi.fn()
+      render(
+        <WordleExercise
+          exercise={wordleExercise({ answer: 'café', wordLength: 4 })}
+          onComplete={onComplete}
+        />
+      )
+      await waitFor(() => expect(screen.getByRole('button', { name: 'C' })).not.toBeDisabled())
+      await act(() => {
+        fireEvent.click(screen.getByRole('button', { name: 'C' }))
       })
-    )
+      await act(() => {
+        fireEvent.click(screen.getByRole('button', { name: 'A' }))
+      })
+      await act(() => {
+        fireEvent.click(screen.getByRole('button', { name: 'F' }))
+      })
+      await act(() => {
+        fireEvent.click(screen.getByRole('button', { name: 'E' }))
+      })
+      await act(() => {
+        fireEvent.click(screen.getByRole('button', { name: /entrée|enter/i }))
+      })
+      await waitFor(
+        () => {
+          expect(onComplete).toHaveBeenCalledWith(
+            expect.objectContaining({
+              score: expect.any(Number),
+            })
+          )
+        },
+        { timeout: 5000 }
+      )
+    } finally {
+      vi.useFakeTimers()
+    }
   })
 
   it('shows Backspace key on keyboard', () => {
     render(<WordleExercise exercise={wordleExercise()} />)
     const backspace = screen.getByRole('button', { name: '⌫' })
     expect(backspace).toBeInTheDocument()
+  })
+
+  it('accepts a common English guess present in the expanded word list', async () => {
+    vi.useRealTimers()
+    try {
+      const onComplete = vi.fn()
+      render(
+        <WordleExercise
+          exercise={wordleExercise({ answer: 'quiz', wordLength: 4, language: 'en' })}
+          onComplete={onComplete}
+        />
+      )
+      await waitFor(() => expect(screen.getByRole('button', { name: 'Q' })).not.toBeDisabled())
+      for (const letter of ['Q', 'U', 'I', 'Z']) {
+        await act(() => {
+          fireEvent.click(screen.getByRole('button', { name: letter }))
+        })
+      }
+      await act(() => {
+        fireEvent.click(screen.getByRole('button', { name: /entrée|enter/i }))
+      })
+      await waitFor(() => expect(onComplete).toHaveBeenCalled(), { timeout: 5000 })
+    } finally {
+      vi.useFakeTimers()
+    }
   })
 })

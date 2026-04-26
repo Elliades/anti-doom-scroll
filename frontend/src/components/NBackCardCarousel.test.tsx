@@ -2,13 +2,13 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { render, act } from '@testing-library/react'
 import { NBackCardCarousel } from './NBackCardCarousel'
 
-// Timing from NBackCardCarousel: INITIAL_DELAY_MS=500, FLIP_MS=320, FACE_DISPLAY_MS=1000, MOVE_MS=450
-// First card: onCardShow(0) at 500ms (start of first advance)
-// Second card: onCardShow(1) at 500 + 1770 = 2270ms (t3)
-// Third card: onCardShow(2) at 500 + 3220 + 1770 = 5490ms (t3 of second advance)
-const INITIAL_DELAY_MS = 500
-const T3_OFFSET_MS = 320 + 1000 + 450 // FLIP_MS + FACE_DISPLAY_MS + MOVE_MS = 1770
-const CYCLE_MS = 320 + 1000 + 450 * 2 + 1000 // time until next advance() = 3220
+// Timing from NBackCardCarousel: INITIAL_DELAY_MS=400, FLIP_MS=256, FACE_DISPLAY_MS=500, MOVE_MS=360
+// First card: onCardShow(0) at 400ms (start of first advance)
+// Second card: onCardShow(1) at 400 + 1116 = 1516ms (t3)
+// Third card: onCardShow(2) at 400 + 1976 + 1116 = 3492ms (t3 of second advance)
+const INITIAL_DELAY_MS = 400
+const T3_OFFSET_MS = 256 + 500 + 360 // FLIP_MS + FACE_DISPLAY_MS + MOVE_MS = 1116
+const CYCLE_MS = 256 + 500 + 360 * 2 + 500 // time until next advance() = 1976
 
 describe('NBackCardCarousel', () => {
   beforeEach(() => {

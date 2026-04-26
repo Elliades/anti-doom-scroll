@@ -19,7 +19,7 @@ logs/
 .env
 .env.*
 !.env.example
-!frontend/.env.production
+!.env.android.example
 
 # --- Java / Kotlin / Gradle / Spring Boot ---
 build/
@@ -38,6 +38,8 @@ replay_pid*
 !gradlew.bat
 
 # --- Frontend (Vite / React / TS) ---
+# Cached raw word lists for npm run build:wordle-words (see scripts/wordlist-sources/SOURCES.md)
+frontend/scripts/wordlist-sources/*.txt
 frontend/node_modules/
 **/node_modules/
 frontend/dist/

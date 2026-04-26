@@ -37,6 +37,18 @@ export function NBackGridExercise({ exercise, onComplete, showInstruction = true
   }, [phase, index])
 
   useEffect(() => {
+    if (phase !== 'playing') return
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === ' ' || e.key === 'm' || e.key === 'M') {
+        e.preventDefault()
+        handleMatchTap()
+      }
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [phase, handleMatchTap])
+
+  useEffect(() => {
     if (phase !== 'playing' || index >= params.sequence.length) return
     const t = setTimeout(() => setIndex((i) => i + 1), intervalMs)
     return () => clearTimeout(t)
@@ -80,7 +92,7 @@ export function NBackGridExercise({ exercise, onComplete, showInstruction = true
             {params.n} step(s) back.
           </p>
         )}
-        <button onClick={handleStart} className="nback-start-btn">
+        <button onClick={handleStart} className="nback-start-btn" autoFocus>
           Start
         </button>
       </div>

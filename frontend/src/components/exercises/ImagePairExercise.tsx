@@ -1,6 +1,7 @@
 import { useState, useMemo, useCallback, useEffect, useRef } from 'react'
 import type { ExerciseDto } from '../../types/api'
 import type { ExerciseResult } from '../../types/exercise'
+import { estimateImagePairComplexityScore } from '../../api/exerciseParamGenerators'
 
 export interface ImagePairExerciseProps {
   exercise: ExerciseDto
@@ -31,6 +32,14 @@ export function ImagePairExercise({ exercise, onComplete, showInstruction = true
   const [cards, setCards] = useState<CardItem[]>([])
   const [moves, setMoves] = useState(0)
   const completedRef = useRef(false)
+  const complexityScore = useMemo(() => {
+    const params = exercise.imagePairParams ?? {
+      pairCount: Math.max(1, deck.length / 2),
+      maxPairsPerBackground: 2,
+      colorCount: Math.max(1, new Set(deck.map((c) => c.backgroundColorHex ?? c.backgroundId)).size),
+    }
+    return Math.round(estimateImagePairComplexityScore(params))
+  }, [deck, exercise.imagePairParams])
 
   const initialCards: CardItem[] = useMemo(
     () =>
@@ -131,7 +140,7 @@ export function ImagePairExercise({ exercise, onComplete, showInstruction = true
             Find pairs: same <strong>background</strong> and same <strong>image</strong>.
           </p>
         )}
-        <button type="button" onClick={startGame} className="imagepair-start-btn">
+        <button type="button" onClick={startGame} className="imagepair-start-btn" autoFocus>
           Start
         </button>
       </div>
@@ -149,6 +158,9 @@ export function ImagePairExercise({ exercise, onComplete, showInstruction = true
 
   return (
     <div className="imagepair-playing">
+      <p className="exercise-complexity-watermark" aria-hidden="true">
+        C {complexityScore}/100
+      </p>
       <div
         className="imagepair-grid"
         style={{ gridTemplateColumns: `repeat(${gridCols(cards.length)}, 1fr)` }}

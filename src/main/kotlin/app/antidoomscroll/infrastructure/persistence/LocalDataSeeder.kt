@@ -95,7 +95,14 @@ class LocalDataSeeder(
                 streakBonusCap = 0.1
             )
         }
-        subjectRepository.saveAll(listOf(subjectDefault, subjectB1, subjectMemory, subjectWord, subjectWordleFr, subjectWordleEn, subjectEstimation))
+        val subjectDigitSpan = SubjectEntity().apply {
+            id = UUID.fromString("b0000000-0000-0000-0000-000000000014")
+            code = "DIGIT_SPAN"
+            name = "Digit Span"
+            description = "Working memory: memorize digits and recall them in order, ascending, descending, even/odd, or every-other."
+            scoringConfig = defaultScoring
+        }
+        subjectRepository.saveAll(listOf(subjectDefault, subjectB1, subjectMemory, subjectWord, subjectWordleFr, subjectWordleEn, subjectEstimation, subjectDigitSpan))
 
         val defaultId = subjectDefault.id!!
         val b1Id = subjectB1.id!!
@@ -104,6 +111,7 @@ class LocalDataSeeder(
         val wordleFrId = subjectWordleFr.id!!
         val wordleEnId = subjectWordleEn.id!!
         val estimationId = subjectEstimation.id!!
+        val digitSpanId = subjectDigitSpan.id!!
 
         val exercises = listOf(
             // Sum (FLASHCARD_QA ADD only): 4 exercises, one per difficulty
@@ -914,27 +922,6 @@ class LocalDataSeeder(
                 timeLimitSeconds = 300
                 exerciseParams = mapOf("language" to "en", "maxAttempts" to 6)
             },
-            // IMAGE_PAIR: pair matching by same background + same image
-            ExerciseEntity().apply {
-                id = UUID.fromString("f1000000-0000-0000-0000-000000000001")
-                subjectId = memoryId
-                type = "IMAGE_PAIR"
-                difficulty = "EASY"
-                prompt = "Find pairs with the same background and the same image."
-                expectedAnswers = emptyList()
-                timeLimitSeconds = 120
-                exerciseParams = mapOf("pairCount" to 4, "maxPairsPerBackground" to 2, "colorCount" to 1)
-            },
-            ExerciseEntity().apply {
-                id = UUID.fromString("f1000000-0000-0000-0000-000000000002")
-                subjectId = memoryId
-                type = "IMAGE_PAIR"
-                difficulty = "MEDIUM"
-                prompt = "Match cards: same background and same animal."
-                expectedAnswers = emptyList()
-                timeLimitSeconds = 180
-                exerciseParams = mapOf("pairCount" to 6, "maxPairsPerBackground" to 2, "colorCount" to 2)
-            },
             // ESTIMATION: approximate numerical answers — ULTRA_EASY (everyday knowledge)
             ExerciseEntity().apply {
                 id = UUID.fromString("a0000000-0000-0000-0000-000000000300")
@@ -1221,6 +1208,57 @@ class LocalDataSeeder(
                 expectedAnswers = listOf("120")
                 timeLimitSeconds = 20
                 exerciseParams = mapOf("correctAnswer" to 120.0, "unit" to "minutes", "toleranceFactor" to 1.4, "category" to "math", "hint" to "1 hour = 60 minutes")
+            },
+            // DIGIT_SPAN: progressive digit recall with challenge modes
+            ExerciseEntity().apply {
+                id = UUID.fromString("f2000000-0000-0000-0000-000000000001")
+                subjectId = digitSpanId
+                type = "DIGIT_SPAN"
+                difficulty = "ULTRA_EASY"
+                prompt = "Memorize the digits, then type them back."
+                expectedAnswers = emptyList()
+                timeLimitSeconds = 300
+                exerciseParams = mapOf("startLength" to 3, "displayTimeMs" to 3000, "maxLength" to 15)
+            },
+            ExerciseEntity().apply {
+                id = UUID.fromString("f2000000-0000-0000-0000-000000000002")
+                subjectId = digitSpanId
+                type = "DIGIT_SPAN"
+                difficulty = "EASY"
+                prompt = "Memorize the digits, then type them back."
+                expectedAnswers = emptyList()
+                timeLimitSeconds = 300
+                exerciseParams = mapOf("startLength" to 4, "displayTimeMs" to 3000, "maxLength" to 15)
+            },
+            ExerciseEntity().apply {
+                id = UUID.fromString("f2000000-0000-0000-0000-000000000003")
+                subjectId = digitSpanId
+                type = "DIGIT_SPAN"
+                difficulty = "MEDIUM"
+                prompt = "Memorize the digits, then type them back."
+                expectedAnswers = emptyList()
+                timeLimitSeconds = 300
+                exerciseParams = mapOf("startLength" to 5, "displayTimeMs" to 2500, "maxLength" to 15)
+            },
+            ExerciseEntity().apply {
+                id = UUID.fromString("f2000000-0000-0000-0000-000000000004")
+                subjectId = digitSpanId
+                type = "DIGIT_SPAN"
+                difficulty = "HARD"
+                prompt = "Memorize the digits, then type them back."
+                expectedAnswers = emptyList()
+                timeLimitSeconds = 300
+                exerciseParams = mapOf("startLength" to 6, "displayTimeMs" to 2000, "maxLength" to 15)
+            },
+            ExerciseEntity().apply {
+                id = UUID.fromString("f2000000-0000-0000-0000-000000000005")
+                subjectId = digitSpanId
+                type = "DIGIT_SPAN"
+                difficulty = "VERY_HARD"
+                prompt = "Memorize the digits, then type them back."
+                expectedAnswers = emptyList()
+                timeLimitSeconds = 300
+                exerciseParams = mapOf("startLength" to 7, "displayTimeMs" to 1500, "maxLength" to 15)
             }
         )
 

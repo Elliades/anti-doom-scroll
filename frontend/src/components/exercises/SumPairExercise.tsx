@@ -1,6 +1,7 @@
 import { useState, useCallback, useEffect, useRef, useMemo } from 'react'
 import type { ExerciseDto } from '../../types/api'
 import type { ExerciseResult } from '../../types/exercise'
+import { estimateSumPairComplexityScore } from '../../api/exerciseParamGenerators'
 
 export interface SumPairExerciseProps {
   exercise: ExerciseDto
@@ -54,6 +55,18 @@ export function SumPairExercise({ exercise, onComplete, showInstruction = true }
   const [cards, setCards] = useState<CardItem[]>([])
   const [moves, setMoves] = useState(0)
   const completedRef = useRef(false)
+  const complexityScore = useMemo(() => {
+    const values = initialCards.map((c) => c.value)
+    const minValue = values.length > 0 ? Math.min(...values) : 1
+    const maxValue = values.length > 0 ? Math.max(...values) : 99
+    const params = exercise.sumPairParams ?? {
+      staticNumbers: (groups ?? []).map((g) => g.static),
+      pairsPerRound: groups?.[0] ? Math.floor(groups[0].cards.length / 2) : 3,
+      minValue,
+      maxValue,
+    }
+    return Math.round(estimateSumPairComplexityScore(params))
+  }, [exercise.sumPairParams, groups, initialCards])
 
   const isMultiStatic = (groups ?? []).length > 1
 
@@ -161,7 +174,7 @@ export function SumPairExercise({ exercise, onComplete, showInstruction = true }
               ' Each static is colored — match only cards of the same color.'}
           </p>
         )}
-        <button type="button" onClick={startGame} className="sumpair-start-btn">
+        <button type="button" onClick={startGame} className="sumpair-start-btn" autoFocus>
           Start
         </button>
       </div>
@@ -179,6 +192,9 @@ export function SumPairExercise({ exercise, onComplete, showInstruction = true }
 
   return (
     <div className="sumpair-playing">
+      <p className="exercise-complexity-watermark" aria-hidden="true">
+        C {complexityScore}/100
+      </p>
       <div className="sumpair-statics">
         {(groups ?? []).map((g) => (
           <span

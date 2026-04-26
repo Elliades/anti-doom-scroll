@@ -1,6 +1,7 @@
-import { useState, useEffect, useCallback, useMemo } from 'react'
+import { useState, useEffect, useCallback, useMemo, useRef } from 'react'
 import type { ExerciseDto } from '../types/api'
 import type { ExerciseResult } from '../types/exercise'
+import { estimateNBackComplexityScore } from '../api/exerciseParamGenerators'
 import { isCardCode } from './NBackCardDisplay'
 import { NBackCardCarousel } from './NBackCardCarousel'
 
@@ -23,11 +24,18 @@ export function NBackExercise({ exercise, onComplete, showInstruction = true }: 
   }
 
   const n = params.n ?? 1
+  const suitCount = useMemo(() => {
+    const suits = new Set(params.sequence.map((item) => item.slice(-1)))
+    return Math.max(2, Math.min(4, suits.size))
+  }, [params.sequence])
+  const cognitiveLoad = Math.round(estimateNBackComplexityScore(n, 1, suitCount))
   const [phase, setPhase] = useState<'intro' | 'playing' | 'done'>('intro')
   const [index, setIndex] = useState(0)
   const [userMatches, setUserMatches] = useState<Set<number>>(new Set())
-  const [showMatchFeedback, setShowMatchFeedback] = useState<'correct' | 'wrong' | null>(null)
+  const [showMatchFeedback, setShowMatchFeedback] = useState<'correct' | 'wrong' | 'miss' | null>(null)
   const [showCanMatchNotice, setShowCanMatchNotice] = useState(false)
+  const matchFeedbackLockRef = useRef(false)
+  const prevIndexRef = useRef(-1)
 
   const intervalMs = 2500 // ultra-easy: slow speed
   const matchIndicesSet = new Set(params.matchIndices ?? [])
@@ -38,13 +46,32 @@ export function NBackExercise({ exercise, onComplete, showInstruction = true }: 
     [params.sequence]
   )
 
+  const FEEDBACK_MS = 750
+
   const handleMatchTap = useCallback(() => {
     if (phase !== 'playing' || matchDisabled) return
+    if (matchFeedbackLockRef.current) return
+    matchFeedbackLockRef.current = true
     const isCorrect = matchIndicesSet.has(index)
     setUserMatches((prev) => new Set(prev).add(index))
     setShowMatchFeedback(isCorrect ? 'correct' : 'wrong')
-    setTimeout(() => setShowMatchFeedback(null), 800)
+    setTimeout(() => {
+      setShowMatchFeedback(null)
+      matchFeedbackLockRef.current = false
+    }, FEEDBACK_MS)
   }, [phase, index, matchDisabled, matchIndicesSet])
+
+  useEffect(() => {
+    if (phase !== 'playing') return
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === ' ' || e.key === 'm' || e.key === 'M') {
+        e.preventDefault()
+        handleMatchTap()
+      }
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [phase, handleMatchTap])
 
   useEffect(() => {
     if (phase !== 'playing' || useCards || index >= params.sequence.length) return
@@ -57,6 +84,22 @@ export function NBackExercise({ exercise, onComplete, showInstruction = true }: 
       setPhase('done')
     }
   }, [phase, index, params.sequence.length])
+
+  // Detect miss: previous index was a match target the user never tapped
+  useEffect(() => {
+    if (phase !== 'playing') return
+    const prev = prevIndexRef.current
+    prevIndexRef.current = index
+    if (prev < 0 || prev === index) return
+    if (matchIndicesSet.has(prev) && !userMatches.has(prev) && !matchFeedbackLockRef.current) {
+      matchFeedbackLockRef.current = true
+      setShowMatchFeedback('miss')
+      setTimeout(() => {
+        setShowMatchFeedback(null)
+        matchFeedbackLockRef.current = false
+      }, FEEDBACK_MS)
+    }
+  }, [phase, index])
 
   // When first card with a match target appears (index === n), show "Match is now active!"
   useEffect(() => {
@@ -101,6 +144,7 @@ export function NBackExercise({ exercise, onComplete, showInstruction = true }: 
         <div className="nback-n-badge" aria-label={`${n}-Back`}>
           {n}-Back
         </div>
+        <p className="cognitive-load-badge">Charge Cognitive : {cognitiveLoad}/100</p>
         <p className="prompt">{exercise.prompt}</p>
         {showInstruction && (
           <p className="nback-instruction">
@@ -109,7 +153,7 @@ export function NBackExercise({ exercise, onComplete, showInstruction = true }: 
               : 'Items will appear one by one. Tap Match when the current item matches the one from ' + params.n + ' step(s) back.'}
           </p>
         )}
-        <button onClick={handleStart} className="nback-start-btn">
+        <button onClick={handleStart} className="nback-start-btn" autoFocus>
           Start
         </button>
       </div>
@@ -124,16 +168,38 @@ export function NBackExercise({ exercise, onComplete, showInstruction = true }: 
         <div className="nback-n-badge" aria-label={`${n}-Back`}>
           {n}-Back
         </div>
-        <div className="nback-stimulus">
+        <p className="cognitive-load-badge">Charge Cognitive : {cognitiveLoad}/100</p>
+        <div
+          className={[
+            'nback-stimulus',
+            !useCards && showMatchFeedback
+              ? `nback-stimulus--feedback nback-stimulus--feedback-${showMatchFeedback === 'miss' ? 'wrong' : showMatchFeedback}`
+              : '',
+          ]
+            .filter(Boolean)
+            .join(' ')}
+        >
           {useCards ? (
             <NBackCardCarousel
               n={params.n}
               sequence={params.sequence}
               onCardShow={setIndex}
               onComplete={handleComplete}
+              matchFeedback={showMatchFeedback}
             />
           ) : (
-            <span className="nback-letter">{currentItem}</span>
+            <>
+              <span className="nback-letter">{currentItem}</span>
+              {showMatchFeedback && (
+                <span
+                  key={`lfb-${Date.now()}`}
+                  className={`nback-card-popup nback-card-popup--${showMatchFeedback}`}
+                  style={{ bottom: '80%' }}
+                >
+                  {showMatchFeedback === 'correct' ? 'Success!' : showMatchFeedback === 'miss' ? 'Miss!' : 'Fail!'}
+                </span>
+              )}
+            </>
           )}
         </div>
         {matchDisabled && (
@@ -144,20 +210,10 @@ export function NBackExercise({ exercise, onComplete, showInstruction = true }: 
             Match is now active!
           </p>
         )}
-        {showMatchFeedback && (
-          <p
-            className={`nback-feedback nback-feedback--${showMatchFeedback}`}
-            role="status"
-          >
-            {showMatchFeedback === 'correct' ? 'Correct!' : 'Incorrect'}
-          </p>
-        )}
         <button
           onClick={handleMatchTap}
-          className={`nback-match-btn ${
-            showMatchFeedback === 'correct' ? 'nback-match-correct' : ''
-          } ${showMatchFeedback === 'wrong' ? 'nback-match-wrong' : ''}`}
-          disabled={matchDisabled || showMatchFeedback !== null}
+          className="nback-match-btn"
+          disabled={matchDisabled}
         >
           Match
         </button>
@@ -174,6 +230,7 @@ export function NBackExercise({ exercise, onComplete, showInstruction = true }: 
   // phase === 'done'
   return (
     <div className="nback-done">
+      <p className="cognitive-load-badge">Charge Cognitive : {cognitiveLoad}/100</p>
       <p className="nback-result">{resultMessage}</p>
       <p className="nback-score">
         Score: {Math.round(score * 100)}% · Hits: {intersectionSize(userMatches, matchIndicesSet)} /{' '}

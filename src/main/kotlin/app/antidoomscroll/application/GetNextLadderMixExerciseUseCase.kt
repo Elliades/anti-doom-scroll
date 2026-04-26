@@ -39,13 +39,25 @@ class GetNextLadderMixExerciseUseCase(
         val thresholds = config.thresholds
         val n = state.ladderCodes.size
 
-        // Store up to 5 scores per ladder; for evaluation we may require fewer when many ladders
-        var newState = state.withScoreAdded(lastCompletedLadderCode, lastScore, thresholds.answersNeededToAdvance)
+        // Store up to max threshold scores per ladder; for evaluation we use per-level thresholds
+        val maxThreshold = state.ladderCodes.maxOfOrNull { code ->
+            ladderPort.getByCode(code)?.thresholds?.answersNeededToAdvance ?: 5
+        } ?: 5
+        var newState = state.withScoreAdded(lastCompletedLadderCode, lastScore, maxThreshold)
         var levelChanged: GetNextLadderExerciseUseCase.LevelChange? = null
 
-        val requiredToEvaluate = if (n > 2) requiredScoresPerLadderWhenMany else thresholds.answersNeededToAdvance
+        // Check each ladder individually based on its own per-level threshold
+        // For 3+ ladders, cap at requiredScoresPerLadderWhenMany (3) to evaluate sooner
         val allHaveEnough = newState.ladderCodes.all { code ->
-            (newState.perLadderStates[code]?.recentScores?.size ?: 0) >= requiredToEvaluate
+            val ladderConfig = ladderPort.getByCode(code) ?: return@all false
+            val perLevelThreshold = ladderConfig.getAnswersNeededToAdvance(state.currentLevelIndex)
+            // For 3+ ladders, cap at 3 to allow earlier evaluation
+            val requiredForThisLadder = if (n > 2) {
+                minOf(perLevelThreshold, requiredScoresPerLadderWhenMany)
+            } else {
+                perLevelThreshold
+            }
+            (newState.perLadderStates[code]?.recentScores?.size ?: 0) >= requiredForThisLadder
         }
         if (allHaveEnough) {
             val maxLevel = newState.ladderCodes.minOfOrNull { code ->
@@ -90,13 +102,22 @@ class GetNextLadderMixExerciseUseCase(
             (nextConfig.levels.maxOfOrNull { it.levelIndex } ?: 0)
         )
         val level = nextConfig.levelAt(levelIndex) ?: return null
-        val exercise = ladderExercisePicker.pick(nextConfig, level)
+        val baseTarget = ladderExercisePicker.targetScoreForLevel(nextConfig, level)
+        val ladderRecent = newState.perLadderStates[nextLadderCode]?.recentScores ?: emptyList()
+        val targetScore = ladderExercisePicker.blendTargetWithRecent(baseTarget, ladderRecent)
+        val exercise = ladderExercisePicker.pick(
+            nextConfig,
+            level,
+            newState.recentExerciseIds.toSet(),
+            targetScore
+        )
         val subjectCode = exercise?.let { subjectPort.findById(it.subjectId)?.code }
+        val stateWithRecent = exercise?.let { newState.withRecentExercisePlayed(it.id) } ?: newState
 
         return LadderMixNextResult(
             exercise = exercise,
             subjectCode = subjectCode,
-            ladderMixState = newState,
+            ladderMixState = stateWithRecent,
             levelChanged = levelChanged
         )
     }

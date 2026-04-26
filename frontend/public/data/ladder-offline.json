@@ -1,0 +1,4256 @@
+{
+  "ladders": [
+    {
+      "code": "default",
+      "name": "Default Ladder",
+      "levelCount": 30
+    },
+    {
+      "code": "sum",
+      "name": "Math Sum Ladder",
+      "levelCount": 26
+    },
+    {
+      "code": "anagram",
+      "name": "Anagram Ladder",
+      "levelCount": 30
+    },
+    {
+      "code": "pair",
+      "name": "Memory Pair Ladder",
+      "levelCount": 30
+    },
+    {
+      "code": "nback",
+      "name": "N-Back Ladder",
+      "levelCount": 30
+    },
+    {
+      "code": "estimation",
+      "name": "Estimation Ladder",
+      "levelCount": 30
+    },
+    {
+      "code": "word",
+      "name": "Word Ladder",
+      "levelCount": 30
+    },
+    {
+      "code": "memory",
+      "name": "Memory Ladder",
+      "levelCount": 30
+    },
+    {
+      "code": "working_memory",
+      "name": "Working Memory Ladder",
+      "levelCount": 30
+    }
+  ],
+  "mixes": [
+    {
+      "code": "mix",
+      "name": "Ladder Mix",
+      "ladderCodes": [
+        "sum",
+        "word",
+        "memory",
+        "working_memory",
+        "estimation"
+      ]
+    }
+  ],
+  "configs": {
+    "default": {
+      "name": "Default Ladder",
+      "thresholds": {
+        "minScoreToStay": 0.4,
+        "minScoreToAdvance": 0.75,
+        "answersNeededToAdvance": 5
+      },
+      "levels": [
+        {
+          "levelIndex": 0,
+          "allowedDifficulties": [
+            "ULTRA_EASY"
+          ],
+          "subjectCodes": [
+            "default"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": null
+        },
+        {
+          "levelIndex": 1,
+          "allowedDifficulties": [
+            "ULTRA_EASY",
+            "EASY"
+          ],
+          "subjectCodes": [
+            "default"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": null
+        },
+        {
+          "levelIndex": 2,
+          "allowedDifficulties": [
+            "EASY"
+          ],
+          "subjectCodes": [
+            "default"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": null
+        },
+        {
+          "levelIndex": 3,
+          "allowedDifficulties": [
+            "EASY",
+            "MEDIUM"
+          ],
+          "subjectCodes": [
+            "default"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": null
+        },
+        {
+          "levelIndex": 4,
+          "allowedDifficulties": [
+            "MEDIUM"
+          ],
+          "subjectCodes": [
+            "default"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": null
+        },
+        {
+          "levelIndex": 5,
+          "allowedDifficulties": [
+            "ULTRA_EASY"
+          ],
+          "subjectCodes": [
+            "WORD"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": null
+        },
+        {
+          "levelIndex": 6,
+          "allowedDifficulties": [
+            "ULTRA_EASY",
+            "EASY"
+          ],
+          "subjectCodes": [
+            "WORD"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": null
+        },
+        {
+          "levelIndex": 7,
+          "allowedDifficulties": [
+            "EASY"
+          ],
+          "subjectCodes": [
+            "WORD"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": null
+        },
+        {
+          "levelIndex": 8,
+          "allowedDifficulties": [
+            "EASY",
+            "MEDIUM"
+          ],
+          "subjectCodes": [
+            "WORD"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": null
+        },
+        {
+          "levelIndex": 9,
+          "allowedDifficulties": [
+            "MEDIUM"
+          ],
+          "subjectCodes": [
+            "WORD"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": null
+        },
+        {
+          "levelIndex": 10,
+          "allowedDifficulties": [
+            "ULTRA_EASY"
+          ],
+          "subjectCodes": [
+            "MEMORY"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": [
+            "MEMORY_CARD_PAIRS"
+          ]
+        },
+        {
+          "levelIndex": 11,
+          "allowedDifficulties": [
+            "ULTRA_EASY",
+            "EASY"
+          ],
+          "subjectCodes": [
+            "MEMORY"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": [
+            "MEMORY_CARD_PAIRS"
+          ]
+        },
+        {
+          "levelIndex": 12,
+          "allowedDifficulties": [
+            "EASY"
+          ],
+          "subjectCodes": [
+            "MEMORY"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": [
+            "MEMORY_CARD_PAIRS",
+            "SUM_PAIR"
+          ]
+        },
+        {
+          "levelIndex": 13,
+          "allowedDifficulties": [
+            "EASY",
+            "MEDIUM"
+          ],
+          "subjectCodes": [
+            "MEMORY"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": null
+        },
+        {
+          "levelIndex": 14,
+          "allowedDifficulties": [
+            "MEDIUM"
+          ],
+          "subjectCodes": [
+            "MEMORY"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": null
+        },
+        {
+          "levelIndex": 15,
+          "allowedDifficulties": [
+            "ULTRA_EASY"
+          ],
+          "subjectCodes": [
+            "ESTIMATION"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": null
+        },
+        {
+          "levelIndex": 16,
+          "allowedDifficulties": [
+            "ULTRA_EASY",
+            "EASY"
+          ],
+          "subjectCodes": [
+            "ESTIMATION"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": null
+        },
+        {
+          "levelIndex": 17,
+          "allowedDifficulties": [
+            "EASY"
+          ],
+          "subjectCodes": [
+            "ESTIMATION"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": null
+        },
+        {
+          "levelIndex": 18,
+          "allowedDifficulties": [
+            "EASY",
+            "MEDIUM"
+          ],
+          "subjectCodes": [
+            "ESTIMATION"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": null
+        },
+        {
+          "levelIndex": 19,
+          "allowedDifficulties": [
+            "MEDIUM"
+          ],
+          "subjectCodes": [
+            "ESTIMATION"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": null
+        },
+        {
+          "levelIndex": 20,
+          "allowedDifficulties": [
+            "ULTRA_EASY"
+          ],
+          "subjectCodes": [
+            "B1"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": {
+            "n": [
+              "1"
+            ]
+          },
+          "allowedTypes": [
+            "N_BACK"
+          ]
+        },
+        {
+          "levelIndex": 21,
+          "allowedDifficulties": [
+            "ULTRA_EASY",
+            "EASY"
+          ],
+          "subjectCodes": [
+            "B1"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": [
+            "N_BACK"
+          ]
+        },
+        {
+          "levelIndex": 22,
+          "allowedDifficulties": [
+            "EASY"
+          ],
+          "subjectCodes": [
+            "B1"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": [
+            "N_BACK",
+            "N_BACK_GRID"
+          ]
+        },
+        {
+          "levelIndex": 23,
+          "allowedDifficulties": [
+            "EASY",
+            "MEDIUM"
+          ],
+          "subjectCodes": [
+            "B1"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": [
+            "N_BACK",
+            "N_BACK_GRID"
+          ]
+        },
+        {
+          "levelIndex": 24,
+          "allowedDifficulties": [
+            "MEDIUM"
+          ],
+          "subjectCodes": [
+            "B1"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": null
+        },
+        {
+          "levelIndex": 25,
+          "allowedDifficulties": [
+            "EASY",
+            "MEDIUM"
+          ],
+          "subjectCodes": [
+            "default",
+            "WORD",
+            "MEMORY",
+            "ESTIMATION"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": null
+        },
+        {
+          "levelIndex": 26,
+          "allowedDifficulties": [
+            "MEDIUM"
+          ],
+          "subjectCodes": [
+            "default",
+            "WORD",
+            "MEMORY",
+            "ESTIMATION",
+            "B1"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": null
+        },
+        {
+          "levelIndex": 27,
+          "allowedDifficulties": [
+            "MEDIUM",
+            "HARD"
+          ],
+          "subjectCodes": [
+            "default",
+            "WORD",
+            "MEMORY",
+            "ESTIMATION",
+            "B1"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": null
+        },
+        {
+          "levelIndex": 28,
+          "allowedDifficulties": [
+            "HARD"
+          ],
+          "subjectCodes": [
+            "default",
+            "WORD",
+            "MEMORY",
+            "ESTIMATION",
+            "B1"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": null
+        },
+        {
+          "levelIndex": 29,
+          "allowedDifficulties": [
+            "HARD",
+            "VERY_HARD"
+          ],
+          "subjectCodes": [
+            "default",
+            "WORD",
+            "MEMORY",
+            "ESTIMATION",
+            "B1"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": null
+        }
+      ]
+    },
+    "sum": {
+      "name": "Math Sum Ladder",
+      "thresholds": {
+        "minScoreToStay": 0.4,
+        "minScoreToAdvance": 0.75,
+        "answersNeededToAdvance": 5
+      },
+      "levels": [
+        {
+          "levelIndex": 0,
+          "allowedDifficulties": [
+            "ULTRA_EASY"
+          ],
+          "subjectCodes": [
+            "default"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": {
+            "operation": [
+              "ADD"
+            ]
+          },
+          "allowedTypes": null
+        },
+        {
+          "levelIndex": 1,
+          "allowedDifficulties": [
+            "ULTRA_EASY",
+            "EASY"
+          ],
+          "subjectCodes": [
+            "default"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": {
+            "operation": [
+              "ADD"
+            ]
+          },
+          "allowedTypes": null
+        },
+        {
+          "levelIndex": 2,
+          "allowedDifficulties": [
+            "ULTRA_EASY",
+            "EASY"
+          ],
+          "subjectCodes": [
+            "default"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": {
+            "operation": [
+              "ADD"
+            ]
+          },
+          "allowedTypes": null
+        },
+        {
+          "levelIndex": 3,
+          "allowedDifficulties": [
+            "EASY"
+          ],
+          "subjectCodes": [
+            "default"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": {
+            "operation": [
+              "ADD"
+            ]
+          },
+          "allowedTypes": null
+        },
+        {
+          "levelIndex": 4,
+          "allowedDifficulties": [
+            "EASY",
+            "MEDIUM"
+          ],
+          "subjectCodes": [
+            "default"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": {
+            "operation": [
+              "ADD"
+            ]
+          },
+          "allowedTypes": null
+        },
+        {
+          "levelIndex": 5,
+          "allowedDifficulties": [
+            "EASY",
+            "MEDIUM"
+          ],
+          "subjectCodes": [
+            "default"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": {
+            "operation": [
+              "ADD"
+            ]
+          },
+          "allowedTypes": null
+        },
+        {
+          "levelIndex": 6,
+          "allowedDifficulties": [
+            "ULTRA_EASY"
+          ],
+          "subjectCodes": [
+            "default"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": {
+            "operation": [
+              "ADD",
+              "SUBTRACT"
+            ]
+          },
+          "allowedTypes": null
+        },
+        {
+          "levelIndex": 7,
+          "allowedDifficulties": [
+            "ULTRA_EASY",
+            "EASY"
+          ],
+          "subjectCodes": [
+            "default"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": {
+            "operation": [
+              "ADD",
+              "SUBTRACT"
+            ]
+          },
+          "allowedTypes": null
+        },
+        {
+          "levelIndex": 8,
+          "allowedDifficulties": [
+            "ULTRA_EASY",
+            "EASY"
+          ],
+          "subjectCodes": [
+            "default"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": {
+            "operation": [
+              "ADD",
+              "SUBTRACT"
+            ]
+          },
+          "allowedTypes": null
+        },
+        {
+          "levelIndex": 9,
+          "allowedDifficulties": [
+            "EASY"
+          ],
+          "subjectCodes": [
+            "default"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": {
+            "operation": [
+              "ADD",
+              "SUBTRACT"
+            ]
+          },
+          "allowedTypes": null
+        },
+        {
+          "levelIndex": 10,
+          "allowedDifficulties": [
+            "EASY",
+            "MEDIUM"
+          ],
+          "subjectCodes": [
+            "default"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": {
+            "operation": [
+              "ADD",
+              "SUBTRACT"
+            ]
+          },
+          "allowedTypes": null
+        },
+        {
+          "levelIndex": 11,
+          "allowedDifficulties": [
+            "EASY",
+            "MEDIUM"
+          ],
+          "subjectCodes": [
+            "default"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": {
+            "operation": [
+              "ADD",
+              "SUBTRACT"
+            ]
+          },
+          "allowedTypes": null
+        },
+        {
+          "levelIndex": 12,
+          "allowedDifficulties": [
+            "MEDIUM"
+          ],
+          "subjectCodes": [
+            "default"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": {
+            "operation": [
+              "ADD",
+              "SUBTRACT"
+            ]
+          },
+          "allowedTypes": null
+        },
+        {
+          "levelIndex": 13,
+          "allowedDifficulties": [
+            "MEDIUM"
+          ],
+          "subjectCodes": [
+            "default"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": {
+            "operation": [
+              "ADD",
+              "SUBTRACT"
+            ]
+          },
+          "allowedTypes": null
+        },
+        {
+          "levelIndex": 14,
+          "allowedDifficulties": [
+            "MEDIUM",
+            "HARD"
+          ],
+          "subjectCodes": [
+            "default"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": {
+            "operation": [
+              "ADD",
+              "SUBTRACT"
+            ]
+          },
+          "allowedTypes": null
+        },
+        {
+          "levelIndex": 15,
+          "allowedDifficulties": [
+            "MEDIUM",
+            "HARD"
+          ],
+          "subjectCodes": [
+            "default"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": {
+            "operation": [
+              "ADD",
+              "SUBTRACT"
+            ]
+          },
+          "allowedTypes": null
+        },
+        {
+          "levelIndex": 16,
+          "allowedDifficulties": [
+            "ULTRA_EASY"
+          ],
+          "subjectCodes": [
+            "default"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": {
+            "operation": [
+              "ADD",
+              "SUBTRACT",
+              "MULTIPLY",
+              "DIVIDE"
+            ]
+          },
+          "allowedTypes": null
+        },
+        {
+          "levelIndex": 17,
+          "allowedDifficulties": [
+            "ULTRA_EASY",
+            "EASY"
+          ],
+          "subjectCodes": [
+            "default"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": {
+            "operation": [
+              "ADD",
+              "SUBTRACT",
+              "MULTIPLY",
+              "DIVIDE"
+            ]
+          },
+          "allowedTypes": null
+        },
+        {
+          "levelIndex": 18,
+          "allowedDifficulties": [
+            "EASY"
+          ],
+          "subjectCodes": [
+            "default"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": {
+            "operation": [
+              "ADD",
+              "SUBTRACT",
+              "MULTIPLY",
+              "DIVIDE"
+            ]
+          },
+          "allowedTypes": null
+        },
+        {
+          "levelIndex": 19,
+          "allowedDifficulties": [
+            "EASY",
+            "MEDIUM"
+          ],
+          "subjectCodes": [
+            "default"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": {
+            "operation": [
+              "ADD",
+              "SUBTRACT",
+              "MULTIPLY",
+              "DIVIDE"
+            ]
+          },
+          "allowedTypes": null
+        },
+        {
+          "levelIndex": 20,
+          "allowedDifficulties": [
+            "EASY",
+            "MEDIUM"
+          ],
+          "subjectCodes": [
+            "default"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": {
+            "operation": [
+              "ADD",
+              "SUBTRACT",
+              "MULTIPLY",
+              "DIVIDE"
+            ]
+          },
+          "allowedTypes": null
+        },
+        {
+          "levelIndex": 21,
+          "allowedDifficulties": [
+            "EASY"
+          ],
+          "subjectCodes": [
+            "default"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": {
+            "operation": [
+              "MULTIPLY",
+              "DIVIDE"
+            ]
+          },
+          "allowedTypes": null
+        },
+        {
+          "levelIndex": 22,
+          "allowedDifficulties": [
+            "EASY",
+            "MEDIUM"
+          ],
+          "subjectCodes": [
+            "default"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": {
+            "operation": [
+              "MULTIPLY",
+              "DIVIDE"
+            ]
+          },
+          "allowedTypes": null
+        },
+        {
+          "levelIndex": 23,
+          "allowedDifficulties": [
+            "MEDIUM"
+          ],
+          "subjectCodes": [
+            "default"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": {
+            "operation": [
+              "MULTIPLY",
+              "DIVIDE"
+            ]
+          },
+          "allowedTypes": null
+        },
+        {
+          "levelIndex": 24,
+          "allowedDifficulties": [
+            "MEDIUM",
+            "HARD"
+          ],
+          "subjectCodes": [
+            "default"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": {
+            "operation": [
+              "MULTIPLY",
+              "DIVIDE"
+            ]
+          },
+          "allowedTypes": null
+        },
+        {
+          "levelIndex": 25,
+          "allowedDifficulties": [
+            "HARD"
+          ],
+          "subjectCodes": [
+            "default"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": {
+            "operation": [
+              "MULTIPLY",
+              "DIVIDE"
+            ]
+          },
+          "allowedTypes": null
+        }
+      ]
+    },
+    "anagram": {
+      "name": "Anagram Ladder",
+      "thresholds": {
+        "minScoreToStay": 0.4,
+        "minScoreToAdvance": 0.75,
+        "answersNeededToAdvance": 5
+      },
+      "levels": [
+        {
+          "levelIndex": 0,
+          "allowedDifficulties": [
+            "ULTRA_EASY"
+          ],
+          "subjectCodes": [
+            "WORD"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": null
+        },
+        {
+          "levelIndex": 1,
+          "allowedDifficulties": [
+            "ULTRA_EASY"
+          ],
+          "subjectCodes": [
+            "WORD"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": null
+        },
+        {
+          "levelIndex": 2,
+          "allowedDifficulties": [
+            "ULTRA_EASY"
+          ],
+          "subjectCodes": [
+            "WORD"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": null
+        },
+        {
+          "levelIndex": 3,
+          "allowedDifficulties": [
+            "ULTRA_EASY"
+          ],
+          "subjectCodes": [
+            "WORD"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": null
+        },
+        {
+          "levelIndex": 4,
+          "allowedDifficulties": [
+            "ULTRA_EASY",
+            "EASY"
+          ],
+          "subjectCodes": [
+            "WORD"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": null
+        },
+        {
+          "levelIndex": 5,
+          "allowedDifficulties": [
+            "ULTRA_EASY",
+            "EASY"
+          ],
+          "subjectCodes": [
+            "WORD"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": null
+        },
+        {
+          "levelIndex": 6,
+          "allowedDifficulties": [
+            "EASY"
+          ],
+          "subjectCodes": [
+            "WORD"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": null
+        },
+        {
+          "levelIndex": 7,
+          "allowedDifficulties": [
+            "EASY"
+          ],
+          "subjectCodes": [
+            "WORD"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": null
+        },
+        {
+          "levelIndex": 8,
+          "allowedDifficulties": [
+            "EASY"
+          ],
+          "subjectCodes": [
+            "WORD"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": null
+        },
+        {
+          "levelIndex": 9,
+          "allowedDifficulties": [
+            "EASY"
+          ],
+          "subjectCodes": [
+            "WORD"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": null
+        },
+        {
+          "levelIndex": 10,
+          "allowedDifficulties": [
+            "EASY"
+          ],
+          "subjectCodes": [
+            "WORD"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": null
+        },
+        {
+          "levelIndex": 11,
+          "allowedDifficulties": [
+            "EASY",
+            "MEDIUM"
+          ],
+          "subjectCodes": [
+            "WORD"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": null
+        },
+        {
+          "levelIndex": 12,
+          "allowedDifficulties": [
+            "EASY",
+            "MEDIUM"
+          ],
+          "subjectCodes": [
+            "WORD"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": null
+        },
+        {
+          "levelIndex": 13,
+          "allowedDifficulties": [
+            "MEDIUM"
+          ],
+          "subjectCodes": [
+            "WORD"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": null
+        },
+        {
+          "levelIndex": 14,
+          "allowedDifficulties": [
+            "MEDIUM"
+          ],
+          "subjectCodes": [
+            "WORD"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": null
+        },
+        {
+          "levelIndex": 15,
+          "allowedDifficulties": [
+            "MEDIUM"
+          ],
+          "subjectCodes": [
+            "WORD"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": null
+        },
+        {
+          "levelIndex": 16,
+          "allowedDifficulties": [
+            "MEDIUM"
+          ],
+          "subjectCodes": [
+            "WORD"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": null
+        },
+        {
+          "levelIndex": 17,
+          "allowedDifficulties": [
+            "MEDIUM"
+          ],
+          "subjectCodes": [
+            "WORD"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": null
+        },
+        {
+          "levelIndex": 18,
+          "allowedDifficulties": [
+            "MEDIUM",
+            "HARD"
+          ],
+          "subjectCodes": [
+            "WORD"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": null
+        },
+        {
+          "levelIndex": 19,
+          "allowedDifficulties": [
+            "MEDIUM",
+            "HARD"
+          ],
+          "subjectCodes": [
+            "WORD"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": null
+        },
+        {
+          "levelIndex": 20,
+          "allowedDifficulties": [
+            "HARD"
+          ],
+          "subjectCodes": [
+            "WORD"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": null
+        },
+        {
+          "levelIndex": 21,
+          "allowedDifficulties": [
+            "HARD"
+          ],
+          "subjectCodes": [
+            "WORD"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": null
+        },
+        {
+          "levelIndex": 22,
+          "allowedDifficulties": [
+            "HARD"
+          ],
+          "subjectCodes": [
+            "WORD"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": null
+        },
+        {
+          "levelIndex": 23,
+          "allowedDifficulties": [
+            "HARD"
+          ],
+          "subjectCodes": [
+            "WORD"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": null
+        },
+        {
+          "levelIndex": 24,
+          "allowedDifficulties": [
+            "HARD"
+          ],
+          "subjectCodes": [
+            "WORD"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": null
+        },
+        {
+          "levelIndex": 25,
+          "allowedDifficulties": [
+            "HARD",
+            "VERY_HARD"
+          ],
+          "subjectCodes": [
+            "WORD"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": null
+        },
+        {
+          "levelIndex": 26,
+          "allowedDifficulties": [
+            "HARD",
+            "VERY_HARD"
+          ],
+          "subjectCodes": [
+            "WORD"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": null
+        },
+        {
+          "levelIndex": 27,
+          "allowedDifficulties": [
+            "VERY_HARD"
+          ],
+          "subjectCodes": [
+            "WORD"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": null
+        },
+        {
+          "levelIndex": 28,
+          "allowedDifficulties": [
+            "VERY_HARD"
+          ],
+          "subjectCodes": [
+            "WORD"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": null
+        },
+        {
+          "levelIndex": 29,
+          "allowedDifficulties": [
+            "VERY_HARD"
+          ],
+          "subjectCodes": [
+            "WORD"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": null
+        }
+      ]
+    },
+    "pair": {
+      "name": "Memory Pair Ladder",
+      "thresholds": {
+        "minScoreToStay": 0.4,
+        "minScoreToAdvance": 0.75,
+        "answersNeededToAdvance": 5
+      },
+      "levels": [
+        {
+          "levelIndex": 0,
+          "allowedDifficulties": [
+            "ULTRA_EASY"
+          ],
+          "subjectCodes": [
+            "MEMORY"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": [
+            "MEMORY_CARD_PAIRS"
+          ]
+        },
+        {
+          "levelIndex": 1,
+          "allowedDifficulties": [
+            "ULTRA_EASY"
+          ],
+          "subjectCodes": [
+            "MEMORY"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": [
+            "MEMORY_CARD_PAIRS"
+          ]
+        },
+        {
+          "levelIndex": 2,
+          "allowedDifficulties": [
+            "ULTRA_EASY"
+          ],
+          "subjectCodes": [
+            "MEMORY"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": [
+            "MEMORY_CARD_PAIRS"
+          ]
+        },
+        {
+          "levelIndex": 3,
+          "allowedDifficulties": [
+            "ULTRA_EASY",
+            "EASY"
+          ],
+          "subjectCodes": [
+            "MEMORY"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": [
+            "MEMORY_CARD_PAIRS"
+          ]
+        },
+        {
+          "levelIndex": 4,
+          "allowedDifficulties": [
+            "ULTRA_EASY",
+            "EASY"
+          ],
+          "subjectCodes": [
+            "MEMORY"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": [
+            "MEMORY_CARD_PAIRS"
+          ]
+        },
+        {
+          "levelIndex": 5,
+          "allowedDifficulties": [
+            "EASY"
+          ],
+          "subjectCodes": [
+            "MEMORY"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": [
+            "MEMORY_CARD_PAIRS"
+          ]
+        },
+        {
+          "levelIndex": 6,
+          "allowedDifficulties": [
+            "EASY"
+          ],
+          "subjectCodes": [
+            "MEMORY"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": [
+            "MEMORY_CARD_PAIRS"
+          ]
+        },
+        {
+          "levelIndex": 7,
+          "allowedDifficulties": [
+            "EASY"
+          ],
+          "subjectCodes": [
+            "MEMORY"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": [
+            "MEMORY_CARD_PAIRS"
+          ]
+        },
+        {
+          "levelIndex": 8,
+          "allowedDifficulties": [
+            "EASY",
+            "MEDIUM"
+          ],
+          "subjectCodes": [
+            "MEMORY"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": [
+            "MEMORY_CARD_PAIRS"
+          ]
+        },
+        {
+          "levelIndex": 9,
+          "allowedDifficulties": [
+            "EASY",
+            "MEDIUM"
+          ],
+          "subjectCodes": [
+            "MEMORY"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": [
+            "MEMORY_CARD_PAIRS"
+          ]
+        },
+        {
+          "levelIndex": 10,
+          "allowedDifficulties": [
+            "MEDIUM"
+          ],
+          "subjectCodes": [
+            "MEMORY"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": [
+            "MEMORY_CARD_PAIRS"
+          ]
+        },
+        {
+          "levelIndex": 11,
+          "allowedDifficulties": [
+            "MEDIUM"
+          ],
+          "subjectCodes": [
+            "MEMORY"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": [
+            "MEMORY_CARD_PAIRS"
+          ]
+        },
+        {
+          "levelIndex": 12,
+          "allowedDifficulties": [
+            "MEDIUM"
+          ],
+          "subjectCodes": [
+            "MEMORY"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": [
+            "MEMORY_CARD_PAIRS"
+          ]
+        },
+        {
+          "levelIndex": 13,
+          "allowedDifficulties": [
+            "MEDIUM"
+          ],
+          "subjectCodes": [
+            "MEMORY"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": [
+            "MEMORY_CARD_PAIRS"
+          ]
+        },
+        {
+          "levelIndex": 14,
+          "allowedDifficulties": [
+            "MEDIUM"
+          ],
+          "subjectCodes": [
+            "MEMORY"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": [
+            "MEMORY_CARD_PAIRS"
+          ]
+        },
+        {
+          "levelIndex": 15,
+          "allowedDifficulties": [
+            "ULTRA_EASY"
+          ],
+          "subjectCodes": [
+            "MEMORY"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": [
+            "SUM_PAIR"
+          ]
+        },
+        {
+          "levelIndex": 16,
+          "allowedDifficulties": [
+            "ULTRA_EASY"
+          ],
+          "subjectCodes": [
+            "MEMORY"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": [
+            "SUM_PAIR"
+          ]
+        },
+        {
+          "levelIndex": 17,
+          "allowedDifficulties": [
+            "ULTRA_EASY",
+            "EASY"
+          ],
+          "subjectCodes": [
+            "MEMORY"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": [
+            "SUM_PAIR"
+          ]
+        },
+        {
+          "levelIndex": 18,
+          "allowedDifficulties": [
+            "EASY"
+          ],
+          "subjectCodes": [
+            "MEMORY"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": [
+            "SUM_PAIR"
+          ]
+        },
+        {
+          "levelIndex": 19,
+          "allowedDifficulties": [
+            "EASY"
+          ],
+          "subjectCodes": [
+            "MEMORY"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": [
+            "SUM_PAIR"
+          ]
+        },
+        {
+          "levelIndex": 20,
+          "allowedDifficulties": [
+            "EASY"
+          ],
+          "subjectCodes": [
+            "MEMORY"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": [
+            "SUM_PAIR"
+          ]
+        },
+        {
+          "levelIndex": 21,
+          "allowedDifficulties": [
+            "EASY",
+            "MEDIUM"
+          ],
+          "subjectCodes": [
+            "MEMORY"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": [
+            "SUM_PAIR"
+          ]
+        },
+        {
+          "levelIndex": 22,
+          "allowedDifficulties": [
+            "MEDIUM"
+          ],
+          "subjectCodes": [
+            "MEMORY"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": [
+            "SUM_PAIR"
+          ]
+        },
+        {
+          "levelIndex": 23,
+          "allowedDifficulties": [
+            "MEDIUM"
+          ],
+          "subjectCodes": [
+            "MEMORY"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": [
+            "SUM_PAIR"
+          ]
+        },
+        {
+          "levelIndex": 24,
+          "allowedDifficulties": [
+            "MEDIUM"
+          ],
+          "subjectCodes": [
+            "MEMORY"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": [
+            "SUM_PAIR"
+          ]
+        },
+        {
+          "levelIndex": 25,
+          "allowedDifficulties": [
+            "MEDIUM",
+            "HARD"
+          ],
+          "subjectCodes": [
+            "MEMORY"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": [
+            "SUM_PAIR"
+          ]
+        },
+        {
+          "levelIndex": 26,
+          "allowedDifficulties": [
+            "HARD"
+          ],
+          "subjectCodes": [
+            "MEMORY"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": [
+            "SUM_PAIR"
+          ]
+        },
+        {
+          "levelIndex": 27,
+          "allowedDifficulties": [
+            "HARD"
+          ],
+          "subjectCodes": [
+            "MEMORY"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": [
+            "SUM_PAIR"
+          ]
+        },
+        {
+          "levelIndex": 28,
+          "allowedDifficulties": [
+            "HARD"
+          ],
+          "subjectCodes": [
+            "MEMORY"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": [
+            "SUM_PAIR"
+          ]
+        },
+        {
+          "levelIndex": 29,
+          "allowedDifficulties": [
+            "HARD"
+          ],
+          "subjectCodes": [
+            "MEMORY"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": [
+            "SUM_PAIR"
+          ]
+        }
+      ]
+    },
+    "nback": {
+      "name": "N-Back Ladder",
+      "thresholds": {
+        "minScoreToStay": 0.4,
+        "minScoreToAdvance": 0.75,
+        "answersNeededToAdvance": 5
+      },
+      "levels": [
+        {
+          "levelIndex": 0,
+          "allowedDifficulties": [
+            "ULTRA_EASY"
+          ],
+          "subjectCodes": [
+            "B1"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": {
+            "n": [
+              "1"
+            ],
+            "suitCount": [
+              "1"
+            ]
+          },
+          "allowedTypes": [
+            "N_BACK"
+          ]
+        },
+        {
+          "levelIndex": 1,
+          "allowedDifficulties": [
+            "ULTRA_EASY"
+          ],
+          "subjectCodes": [
+            "B1"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": {
+            "n": [
+              "1"
+            ],
+            "suitCount": [
+              "2"
+            ]
+          },
+          "allowedTypes": [
+            "N_BACK"
+          ]
+        },
+        {
+          "levelIndex": 2,
+          "allowedDifficulties": [
+            "ULTRA_EASY"
+          ],
+          "subjectCodes": [
+            "B1"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": {
+            "n": [
+              "1"
+            ],
+            "suitCount": [
+              "3"
+            ]
+          },
+          "allowedTypes": [
+            "N_BACK"
+          ]
+        },
+        {
+          "levelIndex": 3,
+          "allowedDifficulties": [
+            "ULTRA_EASY"
+          ],
+          "subjectCodes": [
+            "B1"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": {
+            "n": [
+              "1"
+            ],
+            "suitCount": [
+              "4"
+            ]
+          },
+          "allowedTypes": [
+            "N_BACK"
+          ]
+        },
+        {
+          "levelIndex": 4,
+          "allowedDifficulties": [
+            "EASY"
+          ],
+          "subjectCodes": [
+            "B1"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": {
+            "n": [
+              "2"
+            ],
+            "suitCount": [
+              "1"
+            ]
+          },
+          "allowedTypes": [
+            "N_BACK"
+          ]
+        },
+        {
+          "levelIndex": 5,
+          "allowedDifficulties": [
+            "EASY"
+          ],
+          "subjectCodes": [
+            "B1"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": {
+            "n": [
+              "2"
+            ],
+            "suitCount": [
+              "2"
+            ]
+          },
+          "allowedTypes": [
+            "N_BACK"
+          ]
+        },
+        {
+          "levelIndex": 6,
+          "allowedDifficulties": [
+            "EASY"
+          ],
+          "subjectCodes": [
+            "B1"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": {
+            "n": [
+              "2"
+            ],
+            "suitCount": [
+              "3"
+            ]
+          },
+          "allowedTypes": [
+            "N_BACK"
+          ]
+        },
+        {
+          "levelIndex": 7,
+          "allowedDifficulties": [
+            "EASY"
+          ],
+          "subjectCodes": [
+            "B1"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": {
+            "n": [
+              "2"
+            ],
+            "suitCount": [
+              "4"
+            ]
+          },
+          "allowedTypes": [
+            "N_BACK"
+          ]
+        },
+        {
+          "levelIndex": 8,
+          "allowedDifficulties": [
+            "MEDIUM"
+          ],
+          "subjectCodes": [
+            "B1"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": {
+            "n": [
+              "3"
+            ],
+            "suitCount": [
+              "2"
+            ]
+          },
+          "allowedTypes": [
+            "N_BACK"
+          ]
+        },
+        {
+          "levelIndex": 9,
+          "allowedDifficulties": [
+            "MEDIUM"
+          ],
+          "subjectCodes": [
+            "B1"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": {
+            "n": [
+              "3"
+            ],
+            "suitCount": [
+              "4"
+            ]
+          },
+          "allowedTypes": [
+            "N_BACK"
+          ]
+        },
+        {
+          "levelIndex": 10,
+          "allowedDifficulties": [
+            "ULTRA_EASY"
+          ],
+          "subjectCodes": [
+            "B1"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": {
+            "n": [
+              "1"
+            ],
+            "gridSize": [
+              "3"
+            ]
+          },
+          "allowedTypes": [
+            "N_BACK_GRID"
+          ]
+        },
+        {
+          "levelIndex": 11,
+          "allowedDifficulties": [
+            "ULTRA_EASY"
+          ],
+          "subjectCodes": [
+            "B1"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": {
+            "n": [
+              "1"
+            ],
+            "gridSize": [
+              "4"
+            ]
+          },
+          "allowedTypes": [
+            "N_BACK_GRID"
+          ]
+        },
+        {
+          "levelIndex": 12,
+          "allowedDifficulties": [
+            "EASY"
+          ],
+          "subjectCodes": [
+            "B1"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": {
+            "n": [
+              "2"
+            ],
+            "gridSize": [
+              "3"
+            ]
+          },
+          "allowedTypes": [
+            "N_BACK_GRID"
+          ]
+        },
+        {
+          "levelIndex": 13,
+          "allowedDifficulties": [
+            "EASY"
+          ],
+          "subjectCodes": [
+            "B1"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": {
+            "n": [
+              "2"
+            ],
+            "gridSize": [
+              "4"
+            ]
+          },
+          "allowedTypes": [
+            "N_BACK_GRID"
+          ]
+        },
+        {
+          "levelIndex": 14,
+          "allowedDifficulties": [
+            "MEDIUM"
+          ],
+          "subjectCodes": [
+            "B1"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": {
+            "n": [
+              "3"
+            ],
+            "gridSize": [
+              "3"
+            ]
+          },
+          "allowedTypes": [
+            "N_BACK_GRID"
+          ]
+        },
+        {
+          "levelIndex": 15,
+          "allowedDifficulties": [
+            "MEDIUM"
+          ],
+          "subjectCodes": [
+            "B1"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": {
+            "n": [
+              "3"
+            ],
+            "gridSize": [
+              "4"
+            ]
+          },
+          "allowedTypes": [
+            "N_BACK_GRID"
+          ]
+        },
+        {
+          "levelIndex": 16,
+          "allowedDifficulties": [
+            "EASY",
+            "MEDIUM"
+          ],
+          "subjectCodes": [
+            "B1"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": [
+            "N_BACK_GRID"
+          ]
+        },
+        {
+          "levelIndex": 17,
+          "allowedDifficulties": [
+            "MEDIUM"
+          ],
+          "subjectCodes": [
+            "B1"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": {
+            "n": [
+              "3"
+            ]
+          },
+          "allowedTypes": [
+            "N_BACK",
+            "N_BACK_GRID"
+          ]
+        },
+        {
+          "levelIndex": 18,
+          "allowedDifficulties": [
+            "EASY",
+            "MEDIUM"
+          ],
+          "subjectCodes": [
+            "B1"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": [
+            "N_BACK",
+            "N_BACK_GRID"
+          ]
+        },
+        {
+          "levelIndex": 19,
+          "allowedDifficulties": [
+            "MEDIUM"
+          ],
+          "subjectCodes": [
+            "B1"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": {
+            "n": [
+              "3"
+            ],
+            "gridSize": [
+              "4"
+            ]
+          },
+          "allowedTypes": [
+            "N_BACK_GRID"
+          ]
+        },
+        {
+          "levelIndex": 20,
+          "allowedDifficulties": [
+            "ULTRA_EASY"
+          ],
+          "subjectCodes": [
+            "B1"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": {
+            "n": [
+              "1"
+            ]
+          },
+          "allowedTypes": [
+            "DUAL_NBACK_CARD"
+          ]
+        },
+        {
+          "levelIndex": 21,
+          "allowedDifficulties": [
+            "ULTRA_EASY"
+          ],
+          "subjectCodes": [
+            "B1"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": {
+            "n": [
+              "1"
+            ]
+          },
+          "allowedTypes": [
+            "DUAL_NBACK_GRID"
+          ]
+        },
+        {
+          "levelIndex": 22,
+          "allowedDifficulties": [
+            "EASY"
+          ],
+          "subjectCodes": [
+            "B1"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": {
+            "n": [
+              "1"
+            ]
+          },
+          "allowedTypes": [
+            "DUAL_NBACK_CARD",
+            "DUAL_NBACK_GRID"
+          ]
+        },
+        {
+          "levelIndex": 23,
+          "allowedDifficulties": [
+            "EASY"
+          ],
+          "subjectCodes": [
+            "B1"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": {
+            "n": [
+              "2"
+            ]
+          },
+          "allowedTypes": [
+            "DUAL_NBACK_CARD"
+          ]
+        },
+        {
+          "levelIndex": 24,
+          "allowedDifficulties": [
+            "EASY"
+          ],
+          "subjectCodes": [
+            "B1"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": {
+            "n": [
+              "2"
+            ]
+          },
+          "allowedTypes": [
+            "DUAL_NBACK_GRID"
+          ]
+        },
+        {
+          "levelIndex": 25,
+          "allowedDifficulties": [
+            "EASY",
+            "MEDIUM"
+          ],
+          "subjectCodes": [
+            "B1"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": {
+            "n": [
+              "2"
+            ]
+          },
+          "allowedTypes": [
+            "DUAL_NBACK_CARD",
+            "DUAL_NBACK_GRID"
+          ]
+        },
+        {
+          "levelIndex": 26,
+          "allowedDifficulties": [
+            "MEDIUM"
+          ],
+          "subjectCodes": [
+            "B1"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": {
+            "n": [
+              "3"
+            ]
+          },
+          "allowedTypes": [
+            "DUAL_NBACK_CARD"
+          ]
+        },
+        {
+          "levelIndex": 27,
+          "allowedDifficulties": [
+            "MEDIUM"
+          ],
+          "subjectCodes": [
+            "B1"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": {
+            "n": [
+              "3"
+            ]
+          },
+          "allowedTypes": [
+            "DUAL_NBACK_GRID"
+          ]
+        },
+        {
+          "levelIndex": 28,
+          "allowedDifficulties": [
+            "MEDIUM",
+            "HARD"
+          ],
+          "subjectCodes": [
+            "B1"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": {
+            "n": [
+              "3"
+            ]
+          },
+          "allowedTypes": [
+            "DUAL_NBACK_CARD",
+            "DUAL_NBACK_GRID"
+          ]
+        },
+        {
+          "levelIndex": 29,
+          "allowedDifficulties": [
+            "HARD"
+          ],
+          "subjectCodes": [
+            "B1"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": [
+            "DUAL_NBACK_CARD",
+            "DUAL_NBACK_GRID"
+          ]
+        }
+      ]
+    },
+    "estimation": {
+      "name": "Estimation Ladder",
+      "thresholds": {
+        "minScoreToStay": 0.4,
+        "minScoreToAdvance": 0.75,
+        "answersNeededToAdvance": 5
+      },
+      "levels": [
+        {
+          "levelIndex": 0,
+          "allowedDifficulties": [
+            "ULTRA_EASY"
+          ],
+          "subjectCodes": [
+            "ESTIMATION"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": null
+        },
+        {
+          "levelIndex": 1,
+          "allowedDifficulties": [
+            "ULTRA_EASY"
+          ],
+          "subjectCodes": [
+            "ESTIMATION"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": null
+        },
+        {
+          "levelIndex": 2,
+          "allowedDifficulties": [
+            "ULTRA_EASY"
+          ],
+          "subjectCodes": [
+            "ESTIMATION"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": null
+        },
+        {
+          "levelIndex": 3,
+          "allowedDifficulties": [
+            "ULTRA_EASY"
+          ],
+          "subjectCodes": [
+            "ESTIMATION"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": null
+        },
+        {
+          "levelIndex": 4,
+          "allowedDifficulties": [
+            "ULTRA_EASY"
+          ],
+          "subjectCodes": [
+            "ESTIMATION"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": null
+        },
+        {
+          "levelIndex": 5,
+          "allowedDifficulties": [
+            "ULTRA_EASY",
+            "EASY"
+          ],
+          "subjectCodes": [
+            "ESTIMATION"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": null
+        },
+        {
+          "levelIndex": 6,
+          "allowedDifficulties": [
+            "ULTRA_EASY",
+            "EASY"
+          ],
+          "subjectCodes": [
+            "ESTIMATION"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": null
+        },
+        {
+          "levelIndex": 7,
+          "allowedDifficulties": [
+            "EASY"
+          ],
+          "subjectCodes": [
+            "ESTIMATION"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": null
+        },
+        {
+          "levelIndex": 8,
+          "allowedDifficulties": [
+            "EASY"
+          ],
+          "subjectCodes": [
+            "ESTIMATION"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": null
+        },
+        {
+          "levelIndex": 9,
+          "allowedDifficulties": [
+            "EASY"
+          ],
+          "subjectCodes": [
+            "ESTIMATION"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": null
+        },
+        {
+          "levelIndex": 10,
+          "allowedDifficulties": [
+            "EASY"
+          ],
+          "subjectCodes": [
+            "ESTIMATION"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": null
+        },
+        {
+          "levelIndex": 11,
+          "allowedDifficulties": [
+            "EASY"
+          ],
+          "subjectCodes": [
+            "ESTIMATION"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": null
+        },
+        {
+          "levelIndex": 12,
+          "allowedDifficulties": [
+            "EASY",
+            "MEDIUM"
+          ],
+          "subjectCodes": [
+            "ESTIMATION"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": null
+        },
+        {
+          "levelIndex": 13,
+          "allowedDifficulties": [
+            "EASY",
+            "MEDIUM"
+          ],
+          "subjectCodes": [
+            "ESTIMATION"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": null
+        },
+        {
+          "levelIndex": 14,
+          "allowedDifficulties": [
+            "MEDIUM"
+          ],
+          "subjectCodes": [
+            "ESTIMATION"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": null
+        },
+        {
+          "levelIndex": 15,
+          "allowedDifficulties": [
+            "MEDIUM"
+          ],
+          "subjectCodes": [
+            "ESTIMATION"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": null
+        },
+        {
+          "levelIndex": 16,
+          "allowedDifficulties": [
+            "MEDIUM"
+          ],
+          "subjectCodes": [
+            "ESTIMATION"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": null
+        },
+        {
+          "levelIndex": 17,
+          "allowedDifficulties": [
+            "MEDIUM"
+          ],
+          "subjectCodes": [
+            "ESTIMATION"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": null
+        },
+        {
+          "levelIndex": 18,
+          "allowedDifficulties": [
+            "MEDIUM"
+          ],
+          "subjectCodes": [
+            "ESTIMATION"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": null
+        },
+        {
+          "levelIndex": 19,
+          "allowedDifficulties": [
+            "MEDIUM",
+            "HARD"
+          ],
+          "subjectCodes": [
+            "ESTIMATION"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": null
+        },
+        {
+          "levelIndex": 20,
+          "allowedDifficulties": [
+            "MEDIUM",
+            "HARD"
+          ],
+          "subjectCodes": [
+            "ESTIMATION"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": null
+        },
+        {
+          "levelIndex": 21,
+          "allowedDifficulties": [
+            "HARD"
+          ],
+          "subjectCodes": [
+            "ESTIMATION"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": null
+        },
+        {
+          "levelIndex": 22,
+          "allowedDifficulties": [
+            "HARD"
+          ],
+          "subjectCodes": [
+            "ESTIMATION"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": null
+        },
+        {
+          "levelIndex": 23,
+          "allowedDifficulties": [
+            "HARD"
+          ],
+          "subjectCodes": [
+            "ESTIMATION"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": null
+        },
+        {
+          "levelIndex": 24,
+          "allowedDifficulties": [
+            "HARD"
+          ],
+          "subjectCodes": [
+            "ESTIMATION"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": null
+        },
+        {
+          "levelIndex": 25,
+          "allowedDifficulties": [
+            "HARD",
+            "VERY_HARD"
+          ],
+          "subjectCodes": [
+            "ESTIMATION"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": null
+        },
+        {
+          "levelIndex": 26,
+          "allowedDifficulties": [
+            "HARD",
+            "VERY_HARD"
+          ],
+          "subjectCodes": [
+            "ESTIMATION"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": null
+        },
+        {
+          "levelIndex": 27,
+          "allowedDifficulties": [
+            "VERY_HARD"
+          ],
+          "subjectCodes": [
+            "ESTIMATION"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": null
+        },
+        {
+          "levelIndex": 28,
+          "allowedDifficulties": [
+            "VERY_HARD"
+          ],
+          "subjectCodes": [
+            "ESTIMATION"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": null
+        },
+        {
+          "levelIndex": 29,
+          "allowedDifficulties": [
+            "VERY_HARD"
+          ],
+          "subjectCodes": [
+            "ESTIMATION"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": null
+        }
+      ]
+    },
+    "word": {
+      "name": "Word Ladder",
+      "thresholds": {
+        "minScoreToStay": 0.4,
+        "minScoreToAdvance": 0.75,
+        "answersNeededToAdvance": 5
+      },
+      "levels": [
+        {
+          "levelIndex": 0,
+          "allowedDifficulties": [
+            "ULTRA_EASY"
+          ],
+          "subjectCodes": [
+            "WORD",
+            "WORDLE_FR",
+            "WORDLE_EN"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": [
+            "ANAGRAM",
+            "WORDLE"
+          ]
+        },
+        {
+          "levelIndex": 1,
+          "allowedDifficulties": [
+            "ULTRA_EASY"
+          ],
+          "subjectCodes": [
+            "WORD",
+            "WORDLE_FR",
+            "WORDLE_EN"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": [
+            "ANAGRAM",
+            "WORDLE"
+          ]
+        },
+        {
+          "levelIndex": 2,
+          "allowedDifficulties": [
+            "ULTRA_EASY"
+          ],
+          "subjectCodes": [
+            "WORD",
+            "WORDLE_FR",
+            "WORDLE_EN"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": [
+            "ANAGRAM",
+            "WORDLE"
+          ]
+        },
+        {
+          "levelIndex": 3,
+          "allowedDifficulties": [
+            "ULTRA_EASY"
+          ],
+          "subjectCodes": [
+            "WORD",
+            "WORDLE_FR",
+            "WORDLE_EN"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": [
+            "ANAGRAM",
+            "WORDLE"
+          ]
+        },
+        {
+          "levelIndex": 4,
+          "allowedDifficulties": [
+            "ULTRA_EASY",
+            "EASY"
+          ],
+          "subjectCodes": [
+            "WORD",
+            "WORDLE_FR",
+            "WORDLE_EN"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": [
+            "ANAGRAM",
+            "WORDLE"
+          ]
+        },
+        {
+          "levelIndex": 5,
+          "allowedDifficulties": [
+            "ULTRA_EASY",
+            "EASY"
+          ],
+          "subjectCodes": [
+            "WORD",
+            "WORDLE_FR",
+            "WORDLE_EN"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": [
+            "ANAGRAM",
+            "WORDLE"
+          ]
+        },
+        {
+          "levelIndex": 6,
+          "allowedDifficulties": [
+            "EASY"
+          ],
+          "subjectCodes": [
+            "WORD",
+            "WORDLE_FR",
+            "WORDLE_EN"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": [
+            "ANAGRAM",
+            "WORDLE"
+          ]
+        },
+        {
+          "levelIndex": 7,
+          "allowedDifficulties": [
+            "EASY"
+          ],
+          "subjectCodes": [
+            "WORD",
+            "WORDLE_FR",
+            "WORDLE_EN"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": [
+            "ANAGRAM",
+            "WORDLE"
+          ]
+        },
+        {
+          "levelIndex": 8,
+          "allowedDifficulties": [
+            "EASY"
+          ],
+          "subjectCodes": [
+            "WORD",
+            "WORDLE_FR",
+            "WORDLE_EN"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": [
+            "ANAGRAM",
+            "WORDLE"
+          ]
+        },
+        {
+          "levelIndex": 9,
+          "allowedDifficulties": [
+            "EASY"
+          ],
+          "subjectCodes": [
+            "WORD",
+            "WORDLE_FR",
+            "WORDLE_EN"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": [
+            "ANAGRAM",
+            "WORDLE"
+          ]
+        },
+        {
+          "levelIndex": 10,
+          "allowedDifficulties": [
+            "EASY"
+          ],
+          "subjectCodes": [
+            "WORD",
+            "WORDLE_FR",
+            "WORDLE_EN"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": [
+            "ANAGRAM",
+            "WORDLE"
+          ]
+        },
+        {
+          "levelIndex": 11,
+          "allowedDifficulties": [
+            "EASY",
+            "MEDIUM"
+          ],
+          "subjectCodes": [
+            "WORD",
+            "WORDLE_FR",
+            "WORDLE_EN"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": [
+            "ANAGRAM",
+            "WORDLE"
+          ]
+        },
+        {
+          "levelIndex": 12,
+          "allowedDifficulties": [
+            "EASY",
+            "MEDIUM"
+          ],
+          "subjectCodes": [
+            "WORD",
+            "WORDLE_FR",
+            "WORDLE_EN"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": [
+            "ANAGRAM",
+            "WORDLE"
+          ]
+        },
+        {
+          "levelIndex": 13,
+          "allowedDifficulties": [
+            "MEDIUM"
+          ],
+          "subjectCodes": [
+            "WORD",
+            "WORDLE_FR",
+            "WORDLE_EN"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": [
+            "ANAGRAM",
+            "WORDLE"
+          ]
+        },
+        {
+          "levelIndex": 14,
+          "allowedDifficulties": [
+            "MEDIUM"
+          ],
+          "subjectCodes": [
+            "WORD",
+            "WORDLE_FR",
+            "WORDLE_EN"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": [
+            "ANAGRAM",
+            "WORDLE"
+          ]
+        },
+        {
+          "levelIndex": 15,
+          "allowedDifficulties": [
+            "MEDIUM"
+          ],
+          "subjectCodes": [
+            "WORD",
+            "WORDLE_FR",
+            "WORDLE_EN"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": [
+            "ANAGRAM",
+            "WORDLE"
+          ]
+        },
+        {
+          "levelIndex": 16,
+          "allowedDifficulties": [
+            "MEDIUM"
+          ],
+          "subjectCodes": [
+            "WORD",
+            "WORDLE_FR",
+            "WORDLE_EN"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": [
+            "ANAGRAM",
+            "WORDLE"
+          ]
+        },
+        {
+          "levelIndex": 17,
+          "allowedDifficulties": [
+            "MEDIUM"
+          ],
+          "subjectCodes": [
+            "WORD",
+            "WORDLE_FR",
+            "WORDLE_EN"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": [
+            "ANAGRAM",
+            "WORDLE"
+          ]
+        },
+        {
+          "levelIndex": 18,
+          "allowedDifficulties": [
+            "MEDIUM",
+            "HARD"
+          ],
+          "subjectCodes": [
+            "WORD",
+            "WORDLE_FR",
+            "WORDLE_EN"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": [
+            "ANAGRAM",
+            "WORDLE"
+          ]
+        },
+        {
+          "levelIndex": 19,
+          "allowedDifficulties": [
+            "MEDIUM",
+            "HARD"
+          ],
+          "subjectCodes": [
+            "WORD",
+            "WORDLE_FR",
+            "WORDLE_EN"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": [
+            "ANAGRAM",
+            "WORDLE"
+          ]
+        },
+        {
+          "levelIndex": 20,
+          "allowedDifficulties": [
+            "HARD"
+          ],
+          "subjectCodes": [
+            "WORD",
+            "WORDLE_FR",
+            "WORDLE_EN"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": [
+            "ANAGRAM",
+            "WORDLE"
+          ]
+        },
+        {
+          "levelIndex": 21,
+          "allowedDifficulties": [
+            "HARD"
+          ],
+          "subjectCodes": [
+            "WORD",
+            "WORDLE_FR",
+            "WORDLE_EN"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": [
+            "ANAGRAM",
+            "WORDLE"
+          ]
+        },
+        {
+          "levelIndex": 22,
+          "allowedDifficulties": [
+            "HARD"
+          ],
+          "subjectCodes": [
+            "WORD",
+            "WORDLE_FR",
+            "WORDLE_EN"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": [
+            "ANAGRAM",
+            "WORDLE"
+          ]
+        },
+        {
+          "levelIndex": 23,
+          "allowedDifficulties": [
+            "HARD"
+          ],
+          "subjectCodes": [
+            "WORD",
+            "WORDLE_FR",
+            "WORDLE_EN"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": [
+            "ANAGRAM",
+            "WORDLE"
+          ]
+        },
+        {
+          "levelIndex": 24,
+          "allowedDifficulties": [
+            "HARD"
+          ],
+          "subjectCodes": [
+            "WORD",
+            "WORDLE_FR",
+            "WORDLE_EN"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": [
+            "ANAGRAM",
+            "WORDLE"
+          ]
+        },
+        {
+          "levelIndex": 25,
+          "allowedDifficulties": [
+            "HARD",
+            "VERY_HARD"
+          ],
+          "subjectCodes": [
+            "WORD",
+            "WORDLE_FR",
+            "WORDLE_EN"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": [
+            "ANAGRAM",
+            "WORDLE"
+          ]
+        },
+        {
+          "levelIndex": 26,
+          "allowedDifficulties": [
+            "HARD",
+            "VERY_HARD"
+          ],
+          "subjectCodes": [
+            "WORD",
+            "WORDLE_FR",
+            "WORDLE_EN"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": [
+            "ANAGRAM",
+            "WORDLE"
+          ]
+        },
+        {
+          "levelIndex": 27,
+          "allowedDifficulties": [
+            "VERY_HARD"
+          ],
+          "subjectCodes": [
+            "WORD",
+            "WORDLE_FR",
+            "WORDLE_EN"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": [
+            "ANAGRAM",
+            "WORDLE"
+          ]
+        },
+        {
+          "levelIndex": 28,
+          "allowedDifficulties": [
+            "VERY_HARD"
+          ],
+          "subjectCodes": [
+            "WORD",
+            "WORDLE_FR",
+            "WORDLE_EN"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": [
+            "ANAGRAM",
+            "WORDLE"
+          ]
+        },
+        {
+          "levelIndex": 29,
+          "allowedDifficulties": [
+            "VERY_HARD"
+          ],
+          "subjectCodes": [
+            "WORD",
+            "WORDLE_FR",
+            "WORDLE_EN"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": [
+            "ANAGRAM",
+            "WORDLE"
+          ]
+        }
+      ]
+    },
+    "memory": {
+      "name": "Memory Ladder",
+      "thresholds": {
+        "minScoreToStay": 0.4,
+        "minScoreToAdvance": 0.75,
+        "answersNeededToAdvance": 5
+      },
+      "levels": [
+        {
+          "levelIndex": 0,
+          "allowedDifficulties": [
+            "ULTRA_EASY"
+          ],
+          "subjectCodes": [
+            "MEMORY"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": [
+            "MEMORY_CARD_PAIRS"
+          ]
+        },
+        {
+          "levelIndex": 1,
+          "allowedDifficulties": [
+            "ULTRA_EASY"
+          ],
+          "subjectCodes": [
+            "MEMORY"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": [
+            "MEMORY_CARD_PAIRS"
+          ]
+        },
+        {
+          "levelIndex": 2,
+          "allowedDifficulties": [
+            "ULTRA_EASY"
+          ],
+          "subjectCodes": [
+            "MEMORY"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": [
+            "MEMORY_CARD_PAIRS"
+          ]
+        },
+        {
+          "levelIndex": 3,
+          "allowedDifficulties": [
+            "ULTRA_EASY",
+            "EASY"
+          ],
+          "subjectCodes": [
+            "MEMORY"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": [
+            "MEMORY_CARD_PAIRS"
+          ]
+        },
+        {
+          "levelIndex": 4,
+          "allowedDifficulties": [
+            "ULTRA_EASY",
+            "EASY"
+          ],
+          "subjectCodes": [
+            "MEMORY"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": [
+            "MEMORY_CARD_PAIRS"
+          ]
+        },
+        {
+          "levelIndex": 5,
+          "allowedDifficulties": [
+            "EASY"
+          ],
+          "subjectCodes": [
+            "MEMORY"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": [
+            "MEMORY_CARD_PAIRS"
+          ]
+        },
+        {
+          "levelIndex": 6,
+          "allowedDifficulties": [
+            "EASY"
+          ],
+          "subjectCodes": [
+            "MEMORY"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": [
+            "MEMORY_CARD_PAIRS"
+          ]
+        },
+        {
+          "levelIndex": 7,
+          "allowedDifficulties": [
+            "EASY"
+          ],
+          "subjectCodes": [
+            "MEMORY"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": [
+            "MEMORY_CARD_PAIRS"
+          ]
+        },
+        {
+          "levelIndex": 8,
+          "allowedDifficulties": [
+            "EASY",
+            "MEDIUM"
+          ],
+          "subjectCodes": [
+            "MEMORY"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": [
+            "MEMORY_CARD_PAIRS"
+          ]
+        },
+        {
+          "levelIndex": 9,
+          "allowedDifficulties": [
+            "EASY",
+            "MEDIUM"
+          ],
+          "subjectCodes": [
+            "MEMORY"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": [
+            "MEMORY_CARD_PAIRS"
+          ]
+        },
+        {
+          "levelIndex": 10,
+          "allowedDifficulties": [
+            "MEDIUM"
+          ],
+          "subjectCodes": [
+            "MEMORY"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": [
+            "MEMORY_CARD_PAIRS"
+          ]
+        },
+        {
+          "levelIndex": 11,
+          "allowedDifficulties": [
+            "MEDIUM"
+          ],
+          "subjectCodes": [
+            "MEMORY"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": [
+            "MEMORY_CARD_PAIRS"
+          ]
+        },
+        {
+          "levelIndex": 12,
+          "allowedDifficulties": [
+            "MEDIUM"
+          ],
+          "subjectCodes": [
+            "MEMORY"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": [
+            "MEMORY_CARD_PAIRS"
+          ]
+        },
+        {
+          "levelIndex": 13,
+          "allowedDifficulties": [
+            "MEDIUM"
+          ],
+          "subjectCodes": [
+            "MEMORY"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": [
+            "MEMORY_CARD_PAIRS"
+          ]
+        },
+        {
+          "levelIndex": 14,
+          "allowedDifficulties": [
+            "MEDIUM"
+          ],
+          "subjectCodes": [
+            "MEMORY"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": [
+            "MEMORY_CARD_PAIRS"
+          ]
+        },
+        {
+          "levelIndex": 15,
+          "allowedDifficulties": [
+            "ULTRA_EASY"
+          ],
+          "subjectCodes": [
+            "B1"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": {
+            "n": [
+              "1"
+            ],
+            "suitCount": [
+              "1"
+            ]
+          },
+          "allowedTypes": [
+            "N_BACK"
+          ]
+        },
+        {
+          "levelIndex": 16,
+          "allowedDifficulties": [
+            "ULTRA_EASY"
+          ],
+          "subjectCodes": [
+            "B1"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": {
+            "n": [
+              "1"
+            ],
+            "suitCount": [
+              "2"
+            ]
+          },
+          "allowedTypes": [
+            "N_BACK"
+          ]
+        },
+        {
+          "levelIndex": 17,
+          "allowedDifficulties": [
+            "ULTRA_EASY"
+          ],
+          "subjectCodes": [
+            "B1"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": {
+            "n": [
+              "1"
+            ],
+            "suitCount": [
+              "3"
+            ]
+          },
+          "allowedTypes": [
+            "N_BACK"
+          ]
+        },
+        {
+          "levelIndex": 18,
+          "allowedDifficulties": [
+            "ULTRA_EASY"
+          ],
+          "subjectCodes": [
+            "B1"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": {
+            "n": [
+              "1"
+            ],
+            "suitCount": [
+              "4"
+            ]
+          },
+          "allowedTypes": [
+            "N_BACK"
+          ]
+        },
+        {
+          "levelIndex": 19,
+          "allowedDifficulties": [
+            "EASY"
+          ],
+          "subjectCodes": [
+            "B1"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": {
+            "n": [
+              "2"
+            ],
+            "suitCount": [
+              "1"
+            ]
+          },
+          "allowedTypes": [
+            "N_BACK"
+          ]
+        },
+        {
+          "levelIndex": 20,
+          "allowedDifficulties": [
+            "EASY"
+          ],
+          "subjectCodes": [
+            "B1"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": {
+            "n": [
+              "2"
+            ],
+            "suitCount": [
+              "2"
+            ]
+          },
+          "allowedTypes": [
+            "N_BACK"
+          ]
+        },
+        {
+          "levelIndex": 21,
+          "allowedDifficulties": [
+            "EASY"
+          ],
+          "subjectCodes": [
+            "B1"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": {
+            "n": [
+              "2"
+            ],
+            "suitCount": [
+              "3"
+            ]
+          },
+          "allowedTypes": [
+            "N_BACK"
+          ]
+        },
+        {
+          "levelIndex": 22,
+          "allowedDifficulties": [
+            "EASY"
+          ],
+          "subjectCodes": [
+            "B1"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": {
+            "n": [
+              "2"
+            ],
+            "suitCount": [
+              "4"
+            ]
+          },
+          "allowedTypes": [
+            "N_BACK"
+          ]
+        },
+        {
+          "levelIndex": 23,
+          "allowedDifficulties": [
+            "MEDIUM"
+          ],
+          "subjectCodes": [
+            "B1"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": {
+            "n": [
+              "3"
+            ],
+            "suitCount": [
+              "2"
+            ]
+          },
+          "allowedTypes": [
+            "N_BACK"
+          ]
+        },
+        {
+          "levelIndex": 24,
+          "allowedDifficulties": [
+            "MEDIUM"
+          ],
+          "subjectCodes": [
+            "B1"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": {
+            "n": [
+              "3"
+            ],
+            "suitCount": [
+              "4"
+            ]
+          },
+          "allowedTypes": [
+            "N_BACK"
+          ]
+        },
+        {
+          "levelIndex": 25,
+          "allowedDifficulties": [
+            "ULTRA_EASY"
+          ],
+          "subjectCodes": [
+            "B1"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": {
+            "n": [
+              "1"
+            ],
+            "gridSize": [
+              "3"
+            ]
+          },
+          "allowedTypes": [
+            "N_BACK_GRID"
+          ]
+        },
+        {
+          "levelIndex": 26,
+          "allowedDifficulties": [
+            "ULTRA_EASY"
+          ],
+          "subjectCodes": [
+            "B1"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": {
+            "n": [
+              "1"
+            ],
+            "gridSize": [
+              "4"
+            ]
+          },
+          "allowedTypes": [
+            "N_BACK_GRID"
+          ]
+        },
+        {
+          "levelIndex": 27,
+          "allowedDifficulties": [
+            "EASY"
+          ],
+          "subjectCodes": [
+            "B1"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": {
+            "n": [
+              "2"
+            ],
+            "gridSize": [
+              "3"
+            ]
+          },
+          "allowedTypes": [
+            "N_BACK_GRID"
+          ]
+        },
+        {
+          "levelIndex": 28,
+          "allowedDifficulties": [
+            "EASY"
+          ],
+          "subjectCodes": [
+            "B1"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": {
+            "n": [
+              "2"
+            ],
+            "gridSize": [
+              "4"
+            ]
+          },
+          "allowedTypes": [
+            "N_BACK_GRID"
+          ]
+        },
+        {
+          "levelIndex": 29,
+          "allowedDifficulties": [
+            "MEDIUM"
+          ],
+          "subjectCodes": [
+            "B1"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": {
+            "n": [
+              "3"
+            ],
+            "gridSize": [
+              "3"
+            ]
+          },
+          "allowedTypes": [
+            "N_BACK_GRID"
+          ]
+        }
+      ]
+    },
+    "working_memory": {
+      "name": "Working Memory Ladder",
+      "thresholds": {
+        "minScoreToStay": 0.4,
+        "minScoreToAdvance": 0.75,
+        "answersNeededToAdvance": 5
+      },
+      "levels": [
+        {
+          "levelIndex": 0,
+          "allowedDifficulties": [
+            "ULTRA_EASY"
+          ],
+          "subjectCodes": [
+            "MEMORY"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": [
+            "SUM_PAIR"
+          ]
+        },
+        {
+          "levelIndex": 1,
+          "allowedDifficulties": [
+            "ULTRA_EASY"
+          ],
+          "subjectCodes": [
+            "MEMORY"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": [
+            "SUM_PAIR"
+          ]
+        },
+        {
+          "levelIndex": 2,
+          "allowedDifficulties": [
+            "ULTRA_EASY",
+            "EASY"
+          ],
+          "subjectCodes": [
+            "MEMORY"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": [
+            "SUM_PAIR"
+          ]
+        },
+        {
+          "levelIndex": 3,
+          "allowedDifficulties": [
+            "EASY"
+          ],
+          "subjectCodes": [
+            "MEMORY"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": [
+            "SUM_PAIR"
+          ]
+        },
+        {
+          "levelIndex": 4,
+          "allowedDifficulties": [
+            "EASY"
+          ],
+          "subjectCodes": [
+            "MEMORY"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": [
+            "SUM_PAIR"
+          ]
+        },
+        {
+          "levelIndex": 5,
+          "allowedDifficulties": [
+            "EASY"
+          ],
+          "subjectCodes": [
+            "MEMORY"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": [
+            "SUM_PAIR"
+          ]
+        },
+        {
+          "levelIndex": 6,
+          "allowedDifficulties": [
+            "EASY",
+            "MEDIUM"
+          ],
+          "subjectCodes": [
+            "MEMORY"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": [
+            "SUM_PAIR"
+          ]
+        },
+        {
+          "levelIndex": 7,
+          "allowedDifficulties": [
+            "MEDIUM"
+          ],
+          "subjectCodes": [
+            "MEMORY"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": [
+            "SUM_PAIR"
+          ]
+        },
+        {
+          "levelIndex": 8,
+          "allowedDifficulties": [
+            "MEDIUM"
+          ],
+          "subjectCodes": [
+            "MEMORY"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": [
+            "SUM_PAIR"
+          ]
+        },
+        {
+          "levelIndex": 9,
+          "allowedDifficulties": [
+            "MEDIUM"
+          ],
+          "subjectCodes": [
+            "MEMORY"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": [
+            "SUM_PAIR"
+          ]
+        },
+        {
+          "levelIndex": 10,
+          "allowedDifficulties": [
+            "MEDIUM",
+            "HARD"
+          ],
+          "subjectCodes": [
+            "MEMORY"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": [
+            "SUM_PAIR"
+          ]
+        },
+        {
+          "levelIndex": 11,
+          "allowedDifficulties": [
+            "HARD"
+          ],
+          "subjectCodes": [
+            "MEMORY"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": [
+            "SUM_PAIR"
+          ]
+        },
+        {
+          "levelIndex": 12,
+          "allowedDifficulties": [
+            "HARD"
+          ],
+          "subjectCodes": [
+            "MEMORY"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": [
+            "SUM_PAIR"
+          ]
+        },
+        {
+          "levelIndex": 13,
+          "allowedDifficulties": [
+            "HARD"
+          ],
+          "subjectCodes": [
+            "MEMORY"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": [
+            "SUM_PAIR"
+          ]
+        },
+        {
+          "levelIndex": 14,
+          "allowedDifficulties": [
+            "HARD"
+          ],
+          "subjectCodes": [
+            "MEMORY"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": [
+            "SUM_PAIR"
+          ]
+        },
+        {
+          "levelIndex": 15,
+          "allowedDifficulties": [
+            "ULTRA_EASY"
+          ],
+          "subjectCodes": [
+            "DIGIT_SPAN"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": [
+            "DIGIT_SPAN"
+          ]
+        },
+        {
+          "levelIndex": 16,
+          "allowedDifficulties": [
+            "ULTRA_EASY"
+          ],
+          "subjectCodes": [
+            "DIGIT_SPAN"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": [
+            "DIGIT_SPAN"
+          ]
+        },
+        {
+          "levelIndex": 17,
+          "allowedDifficulties": [
+            "ULTRA_EASY"
+          ],
+          "subjectCodes": [
+            "DIGIT_SPAN"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": [
+            "DIGIT_SPAN"
+          ]
+        },
+        {
+          "levelIndex": 18,
+          "allowedDifficulties": [
+            "ULTRA_EASY",
+            "EASY"
+          ],
+          "subjectCodes": [
+            "DIGIT_SPAN"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": [
+            "DIGIT_SPAN"
+          ]
+        },
+        {
+          "levelIndex": 19,
+          "allowedDifficulties": [
+            "ULTRA_EASY",
+            "EASY"
+          ],
+          "subjectCodes": [
+            "DIGIT_SPAN"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": [
+            "DIGIT_SPAN"
+          ]
+        },
+        {
+          "levelIndex": 20,
+          "allowedDifficulties": [
+            "EASY"
+          ],
+          "subjectCodes": [
+            "DIGIT_SPAN"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": [
+            "DIGIT_SPAN"
+          ]
+        },
+        {
+          "levelIndex": 21,
+          "allowedDifficulties": [
+            "EASY"
+          ],
+          "subjectCodes": [
+            "DIGIT_SPAN"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": [
+            "DIGIT_SPAN"
+          ]
+        },
+        {
+          "levelIndex": 22,
+          "allowedDifficulties": [
+            "EASY"
+          ],
+          "subjectCodes": [
+            "DIGIT_SPAN"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": [
+            "DIGIT_SPAN"
+          ]
+        },
+        {
+          "levelIndex": 23,
+          "allowedDifficulties": [
+            "EASY",
+            "MEDIUM"
+          ],
+          "subjectCodes": [
+            "DIGIT_SPAN"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": [
+            "DIGIT_SPAN"
+          ]
+        },
+        {
+          "levelIndex": 24,
+          "allowedDifficulties": [
+            "EASY",
+            "MEDIUM"
+          ],
+          "subjectCodes": [
+            "DIGIT_SPAN"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": [
+            "DIGIT_SPAN"
+          ]
+        },
+        {
+          "levelIndex": 25,
+          "allowedDifficulties": [
+            "MEDIUM"
+          ],
+          "subjectCodes": [
+            "DIGIT_SPAN"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": [
+            "DIGIT_SPAN"
+          ]
+        },
+        {
+          "levelIndex": 26,
+          "allowedDifficulties": [
+            "MEDIUM"
+          ],
+          "subjectCodes": [
+            "DIGIT_SPAN"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": [
+            "DIGIT_SPAN"
+          ]
+        },
+        {
+          "levelIndex": 27,
+          "allowedDifficulties": [
+            "MEDIUM"
+          ],
+          "subjectCodes": [
+            "DIGIT_SPAN"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": [
+            "DIGIT_SPAN"
+          ]
+        },
+        {
+          "levelIndex": 28,
+          "allowedDifficulties": [
+            "MEDIUM",
+            "HARD"
+          ],
+          "subjectCodes": [
+            "DIGIT_SPAN"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": [
+            "DIGIT_SPAN"
+          ]
+        },
+        {
+          "levelIndex": 29,
+          "allowedDifficulties": [
+            "MEDIUM",
+            "HARD"
+          ],
+          "subjectCodes": [
+            "DIGIT_SPAN"
+          ],
+          "exerciseIds": null,
+          "exerciseParamFilter": null,
+          "allowedTypes": [
+            "DIGIT_SPAN"
+          ]
+        }
+      ]
+    }
+  }
+}

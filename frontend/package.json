@@ -9,14 +9,26 @@
     "preview": "vite preview",
     "test": "vitest run",
     "test:watch": "vitest",
-    "deploy": "npm run build && cd .. && firebase deploy"
+    "deploy": "npm run build && cd .. && firebase deploy",
+    "prebuild:android": "node scripts/ensure-android-env.mjs",
+    "export:journey-offline": "node scripts/export-journey-offline.mjs",
+    "export:catalog-offline": "node scripts/export-catalog-offline.mjs",
+    "export:ladder-offline": "node scripts/export-ladder-offline.mjs",
+    "export:offline-data": "npm run export:journey-offline && npm run export:catalog-offline && npm run export:ladder-offline",
+    "build:wordle-words": "node scripts/build-wordle-wordlists.mjs",
+    "build:android": "tsc -b && vite build --mode android",
+    "android:sync": "npm run build:android && npx cap sync android",
+    "android:install": "npm run android:sync && cd android && .\\gradlew.bat installDebug --no-daemon"
   },
   "dependencies": {
+    "@capacitor/android": "^6.0.0",
+    "@capacitor/core": "^6.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^7.13.1"
   },
   "devDependencies": {
+    "@capacitor/cli": "^6.0.0",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.2",
     "@types/react": "^18.2.43",

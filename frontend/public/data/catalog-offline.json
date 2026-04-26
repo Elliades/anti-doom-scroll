@@ -1,0 +1,4820 @@
+{
+  "subjects": [
+    {
+      "id": "b0000000-0000-0000-0000-000000000001",
+      "code": "default",
+      "name": "Default",
+      "description": "Default subject for general exercises",
+      "parentSubjectId": null,
+      "scoringConfig": {
+        "accuracyType": "BINARY",
+        "speedTargetMs": 10000,
+        "confidenceWeight": 0,
+        "streakBonusCap": 0.1,
+        "partialMatchThreshold": null
+      }
+    },
+    {
+      "id": "b0000000-0000-0000-0000-000000000004",
+      "code": "B1",
+      "name": "N-back",
+      "description": "Working memory: n-back",
+      "parentSubjectId": null,
+      "scoringConfig": {
+        "accuracyType": "BINARY",
+        "speedTargetMs": null,
+        "confidenceWeight": 0,
+        "streakBonusCap": 0.1,
+        "partialMatchThreshold": null
+      }
+    },
+    {
+      "id": "b0000000-0000-0000-0000-000000000008",
+      "code": "MEMORY",
+      "name": "Memory",
+      "description": "Memory games: find matching pairs",
+      "parentSubjectId": null,
+      "scoringConfig": {
+        "accuracyType": "BINARY",
+        "speedTargetMs": 10000,
+        "confidenceWeight": 0,
+        "streakBonusCap": 0.1,
+        "partialMatchThreshold": null
+      }
+    },
+    {
+      "id": "b0000000-0000-0000-0000-000000000010",
+      "code": "WORD",
+      "name": "Word",
+      "description": "Word games: anagrams and vocabulary.",
+      "parentSubjectId": null,
+      "scoringConfig": {
+        "accuracyType": "BINARY",
+        "speedTargetMs": 10000,
+        "confidenceWeight": 0,
+        "streakBonusCap": 0.1,
+        "partialMatchThreshold": null
+      }
+    },
+    {
+      "id": "b0000000-0000-0000-0000-000000000011",
+      "code": "WORDLE_FR",
+      "name": "Wordle (FR)",
+      "description": "Devinez le mot en 6 essais. Lettres vertes = bonne position, jaunes = mauvaise position.",
+      "parentSubjectId": null,
+      "scoringConfig": {
+        "accuracyType": "BINARY",
+        "speedTargetMs": 120000,
+        "confidenceWeight": 0.1,
+        "streakBonusCap": 0.1,
+        "partialMatchThreshold": null
+      }
+    },
+    {
+      "id": "b0000000-0000-0000-0000-000000000012",
+      "code": "WORDLE_EN",
+      "name": "Wordle (EN)",
+      "description": "Guess the word in 6 tries. Green = right letter & position, yellow = right letter wrong position.",
+      "parentSubjectId": null,
+      "scoringConfig": {
+        "accuracyType": "BINARY",
+        "speedTargetMs": 120000,
+        "confidenceWeight": 0.1,
+        "streakBonusCap": 0.1,
+        "partialMatchThreshold": null
+      }
+    },
+    {
+      "id": "b0000000-0000-0000-0000-000000000013",
+      "code": "ESTIMATION",
+      "name": "Estimation",
+      "description": "Approximate numerical answers: monuments, distances, populations, mental math. Scored on accuracy and speed.",
+      "parentSubjectId": null,
+      "scoringConfig": {
+        "accuracyType": "PARTIAL",
+        "speedTargetMs": 15000,
+        "confidenceWeight": 0,
+        "streakBonusCap": 0.1,
+        "partialMatchThreshold": null
+      }
+    },
+    {
+      "id": "b0000000-0000-0000-0000-000000000014",
+      "code": "DIGIT_SPAN",
+      "name": "Digit Span",
+      "description": "Working memory: memorize digits and recall them in order, ascending, descending, even/odd, or every-other.",
+      "parentSubjectId": null,
+      "scoringConfig": {
+        "accuracyType": "BINARY",
+        "speedTargetMs": 10000,
+        "confidenceWeight": 0,
+        "streakBonusCap": 0.1,
+        "partialMatchThreshold": null
+      }
+    }
+  ],
+  "allExercises": [
+    {
+      "id": "a0000000-0000-0000-0000-000000000001",
+      "subjectId": "b0000000-0000-0000-0000-000000000001",
+      "subjectCode": "default",
+      "type": "FLASHCARD_QA",
+      "difficulty": "ULTRA_EASY",
+      "prompt": "What is 3 + 21?",
+      "expectedAnswers": [
+        "24"
+      ],
+      "timeLimitSeconds": 30,
+      "mathOperation": "ADD",
+      "mathComplexityScore": 3.3,
+      "dualNBackGridParams": null,
+      "dualNBackCardParams": null,
+      "memoryCardParams": null,
+      "sumPairParams": null,
+      "sumPairRounds": null,
+      "sumPairGroups": null,
+      "sumPairDeck": null,
+      "imagePairParams": null,
+      "imagePairDeck": null,
+      "anagramParams": null,
+      "wordleParams": null,
+      "estimationParams": null,
+      "digitSpanParams": null,
+      "nbackGridParams": null,
+      "nbackParams": null
+    },
+    {
+      "id": "a0000000-0000-0000-0000-000000000002",
+      "subjectId": "b0000000-0000-0000-0000-000000000001",
+      "subjectCode": "default",
+      "type": "FLASHCARD_QA",
+      "difficulty": "EASY",
+      "prompt": "What is 97 + 44?",
+      "expectedAnswers": [
+        "141"
+      ],
+      "timeLimitSeconds": 45,
+      "mathOperation": "ADD",
+      "mathComplexityScore": 12.8,
+      "dualNBackGridParams": null,
+      "dualNBackCardParams": null,
+      "memoryCardParams": null,
+      "sumPairParams": null,
+      "sumPairRounds": null,
+      "sumPairGroups": null,
+      "sumPairDeck": null,
+      "imagePairParams": null,
+      "imagePairDeck": null,
+      "anagramParams": null,
+      "wordleParams": null,
+      "estimationParams": null,
+      "digitSpanParams": null,
+      "nbackGridParams": null,
+      "nbackParams": null
+    },
+    {
+      "id": "a0000000-0000-0000-0000-000000000010",
+      "subjectId": "b0000000-0000-0000-0000-000000000001",
+      "subjectCode": "default",
+      "type": "FLASHCARD_QA",
+      "difficulty": "MEDIUM",
+      "prompt": "What is 846 + 155?",
+      "expectedAnswers": [
+        "1001"
+      ],
+      "timeLimitSeconds": 60,
+      "mathOperation": "ADD",
+      "mathComplexityScore": 17.2,
+      "dualNBackGridParams": null,
+      "dualNBackCardParams": null,
+      "memoryCardParams": null,
+      "sumPairParams": null,
+      "sumPairRounds": null,
+      "sumPairGroups": null,
+      "sumPairDeck": null,
+      "imagePairParams": null,
+      "imagePairDeck": null,
+      "anagramParams": null,
+      "wordleParams": null,
+      "estimationParams": null,
+      "digitSpanParams": null,
+      "nbackGridParams": null,
+      "nbackParams": null
+    },
+    {
+      "id": "a0000000-0000-0000-0000-000000000011",
+      "subjectId": "b0000000-0000-0000-0000-000000000001",
+      "subjectCode": "default",
+      "type": "FLASHCARD_QA",
+      "difficulty": "HARD",
+      "prompt": "What is 466 + 3671?",
+      "expectedAnswers": [
+        "4137"
+      ],
+      "timeLimitSeconds": 90,
+      "mathOperation": "ADD",
+      "mathComplexityScore": 15.1,
+      "dualNBackGridParams": null,
+      "dualNBackCardParams": null,
+      "memoryCardParams": null,
+      "sumPairParams": null,
+      "sumPairRounds": null,
+      "sumPairGroups": null,
+      "sumPairDeck": null,
+      "imagePairParams": null,
+      "imagePairDeck": null,
+      "anagramParams": null,
+      "wordleParams": null,
+      "estimationParams": null,
+      "digitSpanParams": null,
+      "nbackGridParams": null,
+      "nbackParams": null
+    },
+    {
+      "id": "a0000000-0000-0000-0000-000000000020",
+      "subjectId": "b0000000-0000-0000-0000-000000000001",
+      "subjectCode": "default",
+      "type": "FLASHCARD_QA",
+      "difficulty": "ULTRA_EASY",
+      "prompt": "What is 82 − 2?",
+      "expectedAnswers": [
+        "80"
+      ],
+      "timeLimitSeconds": 30,
+      "mathOperation": "SUBTRACT",
+      "mathComplexityScore": 2,
+      "dualNBackGridParams": null,
+      "dualNBackCardParams": null,
+      "memoryCardParams": null,
+      "sumPairParams": null,
+      "sumPairRounds": null,
+      "sumPairGroups": null,
+      "sumPairDeck": null,
+      "imagePairParams": null,
+      "imagePairDeck": null,
+      "anagramParams": null,
+      "wordleParams": null,
+      "estimationParams": null,
+      "digitSpanParams": null,
+      "nbackGridParams": null,
+      "nbackParams": null
+    },
+    {
+      "id": "a0000000-0000-0000-0000-000000000021",
+      "subjectId": "b0000000-0000-0000-0000-000000000001",
+      "subjectCode": "default",
+      "type": "FLASHCARD_QA",
+      "difficulty": "EASY",
+      "prompt": "What is 90 − 42?",
+      "expectedAnswers": [
+        "48"
+      ],
+      "timeLimitSeconds": 45,
+      "mathOperation": "SUBTRACT",
+      "mathComplexityScore": 8.5,
+      "dualNBackGridParams": null,
+      "dualNBackCardParams": null,
+      "memoryCardParams": null,
+      "sumPairParams": null,
+      "sumPairRounds": null,
+      "sumPairGroups": null,
+      "sumPairDeck": null,
+      "imagePairParams": null,
+      "imagePairDeck": null,
+      "anagramParams": null,
+      "wordleParams": null,
+      "estimationParams": null,
+      "digitSpanParams": null,
+      "nbackGridParams": null,
+      "nbackParams": null
+    },
+    {
+      "id": "a0000000-0000-0000-0000-000000000022",
+      "subjectId": "b0000000-0000-0000-0000-000000000001",
+      "subjectCode": "default",
+      "type": "FLASHCARD_QA",
+      "difficulty": "MEDIUM",
+      "prompt": "What is 110 − 37?",
+      "expectedAnswers": [
+        "73"
+      ],
+      "timeLimitSeconds": 60,
+      "mathOperation": "SUBTRACT",
+      "mathComplexityScore": 16,
+      "dualNBackGridParams": null,
+      "dualNBackCardParams": null,
+      "memoryCardParams": null,
+      "sumPairParams": null,
+      "sumPairRounds": null,
+      "sumPairGroups": null,
+      "sumPairDeck": null,
+      "imagePairParams": null,
+      "imagePairDeck": null,
+      "anagramParams": null,
+      "wordleParams": null,
+      "estimationParams": null,
+      "digitSpanParams": null,
+      "nbackGridParams": null,
+      "nbackParams": null
+    },
+    {
+      "id": "a0000000-0000-0000-0000-000000000023",
+      "subjectId": "b0000000-0000-0000-0000-000000000001",
+      "subjectCode": "default",
+      "type": "FLASHCARD_QA",
+      "difficulty": "HARD",
+      "prompt": "What is 7950 − 7285?",
+      "expectedAnswers": [
+        "665"
+      ],
+      "timeLimitSeconds": 90,
+      "mathOperation": "SUBTRACT",
+      "mathComplexityScore": 15.5,
+      "dualNBackGridParams": null,
+      "dualNBackCardParams": null,
+      "memoryCardParams": null,
+      "sumPairParams": null,
+      "sumPairRounds": null,
+      "sumPairGroups": null,
+      "sumPairDeck": null,
+      "imagePairParams": null,
+      "imagePairDeck": null,
+      "anagramParams": null,
+      "wordleParams": null,
+      "estimationParams": null,
+      "digitSpanParams": null,
+      "nbackGridParams": null,
+      "nbackParams": null
+    },
+    {
+      "id": "a0000000-0000-0000-0000-000000000030",
+      "subjectId": "b0000000-0000-0000-0000-000000000001",
+      "subjectCode": "default",
+      "type": "FLASHCARD_QA",
+      "difficulty": "ULTRA_EASY",
+      "prompt": "What is 2 × 1?",
+      "expectedAnswers": [
+        "2"
+      ],
+      "timeLimitSeconds": 30,
+      "mathOperation": "MULTIPLY",
+      "mathComplexityScore": 2,
+      "dualNBackGridParams": null,
+      "dualNBackCardParams": null,
+      "memoryCardParams": null,
+      "sumPairParams": null,
+      "sumPairRounds": null,
+      "sumPairGroups": null,
+      "sumPairDeck": null,
+      "imagePairParams": null,
+      "imagePairDeck": null,
+      "anagramParams": null,
+      "wordleParams": null,
+      "estimationParams": null,
+      "digitSpanParams": null,
+      "nbackGridParams": null,
+      "nbackParams": null
+    },
+    {
+      "id": "a0000000-0000-0000-0000-000000000031",
+      "subjectId": "b0000000-0000-0000-0000-000000000001",
+      "subjectCode": "default",
+      "type": "FLASHCARD_QA",
+      "difficulty": "EASY",
+      "prompt": "What is 7 × 10?",
+      "expectedAnswers": [
+        "70"
+      ],
+      "timeLimitSeconds": 45,
+      "mathOperation": "MULTIPLY",
+      "mathComplexityScore": 5.699999999999999,
+      "dualNBackGridParams": null,
+      "dualNBackCardParams": null,
+      "memoryCardParams": null,
+      "sumPairParams": null,
+      "sumPairRounds": null,
+      "sumPairGroups": null,
+      "sumPairDeck": null,
+      "imagePairParams": null,
+      "imagePairDeck": null,
+      "anagramParams": null,
+      "wordleParams": null,
+      "estimationParams": null,
+      "digitSpanParams": null,
+      "nbackGridParams": null,
+      "nbackParams": null
+    },
+    {
+      "id": "a0000000-0000-0000-0000-000000000032",
+      "subjectId": "b0000000-0000-0000-0000-000000000001",
+      "subjectCode": "default",
+      "type": "FLASHCARD_QA",
+      "difficulty": "MEDIUM",
+      "prompt": "What is 46 × 1?",
+      "expectedAnswers": [
+        "46"
+      ],
+      "timeLimitSeconds": 60,
+      "mathOperation": "MULTIPLY",
+      "mathComplexityScore": 5.199999999999999,
+      "dualNBackGridParams": null,
+      "dualNBackCardParams": null,
+      "memoryCardParams": null,
+      "sumPairParams": null,
+      "sumPairRounds": null,
+      "sumPairGroups": null,
+      "sumPairDeck": null,
+      "imagePairParams": null,
+      "imagePairDeck": null,
+      "anagramParams": null,
+      "wordleParams": null,
+      "estimationParams": null,
+      "digitSpanParams": null,
+      "nbackGridParams": null,
+      "nbackParams": null
+    },
+    {
+      "id": "a0000000-0000-0000-0000-000000000033",
+      "subjectId": "b0000000-0000-0000-0000-000000000001",
+      "subjectCode": "default",
+      "type": "FLASHCARD_QA",
+      "difficulty": "HARD",
+      "prompt": "What is 81 × 34?",
+      "expectedAnswers": [
+        "2754"
+      ],
+      "timeLimitSeconds": 90,
+      "mathOperation": "MULTIPLY",
+      "mathComplexityScore": 16,
+      "dualNBackGridParams": null,
+      "dualNBackCardParams": null,
+      "memoryCardParams": null,
+      "sumPairParams": null,
+      "sumPairRounds": null,
+      "sumPairGroups": null,
+      "sumPairDeck": null,
+      "imagePairParams": null,
+      "imagePairDeck": null,
+      "anagramParams": null,
+      "wordleParams": null,
+      "estimationParams": null,
+      "digitSpanParams": null,
+      "nbackGridParams": null,
+      "nbackParams": null
+    },
+    {
+      "id": "a0000000-0000-0000-0000-000000000040",
+      "subjectId": "b0000000-0000-0000-0000-000000000001",
+      "subjectCode": "default",
+      "type": "FLASHCARD_QA",
+      "difficulty": "ULTRA_EASY",
+      "prompt": "What is 4 ÷ 2?",
+      "expectedAnswers": [
+        "2"
+      ],
+      "timeLimitSeconds": 30,
+      "mathOperation": "DIVIDE",
+      "mathComplexityScore": 5.5,
+      "dualNBackGridParams": null,
+      "dualNBackCardParams": null,
+      "memoryCardParams": null,
+      "sumPairParams": null,
+      "sumPairRounds": null,
+      "sumPairGroups": null,
+      "sumPairDeck": null,
+      "imagePairParams": null,
+      "imagePairDeck": null,
+      "anagramParams": null,
+      "wordleParams": null,
+      "estimationParams": null,
+      "digitSpanParams": null,
+      "nbackGridParams": null,
+      "nbackParams": null
+    },
+    {
+      "id": "a0000000-0000-0000-0000-000000000041",
+      "subjectId": "b0000000-0000-0000-0000-000000000001",
+      "subjectCode": "default",
+      "type": "FLASHCARD_QA",
+      "difficulty": "EASY",
+      "prompt": "What is 24 ÷ 6?",
+      "expectedAnswers": [
+        "4"
+      ],
+      "timeLimitSeconds": 45,
+      "mathOperation": "DIVIDE",
+      "mathComplexityScore": 7,
+      "dualNBackGridParams": null,
+      "dualNBackCardParams": null,
+      "memoryCardParams": null,
+      "sumPairParams": null,
+      "sumPairRounds": null,
+      "sumPairGroups": null,
+      "sumPairDeck": null,
+      "imagePairParams": null,
+      "imagePairDeck": null,
+      "anagramParams": null,
+      "wordleParams": null,
+      "estimationParams": null,
+      "digitSpanParams": null,
+      "nbackGridParams": null,
+      "nbackParams": null
+    },
+    {
+      "id": "a0000000-0000-0000-0000-000000000042",
+      "subjectId": "b0000000-0000-0000-0000-000000000001",
+      "subjectCode": "default",
+      "type": "FLASHCARD_QA",
+      "difficulty": "MEDIUM",
+      "prompt": "What is 216 ÷ 9?",
+      "expectedAnswers": [
+        "24"
+      ],
+      "timeLimitSeconds": 60,
+      "mathOperation": "DIVIDE",
+      "mathComplexityScore": 10.5,
+      "dualNBackGridParams": null,
+      "dualNBackCardParams": null,
+      "memoryCardParams": null,
+      "sumPairParams": null,
+      "sumPairRounds": null,
+      "sumPairGroups": null,
+      "sumPairDeck": null,
+      "imagePairParams": null,
+      "imagePairDeck": null,
+      "anagramParams": null,
+      "wordleParams": null,
+      "estimationParams": null,
+      "digitSpanParams": null,
+      "nbackGridParams": null,
+      "nbackParams": null
+    },
+    {
+      "id": "a0000000-0000-0000-0000-000000000043",
+      "subjectId": "b0000000-0000-0000-0000-000000000001",
+      "subjectCode": "default",
+      "type": "FLASHCARD_QA",
+      "difficulty": "HARD",
+      "prompt": "What is 1274 ÷ 26?",
+      "expectedAnswers": [
+        "49"
+      ],
+      "timeLimitSeconds": 90,
+      "mathOperation": "DIVIDE",
+      "mathComplexityScore": 14,
+      "dualNBackGridParams": null,
+      "dualNBackCardParams": null,
+      "memoryCardParams": null,
+      "sumPairParams": null,
+      "sumPairRounds": null,
+      "sumPairGroups": null,
+      "sumPairDeck": null,
+      "imagePairParams": null,
+      "imagePairDeck": null,
+      "anagramParams": null,
+      "wordleParams": null,
+      "estimationParams": null,
+      "digitSpanParams": null,
+      "nbackGridParams": null,
+      "nbackParams": null
+    },
+    {
+      "id": "c0000000-0000-0000-0000-000000000001",
+      "subjectId": "b0000000-0000-0000-0000-000000000004",
+      "subjectCode": "B1",
+      "type": "N_BACK",
+      "difficulty": "ULTRA_EASY",
+      "prompt": "1-Back: Tap when the card matches the previous one.",
+      "expectedAnswers": [],
+      "timeLimitSeconds": 30,
+      "mathOperation": null,
+      "mathComplexityScore": null,
+      "dualNBackGridParams": null,
+      "dualNBackCardParams": null,
+      "memoryCardParams": null,
+      "sumPairParams": null,
+      "sumPairRounds": null,
+      "sumPairGroups": null,
+      "sumPairDeck": null,
+      "imagePairParams": null,
+      "imagePairDeck": null,
+      "anagramParams": null,
+      "wordleParams": null,
+      "estimationParams": null,
+      "digitSpanParams": null,
+      "nbackGridParams": null,
+      "nbackParams": {
+        "n": 1,
+        "sequence": [
+          "3C",
+          "3C",
+          "10C",
+          "9C",
+          "9C",
+          "9C",
+          "2C",
+          "8C",
+          "8C",
+          "3C",
+          "6C",
+          "4C"
+        ],
+        "matchIndices": [
+          1,
+          4,
+          5,
+          8
+        ]
+      }
+    },
+    {
+      "id": "c0000000-0000-0000-0000-000000000002",
+      "subjectId": "b0000000-0000-0000-0000-000000000004",
+      "subjectCode": "B1",
+      "type": "N_BACK",
+      "difficulty": "EASY",
+      "prompt": "2-Back: Tap when the card matches the one from 2 steps back.",
+      "expectedAnswers": [],
+      "timeLimitSeconds": 60,
+      "mathOperation": null,
+      "mathComplexityScore": null,
+      "dualNBackGridParams": null,
+      "dualNBackCardParams": null,
+      "memoryCardParams": null,
+      "sumPairParams": null,
+      "sumPairRounds": null,
+      "sumPairGroups": null,
+      "sumPairDeck": null,
+      "imagePairParams": null,
+      "imagePairDeck": null,
+      "anagramParams": null,
+      "wordleParams": null,
+      "estimationParams": null,
+      "digitSpanParams": null,
+      "nbackGridParams": null,
+      "nbackParams": {
+        "n": 2,
+        "sequence": [
+          "5C",
+          "9D",
+          "9D",
+          "3C",
+          "8C",
+          "4C",
+          "6D",
+          "4C",
+          "6D",
+          "4C",
+          "6D",
+          "4C"
+        ],
+        "matchIndices": [
+          7,
+          8,
+          9,
+          10,
+          11
+        ]
+      }
+    },
+    {
+      "id": "c0000000-0000-0000-0000-000000000003",
+      "subjectId": "b0000000-0000-0000-0000-000000000004",
+      "subjectCode": "B1",
+      "type": "N_BACK",
+      "difficulty": "MEDIUM",
+      "prompt": "3-Back: Tap when the card matches the one from 3 steps back.",
+      "expectedAnswers": [],
+      "timeLimitSeconds": 60,
+      "mathOperation": null,
+      "mathComplexityScore": null,
+      "dualNBackGridParams": null,
+      "dualNBackCardParams": null,
+      "memoryCardParams": null,
+      "sumPairParams": null,
+      "sumPairRounds": null,
+      "sumPairGroups": null,
+      "sumPairDeck": null,
+      "imagePairParams": null,
+      "imagePairDeck": null,
+      "anagramParams": null,
+      "wordleParams": null,
+      "estimationParams": null,
+      "digitSpanParams": null,
+      "nbackGridParams": null,
+      "nbackParams": {
+        "n": 3,
+        "sequence": [
+          "6S",
+          "AH",
+          "QD",
+          "7H",
+          "KS",
+          "5S",
+          "QC",
+          "QD",
+          "5S",
+          "QC",
+          "6H",
+          "2S"
+        ],
+        "matchIndices": [
+          8,
+          9
+        ]
+      }
+    },
+    {
+      "id": "c0000000-0000-0000-0000-000000000010",
+      "subjectId": "b0000000-0000-0000-0000-000000000004",
+      "subjectCode": "B1",
+      "type": "N_BACK_GRID",
+      "difficulty": "ULTRA_EASY",
+      "prompt": "Grid 1-Back: Tap Match when the highlighted cell is the same as 1 step back.",
+      "expectedAnswers": [],
+      "timeLimitSeconds": 45,
+      "mathOperation": null,
+      "mathComplexityScore": null,
+      "dualNBackGridParams": null,
+      "dualNBackCardParams": null,
+      "memoryCardParams": null,
+      "sumPairParams": null,
+      "sumPairRounds": null,
+      "sumPairGroups": null,
+      "sumPairDeck": null,
+      "imagePairParams": null,
+      "imagePairDeck": null,
+      "anagramParams": null,
+      "wordleParams": null,
+      "estimationParams": null,
+      "digitSpanParams": null,
+      "nbackGridParams": {
+        "n": 1,
+        "sequence": [
+          0,
+          4,
+          2,
+          4,
+          8,
+          1,
+          8
+        ],
+        "matchIndices": [
+          3,
+          6
+        ],
+        "gridSize": 3
+      },
+      "nbackParams": null
+    },
+    {
+      "id": "c0000000-0000-0000-0000-000000000011",
+      "subjectId": "b0000000-0000-0000-0000-000000000004",
+      "subjectCode": "B1",
+      "type": "N_BACK_GRID",
+      "difficulty": "EASY",
+      "prompt": "Grid 2-Back: Tap Match when the highlighted cell matches the one from 2 steps back.",
+      "expectedAnswers": [],
+      "timeLimitSeconds": 60,
+      "mathOperation": null,
+      "mathComplexityScore": null,
+      "dualNBackGridParams": null,
+      "dualNBackCardParams": null,
+      "memoryCardParams": null,
+      "sumPairParams": null,
+      "sumPairRounds": null,
+      "sumPairGroups": null,
+      "sumPairDeck": null,
+      "imagePairParams": null,
+      "imagePairDeck": null,
+      "anagramParams": null,
+      "wordleParams": null,
+      "estimationParams": null,
+      "digitSpanParams": null,
+      "nbackGridParams": {
+        "n": 2,
+        "sequence": [
+          0,
+          2,
+          4,
+          2,
+          6,
+          8,
+          4
+        ],
+        "matchIndices": [
+          3,
+          6
+        ],
+        "gridSize": 3
+      },
+      "nbackParams": null
+    },
+    {
+      "id": "c0000000-0000-0000-0000-000000000012",
+      "subjectId": "b0000000-0000-0000-0000-000000000004",
+      "subjectCode": "B1",
+      "type": "DUAL_NBACK_GRID",
+      "difficulty": "ULTRA_EASY",
+      "prompt": "Dual Grid 1-Back: Tap Match Position or Match Color when that attribute matches 1 step back.",
+      "expectedAnswers": [],
+      "timeLimitSeconds": 60,
+      "mathOperation": null,
+      "mathComplexityScore": null,
+      "dualNBackGridParams": {
+        "n": 1,
+        "sequence": [
+          {
+            "position": 0,
+            "color": "#4285F4"
+          },
+          {
+            "position": 4,
+            "color": "#EA4335"
+          },
+          {
+            "position": 0,
+            "color": "#FBBC04"
+          },
+          {
+            "position": 2,
+            "color": "#4285F4"
+          },
+          {
+            "position": 4,
+            "color": "#34A853"
+          }
+        ],
+        "matchPositionIndices": [
+          2
+        ],
+        "matchColorIndices": [
+          3
+        ],
+        "colors": [
+          "#4285F4",
+          "#EA4335",
+          "#FBBC04",
+          "#34A853"
+        ],
+        "gridSize": 3
+      },
+      "dualNBackCardParams": null,
+      "memoryCardParams": null,
+      "sumPairParams": null,
+      "sumPairRounds": null,
+      "sumPairGroups": null,
+      "sumPairDeck": null,
+      "imagePairParams": null,
+      "imagePairDeck": null,
+      "anagramParams": null,
+      "wordleParams": null,
+      "estimationParams": null,
+      "digitSpanParams": null,
+      "nbackGridParams": null,
+      "nbackParams": null
+    },
+    {
+      "id": "c0000000-0000-0000-0000-000000000013",
+      "subjectId": "b0000000-0000-0000-0000-000000000004",
+      "subjectCode": "B1",
+      "type": "DUAL_NBACK_CARD",
+      "difficulty": "ULTRA_EASY",
+      "prompt": "Dual Card 1-Back: Tap Match Color (suit) or Match Number (rank) when that matches 1 step back.",
+      "expectedAnswers": [],
+      "timeLimitSeconds": 60,
+      "mathOperation": null,
+      "mathComplexityScore": null,
+      "dualNBackGridParams": null,
+      "dualNBackCardParams": {
+        "n": 1,
+        "sequence": [
+          "AC",
+          "2D",
+          "2C",
+          "3H",
+          "AS",
+          "3S"
+        ],
+        "matchColorIndices": [
+          5
+        ],
+        "matchNumberIndices": [
+          2
+        ]
+      },
+      "memoryCardParams": null,
+      "sumPairParams": null,
+      "sumPairRounds": null,
+      "sumPairGroups": null,
+      "sumPairDeck": null,
+      "imagePairParams": null,
+      "imagePairDeck": null,
+      "anagramParams": null,
+      "wordleParams": null,
+      "estimationParams": null,
+      "digitSpanParams": null,
+      "nbackGridParams": null,
+      "nbackParams": null
+    },
+    {
+      "id": "c0000000-0000-0000-0000-000000000014",
+      "subjectId": "b0000000-0000-0000-0000-000000000004",
+      "subjectCode": "B1",
+      "type": "N_BACK",
+      "difficulty": "ULTRA_EASY",
+      "prompt": "1-Back: Tap when the card matches the previous one. (2 suits)",
+      "expectedAnswers": [],
+      "timeLimitSeconds": 30,
+      "mathOperation": null,
+      "mathComplexityScore": null,
+      "dualNBackGridParams": null,
+      "dualNBackCardParams": null,
+      "memoryCardParams": null,
+      "sumPairParams": null,
+      "sumPairRounds": null,
+      "sumPairGroups": null,
+      "sumPairDeck": null,
+      "imagePairParams": null,
+      "imagePairDeck": null,
+      "anagramParams": null,
+      "wordleParams": null,
+      "estimationParams": null,
+      "digitSpanParams": null,
+      "nbackGridParams": null,
+      "nbackParams": {
+        "n": 1,
+        "sequence": [
+          "5D",
+          "8D",
+          "8D",
+          "KC",
+          "10D",
+          "10D",
+          "10C",
+          "9D",
+          "10D",
+          "10D",
+          "AD",
+          "10D"
+        ],
+        "matchIndices": [
+          2,
+          5,
+          9
+        ]
+      }
+    },
+    {
+      "id": "c0000000-0000-0000-0000-000000000015",
+      "subjectId": "b0000000-0000-0000-0000-000000000004",
+      "subjectCode": "B1",
+      "type": "N_BACK",
+      "difficulty": "ULTRA_EASY",
+      "prompt": "1-Back: Tap when the card matches the previous one. (3 suits)",
+      "expectedAnswers": [],
+      "timeLimitSeconds": 30,
+      "mathOperation": null,
+      "mathComplexityScore": null,
+      "dualNBackGridParams": null,
+      "dualNBackCardParams": null,
+      "memoryCardParams": null,
+      "sumPairParams": null,
+      "sumPairRounds": null,
+      "sumPairGroups": null,
+      "sumPairDeck": null,
+      "imagePairParams": null,
+      "imagePairDeck": null,
+      "anagramParams": null,
+      "wordleParams": null,
+      "estimationParams": null,
+      "digitSpanParams": null,
+      "nbackGridParams": null,
+      "nbackParams": {
+        "n": 1,
+        "sequence": [
+          "QH",
+          "5H",
+          "5H",
+          "4C",
+          "KD",
+          "KD",
+          "KD",
+          "9H",
+          "9H",
+          "9H",
+          "2H",
+          "JC"
+        ],
+        "matchIndices": [
+          2,
+          5,
+          6,
+          8,
+          9
+        ]
+      }
+    },
+    {
+      "id": "c0000000-0000-0000-0000-000000000016",
+      "subjectId": "b0000000-0000-0000-0000-000000000004",
+      "subjectCode": "B1",
+      "type": "N_BACK",
+      "difficulty": "ULTRA_EASY",
+      "prompt": "1-Back: Tap when the card matches the previous one. (4 suits)",
+      "expectedAnswers": [],
+      "timeLimitSeconds": 30,
+      "mathOperation": null,
+      "mathComplexityScore": null,
+      "dualNBackGridParams": null,
+      "dualNBackCardParams": null,
+      "memoryCardParams": null,
+      "sumPairParams": null,
+      "sumPairRounds": null,
+      "sumPairGroups": null,
+      "sumPairDeck": null,
+      "imagePairParams": null,
+      "imagePairDeck": null,
+      "anagramParams": null,
+      "wordleParams": null,
+      "estimationParams": null,
+      "digitSpanParams": null,
+      "nbackGridParams": null,
+      "nbackParams": {
+        "n": 1,
+        "sequence": [
+          "2S",
+          "2S",
+          "10C",
+          "3D",
+          "3D",
+          "3D",
+          "3H",
+          "JC",
+          "QC",
+          "4S",
+          "7H",
+          "7H"
+        ],
+        "matchIndices": [
+          1,
+          4,
+          5,
+          11
+        ]
+      }
+    },
+    {
+      "id": "c0000000-0000-0000-0000-000000000017",
+      "subjectId": "b0000000-0000-0000-0000-000000000004",
+      "subjectCode": "B1",
+      "type": "N_BACK",
+      "difficulty": "EASY",
+      "prompt": "2-Back: Tap when the card matches the one from 2 steps back. (1 suit)",
+      "expectedAnswers": [],
+      "timeLimitSeconds": 60,
+      "mathOperation": null,
+      "mathComplexityScore": null,
+      "dualNBackGridParams": null,
+      "dualNBackCardParams": null,
+      "memoryCardParams": null,
+      "sumPairParams": null,
+      "sumPairRounds": null,
+      "sumPairGroups": null,
+      "sumPairDeck": null,
+      "imagePairParams": null,
+      "imagePairDeck": null,
+      "anagramParams": null,
+      "wordleParams": null,
+      "estimationParams": null,
+      "digitSpanParams": null,
+      "nbackGridParams": null,
+      "nbackParams": {
+        "n": 2,
+        "sequence": [
+          "AC",
+          "2C",
+          "AC",
+          "4C",
+          "10C",
+          "7C",
+          "KC",
+          "5C",
+          "KC",
+          "4C",
+          "KC",
+          "3C"
+        ],
+        "matchIndices": [
+          2,
+          8,
+          10
+        ]
+      }
+    },
+    {
+      "id": "c0000000-0000-0000-0000-000000000018",
+      "subjectId": "b0000000-0000-0000-0000-000000000004",
+      "subjectCode": "B1",
+      "type": "N_BACK",
+      "difficulty": "EASY",
+      "prompt": "2-Back: Tap when the card matches the one from 2 steps back. (3 suits)",
+      "expectedAnswers": [],
+      "timeLimitSeconds": 60,
+      "mathOperation": null,
+      "mathComplexityScore": null,
+      "dualNBackGridParams": null,
+      "dualNBackCardParams": null,
+      "memoryCardParams": null,
+      "sumPairParams": null,
+      "sumPairRounds": null,
+      "sumPairGroups": null,
+      "sumPairDeck": null,
+      "imagePairParams": null,
+      "imagePairDeck": null,
+      "anagramParams": null,
+      "wordleParams": null,
+      "estimationParams": null,
+      "digitSpanParams": null,
+      "nbackGridParams": null,
+      "nbackParams": {
+        "n": 2,
+        "sequence": [
+          "JD",
+          "QD",
+          "JD",
+          "8D",
+          "QD",
+          "8D",
+          "QD",
+          "10D",
+          "9C",
+          "6C",
+          "6D",
+          "6H"
+        ],
+        "matchIndices": [
+          2,
+          5,
+          6
+        ]
+      }
+    },
+    {
+      "id": "c0000000-0000-0000-0000-000000000019",
+      "subjectId": "b0000000-0000-0000-0000-000000000004",
+      "subjectCode": "B1",
+      "type": "N_BACK",
+      "difficulty": "EASY",
+      "prompt": "2-Back: Tap when the card matches the one from 2 steps back. (4 suits)",
+      "expectedAnswers": [],
+      "timeLimitSeconds": 60,
+      "mathOperation": null,
+      "mathComplexityScore": null,
+      "dualNBackGridParams": null,
+      "dualNBackCardParams": null,
+      "memoryCardParams": null,
+      "sumPairParams": null,
+      "sumPairRounds": null,
+      "sumPairGroups": null,
+      "sumPairDeck": null,
+      "imagePairParams": null,
+      "imagePairDeck": null,
+      "anagramParams": null,
+      "wordleParams": null,
+      "estimationParams": null,
+      "digitSpanParams": null,
+      "nbackGridParams": null,
+      "nbackParams": {
+        "n": 2,
+        "sequence": [
+          "2H",
+          "JD",
+          "9H",
+          "5H",
+          "4S",
+          "6S",
+          "QS",
+          "4C",
+          "9H",
+          "4C",
+          "JH",
+          "4S"
+        ],
+        "matchIndices": [
+          9
+        ]
+      }
+    },
+    {
+      "id": "c0000000-0000-0000-0000-000000000020",
+      "subjectId": "b0000000-0000-0000-0000-000000000004",
+      "subjectCode": "B1",
+      "type": "N_BACK",
+      "difficulty": "MEDIUM",
+      "prompt": "3-Back: Tap when the card matches the one from 3 steps back. (1 suit)",
+      "expectedAnswers": [],
+      "timeLimitSeconds": 60,
+      "mathOperation": null,
+      "mathComplexityScore": null,
+      "dualNBackGridParams": null,
+      "dualNBackCardParams": null,
+      "memoryCardParams": null,
+      "sumPairParams": null,
+      "sumPairRounds": null,
+      "sumPairGroups": null,
+      "sumPairDeck": null,
+      "imagePairParams": null,
+      "imagePairDeck": null,
+      "anagramParams": null,
+      "wordleParams": null,
+      "estimationParams": null,
+      "digitSpanParams": null,
+      "nbackGridParams": null,
+      "nbackParams": {
+        "n": 3,
+        "sequence": [
+          "2C",
+          "6C",
+          "KC",
+          "9C",
+          "7C",
+          "KC",
+          "9C",
+          "6C",
+          "KC",
+          "2C",
+          "7C",
+          "KC"
+        ],
+        "matchIndices": [
+          5,
+          6,
+          8,
+          11
+        ]
+      }
+    },
+    {
+      "id": "c0000000-0000-0000-0000-000000000021",
+      "subjectId": "b0000000-0000-0000-0000-000000000004",
+      "subjectCode": "B1",
+      "type": "N_BACK",
+      "difficulty": "MEDIUM",
+      "prompt": "3-Back: Tap when the card matches the one from 3 steps back. (2 suits)",
+      "expectedAnswers": [],
+      "timeLimitSeconds": 60,
+      "mathOperation": null,
+      "mathComplexityScore": null,
+      "dualNBackGridParams": null,
+      "dualNBackCardParams": null,
+      "memoryCardParams": null,
+      "sumPairParams": null,
+      "sumPairRounds": null,
+      "sumPairGroups": null,
+      "sumPairDeck": null,
+      "imagePairParams": null,
+      "imagePairDeck": null,
+      "anagramParams": null,
+      "wordleParams": null,
+      "estimationParams": null,
+      "digitSpanParams": null,
+      "nbackGridParams": null,
+      "nbackParams": {
+        "n": 3,
+        "sequence": [
+          "9C",
+          "AC",
+          "3D",
+          "KD",
+          "AC",
+          "3D",
+          "KD",
+          "3C",
+          "2D",
+          "KD",
+          "KD",
+          "2D"
+        ],
+        "matchIndices": [
+          4,
+          5,
+          6,
+          9,
+          11
+        ]
+      }
+    },
+    {
+      "id": "c0000000-0000-0000-0000-000000000022",
+      "subjectId": "b0000000-0000-0000-0000-000000000004",
+      "subjectCode": "B1",
+      "type": "N_BACK",
+      "difficulty": "MEDIUM",
+      "prompt": "3-Back: Tap when the card matches the one from 3 steps back. (3 suits)",
+      "expectedAnswers": [],
+      "timeLimitSeconds": 60,
+      "mathOperation": null,
+      "mathComplexityScore": null,
+      "dualNBackGridParams": null,
+      "dualNBackCardParams": null,
+      "memoryCardParams": null,
+      "sumPairParams": null,
+      "sumPairRounds": null,
+      "sumPairGroups": null,
+      "sumPairDeck": null,
+      "imagePairParams": null,
+      "imagePairDeck": null,
+      "anagramParams": null,
+      "wordleParams": null,
+      "estimationParams": null,
+      "digitSpanParams": null,
+      "nbackGridParams": null,
+      "nbackParams": {
+        "n": 3,
+        "sequence": [
+          "AD",
+          "5H",
+          "4H",
+          "4D",
+          "6H",
+          "10C",
+          "4D",
+          "6H",
+          "JD",
+          "QD",
+          "5D",
+          "KD"
+        ],
+        "matchIndices": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "id": "c0000000-0000-0000-0000-000000000030",
+      "subjectId": "b0000000-0000-0000-0000-000000000004",
+      "subjectCode": "B1",
+      "type": "N_BACK_GRID",
+      "difficulty": "ULTRA_EASY",
+      "prompt": "Grid 1-Back: Tap Match when the highlighted cell matches 1 step back. (3×3)",
+      "expectedAnswers": [],
+      "timeLimitSeconds": 45,
+      "mathOperation": null,
+      "mathComplexityScore": null,
+      "dualNBackGridParams": null,
+      "dualNBackCardParams": null,
+      "memoryCardParams": null,
+      "sumPairParams": null,
+      "sumPairRounds": null,
+      "sumPairGroups": null,
+      "sumPairDeck": null,
+      "imagePairParams": null,
+      "imagePairDeck": null,
+      "anagramParams": null,
+      "wordleParams": null,
+      "estimationParams": null,
+      "digitSpanParams": null,
+      "nbackGridParams": {
+        "n": 1,
+        "sequence": [
+          7,
+          7,
+          7,
+          4,
+          8,
+          3,
+          3,
+          2
+        ],
+        "matchIndices": [
+          1,
+          2,
+          6
+        ],
+        "gridSize": 3
+      },
+      "nbackParams": null
+    },
+    {
+      "id": "c0000000-0000-0000-0000-000000000031",
+      "subjectId": "b0000000-0000-0000-0000-000000000004",
+      "subjectCode": "B1",
+      "type": "N_BACK_GRID",
+      "difficulty": "ULTRA_EASY",
+      "prompt": "Grid 1-Back: Tap Match when the highlighted cell matches 1 step back. (4×4)",
+      "expectedAnswers": [],
+      "timeLimitSeconds": 55,
+      "mathOperation": null,
+      "mathComplexityScore": null,
+      "dualNBackGridParams": null,
+      "dualNBackCardParams": null,
+      "memoryCardParams": null,
+      "sumPairParams": null,
+      "sumPairRounds": null,
+      "sumPairGroups": null,
+      "sumPairDeck": null,
+      "imagePairParams": null,
+      "imagePairDeck": null,
+      "anagramParams": null,
+      "wordleParams": null,
+      "estimationParams": null,
+      "digitSpanParams": null,
+      "nbackGridParams": {
+        "n": 1,
+        "sequence": [
+          3,
+          13,
+          5,
+          1,
+          1,
+          12,
+          7,
+          7,
+          7,
+          7
+        ],
+        "matchIndices": [
+          4,
+          7,
+          8,
+          9
+        ],
+        "gridSize": 4
+      },
+      "nbackParams": null
+    },
+    {
+      "id": "c0000000-0000-0000-0000-000000000032",
+      "subjectId": "b0000000-0000-0000-0000-000000000004",
+      "subjectCode": "B1",
+      "type": "N_BACK_GRID",
+      "difficulty": "EASY",
+      "prompt": "Grid 2-Back: Tap Match when the cell matches 2 steps back. (3×3)",
+      "expectedAnswers": [],
+      "timeLimitSeconds": 55,
+      "mathOperation": null,
+      "mathComplexityScore": null,
+      "dualNBackGridParams": null,
+      "dualNBackCardParams": null,
+      "memoryCardParams": null,
+      "sumPairParams": null,
+      "sumPairRounds": null,
+      "sumPairGroups": null,
+      "sumPairDeck": null,
+      "imagePairParams": null,
+      "imagePairDeck": null,
+      "anagramParams": null,
+      "wordleParams": null,
+      "estimationParams": null,
+      "digitSpanParams": null,
+      "nbackGridParams": {
+        "n": 2,
+        "sequence": [
+          6,
+          6,
+          6,
+          0,
+          4,
+          7,
+          3,
+          0,
+          3,
+          3
+        ],
+        "matchIndices": [
+          2,
+          8
+        ],
+        "gridSize": 3
+      },
+      "nbackParams": null
+    },
+    {
+      "id": "c0000000-0000-0000-0000-000000000033",
+      "subjectId": "b0000000-0000-0000-0000-000000000004",
+      "subjectCode": "B1",
+      "type": "N_BACK_GRID",
+      "difficulty": "EASY",
+      "prompt": "Grid 2-Back: Tap Match when the cell matches 2 steps back. (4×4)",
+      "expectedAnswers": [],
+      "timeLimitSeconds": 65,
+      "mathOperation": null,
+      "mathComplexityScore": null,
+      "dualNBackGridParams": null,
+      "dualNBackCardParams": null,
+      "memoryCardParams": null,
+      "sumPairParams": null,
+      "sumPairRounds": null,
+      "sumPairGroups": null,
+      "sumPairDeck": null,
+      "imagePairParams": null,
+      "imagePairDeck": null,
+      "anagramParams": null,
+      "wordleParams": null,
+      "estimationParams": null,
+      "digitSpanParams": null,
+      "nbackGridParams": {
+        "n": 2,
+        "sequence": [
+          5,
+          12,
+          13,
+          7,
+          13,
+          7,
+          5,
+          2,
+          5,
+          6,
+          12,
+          0
+        ],
+        "matchIndices": [
+          4,
+          5,
+          8
+        ],
+        "gridSize": 4
+      },
+      "nbackParams": null
+    },
+    {
+      "id": "c0000000-0000-0000-0000-000000000034",
+      "subjectId": "b0000000-0000-0000-0000-000000000004",
+      "subjectCode": "B1",
+      "type": "N_BACK_GRID",
+      "difficulty": "MEDIUM",
+      "prompt": "Grid 3-Back: Tap Match when the cell matches 3 steps back. (3×3)",
+      "expectedAnswers": [],
+      "timeLimitSeconds": 65,
+      "mathOperation": null,
+      "mathComplexityScore": null,
+      "dualNBackGridParams": null,
+      "dualNBackCardParams": null,
+      "memoryCardParams": null,
+      "sumPairParams": null,
+      "sumPairRounds": null,
+      "sumPairGroups": null,
+      "sumPairDeck": null,
+      "imagePairParams": null,
+      "imagePairDeck": null,
+      "anagramParams": null,
+      "wordleParams": null,
+      "estimationParams": null,
+      "digitSpanParams": null,
+      "nbackGridParams": {
+        "n": 3,
+        "sequence": [
+          4,
+          0,
+          7,
+          7,
+          7,
+          1,
+          8,
+          7,
+          7,
+          2
+        ],
+        "matchIndices": [
+          7
+        ],
+        "gridSize": 3
+      },
+      "nbackParams": null
+    },
+    {
+      "id": "c0000000-0000-0000-0000-000000000035",
+      "subjectId": "b0000000-0000-0000-0000-000000000004",
+      "subjectCode": "B1",
+      "type": "N_BACK_GRID",
+      "difficulty": "MEDIUM",
+      "prompt": "Grid 3-Back: Tap Match when the cell matches 3 steps back. (4×4)",
+      "expectedAnswers": [],
+      "timeLimitSeconds": 75,
+      "mathOperation": null,
+      "mathComplexityScore": null,
+      "dualNBackGridParams": null,
+      "dualNBackCardParams": null,
+      "memoryCardParams": null,
+      "sumPairParams": null,
+      "sumPairRounds": null,
+      "sumPairGroups": null,
+      "sumPairDeck": null,
+      "imagePairParams": null,
+      "imagePairDeck": null,
+      "anagramParams": null,
+      "wordleParams": null,
+      "estimationParams": null,
+      "digitSpanParams": null,
+      "nbackGridParams": {
+        "n": 3,
+        "sequence": [
+          4,
+          7,
+          5,
+          2,
+          7,
+          5,
+          3,
+          7,
+          10,
+          3,
+          11,
+          10
+        ],
+        "matchIndices": [
+          4,
+          5,
+          7,
+          9,
+          11
+        ],
+        "gridSize": 4
+      },
+      "nbackParams": null
+    },
+    {
+      "id": "c0000000-0000-0000-0000-000000000040",
+      "subjectId": "b0000000-0000-0000-0000-000000000004",
+      "subjectCode": "B1",
+      "type": "DUAL_NBACK_GRID",
+      "difficulty": "ULTRA_EASY",
+      "prompt": "Dual Grid 1-Back (short): Tap Match Position or Match Color when that attribute matches 1 step back.",
+      "expectedAnswers": [],
+      "timeLimitSeconds": 55,
+      "mathOperation": null,
+      "mathComplexityScore": null,
+      "dualNBackGridParams": {
+        "n": 1,
+        "sequence": [
+          {
+            "position": 7,
+            "color": "#FBBC04"
+          },
+          {
+            "position": 3,
+            "color": "#4285F4"
+          },
+          {
+            "position": 2,
+            "color": "#EA4335"
+          },
+          {
+            "position": 6,
+            "color": "#34A853"
+          },
+          {
+            "position": 5,
+            "color": "#4285F4"
+          },
+          {
+            "position": 1,
+            "color": "#FBBC04"
+          },
+          {
+            "position": 1,
+            "color": "#FBBC04"
+          },
+          {
+            "position": 1,
+            "color": "#FBBC04"
+          }
+        ],
+        "matchPositionIndices": [
+          6,
+          7
+        ],
+        "matchColorIndices": [
+          6,
+          7
+        ],
+        "colors": [
+          "#4285F4",
+          "#EA4335",
+          "#FBBC04",
+          "#34A853"
+        ],
+        "gridSize": 3
+      },
+      "dualNBackCardParams": null,
+      "memoryCardParams": null,
+      "sumPairParams": null,
+      "sumPairRounds": null,
+      "sumPairGroups": null,
+      "sumPairDeck": null,
+      "imagePairParams": null,
+      "imagePairDeck": null,
+      "anagramParams": null,
+      "wordleParams": null,
+      "estimationParams": null,
+      "digitSpanParams": null,
+      "nbackGridParams": null,
+      "nbackParams": null
+    },
+    {
+      "id": "c0000000-0000-0000-0000-000000000041",
+      "subjectId": "b0000000-0000-0000-0000-000000000004",
+      "subjectCode": "B1",
+      "type": "DUAL_NBACK_GRID",
+      "difficulty": "EASY",
+      "prompt": "Dual Grid 1-Back: Tap Match Position or Match Color when that attribute matches 1 step back.",
+      "expectedAnswers": [],
+      "timeLimitSeconds": 65,
+      "mathOperation": null,
+      "mathComplexityScore": null,
+      "dualNBackGridParams": {
+        "n": 1,
+        "sequence": [
+          {
+            "position": 6,
+            "color": "#4285F4"
+          },
+          {
+            "position": 0,
+            "color": "#FBBC04"
+          },
+          {
+            "position": 5,
+            "color": "#EA4335"
+          },
+          {
+            "position": 5,
+            "color": "#4285F4"
+          },
+          {
+            "position": 5,
+            "color": "#4285F4"
+          },
+          {
+            "position": 5,
+            "color": "#FBBC04"
+          },
+          {
+            "position": 8,
+            "color": "#34A853"
+          },
+          {
+            "position": 7,
+            "color": "#4285F4"
+          },
+          {
+            "position": 7,
+            "color": "#34A853"
+          },
+          {
+            "position": 3,
+            "color": "#4285F4"
+          },
+          {
+            "position": 5,
+            "color": "#FBBC04"
+          },
+          {
+            "position": 6,
+            "color": "#4285F4"
+          }
+        ],
+        "matchPositionIndices": [
+          3,
+          4,
+          5,
+          8
+        ],
+        "matchColorIndices": [
+          4
+        ],
+        "colors": [
+          "#4285F4",
+          "#EA4335",
+          "#FBBC04",
+          "#34A853"
+        ],
+        "gridSize": 3
+      },
+      "dualNBackCardParams": null,
+      "memoryCardParams": null,
+      "sumPairParams": null,
+      "sumPairRounds": null,
+      "sumPairGroups": null,
+      "sumPairDeck": null,
+      "imagePairParams": null,
+      "imagePairDeck": null,
+      "anagramParams": null,
+      "wordleParams": null,
+      "estimationParams": null,
+      "digitSpanParams": null,
+      "nbackGridParams": null,
+      "nbackParams": null
+    },
+    {
+      "id": "c0000000-0000-0000-0000-000000000042",
+      "subjectId": "b0000000-0000-0000-0000-000000000004",
+      "subjectCode": "B1",
+      "type": "DUAL_NBACK_GRID",
+      "difficulty": "EASY",
+      "prompt": "Dual Grid 2-Back: Tap Match Position or Match Color when that attribute matches 2 steps back.",
+      "expectedAnswers": [],
+      "timeLimitSeconds": 65,
+      "mathOperation": null,
+      "mathComplexityScore": null,
+      "dualNBackGridParams": {
+        "n": 2,
+        "sequence": [
+          {
+            "position": 2,
+            "color": "#FBBC04"
+          },
+          {
+            "position": 7,
+            "color": "#34A853"
+          },
+          {
+            "position": 2,
+            "color": "#FBBC04"
+          },
+          {
+            "position": 8,
+            "color": "#34A853"
+          },
+          {
+            "position": 2,
+            "color": "#FBBC04"
+          },
+          {
+            "position": 7,
+            "color": "#4285F4"
+          },
+          {
+            "position": 2,
+            "color": "#FBBC04"
+          },
+          {
+            "position": 4,
+            "color": "#FBBC04"
+          },
+          {
+            "position": 6,
+            "color": "#FBBC04"
+          },
+          {
+            "position": 4,
+            "color": "#EA4335"
+          }
+        ],
+        "matchPositionIndices": [
+          2,
+          4,
+          6,
+          9
+        ],
+        "matchColorIndices": [
+          2,
+          3,
+          4,
+          6,
+          8
+        ],
+        "colors": [
+          "#4285F4",
+          "#EA4335",
+          "#FBBC04",
+          "#34A853"
+        ],
+        "gridSize": 3
+      },
+      "dualNBackCardParams": null,
+      "memoryCardParams": null,
+      "sumPairParams": null,
+      "sumPairRounds": null,
+      "sumPairGroups": null,
+      "sumPairDeck": null,
+      "imagePairParams": null,
+      "imagePairDeck": null,
+      "anagramParams": null,
+      "wordleParams": null,
+      "estimationParams": null,
+      "digitSpanParams": null,
+      "nbackGridParams": null,
+      "nbackParams": null
+    },
+    {
+      "id": "c0000000-0000-0000-0000-000000000043",
+      "subjectId": "b0000000-0000-0000-0000-000000000004",
+      "subjectCode": "B1",
+      "type": "DUAL_NBACK_GRID",
+      "difficulty": "MEDIUM",
+      "prompt": "Dual Grid 2-Back (4×4): Tap Match Position or Match Color when that attribute matches 2 steps back.",
+      "expectedAnswers": [],
+      "timeLimitSeconds": 75,
+      "mathOperation": null,
+      "mathComplexityScore": null,
+      "dualNBackGridParams": {
+        "n": 2,
+        "sequence": [
+          {
+            "position": 8,
+            "color": "#4285F4"
+          },
+          {
+            "position": 0,
+            "color": "#FBBC04"
+          },
+          {
+            "position": 11,
+            "color": "#34A853"
+          },
+          {
+            "position": 0,
+            "color": "#FBBC04"
+          },
+          {
+            "position": 14,
+            "color": "#34A853"
+          },
+          {
+            "position": 0,
+            "color": "#EA4335"
+          },
+          {
+            "position": 14,
+            "color": "#4285F4"
+          },
+          {
+            "position": 0,
+            "color": "#EA4335"
+          },
+          {
+            "position": 9,
+            "color": "#EA4335"
+          },
+          {
+            "position": 0,
+            "color": "#EA4335"
+          },
+          {
+            "position": 5,
+            "color": "#FBBC04"
+          },
+          {
+            "position": 13,
+            "color": "#EA4335"
+          }
+        ],
+        "matchPositionIndices": [
+          3,
+          5,
+          6,
+          7,
+          9
+        ],
+        "matchColorIndices": [
+          3,
+          4,
+          7,
+          9,
+          11
+        ],
+        "colors": [
+          "#4285F4",
+          "#EA4335",
+          "#FBBC04",
+          "#34A853"
+        ],
+        "gridSize": 4
+      },
+      "dualNBackCardParams": null,
+      "memoryCardParams": null,
+      "sumPairParams": null,
+      "sumPairRounds": null,
+      "sumPairGroups": null,
+      "sumPairDeck": null,
+      "imagePairParams": null,
+      "imagePairDeck": null,
+      "anagramParams": null,
+      "wordleParams": null,
+      "estimationParams": null,
+      "digitSpanParams": null,
+      "nbackGridParams": null,
+      "nbackParams": null
+    },
+    {
+      "id": "c0000000-0000-0000-0000-000000000044",
+      "subjectId": "b0000000-0000-0000-0000-000000000004",
+      "subjectCode": "B1",
+      "type": "DUAL_NBACK_GRID",
+      "difficulty": "MEDIUM",
+      "prompt": "Dual Grid 3-Back: Tap Match Position or Match Color when that attribute matches 3 steps back.",
+      "expectedAnswers": [],
+      "timeLimitSeconds": 75,
+      "mathOperation": null,
+      "mathComplexityScore": null,
+      "dualNBackGridParams": {
+        "n": 3,
+        "sequence": [
+          {
+            "position": 3,
+            "color": "#FBBC04"
+          },
+          {
+            "position": 0,
+            "color": "#EA4335"
+          },
+          {
+            "position": 7,
+            "color": "#EA4335"
+          },
+          {
+            "position": 8,
+            "color": "#FBBC04"
+          },
+          {
+            "position": 0,
+            "color": "#34A853"
+          },
+          {
+            "position": 0,
+            "color": "#EA4335"
+          },
+          {
+            "position": 8,
+            "color": "#34A853"
+          },
+          {
+            "position": 2,
+            "color": "#34A853"
+          },
+          {
+            "position": 0,
+            "color": "#FBBC04"
+          },
+          {
+            "position": 8,
+            "color": "#FBBC04"
+          }
+        ],
+        "matchPositionIndices": [
+          4,
+          6,
+          8,
+          9
+        ],
+        "matchColorIndices": [
+          3,
+          5,
+          7
+        ],
+        "colors": [
+          "#4285F4",
+          "#EA4335",
+          "#FBBC04",
+          "#34A853"
+        ],
+        "gridSize": 3
+      },
+      "dualNBackCardParams": null,
+      "memoryCardParams": null,
+      "sumPairParams": null,
+      "sumPairRounds": null,
+      "sumPairGroups": null,
+      "sumPairDeck": null,
+      "imagePairParams": null,
+      "imagePairDeck": null,
+      "anagramParams": null,
+      "wordleParams": null,
+      "estimationParams": null,
+      "digitSpanParams": null,
+      "nbackGridParams": null,
+      "nbackParams": null
+    },
+    {
+      "id": "c0000000-0000-0000-0000-000000000045",
+      "subjectId": "b0000000-0000-0000-0000-000000000004",
+      "subjectCode": "B1",
+      "type": "DUAL_NBACK_GRID",
+      "difficulty": "HARD",
+      "prompt": "Dual Grid 3-Back (4×4): Tap Match Position or Match Color when that attribute matches 3 steps back.",
+      "expectedAnswers": [],
+      "timeLimitSeconds": 90,
+      "mathOperation": null,
+      "mathComplexityScore": null,
+      "dualNBackGridParams": {
+        "n": 3,
+        "sequence": [
+          {
+            "position": 3,
+            "color": "#34A853"
+          },
+          {
+            "position": 4,
+            "color": "#FBBC04"
+          },
+          {
+            "position": 13,
+            "color": "#34A853"
+          },
+          {
+            "position": 3,
+            "color": "#FBBC04"
+          },
+          {
+            "position": 4,
+            "color": "#34A853"
+          },
+          {
+            "position": 13,
+            "color": "#4285F4"
+          },
+          {
+            "position": 8,
+            "color": "#FBBC04"
+          },
+          {
+            "position": 9,
+            "color": "#EA4335"
+          },
+          {
+            "position": 13,
+            "color": "#EA4335"
+          },
+          {
+            "position": 15,
+            "color": "#FBBC04"
+          },
+          {
+            "position": 9,
+            "color": "#EA4335"
+          },
+          {
+            "position": 11,
+            "color": "#FBBC04"
+          }
+        ],
+        "matchPositionIndices": [
+          3,
+          4,
+          5,
+          8,
+          10
+        ],
+        "matchColorIndices": [
+          6,
+          9,
+          10
+        ],
+        "colors": [
+          "#4285F4",
+          "#EA4335",
+          "#FBBC04",
+          "#34A853"
+        ],
+        "gridSize": 4
+      },
+      "dualNBackCardParams": null,
+      "memoryCardParams": null,
+      "sumPairParams": null,
+      "sumPairRounds": null,
+      "sumPairGroups": null,
+      "sumPairDeck": null,
+      "imagePairParams": null,
+      "imagePairDeck": null,
+      "anagramParams": null,
+      "wordleParams": null,
+      "estimationParams": null,
+      "digitSpanParams": null,
+      "nbackGridParams": null,
+      "nbackParams": null
+    },
+    {
+      "id": "c0000000-0000-0000-0000-000000000050",
+      "subjectId": "b0000000-0000-0000-0000-000000000004",
+      "subjectCode": "B1",
+      "type": "DUAL_NBACK_CARD",
+      "difficulty": "ULTRA_EASY",
+      "prompt": "Dual Card 1-Back (short): Tap Match Color (suit) or Match Number (rank) when it matches 1 step back.",
+      "expectedAnswers": [],
+      "timeLimitSeconds": 55,
+      "mathOperation": null,
+      "mathComplexityScore": null,
+      "dualNBackGridParams": null,
+      "dualNBackCardParams": {
+        "n": 1,
+        "sequence": [
+          "QD",
+          "10C",
+          "QC",
+          "AS",
+          "6S",
+          "6H",
+          "6C",
+          "KC"
+        ],
+        "matchColorIndices": [
+          2,
+          4,
+          7
+        ],
+        "matchNumberIndices": [
+          5,
+          6
+        ]
+      },
+      "memoryCardParams": null,
+      "sumPairParams": null,
+      "sumPairRounds": null,
+      "sumPairGroups": null,
+      "sumPairDeck": null,
+      "imagePairParams": null,
+      "imagePairDeck": null,
+      "anagramParams": null,
+      "wordleParams": null,
+      "estimationParams": null,
+      "digitSpanParams": null,
+      "nbackGridParams": null,
+      "nbackParams": null
+    },
+    {
+      "id": "c0000000-0000-0000-0000-000000000051",
+      "subjectId": "b0000000-0000-0000-0000-000000000004",
+      "subjectCode": "B1",
+      "type": "DUAL_NBACK_CARD",
+      "difficulty": "EASY",
+      "prompt": "Dual Card 1-Back: Tap Match Color (suit) or Match Number (rank) when it matches 1 step back.",
+      "expectedAnswers": [],
+      "timeLimitSeconds": 65,
+      "mathOperation": null,
+      "mathComplexityScore": null,
+      "dualNBackGridParams": null,
+      "dualNBackCardParams": {
+        "n": 1,
+        "sequence": [
+          "3H",
+          "5D",
+          "6C",
+          "KH",
+          "8C",
+          "5S",
+          "JS",
+          "8C",
+          "5D",
+          "3S",
+          "QH",
+          "QD"
+        ],
+        "matchColorIndices": [
+          6
+        ],
+        "matchNumberIndices": [
+          11
+        ]
+      },
+      "memoryCardParams": null,
+      "sumPairParams": null,
+      "sumPairRounds": null,
+      "sumPairGroups": null,
+      "sumPairDeck": null,
+      "imagePairParams": null,
+      "imagePairDeck": null,
+      "anagramParams": null,
+      "wordleParams": null,
+      "estimationParams": null,
+      "digitSpanParams": null,
+      "nbackGridParams": null,
+      "nbackParams": null
+    },
+    {
+      "id": "c0000000-0000-0000-0000-000000000052",
+      "subjectId": "b0000000-0000-0000-0000-000000000004",
+      "subjectCode": "B1",
+      "type": "DUAL_NBACK_CARD",
+      "difficulty": "EASY",
+      "prompt": "Dual Card 2-Back: Tap Match Color (suit) or Match Number (rank) when it matches 2 steps back.",
+      "expectedAnswers": [],
+      "timeLimitSeconds": 65,
+      "mathOperation": null,
+      "mathComplexityScore": null,
+      "dualNBackGridParams": null,
+      "dualNBackCardParams": {
+        "n": 2,
+        "sequence": [
+          "4D",
+          "2C",
+          "4H",
+          "2H",
+          "4H",
+          "8S",
+          "2D",
+          "2S",
+          "4C",
+          "7D"
+        ],
+        "matchColorIndices": [
+          4,
+          7
+        ],
+        "matchNumberIndices": [
+          2,
+          3,
+          4
+        ]
+      },
+      "memoryCardParams": null,
+      "sumPairParams": null,
+      "sumPairRounds": null,
+      "sumPairGroups": null,
+      "sumPairDeck": null,
+      "imagePairParams": null,
+      "imagePairDeck": null,
+      "anagramParams": null,
+      "wordleParams": null,
+      "estimationParams": null,
+      "digitSpanParams": null,
+      "nbackGridParams": null,
+      "nbackParams": null
+    },
+    {
+      "id": "c0000000-0000-0000-0000-000000000053",
+      "subjectId": "b0000000-0000-0000-0000-000000000004",
+      "subjectCode": "B1",
+      "type": "DUAL_NBACK_CARD",
+      "difficulty": "MEDIUM",
+      "prompt": "Dual Card 2-Back (long): Tap Match Color (suit) or Match Number (rank) when it matches 2 steps back.",
+      "expectedAnswers": [],
+      "timeLimitSeconds": 75,
+      "mathOperation": null,
+      "mathComplexityScore": null,
+      "dualNBackGridParams": null,
+      "dualNBackCardParams": {
+        "n": 2,
+        "sequence": [
+          "QC",
+          "7S",
+          "QC",
+          "4S",
+          "2D",
+          "4C",
+          "2S",
+          "AS",
+          "7C",
+          "2S",
+          "7D",
+          "6H"
+        ],
+        "matchColorIndices": [
+          2,
+          3,
+          9
+        ],
+        "matchNumberIndices": [
+          2,
+          5,
+          6,
+          10
+        ]
+      },
+      "memoryCardParams": null,
+      "sumPairParams": null,
+      "sumPairRounds": null,
+      "sumPairGroups": null,
+      "sumPairDeck": null,
+      "imagePairParams": null,
+      "imagePairDeck": null,
+      "anagramParams": null,
+      "wordleParams": null,
+      "estimationParams": null,
+      "digitSpanParams": null,
+      "nbackGridParams": null,
+      "nbackParams": null
+    },
+    {
+      "id": "c0000000-0000-0000-0000-000000000054",
+      "subjectId": "b0000000-0000-0000-0000-000000000004",
+      "subjectCode": "B1",
+      "type": "DUAL_NBACK_CARD",
+      "difficulty": "MEDIUM",
+      "prompt": "Dual Card 3-Back: Tap Match Color (suit) or Match Number (rank) when it matches 3 steps back.",
+      "expectedAnswers": [],
+      "timeLimitSeconds": 75,
+      "mathOperation": null,
+      "mathComplexityScore": null,
+      "dualNBackGridParams": null,
+      "dualNBackCardParams": {
+        "n": 3,
+        "sequence": [
+          "2S",
+          "6H",
+          "9S",
+          "8S",
+          "6S",
+          "JD",
+          "8D",
+          "6D",
+          "QD",
+          "9C"
+        ],
+        "matchColorIndices": [
+          3,
+          8
+        ],
+        "matchNumberIndices": [
+          4,
+          6,
+          7
+        ]
+      },
+      "memoryCardParams": null,
+      "sumPairParams": null,
+      "sumPairRounds": null,
+      "sumPairGroups": null,
+      "sumPairDeck": null,
+      "imagePairParams": null,
+      "imagePairDeck": null,
+      "anagramParams": null,
+      "wordleParams": null,
+      "estimationParams": null,
+      "digitSpanParams": null,
+      "nbackGridParams": null,
+      "nbackParams": null
+    },
+    {
+      "id": "c0000000-0000-0000-0000-000000000055",
+      "subjectId": "b0000000-0000-0000-0000-000000000004",
+      "subjectCode": "B1",
+      "type": "DUAL_NBACK_CARD",
+      "difficulty": "HARD",
+      "prompt": "Dual Card 3-Back (long): Tap Match Color (suit) or Match Number (rank) when it matches 3 steps back.",
+      "expectedAnswers": [],
+      "timeLimitSeconds": 90,
+      "mathOperation": null,
+      "mathComplexityScore": null,
+      "dualNBackGridParams": null,
+      "dualNBackCardParams": {
+        "n": 3,
+        "sequence": [
+          "9S",
+          "KC",
+          "8C",
+          "2H",
+          "3S",
+          "10C",
+          "QC",
+          "3S",
+          "9C",
+          "4C",
+          "KH",
+          "6C"
+        ],
+        "matchColorIndices": [
+          5,
+          7,
+          8,
+          9,
+          11
+        ],
+        "matchNumberIndices": [
+          7
+        ]
+      },
+      "memoryCardParams": null,
+      "sumPairParams": null,
+      "sumPairRounds": null,
+      "sumPairGroups": null,
+      "sumPairDeck": null,
+      "imagePairParams": null,
+      "imagePairDeck": null,
+      "anagramParams": null,
+      "wordleParams": null,
+      "estimationParams": null,
+      "digitSpanParams": null,
+      "nbackGridParams": null,
+      "nbackParams": null
+    },
+    {
+      "id": "d0000000-0000-0000-0000-000000000001",
+      "subjectId": "b0000000-0000-0000-0000-000000000008",
+      "subjectCode": "MEMORY",
+      "type": "MEMORY_CARD_PAIRS",
+      "difficulty": "EASY",
+      "prompt": "Find all matching pairs. Flip two cards at a time.",
+      "expectedAnswers": [],
+      "timeLimitSeconds": 120,
+      "mathOperation": null,
+      "mathComplexityScore": null,
+      "dualNBackGridParams": null,
+      "dualNBackCardParams": null,
+      "memoryCardParams": {
+        "pairCount": 4,
+        "symbols": [
+          "🍎",
+          "🍊",
+          "🍋",
+          "🍇"
+        ],
+        "shuffledDeck": [
+          "🍊",
+          "🍎",
+          "🍎",
+          "🍋",
+          "🍇",
+          "🍋",
+          "🍊",
+          "🍇"
+        ]
+      },
+      "sumPairParams": null,
+      "sumPairRounds": null,
+      "sumPairGroups": null,
+      "sumPairDeck": null,
+      "imagePairParams": null,
+      "imagePairDeck": null,
+      "anagramParams": null,
+      "wordleParams": null,
+      "estimationParams": null,
+      "digitSpanParams": null,
+      "nbackGridParams": null,
+      "nbackParams": null
+    },
+    {
+      "id": "d0000000-0000-0000-0000-000000000002",
+      "subjectId": "b0000000-0000-0000-0000-000000000008",
+      "subjectCode": "MEMORY",
+      "type": "MEMORY_CARD_PAIRS",
+      "difficulty": "MEDIUM",
+      "prompt": "Find all matching pairs. Flip two cards at a time.",
+      "expectedAnswers": [],
+      "timeLimitSeconds": 180,
+      "mathOperation": null,
+      "mathComplexityScore": null,
+      "dualNBackGridParams": null,
+      "dualNBackCardParams": null,
+      "memoryCardParams": {
+        "pairCount": 6,
+        "symbols": [
+          "🐶",
+          "🐱",
+          "🐰",
+          "🐻",
+          "🦊",
+          "🐼"
+        ],
+        "shuffledDeck": [
+          "🐱",
+          "🐻",
+          "🐻",
+          "🐶",
+          "🦊",
+          "🐰",
+          "🐼",
+          "🐱",
+          "🦊",
+          "🐼",
+          "🐶",
+          "🐰"
+        ]
+      },
+      "sumPairParams": null,
+      "sumPairRounds": null,
+      "sumPairGroups": null,
+      "sumPairDeck": null,
+      "imagePairParams": null,
+      "imagePairDeck": null,
+      "anagramParams": null,
+      "wordleParams": null,
+      "estimationParams": null,
+      "digitSpanParams": null,
+      "nbackGridParams": null,
+      "nbackParams": null
+    },
+    {
+      "id": "d0000000-0000-0000-0000-000000000003",
+      "subjectId": "b0000000-0000-0000-0000-000000000008",
+      "subjectCode": "MEMORY",
+      "type": "MEMORY_CARD_PAIRS",
+      "difficulty": "ULTRA_EASY",
+      "prompt": "Find the 3 matching pairs.",
+      "expectedAnswers": [],
+      "timeLimitSeconds": 60,
+      "mathOperation": null,
+      "mathComplexityScore": null,
+      "dualNBackGridParams": null,
+      "dualNBackCardParams": null,
+      "memoryCardParams": {
+        "pairCount": 3,
+        "symbols": [
+          "⭐",
+          "❤️",
+          "🔵"
+        ],
+        "shuffledDeck": [
+          "🔵",
+          "❤️",
+          "🔵",
+          "⭐",
+          "❤️",
+          "⭐"
+        ]
+      },
+      "sumPairParams": null,
+      "sumPairRounds": null,
+      "sumPairGroups": null,
+      "sumPairDeck": null,
+      "imagePairParams": null,
+      "imagePairDeck": null,
+      "anagramParams": null,
+      "wordleParams": null,
+      "estimationParams": null,
+      "digitSpanParams": null,
+      "nbackGridParams": null,
+      "nbackParams": null
+    },
+    {
+      "id": "e0000000-0000-0000-0000-000000000001",
+      "subjectId": "b0000000-0000-0000-0000-000000000008",
+      "subjectCode": "MEMORY",
+      "type": "SUM_PAIR",
+      "difficulty": "EASY",
+      "prompt": "Find pairs where first number + static = second number.",
+      "expectedAnswers": [],
+      "timeLimitSeconds": 120,
+      "mathOperation": null,
+      "mathComplexityScore": null,
+      "dualNBackGridParams": null,
+      "dualNBackCardParams": null,
+      "memoryCardParams": null,
+      "sumPairParams": {
+        "staticNumbers": [
+          5
+        ],
+        "pairsPerRound": 4,
+        "minValue": 1,
+        "maxValue": 50
+      },
+      "sumPairRounds": null,
+      "sumPairGroups": [
+        {
+          "static": 5,
+          "color": "#3b82f6",
+          "cards": [
+            27,
+            29,
+            22,
+            42,
+            34,
+            47,
+            15,
+            10
+          ]
+        }
+      ],
+      "sumPairDeck": [
+        {
+          "value": 10,
+          "static": 5,
+          "color": "#3b82f6"
+        },
+        {
+          "value": 29,
+          "static": 5,
+          "color": "#3b82f6"
+        },
+        {
+          "value": 42,
+          "static": 5,
+          "color": "#3b82f6"
+        },
+        {
+          "value": 47,
+          "static": 5,
+          "color": "#3b82f6"
+        },
+        {
+          "value": 34,
+          "static": 5,
+          "color": "#3b82f6"
+        },
+        {
+          "value": 22,
+          "static": 5,
+          "color": "#3b82f6"
+        },
+        {
+          "value": 27,
+          "static": 5,
+          "color": "#3b82f6"
+        },
+        {
+          "value": 15,
+          "static": 5,
+          "color": "#3b82f6"
+        }
+      ],
+      "imagePairParams": null,
+      "imagePairDeck": null,
+      "anagramParams": null,
+      "wordleParams": null,
+      "estimationParams": null,
+      "digitSpanParams": null,
+      "nbackGridParams": null,
+      "nbackParams": null
+    },
+    {
+      "id": "e0000000-0000-0000-0000-000000000002",
+      "subjectId": "b0000000-0000-0000-0000-000000000008",
+      "subjectCode": "MEMORY",
+      "type": "SUM_PAIR",
+      "difficulty": "MEDIUM",
+      "prompt": "Find sum pairs. Complete all pairs for the current static, then the next.",
+      "expectedAnswers": [],
+      "timeLimitSeconds": 180,
+      "mathOperation": null,
+      "mathComplexityScore": null,
+      "dualNBackGridParams": null,
+      "dualNBackCardParams": null,
+      "memoryCardParams": null,
+      "sumPairParams": {
+        "staticNumbers": [
+          3,
+          7
+        ],
+        "pairsPerRound": 3,
+        "minValue": 1,
+        "maxValue": 99
+      },
+      "sumPairRounds": null,
+      "sumPairGroups": [
+        {
+          "static": 3,
+          "color": "#3b82f6",
+          "cards": [
+            7,
+            34,
+            22,
+            31,
+            10,
+            19
+          ]
+        },
+        {
+          "static": 7,
+          "color": "#22c55e",
+          "cards": [
+            71,
+            95,
+            64,
+            62,
+            88,
+            69
+          ]
+        }
+      ],
+      "sumPairDeck": [
+        {
+          "value": 69,
+          "static": 7,
+          "color": "#22c55e"
+        },
+        {
+          "value": 31,
+          "static": 3,
+          "color": "#3b82f6"
+        },
+        {
+          "value": 19,
+          "static": 3,
+          "color": "#3b82f6"
+        },
+        {
+          "value": 71,
+          "static": 7,
+          "color": "#22c55e"
+        },
+        {
+          "value": 95,
+          "static": 7,
+          "color": "#22c55e"
+        },
+        {
+          "value": 34,
+          "static": 3,
+          "color": "#3b82f6"
+        },
+        {
+          "value": 88,
+          "static": 7,
+          "color": "#22c55e"
+        },
+        {
+          "value": 64,
+          "static": 7,
+          "color": "#22c55e"
+        },
+        {
+          "value": 10,
+          "static": 3,
+          "color": "#3b82f6"
+        },
+        {
+          "value": 22,
+          "static": 3,
+          "color": "#3b82f6"
+        },
+        {
+          "value": 62,
+          "static": 7,
+          "color": "#22c55e"
+        },
+        {
+          "value": 7,
+          "static": 3,
+          "color": "#3b82f6"
+        }
+      ],
+      "imagePairParams": null,
+      "imagePairDeck": null,
+      "anagramParams": null,
+      "wordleParams": null,
+      "estimationParams": null,
+      "digitSpanParams": null,
+      "nbackGridParams": null,
+      "nbackParams": null
+    },
+    {
+      "id": "e0000000-0000-0000-0000-000000000003",
+      "subjectId": "b0000000-0000-0000-0000-000000000008",
+      "subjectCode": "MEMORY",
+      "type": "SUM_PAIR",
+      "difficulty": "ULTRA_EASY",
+      "prompt": "Find pairs where first + static = second.",
+      "expectedAnswers": [],
+      "timeLimitSeconds": 90,
+      "mathOperation": null,
+      "mathComplexityScore": null,
+      "dualNBackGridParams": null,
+      "dualNBackCardParams": null,
+      "memoryCardParams": null,
+      "sumPairParams": {
+        "staticNumbers": [
+          2
+        ],
+        "pairsPerRound": 3,
+        "minValue": 1,
+        "maxValue": 30
+      },
+      "sumPairRounds": null,
+      "sumPairGroups": [
+        {
+          "static": 2,
+          "color": "#3b82f6",
+          "cards": [
+            12,
+            17,
+            10,
+            15,
+            20,
+            18
+          ]
+        }
+      ],
+      "sumPairDeck": [
+        {
+          "value": 15,
+          "static": 2,
+          "color": "#3b82f6"
+        },
+        {
+          "value": 18,
+          "static": 2,
+          "color": "#3b82f6"
+        },
+        {
+          "value": 20,
+          "static": 2,
+          "color": "#3b82f6"
+        },
+        {
+          "value": 12,
+          "static": 2,
+          "color": "#3b82f6"
+        },
+        {
+          "value": 17,
+          "static": 2,
+          "color": "#3b82f6"
+        },
+        {
+          "value": 10,
+          "static": 2,
+          "color": "#3b82f6"
+        }
+      ],
+      "imagePairParams": null,
+      "imagePairDeck": null,
+      "anagramParams": null,
+      "wordleParams": null,
+      "estimationParams": null,
+      "digitSpanParams": null,
+      "nbackGridParams": null,
+      "nbackParams": null
+    },
+    {
+      "id": "e0000000-0000-0000-0000-000000000004",
+      "subjectId": "b0000000-0000-0000-0000-000000000008",
+      "subjectCode": "MEMORY",
+      "type": "SUM_PAIR",
+      "difficulty": "HARD",
+      "prompt": "Find sum pairs. Complete each round before the next (3 rounds).",
+      "expectedAnswers": [],
+      "timeLimitSeconds": 240,
+      "mathOperation": null,
+      "mathComplexityScore": null,
+      "dualNBackGridParams": null,
+      "dualNBackCardParams": null,
+      "memoryCardParams": null,
+      "sumPairParams": {
+        "staticNumbers": [
+          2,
+          5,
+          10
+        ],
+        "pairsPerRound": 4,
+        "minValue": 1,
+        "maxValue": 99
+      },
+      "sumPairRounds": null,
+      "sumPairGroups": [
+        {
+          "static": 2,
+          "color": "#3b82f6",
+          "cards": [
+            19,
+            4,
+            2,
+            30,
+            21,
+            32,
+            10,
+            8
+          ]
+        },
+        {
+          "static": 5,
+          "color": "#22c55e",
+          "cards": [
+            57,
+            50,
+            64,
+            39,
+            59,
+            52,
+            44,
+            45
+          ]
+        },
+        {
+          "static": 10,
+          "color": "#f59e0b",
+          "cards": [
+            88,
+            84,
+            98,
+            91,
+            77,
+            81,
+            87,
+            94
+          ]
+        }
+      ],
+      "sumPairDeck": [
+        {
+          "value": 50,
+          "static": 5,
+          "color": "#22c55e"
+        },
+        {
+          "value": 91,
+          "static": 10,
+          "color": "#f59e0b"
+        },
+        {
+          "value": 44,
+          "static": 5,
+          "color": "#22c55e"
+        },
+        {
+          "value": 10,
+          "static": 2,
+          "color": "#3b82f6"
+        },
+        {
+          "value": 19,
+          "static": 2,
+          "color": "#3b82f6"
+        },
+        {
+          "value": 94,
+          "static": 10,
+          "color": "#f59e0b"
+        },
+        {
+          "value": 21,
+          "static": 2,
+          "color": "#3b82f6"
+        },
+        {
+          "value": 84,
+          "static": 10,
+          "color": "#f59e0b"
+        },
+        {
+          "value": 52,
+          "static": 5,
+          "color": "#22c55e"
+        },
+        {
+          "value": 98,
+          "static": 10,
+          "color": "#f59e0b"
+        },
+        {
+          "value": 59,
+          "static": 5,
+          "color": "#22c55e"
+        },
+        {
+          "value": 4,
+          "static": 2,
+          "color": "#3b82f6"
+        },
+        {
+          "value": 39,
+          "static": 5,
+          "color": "#22c55e"
+        },
+        {
+          "value": 45,
+          "static": 5,
+          "color": "#22c55e"
+        },
+        {
+          "value": 64,
+          "static": 5,
+          "color": "#22c55e"
+        },
+        {
+          "value": 81,
+          "static": 10,
+          "color": "#f59e0b"
+        },
+        {
+          "value": 57,
+          "static": 5,
+          "color": "#22c55e"
+        },
+        {
+          "value": 87,
+          "static": 10,
+          "color": "#f59e0b"
+        },
+        {
+          "value": 2,
+          "static": 2,
+          "color": "#3b82f6"
+        },
+        {
+          "value": 32,
+          "static": 2,
+          "color": "#3b82f6"
+        },
+        {
+          "value": 30,
+          "static": 2,
+          "color": "#3b82f6"
+        },
+        {
+          "value": 77,
+          "static": 10,
+          "color": "#f59e0b"
+        },
+        {
+          "value": 88,
+          "static": 10,
+          "color": "#f59e0b"
+        },
+        {
+          "value": 8,
+          "static": 2,
+          "color": "#3b82f6"
+        }
+      ],
+      "imagePairParams": null,
+      "imagePairDeck": null,
+      "anagramParams": null,
+      "wordleParams": null,
+      "estimationParams": null,
+      "digitSpanParams": null,
+      "nbackGridParams": null,
+      "nbackParams": null
+    },
+    {
+      "id": "e0000000-0000-0000-0000-000000000006",
+      "subjectId": "b0000000-0000-0000-0000-000000000008",
+      "subjectCode": "MEMORY",
+      "type": "SUM_PAIR",
+      "difficulty": "EASY",
+      "prompt": "Find pairs where first + static = second. Numbers are 1–2 digits.",
+      "expectedAnswers": [],
+      "timeLimitSeconds": 120,
+      "mathOperation": null,
+      "mathComplexityScore": null,
+      "dualNBackGridParams": null,
+      "dualNBackCardParams": null,
+      "memoryCardParams": null,
+      "sumPairParams": {
+        "staticNumbers": [
+          5
+        ],
+        "pairsPerRound": 4,
+        "minValue": 1,
+        "maxValue": 99
+      },
+      "sumPairRounds": null,
+      "sumPairGroups": [
+        {
+          "static": 5,
+          "color": "#3b82f6",
+          "cards": [
+            13,
+            18,
+            94,
+            86,
+            9,
+            99,
+            14,
+            91
+          ]
+        }
+      ],
+      "sumPairDeck": [
+        {
+          "value": 14,
+          "static": 5,
+          "color": "#3b82f6"
+        },
+        {
+          "value": 94,
+          "static": 5,
+          "color": "#3b82f6"
+        },
+        {
+          "value": 99,
+          "static": 5,
+          "color": "#3b82f6"
+        },
+        {
+          "value": 13,
+          "static": 5,
+          "color": "#3b82f6"
+        },
+        {
+          "value": 86,
+          "static": 5,
+          "color": "#3b82f6"
+        },
+        {
+          "value": 91,
+          "static": 5,
+          "color": "#3b82f6"
+        },
+        {
+          "value": 18,
+          "static": 5,
+          "color": "#3b82f6"
+        },
+        {
+          "value": 9,
+          "static": 5,
+          "color": "#3b82f6"
+        }
+      ],
+      "imagePairParams": null,
+      "imagePairDeck": null,
+      "anagramParams": null,
+      "wordleParams": null,
+      "estimationParams": null,
+      "digitSpanParams": null,
+      "nbackGridParams": null,
+      "nbackParams": null
+    },
+    {
+      "id": "f0000000-0000-0000-0000-000000000001",
+      "subjectId": "b0000000-0000-0000-0000-000000000010",
+      "subjectCode": "WORD",
+      "type": "ANAGRAM",
+      "difficulty": "ULTRA_EASY",
+      "prompt": "Trouvez le mot à partir des lettres affichées.",
+      "expectedAnswers": [],
+      "timeLimitSeconds": 90,
+      "mathOperation": null,
+      "mathComplexityScore": null,
+      "dualNBackGridParams": null,
+      "dualNBackCardParams": null,
+      "memoryCardParams": null,
+      "sumPairParams": null,
+      "sumPairRounds": null,
+      "sumPairGroups": null,
+      "sumPairDeck": null,
+      "imagePairParams": null,
+      "imagePairDeck": null,
+      "anagramParams": {
+        "scrambledLetters": [
+          "s",
+          "i"
+        ],
+        "answer": "si",
+        "hintIntervalSeconds": 10,
+        "letterColorHint": true
+      },
+      "wordleParams": null,
+      "estimationParams": null,
+      "digitSpanParams": null,
+      "nbackGridParams": null,
+      "nbackParams": null
+    },
+    {
+      "id": "f0000000-0000-0000-0000-000000000002",
+      "subjectId": "b0000000-0000-0000-0000-000000000010",
+      "subjectCode": "WORD",
+      "type": "ANAGRAM",
+      "difficulty": "EASY",
+      "prompt": "Trouvez le mot à partir des lettres affichées.",
+      "expectedAnswers": [],
+      "timeLimitSeconds": 120,
+      "mathOperation": null,
+      "mathComplexityScore": null,
+      "dualNBackGridParams": null,
+      "dualNBackCardParams": null,
+      "memoryCardParams": null,
+      "sumPairParams": null,
+      "sumPairRounds": null,
+      "sumPairGroups": null,
+      "sumPairDeck": null,
+      "imagePairParams": null,
+      "imagePairDeck": null,
+      "anagramParams": {
+        "scrambledLetters": [
+          "d",
+          "t",
+          "i"
+        ],
+        "answer": "dit",
+        "hintIntervalSeconds": 10,
+        "letterColorHint": true
+      },
+      "wordleParams": null,
+      "estimationParams": null,
+      "digitSpanParams": null,
+      "nbackGridParams": null,
+      "nbackParams": null
+    },
+    {
+      "id": "f0000000-0000-0000-0000-000000000003",
+      "subjectId": "b0000000-0000-0000-0000-000000000010",
+      "subjectCode": "WORD",
+      "type": "ANAGRAM",
+      "difficulty": "MEDIUM",
+      "prompt": "Trouvez le mot à partir des lettres affichées.",
+      "expectedAnswers": [],
+      "timeLimitSeconds": 150,
+      "mathOperation": null,
+      "mathComplexityScore": null,
+      "dualNBackGridParams": null,
+      "dualNBackCardParams": null,
+      "memoryCardParams": null,
+      "sumPairParams": null,
+      "sumPairRounds": null,
+      "sumPairGroups": null,
+      "sumPairDeck": null,
+      "imagePairParams": null,
+      "imagePairDeck": null,
+      "anagramParams": {
+        "scrambledLetters": [
+          "e",
+          "i",
+          "l",
+          "a"
+        ],
+        "answer": "aile",
+        "hintIntervalSeconds": 10,
+        "letterColorHint": true
+      },
+      "wordleParams": null,
+      "estimationParams": null,
+      "digitSpanParams": null,
+      "nbackGridParams": null,
+      "nbackParams": null
+    },
+    {
+      "id": "f0000000-0000-0000-0000-000000000004",
+      "subjectId": "b0000000-0000-0000-0000-000000000010",
+      "subjectCode": "WORD",
+      "type": "ANAGRAM",
+      "difficulty": "HARD",
+      "prompt": "Trouvez le mot à partir des lettres affichées.",
+      "expectedAnswers": [],
+      "timeLimitSeconds": 180,
+      "mathOperation": null,
+      "mathComplexityScore": null,
+      "dualNBackGridParams": null,
+      "dualNBackCardParams": null,
+      "memoryCardParams": null,
+      "sumPairParams": null,
+      "sumPairRounds": null,
+      "sumPairGroups": null,
+      "sumPairDeck": null,
+      "imagePairParams": null,
+      "imagePairDeck": null,
+      "anagramParams": {
+        "scrambledLetters": [
+          "e",
+          "d",
+          "r",
+          "n",
+          "i",
+          "r",
+          "e"
+        ],
+        "answer": "dernier",
+        "hintIntervalSeconds": 10,
+        "letterColorHint": true
+      },
+      "wordleParams": null,
+      "estimationParams": null,
+      "digitSpanParams": null,
+      "nbackGridParams": null,
+      "nbackParams": null
+    },
+    {
+      "id": "f0000000-0000-0000-0000-000000000005",
+      "subjectId": "b0000000-0000-0000-0000-000000000010",
+      "subjectCode": "WORD",
+      "type": "ANAGRAM",
+      "difficulty": "VERY_HARD",
+      "prompt": "Trouvez le mot à partir des lettres affichées.",
+      "expectedAnswers": [],
+      "timeLimitSeconds": 210,
+      "mathOperation": null,
+      "mathComplexityScore": null,
+      "dualNBackGridParams": null,
+      "dualNBackCardParams": null,
+      "memoryCardParams": null,
+      "sumPairParams": null,
+      "sumPairRounds": null,
+      "sumPairGroups": null,
+      "sumPairDeck": null,
+      "imagePairParams": null,
+      "imagePairDeck": null,
+      "anagramParams": {
+        "scrambledLetters": [
+          "u",
+          "q",
+          "q",
+          "u",
+          "e",
+          "e",
+          "s",
+          "l"
+        ],
+        "answer": "quelques",
+        "hintIntervalSeconds": 10,
+        "letterColorHint": true
+      },
+      "wordleParams": null,
+      "estimationParams": null,
+      "digitSpanParams": null,
+      "nbackGridParams": null,
+      "nbackParams": null
+    },
+    {
+      "id": "a0000000-0000-0000-0000-000000000200",
+      "subjectId": "b0000000-0000-0000-0000-000000000011",
+      "subjectCode": "WORDLE_FR",
+      "type": "WORDLE",
+      "difficulty": "EASY",
+      "prompt": "Devinez le mot de 3 lettres en 6 essais.",
+      "expectedAnswers": [],
+      "timeLimitSeconds": 120,
+      "mathOperation": null,
+      "mathComplexityScore": null,
+      "dualNBackGridParams": null,
+      "dualNBackCardParams": null,
+      "memoryCardParams": null,
+      "sumPairParams": null,
+      "sumPairRounds": null,
+      "sumPairGroups": null,
+      "sumPairDeck": null,
+      "imagePairParams": null,
+      "imagePairDeck": null,
+      "anagramParams": null,
+      "wordleParams": {
+        "answer": "nez",
+        "wordLength": 3,
+        "maxAttempts": 6,
+        "language": "fr"
+      },
+      "estimationParams": null,
+      "digitSpanParams": null,
+      "nbackGridParams": null,
+      "nbackParams": null
+    },
+    {
+      "id": "a0000000-0000-0000-0000-000000000201",
+      "subjectId": "b0000000-0000-0000-0000-000000000011",
+      "subjectCode": "WORDLE_FR",
+      "type": "WORDLE",
+      "difficulty": "MEDIUM",
+      "prompt": "Devinez le mot de 5 lettres en 6 essais.",
+      "expectedAnswers": [],
+      "timeLimitSeconds": 180,
+      "mathOperation": null,
+      "mathComplexityScore": null,
+      "dualNBackGridParams": null,
+      "dualNBackCardParams": null,
+      "memoryCardParams": null,
+      "sumPairParams": null,
+      "sumPairRounds": null,
+      "sumPairGroups": null,
+      "sumPairDeck": null,
+      "imagePairParams": null,
+      "imagePairDeck": null,
+      "anagramParams": null,
+      "wordleParams": {
+        "answer": "champ",
+        "wordLength": 5,
+        "maxAttempts": 6,
+        "language": "fr"
+      },
+      "estimationParams": null,
+      "digitSpanParams": null,
+      "nbackGridParams": null,
+      "nbackParams": null
+    },
+    {
+      "id": "a0000000-0000-0000-0000-000000000202",
+      "subjectId": "b0000000-0000-0000-0000-000000000011",
+      "subjectCode": "WORDLE_FR",
+      "type": "WORDLE",
+      "difficulty": "HARD",
+      "prompt": "Devinez le mot de 6 lettres en 6 essais.",
+      "expectedAnswers": [],
+      "timeLimitSeconds": 240,
+      "mathOperation": null,
+      "mathComplexityScore": null,
+      "dualNBackGridParams": null,
+      "dualNBackCardParams": null,
+      "memoryCardParams": null,
+      "sumPairParams": null,
+      "sumPairRounds": null,
+      "sumPairGroups": null,
+      "sumPairDeck": null,
+      "imagePairParams": null,
+      "imagePairDeck": null,
+      "anagramParams": null,
+      "wordleParams": {
+        "answer": "camion",
+        "wordLength": 6,
+        "maxAttempts": 6,
+        "language": "fr"
+      },
+      "estimationParams": null,
+      "digitSpanParams": null,
+      "nbackGridParams": null,
+      "nbackParams": null
+    },
+    {
+      "id": "a0000000-0000-0000-0000-000000000203",
+      "subjectId": "b0000000-0000-0000-0000-000000000011",
+      "subjectCode": "WORDLE_FR",
+      "type": "WORDLE",
+      "difficulty": "VERY_HARD",
+      "prompt": "Devinez le mot de 7 lettres en 6 essais.",
+      "expectedAnswers": [],
+      "timeLimitSeconds": 300,
+      "mathOperation": null,
+      "mathComplexityScore": null,
+      "dualNBackGridParams": null,
+      "dualNBackCardParams": null,
+      "memoryCardParams": null,
+      "sumPairParams": null,
+      "sumPairRounds": null,
+      "sumPairGroups": null,
+      "sumPairDeck": null,
+      "imagePairParams": null,
+      "imagePairDeck": null,
+      "anagramParams": null,
+      "wordleParams": {
+        "answer": "charger",
+        "wordLength": 7,
+        "maxAttempts": 6,
+        "language": "fr"
+      },
+      "estimationParams": null,
+      "digitSpanParams": null,
+      "nbackGridParams": null,
+      "nbackParams": null
+    },
+    {
+      "id": "a0000000-0000-0000-0000-000000000210",
+      "subjectId": "b0000000-0000-0000-0000-000000000012",
+      "subjectCode": "WORDLE_EN",
+      "type": "WORDLE",
+      "difficulty": "EASY",
+      "prompt": "Guess the 3-letter word in 6 tries.",
+      "expectedAnswers": [],
+      "timeLimitSeconds": 120,
+      "mathOperation": null,
+      "mathComplexityScore": null,
+      "dualNBackGridParams": null,
+      "dualNBackCardParams": null,
+      "memoryCardParams": null,
+      "sumPairParams": null,
+      "sumPairRounds": null,
+      "sumPairGroups": null,
+      "sumPairDeck": null,
+      "imagePairParams": null,
+      "imagePairDeck": null,
+      "anagramParams": null,
+      "wordleParams": {
+        "answer": "van",
+        "wordLength": 3,
+        "maxAttempts": 6,
+        "language": "en"
+      },
+      "estimationParams": null,
+      "digitSpanParams": null,
+      "nbackGridParams": null,
+      "nbackParams": null
+    },
+    {
+      "id": "a0000000-0000-0000-0000-000000000211",
+      "subjectId": "b0000000-0000-0000-0000-000000000012",
+      "subjectCode": "WORDLE_EN",
+      "type": "WORDLE",
+      "difficulty": "MEDIUM",
+      "prompt": "Guess the 5-letter word in 6 tries.",
+      "expectedAnswers": [],
+      "timeLimitSeconds": 180,
+      "mathOperation": null,
+      "mathComplexityScore": null,
+      "dualNBackGridParams": null,
+      "dualNBackCardParams": null,
+      "memoryCardParams": null,
+      "sumPairParams": null,
+      "sumPairRounds": null,
+      "sumPairGroups": null,
+      "sumPairDeck": null,
+      "imagePairParams": null,
+      "imagePairDeck": null,
+      "anagramParams": null,
+      "wordleParams": {
+        "answer": "trend",
+        "wordLength": 5,
+        "maxAttempts": 6,
+        "language": "en"
+      },
+      "estimationParams": null,
+      "digitSpanParams": null,
+      "nbackGridParams": null,
+      "nbackParams": null
+    },
+    {
+      "id": "a0000000-0000-0000-0000-000000000212",
+      "subjectId": "b0000000-0000-0000-0000-000000000012",
+      "subjectCode": "WORDLE_EN",
+      "type": "WORDLE",
+      "difficulty": "HARD",
+      "prompt": "Guess the 6-letter word in 6 tries.",
+      "expectedAnswers": [],
+      "timeLimitSeconds": 240,
+      "mathOperation": null,
+      "mathComplexityScore": null,
+      "dualNBackGridParams": null,
+      "dualNBackCardParams": null,
+      "memoryCardParams": null,
+      "sumPairParams": null,
+      "sumPairRounds": null,
+      "sumPairGroups": null,
+      "sumPairDeck": null,
+      "imagePairParams": null,
+      "imagePairDeck": null,
+      "anagramParams": null,
+      "wordleParams": {
+        "answer": "stream",
+        "wordLength": 6,
+        "maxAttempts": 6,
+        "language": "en"
+      },
+      "estimationParams": null,
+      "digitSpanParams": null,
+      "nbackGridParams": null,
+      "nbackParams": null
+    },
+    {
+      "id": "a0000000-0000-0000-0000-000000000213",
+      "subjectId": "b0000000-0000-0000-0000-000000000012",
+      "subjectCode": "WORDLE_EN",
+      "type": "WORDLE",
+      "difficulty": "VERY_HARD",
+      "prompt": "Guess the 7-letter word in 6 tries.",
+      "expectedAnswers": [],
+      "timeLimitSeconds": 300,
+      "mathOperation": null,
+      "mathComplexityScore": null,
+      "dualNBackGridParams": null,
+      "dualNBackCardParams": null,
+      "memoryCardParams": null,
+      "sumPairParams": null,
+      "sumPairRounds": null,
+      "sumPairGroups": null,
+      "sumPairDeck": null,
+      "imagePairParams": null,
+      "imagePairDeck": null,
+      "anagramParams": null,
+      "wordleParams": {
+        "answer": "success",
+        "wordLength": 7,
+        "maxAttempts": 6,
+        "language": "en"
+      },
+      "estimationParams": null,
+      "digitSpanParams": null,
+      "nbackGridParams": null,
+      "nbackParams": null
+    },
+    {
+      "id": "a0000000-0000-0000-0000-000000000300",
+      "subjectId": "b0000000-0000-0000-0000-000000000013",
+      "subjectCode": "ESTIMATION",
+      "type": "ESTIMATION",
+      "difficulty": "ULTRA_EASY",
+      "prompt": "How many days are in a year?",
+      "expectedAnswers": [
+        "365"
+      ],
+      "timeLimitSeconds": 20,
+      "mathOperation": null,
+      "mathComplexityScore": null,
+      "dualNBackGridParams": null,
+      "dualNBackCardParams": null,
+      "memoryCardParams": null,
+      "sumPairParams": null,
+      "sumPairRounds": null,
+      "sumPairGroups": null,
+      "sumPairDeck": null,
+      "imagePairParams": null,
+      "imagePairDeck": null,
+      "anagramParams": null,
+      "wordleParams": null,
+      "estimationParams": {
+        "correctAnswer": 365,
+        "unit": "days",
+        "toleranceFactor": 1.03,
+        "category": "math",
+        "hint": null,
+        "timeWeightHigher": false
+      },
+      "digitSpanParams": null,
+      "nbackGridParams": null,
+      "nbackParams": null
+    },
+    {
+      "id": "a0000000-0000-0000-0000-000000000301",
+      "subjectId": "b0000000-0000-0000-0000-000000000013",
+      "subjectCode": "ESTIMATION",
+      "type": "ESTIMATION",
+      "difficulty": "ULTRA_EASY",
+      "prompt": "How tall is the Eiffel Tower (in meters)?",
+      "expectedAnswers": [
+        "330"
+      ],
+      "timeLimitSeconds": 25,
+      "mathOperation": null,
+      "mathComplexityScore": null,
+      "dualNBackGridParams": null,
+      "dualNBackCardParams": null,
+      "memoryCardParams": null,
+      "sumPairParams": null,
+      "sumPairRounds": null,
+      "sumPairGroups": null,
+      "sumPairDeck": null,
+      "imagePairParams": null,
+      "imagePairDeck": null,
+      "anagramParams": null,
+      "wordleParams": null,
+      "estimationParams": {
+        "correctAnswer": 330,
+        "unit": "m",
+        "toleranceFactor": 1.5,
+        "category": "geography",
+        "hint": "It was the tallest man-made structure when built in 1889.",
+        "timeWeightHigher": false
+      },
+      "digitSpanParams": null,
+      "nbackGridParams": null,
+      "nbackParams": null
+    },
+    {
+      "id": "a0000000-0000-0000-0000-000000000302",
+      "subjectId": "b0000000-0000-0000-0000-000000000013",
+      "subjectCode": "ESTIMATION",
+      "type": "ESTIMATION",
+      "difficulty": "ULTRA_EASY",
+      "prompt": "What is the speed of sound in air (m/s)?",
+      "expectedAnswers": [
+        "343"
+      ],
+      "timeLimitSeconds": 25,
+      "mathOperation": null,
+      "mathComplexityScore": null,
+      "dualNBackGridParams": null,
+      "dualNBackCardParams": null,
+      "memoryCardParams": null,
+      "sumPairParams": null,
+      "sumPairRounds": null,
+      "sumPairGroups": null,
+      "sumPairDeck": null,
+      "imagePairParams": null,
+      "imagePairDeck": null,
+      "anagramParams": null,
+      "wordleParams": null,
+      "estimationParams": {
+        "correctAnswer": 343,
+        "unit": "m/s",
+        "toleranceFactor": 1.3,
+        "category": "science",
+        "hint": "It depends on temperature; ~20°C.",
+        "timeWeightHigher": false
+      },
+      "digitSpanParams": null,
+      "nbackGridParams": null,
+      "nbackParams": null
+    },
+    {
+      "id": "a0000000-0000-0000-0000-000000000303",
+      "subjectId": "b0000000-0000-0000-0000-000000000013",
+      "subjectCode": "ESTIMATION",
+      "type": "ESTIMATION",
+      "difficulty": "ULTRA_EASY",
+      "prompt": "Estimate: π × 10 = ?",
+      "expectedAnswers": [
+        "31.4"
+      ],
+      "timeLimitSeconds": 15,
+      "mathOperation": null,
+      "mathComplexityScore": null,
+      "dualNBackGridParams": null,
+      "dualNBackCardParams": null,
+      "memoryCardParams": null,
+      "sumPairParams": null,
+      "sumPairRounds": null,
+      "sumPairGroups": null,
+      "sumPairDeck": null,
+      "imagePairParams": null,
+      "imagePairDeck": null,
+      "anagramParams": null,
+      "wordleParams": null,
+      "estimationParams": {
+        "correctAnswer": 31.416,
+        "unit": "",
+        "toleranceFactor": 1.05,
+        "category": "math",
+        "hint": "π ≈ 3.14159…",
+        "timeWeightHigher": false
+      },
+      "digitSpanParams": null,
+      "nbackGridParams": null,
+      "nbackParams": null
+    },
+    {
+      "id": "a0000000-0000-0000-0000-000000000304",
+      "subjectId": "b0000000-0000-0000-0000-000000000013",
+      "subjectCode": "ESTIMATION",
+      "type": "ESTIMATION",
+      "difficulty": "ULTRA_EASY",
+      "prompt": "How many hours are in a week?",
+      "expectedAnswers": [
+        "168"
+      ],
+      "timeLimitSeconds": 20,
+      "mathOperation": null,
+      "mathComplexityScore": null,
+      "dualNBackGridParams": null,
+      "dualNBackCardParams": null,
+      "memoryCardParams": null,
+      "sumPairParams": null,
+      "sumPairRounds": null,
+      "sumPairGroups": null,
+      "sumPairDeck": null,
+      "imagePairParams": null,
+      "imagePairDeck": null,
+      "anagramParams": null,
+      "wordleParams": null,
+      "estimationParams": {
+        "correctAnswer": 168,
+        "unit": "hours",
+        "toleranceFactor": 1.05,
+        "category": "math",
+        "hint": null,
+        "timeWeightHigher": false
+      },
+      "digitSpanParams": null,
+      "nbackGridParams": null,
+      "nbackParams": null
+    },
+    {
+      "id": "a0000000-0000-0000-0000-000000000305",
+      "subjectId": "b0000000-0000-0000-0000-000000000013",
+      "subjectCode": "ESTIMATION",
+      "type": "ESTIMATION",
+      "difficulty": "EASY",
+      "prompt": "What is the height of Mount Everest (in meters)?",
+      "expectedAnswers": [
+        "8849"
+      ],
+      "timeLimitSeconds": 30,
+      "mathOperation": null,
+      "mathComplexityScore": null,
+      "dualNBackGridParams": null,
+      "dualNBackCardParams": null,
+      "memoryCardParams": null,
+      "sumPairParams": null,
+      "sumPairRounds": null,
+      "sumPairGroups": null,
+      "sumPairDeck": null,
+      "imagePairParams": null,
+      "imagePairDeck": null,
+      "anagramParams": null,
+      "wordleParams": null,
+      "estimationParams": {
+        "correctAnswer": 8849,
+        "unit": "m",
+        "toleranceFactor": 1.3,
+        "category": "geography",
+        "hint": "It is the highest peak on Earth.",
+        "timeWeightHigher": false
+      },
+      "digitSpanParams": null,
+      "nbackGridParams": null,
+      "nbackParams": null
+    },
+    {
+      "id": "a0000000-0000-0000-0000-000000000306",
+      "subjectId": "b0000000-0000-0000-0000-000000000013",
+      "subjectCode": "ESTIMATION",
+      "type": "ESTIMATION",
+      "difficulty": "EASY",
+      "prompt": "What is the straight-line distance from Paris to New York (in km)?",
+      "expectedAnswers": [
+        "5837"
+      ],
+      "timeLimitSeconds": 30,
+      "mathOperation": null,
+      "mathComplexityScore": null,
+      "dualNBackGridParams": null,
+      "dualNBackCardParams": null,
+      "memoryCardParams": null,
+      "sumPairParams": null,
+      "sumPairRounds": null,
+      "sumPairGroups": null,
+      "sumPairDeck": null,
+      "imagePairParams": null,
+      "imagePairDeck": null,
+      "anagramParams": null,
+      "wordleParams": null,
+      "estimationParams": {
+        "correctAnswer": 5837,
+        "unit": "km",
+        "toleranceFactor": 2,
+        "category": "geography",
+        "hint": null,
+        "timeWeightHigher": false
+      },
+      "digitSpanParams": null,
+      "nbackGridParams": null,
+      "nbackParams": null
+    },
+    {
+      "id": "a0000000-0000-0000-0000-000000000307",
+      "subjectId": "b0000000-0000-0000-0000-000000000013",
+      "subjectCode": "ESTIMATION",
+      "type": "ESTIMATION",
+      "difficulty": "EASY",
+      "prompt": "What is the population of France (in millions)?",
+      "expectedAnswers": [
+        "68"
+      ],
+      "timeLimitSeconds": 30,
+      "mathOperation": null,
+      "mathComplexityScore": null,
+      "dualNBackGridParams": null,
+      "dualNBackCardParams": null,
+      "memoryCardParams": null,
+      "sumPairParams": null,
+      "sumPairRounds": null,
+      "sumPairGroups": null,
+      "sumPairDeck": null,
+      "imagePairParams": null,
+      "imagePairDeck": null,
+      "anagramParams": null,
+      "wordleParams": null,
+      "estimationParams": {
+        "correctAnswer": 68,
+        "unit": "million people",
+        "toleranceFactor": 1.5,
+        "category": "geography",
+        "hint": null,
+        "timeWeightHigher": false
+      },
+      "digitSpanParams": null,
+      "nbackGridParams": null,
+      "nbackParams": null
+    },
+    {
+      "id": "a0000000-0000-0000-0000-000000000308",
+      "subjectId": "b0000000-0000-0000-0000-000000000013",
+      "subjectCode": "ESTIMATION",
+      "type": "ESTIMATION",
+      "difficulty": "EASY",
+      "prompt": "Estimate: 17 × 23 = ?",
+      "expectedAnswers": [
+        "391"
+      ],
+      "timeLimitSeconds": 20,
+      "mathOperation": null,
+      "mathComplexityScore": null,
+      "dualNBackGridParams": null,
+      "dualNBackCardParams": null,
+      "memoryCardParams": null,
+      "sumPairParams": null,
+      "sumPairRounds": null,
+      "sumPairGroups": null,
+      "sumPairDeck": null,
+      "imagePairParams": null,
+      "imagePairDeck": null,
+      "anagramParams": null,
+      "wordleParams": null,
+      "estimationParams": {
+        "correctAnswer": 391,
+        "unit": "",
+        "toleranceFactor": 1.1,
+        "category": "math",
+        "hint": "Decompose: 17×20 + 17×3",
+        "timeWeightHigher": false
+      },
+      "digitSpanParams": null,
+      "nbackGridParams": null,
+      "nbackParams": null
+    },
+    {
+      "id": "a0000000-0000-0000-0000-000000000309",
+      "subjectId": "b0000000-0000-0000-0000-000000000013",
+      "subjectCode": "ESTIMATION",
+      "type": "ESTIMATION",
+      "difficulty": "EASY",
+      "prompt": "Estimate: √200 = ?",
+      "expectedAnswers": [
+        "14.1"
+      ],
+      "timeLimitSeconds": 20,
+      "mathOperation": null,
+      "mathComplexityScore": null,
+      "dualNBackGridParams": null,
+      "dualNBackCardParams": null,
+      "memoryCardParams": null,
+      "sumPairParams": null,
+      "sumPairRounds": null,
+      "sumPairGroups": null,
+      "sumPairDeck": null,
+      "imagePairParams": null,
+      "imagePairDeck": null,
+      "anagramParams": null,
+      "wordleParams": null,
+      "estimationParams": {
+        "correctAnswer": 14.142,
+        "unit": "",
+        "toleranceFactor": 1.08,
+        "category": "math",
+        "hint": "Between √196=14 and √225=15.",
+        "timeWeightHigher": false
+      },
+      "digitSpanParams": null,
+      "nbackGridParams": null,
+      "nbackParams": null
+    },
+    {
+      "id": "a0000000-0000-0000-0000-000000000310",
+      "subjectId": "b0000000-0000-0000-0000-000000000013",
+      "subjectCode": "ESTIMATION",
+      "type": "ESTIMATION",
+      "difficulty": "MEDIUM",
+      "prompt": "What is the approximate population of Earth (in billions)?",
+      "expectedAnswers": [
+        "8"
+      ],
+      "timeLimitSeconds": 25,
+      "mathOperation": null,
+      "mathComplexityScore": null,
+      "dualNBackGridParams": null,
+      "dualNBackCardParams": null,
+      "memoryCardParams": null,
+      "sumPairParams": null,
+      "sumPairRounds": null,
+      "sumPairGroups": null,
+      "sumPairDeck": null,
+      "imagePairParams": null,
+      "imagePairDeck": null,
+      "anagramParams": null,
+      "wordleParams": null,
+      "estimationParams": {
+        "correctAnswer": 8.1,
+        "unit": "billion people",
+        "toleranceFactor": 1.5,
+        "category": "science",
+        "hint": null,
+        "timeWeightHigher": false
+      },
+      "digitSpanParams": null,
+      "nbackGridParams": null,
+      "nbackParams": null
+    },
+    {
+      "id": "a0000000-0000-0000-0000-000000000311",
+      "subjectId": "b0000000-0000-0000-0000-000000000013",
+      "subjectCode": "ESTIMATION",
+      "type": "ESTIMATION",
+      "difficulty": "MEDIUM",
+      "prompt": "What is the average distance from Earth to the Moon (in km)?",
+      "expectedAnswers": [
+        "384400"
+      ],
+      "timeLimitSeconds": 35,
+      "mathOperation": null,
+      "mathComplexityScore": null,
+      "dualNBackGridParams": null,
+      "dualNBackCardParams": null,
+      "memoryCardParams": null,
+      "sumPairParams": null,
+      "sumPairRounds": null,
+      "sumPairGroups": null,
+      "sumPairDeck": null,
+      "imagePairParams": null,
+      "imagePairDeck": null,
+      "anagramParams": null,
+      "wordleParams": null,
+      "estimationParams": {
+        "correctAnswer": 384400,
+        "unit": "km",
+        "toleranceFactor": 2,
+        "category": "science",
+        "hint": "Light takes about 1.3 seconds to travel that distance.",
+        "timeWeightHigher": false
+      },
+      "digitSpanParams": null,
+      "nbackGridParams": null,
+      "nbackParams": null
+    },
+    {
+      "id": "a0000000-0000-0000-0000-000000000312",
+      "subjectId": "b0000000-0000-0000-0000-000000000013",
+      "subjectCode": "ESTIMATION",
+      "type": "ESTIMATION",
+      "difficulty": "MEDIUM",
+      "prompt": "What is the area of France (in km²)?",
+      "expectedAnswers": [
+        "551695"
+      ],
+      "timeLimitSeconds": 35,
+      "mathOperation": null,
+      "mathComplexityScore": null,
+      "dualNBackGridParams": null,
+      "dualNBackCardParams": null,
+      "memoryCardParams": null,
+      "sumPairParams": null,
+      "sumPairRounds": null,
+      "sumPairGroups": null,
+      "sumPairDeck": null,
+      "imagePairParams": null,
+      "imagePairDeck": null,
+      "anagramParams": null,
+      "wordleParams": null,
+      "estimationParams": {
+        "correctAnswer": 551695,
+        "unit": "km²",
+        "toleranceFactor": 2,
+        "category": "geography",
+        "hint": "It is the largest country in the EU.",
+        "timeWeightHigher": false
+      },
+      "digitSpanParams": null,
+      "nbackGridParams": null,
+      "nbackParams": null
+    },
+    {
+      "id": "a0000000-0000-0000-0000-000000000313",
+      "subjectId": "b0000000-0000-0000-0000-000000000013",
+      "subjectCode": "ESTIMATION",
+      "type": "ESTIMATION",
+      "difficulty": "MEDIUM",
+      "prompt": "Estimate: e³ = ?",
+      "expectedAnswers": [
+        "20.1"
+      ],
+      "timeLimitSeconds": 25,
+      "mathOperation": null,
+      "mathComplexityScore": null,
+      "dualNBackGridParams": null,
+      "dualNBackCardParams": null,
+      "memoryCardParams": null,
+      "sumPairParams": null,
+      "sumPairRounds": null,
+      "sumPairGroups": null,
+      "sumPairDeck": null,
+      "imagePairParams": null,
+      "imagePairDeck": null,
+      "anagramParams": null,
+      "wordleParams": null,
+      "estimationParams": {
+        "correctAnswer": 20.086,
+        "unit": "",
+        "toleranceFactor": 1.15,
+        "category": "math",
+        "hint": "e ≈ 2.718; e² ≈ 7.39.",
+        "timeWeightHigher": false
+      },
+      "digitSpanParams": null,
+      "nbackGridParams": null,
+      "nbackParams": null
+    },
+    {
+      "id": "a0000000-0000-0000-0000-000000000314",
+      "subjectId": "b0000000-0000-0000-0000-000000000013",
+      "subjectCode": "ESTIMATION",
+      "type": "ESTIMATION",
+      "difficulty": "MEDIUM",
+      "prompt": "What is 2^10?",
+      "expectedAnswers": [
+        "1024"
+      ],
+      "timeLimitSeconds": 20,
+      "mathOperation": null,
+      "mathComplexityScore": null,
+      "dualNBackGridParams": null,
+      "dualNBackCardParams": null,
+      "memoryCardParams": null,
+      "sumPairParams": null,
+      "sumPairRounds": null,
+      "sumPairGroups": null,
+      "sumPairDeck": null,
+      "imagePairParams": null,
+      "imagePairDeck": null,
+      "anagramParams": null,
+      "wordleParams": null,
+      "estimationParams": {
+        "correctAnswer": 1024,
+        "unit": "",
+        "toleranceFactor": 1.05,
+        "category": "math",
+        "hint": "Powers of 2 double each time: 2, 4, 8, 16…",
+        "timeWeightHigher": false
+      },
+      "digitSpanParams": null,
+      "nbackGridParams": null,
+      "nbackParams": null
+    },
+    {
+      "id": "a0000000-0000-0000-0000-000000000315",
+      "subjectId": "b0000000-0000-0000-0000-000000000013",
+      "subjectCode": "ESTIMATION",
+      "type": "ESTIMATION",
+      "difficulty": "HARD",
+      "prompt": "What is the speed of light in a vacuum (in km/s)?",
+      "expectedAnswers": [
+        "299792"
+      ],
+      "timeLimitSeconds": 30,
+      "mathOperation": null,
+      "mathComplexityScore": null,
+      "dualNBackGridParams": null,
+      "dualNBackCardParams": null,
+      "memoryCardParams": null,
+      "sumPairParams": null,
+      "sumPairRounds": null,
+      "sumPairGroups": null,
+      "sumPairDeck": null,
+      "imagePairParams": null,
+      "imagePairDeck": null,
+      "anagramParams": null,
+      "wordleParams": null,
+      "estimationParams": {
+        "correctAnswer": 299792,
+        "unit": "km/s",
+        "toleranceFactor": 1.1,
+        "category": "science",
+        "hint": "It is exactly 299 792 458 m/s.",
+        "timeWeightHigher": false
+      },
+      "digitSpanParams": null,
+      "nbackGridParams": null,
+      "nbackParams": null
+    },
+    {
+      "id": "a0000000-0000-0000-0000-000000000316",
+      "subjectId": "b0000000-0000-0000-0000-000000000013",
+      "subjectCode": "ESTIMATION",
+      "type": "ESTIMATION",
+      "difficulty": "HARD",
+      "prompt": "What is the average distance from Earth to the Sun (in millions of km)?",
+      "expectedAnswers": [
+        "150"
+      ],
+      "timeLimitSeconds": 30,
+      "mathOperation": null,
+      "mathComplexityScore": null,
+      "dualNBackGridParams": null,
+      "dualNBackCardParams": null,
+      "memoryCardParams": null,
+      "sumPairParams": null,
+      "sumPairRounds": null,
+      "sumPairGroups": null,
+      "sumPairDeck": null,
+      "imagePairParams": null,
+      "imagePairDeck": null,
+      "anagramParams": null,
+      "wordleParams": null,
+      "estimationParams": {
+        "correctAnswer": 149.6,
+        "unit": "million km",
+        "toleranceFactor": 1.5,
+        "category": "science",
+        "hint": "This distance is called 1 astronomical unit (1 AU).",
+        "timeWeightHigher": false
+      },
+      "digitSpanParams": null,
+      "nbackGridParams": null,
+      "nbackParams": null
+    },
+    {
+      "id": "a0000000-0000-0000-0000-000000000317",
+      "subjectId": "b0000000-0000-0000-0000-000000000013",
+      "subjectCode": "ESTIMATION",
+      "type": "ESTIMATION",
+      "difficulty": "HARD",
+      "prompt": "Estimate: 7^5 = ?",
+      "expectedAnswers": [
+        "16807"
+      ],
+      "timeLimitSeconds": 30,
+      "mathOperation": null,
+      "mathComplexityScore": null,
+      "dualNBackGridParams": null,
+      "dualNBackCardParams": null,
+      "memoryCardParams": null,
+      "sumPairParams": null,
+      "sumPairRounds": null,
+      "sumPairGroups": null,
+      "sumPairDeck": null,
+      "imagePairParams": null,
+      "imagePairDeck": null,
+      "anagramParams": null,
+      "wordleParams": null,
+      "estimationParams": {
+        "correctAnswer": 16807,
+        "unit": "",
+        "toleranceFactor": 1.15,
+        "category": "math",
+        "hint": "7^2=49, 7^3=343, 7^4=2401…",
+        "timeWeightHigher": false
+      },
+      "digitSpanParams": null,
+      "nbackGridParams": null,
+      "nbackParams": null
+    },
+    {
+      "id": "a0000000-0000-0000-0000-000000000318",
+      "subjectId": "b0000000-0000-0000-0000-000000000013",
+      "subjectCode": "ESTIMATION",
+      "type": "ESTIMATION",
+      "difficulty": "VERY_HARD",
+      "prompt": "How many seconds are in a year?",
+      "expectedAnswers": [
+        "31536000"
+      ],
+      "timeLimitSeconds": 40,
+      "mathOperation": null,
+      "mathComplexityScore": null,
+      "dualNBackGridParams": null,
+      "dualNBackCardParams": null,
+      "memoryCardParams": null,
+      "sumPairParams": null,
+      "sumPairRounds": null,
+      "sumPairGroups": null,
+      "sumPairDeck": null,
+      "imagePairParams": null,
+      "imagePairDeck": null,
+      "anagramParams": null,
+      "wordleParams": null,
+      "estimationParams": {
+        "correctAnswer": 31536000,
+        "unit": "seconds",
+        "toleranceFactor": 1.05,
+        "category": "math",
+        "hint": "365 × 24 × 60 × 60",
+        "timeWeightHigher": false
+      },
+      "digitSpanParams": null,
+      "nbackGridParams": null,
+      "nbackParams": null
+    },
+    {
+      "id": "a0000000-0000-0000-0000-000000000319",
+      "subjectId": "b0000000-0000-0000-0000-000000000013",
+      "subjectCode": "ESTIMATION",
+      "type": "ESTIMATION",
+      "difficulty": "VERY_HARD",
+      "prompt": "What is the estimated age of the universe (in billions of years)?",
+      "expectedAnswers": [
+        "13.8"
+      ],
+      "timeLimitSeconds": 35,
+      "mathOperation": null,
+      "mathComplexityScore": null,
+      "dualNBackGridParams": null,
+      "dualNBackCardParams": null,
+      "memoryCardParams": null,
+      "sumPairParams": null,
+      "sumPairRounds": null,
+      "sumPairGroups": null,
+      "sumPairDeck": null,
+      "imagePairParams": null,
+      "imagePairDeck": null,
+      "anagramParams": null,
+      "wordleParams": null,
+      "estimationParams": {
+        "correctAnswer": 13.8,
+        "unit": "billion years",
+        "toleranceFactor": 1.3,
+        "category": "science",
+        "hint": "Measured from the cosmic microwave background radiation.",
+        "timeWeightHigher": false
+      },
+      "digitSpanParams": null,
+      "nbackGridParams": null,
+      "nbackParams": null
+    },
+    {
+      "id": "a0000000-0000-0000-0000-000000000320",
+      "subjectId": "b0000000-0000-0000-0000-000000000013",
+      "subjectCode": "ESTIMATION",
+      "type": "ESTIMATION",
+      "difficulty": "VERY_HARD",
+      "prompt": "What is 2^20 (exact)?",
+      "expectedAnswers": [
+        "1048576"
+      ],
+      "timeLimitSeconds": 30,
+      "mathOperation": null,
+      "mathComplexityScore": null,
+      "dualNBackGridParams": null,
+      "dualNBackCardParams": null,
+      "memoryCardParams": null,
+      "sumPairParams": null,
+      "sumPairRounds": null,
+      "sumPairGroups": null,
+      "sumPairDeck": null,
+      "imagePairParams": null,
+      "imagePairDeck": null,
+      "anagramParams": null,
+      "wordleParams": null,
+      "estimationParams": {
+        "correctAnswer": 1048576,
+        "unit": "",
+        "toleranceFactor": 1.05,
+        "category": "math",
+        "hint": "2^10 = 1 024, so 2^20 = 1 024².",
+        "timeWeightHigher": false
+      },
+      "digitSpanParams": null,
+      "nbackGridParams": null,
+      "nbackParams": null
+    },
+    {
+      "id": "a0000000-0000-0000-0000-000000000321",
+      "subjectId": "b0000000-0000-0000-0000-000000000013",
+      "subjectCode": "ESTIMATION",
+      "type": "ESTIMATION",
+      "difficulty": "ULTRA_EASY",
+      "prompt": "Estimate: 372 ÷ 3 = ?",
+      "expectedAnswers": [
+        "124"
+      ],
+      "timeLimitSeconds": 20,
+      "mathOperation": null,
+      "mathComplexityScore": null,
+      "dualNBackGridParams": null,
+      "dualNBackCardParams": null,
+      "memoryCardParams": null,
+      "sumPairParams": null,
+      "sumPairRounds": null,
+      "sumPairGroups": null,
+      "sumPairDeck": null,
+      "imagePairParams": null,
+      "imagePairDeck": null,
+      "anagramParams": null,
+      "wordleParams": null,
+      "estimationParams": {
+        "correctAnswer": 124,
+        "unit": "",
+        "toleranceFactor": 1.15,
+        "category": "math",
+        "hint": null,
+        "timeWeightHigher": true
+      },
+      "digitSpanParams": null,
+      "nbackGridParams": null,
+      "nbackParams": null
+    },
+    {
+      "id": "a0000000-0000-0000-0000-000000000322",
+      "subjectId": "b0000000-0000-0000-0000-000000000013",
+      "subjectCode": "ESTIMATION",
+      "type": "ESTIMATION",
+      "difficulty": "ULTRA_EASY",
+      "prompt": "A car travels at 100 km/h. How long (in hours) to cover 50 km?",
+      "expectedAnswers": [
+        "0.5"
+      ],
+      "timeLimitSeconds": 25,
+      "mathOperation": null,
+      "mathComplexityScore": null,
+      "dualNBackGridParams": null,
+      "dualNBackCardParams": null,
+      "memoryCardParams": null,
+      "sumPairParams": null,
+      "sumPairRounds": null,
+      "sumPairGroups": null,
+      "sumPairDeck": null,
+      "imagePairParams": null,
+      "imagePairDeck": null,
+      "anagramParams": null,
+      "wordleParams": null,
+      "estimationParams": {
+        "correctAnswer": 0.5,
+        "unit": "hours",
+        "toleranceFactor": 1.2,
+        "category": "math",
+        "hint": "time = distance ÷ speed",
+        "timeWeightHigher": false
+      },
+      "digitSpanParams": null,
+      "nbackGridParams": null,
+      "nbackParams": null
+    },
+    {
+      "id": "a0000000-0000-0000-0000-000000000323",
+      "subjectId": "b0000000-0000-0000-0000-000000000013",
+      "subjectCode": "ESTIMATION",
+      "type": "ESTIMATION",
+      "difficulty": "ULTRA_EASY",
+      "prompt": "Budget is 72K, daily rate is 612. How many days can you cover?",
+      "expectedAnswers": [
+        "117.6"
+      ],
+      "timeLimitSeconds": 25,
+      "mathOperation": null,
+      "mathComplexityScore": null,
+      "dualNBackGridParams": null,
+      "dualNBackCardParams": null,
+      "memoryCardParams": null,
+      "sumPairParams": null,
+      "sumPairRounds": null,
+      "sumPairGroups": null,
+      "sumPairDeck": null,
+      "imagePairParams": null,
+      "imagePairDeck": null,
+      "anagramParams": null,
+      "wordleParams": null,
+      "estimationParams": {
+        "correctAnswer": 117.647,
+        "unit": "days",
+        "toleranceFactor": 1.15,
+        "category": "math",
+        "hint": "days = budget ÷ daily rate",
+        "timeWeightHigher": false
+      },
+      "digitSpanParams": null,
+      "nbackGridParams": null,
+      "nbackParams": null
+    },
+    {
+      "id": "a0000000-0000-0000-0000-000000000324",
+      "subjectId": "b0000000-0000-0000-0000-000000000013",
+      "subjectCode": "ESTIMATION",
+      "type": "ESTIMATION",
+      "difficulty": "ULTRA_EASY",
+      "prompt": "A car travels at 130 km/h. How long (in hours) to cover 50 km?",
+      "expectedAnswers": [
+        "0.385"
+      ],
+      "timeLimitSeconds": 25,
+      "mathOperation": null,
+      "mathComplexityScore": null,
+      "dualNBackGridParams": null,
+      "dualNBackCardParams": null,
+      "memoryCardParams": null,
+      "sumPairParams": null,
+      "sumPairRounds": null,
+      "sumPairGroups": null,
+      "sumPairDeck": null,
+      "imagePairParams": null,
+      "imagePairDeck": null,
+      "anagramParams": null,
+      "wordleParams": null,
+      "estimationParams": {
+        "correctAnswer": 0.385,
+        "unit": "hours",
+        "toleranceFactor": 1.4,
+        "category": "math",
+        "hint": "time = distance ÷ speed",
+        "timeWeightHigher": false
+      },
+      "digitSpanParams": null,
+      "nbackGridParams": null,
+      "nbackParams": null
+    },
+    {
+      "id": "a0000000-0000-0000-0000-000000000325",
+      "subjectId": "b0000000-0000-0000-0000-000000000013",
+      "subjectCode": "ESTIMATION",
+      "type": "ESTIMATION",
+      "difficulty": "ULTRA_EASY",
+      "prompt": "A car travels at 60 km/h. How long (in minutes) to cover 30 km?",
+      "expectedAnswers": [
+        "30"
+      ],
+      "timeLimitSeconds": 25,
+      "mathOperation": null,
+      "mathComplexityScore": null,
+      "dualNBackGridParams": null,
+      "dualNBackCardParams": null,
+      "memoryCardParams": null,
+      "sumPairParams": null,
+      "sumPairRounds": null,
+      "sumPairGroups": null,
+      "sumPairDeck": null,
+      "imagePairParams": null,
+      "imagePairDeck": null,
+      "anagramParams": null,
+      "wordleParams": null,
+      "estimationParams": {
+        "correctAnswer": 30,
+        "unit": "minutes",
+        "toleranceFactor": 1.4,
+        "category": "math",
+        "hint": "time = distance ÷ speed; 1 h = 60 min",
+        "timeWeightHigher": false
+      },
+      "digitSpanParams": null,
+      "nbackGridParams": null,
+      "nbackParams": null
+    },
+    {
+      "id": "a0000000-0000-0000-0000-000000000326",
+      "subjectId": "b0000000-0000-0000-0000-000000000013",
+      "subjectCode": "ESTIMATION",
+      "type": "ESTIMATION",
+      "difficulty": "ULTRA_EASY",
+      "prompt": "How many minutes are in 1.5 hours?",
+      "expectedAnswers": [
+        "90"
+      ],
+      "timeLimitSeconds": 20,
+      "mathOperation": null,
+      "mathComplexityScore": null,
+      "dualNBackGridParams": null,
+      "dualNBackCardParams": null,
+      "memoryCardParams": null,
+      "sumPairParams": null,
+      "sumPairRounds": null,
+      "sumPairGroups": null,
+      "sumPairDeck": null,
+      "imagePairParams": null,
+      "imagePairDeck": null,
+      "anagramParams": null,
+      "wordleParams": null,
+      "estimationParams": {
+        "correctAnswer": 90,
+        "unit": "minutes",
+        "toleranceFactor": 1.4,
+        "category": "math",
+        "hint": "1 hour = 60 minutes",
+        "timeWeightHigher": false
+      },
+      "digitSpanParams": null,
+      "nbackGridParams": null,
+      "nbackParams": null
+    },
+    {
+      "id": "a0000000-0000-0000-0000-000000000327",
+      "subjectId": "b0000000-0000-0000-0000-000000000013",
+      "subjectCode": "ESTIMATION",
+      "type": "ESTIMATION",
+      "difficulty": "ULTRA_EASY",
+      "prompt": "How many minutes are in 2 hours?",
+      "expectedAnswers": [
+        "120"
+      ],
+      "timeLimitSeconds": 20,
+      "mathOperation": null,
+      "mathComplexityScore": null,
+      "dualNBackGridParams": null,
+      "dualNBackCardParams": null,
+      "memoryCardParams": null,
+      "sumPairParams": null,
+      "sumPairRounds": null,
+      "sumPairGroups": null,
+      "sumPairDeck": null,
+      "imagePairParams": null,
+      "imagePairDeck": null,
+      "anagramParams": null,
+      "wordleParams": null,
+      "estimationParams": {
+        "correctAnswer": 120,
+        "unit": "minutes",
+        "toleranceFactor": 1.4,
+        "category": "math",
+        "hint": "1 hour = 60 minutes",
+        "timeWeightHigher": false
+      },
+      "digitSpanParams": null,
+      "nbackGridParams": null,
+      "nbackParams": null
+    },
+    {
+      "id": "f2000000-0000-0000-0000-000000000001",
+      "subjectId": "b0000000-0000-0000-0000-000000000014",
+      "subjectCode": "DIGIT_SPAN",
+      "type": "DIGIT_SPAN",
+      "difficulty": "ULTRA_EASY",
+      "prompt": "Memorize the digits, then type them back.",
+      "expectedAnswers": [],
+      "timeLimitSeconds": 300,
+      "mathOperation": null,
+      "mathComplexityScore": null,
+      "dualNBackGridParams": null,
+      "dualNBackCardParams": null,
+      "memoryCardParams": null,
+      "sumPairParams": null,
+      "sumPairRounds": null,
+      "sumPairGroups": null,
+      "sumPairDeck": null,
+      "imagePairParams": null,
+      "imagePairDeck": null,
+      "anagramParams": null,
+      "wordleParams": null,
+      "estimationParams": null,
+      "digitSpanParams": {
+        "startLength": 3,
+        "displayTimeMs": 3000,
+        "maxLength": 15
+      },
+      "nbackGridParams": null,
+      "nbackParams": null
+    },
+    {
+      "id": "f2000000-0000-0000-0000-000000000002",
+      "subjectId": "b0000000-0000-0000-0000-000000000014",
+      "subjectCode": "DIGIT_SPAN",
+      "type": "DIGIT_SPAN",
+      "difficulty": "EASY",
+      "prompt": "Memorize the digits, then type them back.",
+      "expectedAnswers": [],
+      "timeLimitSeconds": 300,
+      "mathOperation": null,
+      "mathComplexityScore": null,
+      "dualNBackGridParams": null,
+      "dualNBackCardParams": null,
+      "memoryCardParams": null,
+      "sumPairParams": null,
+      "sumPairRounds": null,
+      "sumPairGroups": null,
+      "sumPairDeck": null,
+      "imagePairParams": null,
+      "imagePairDeck": null,
+      "anagramParams": null,
+      "wordleParams": null,
+      "estimationParams": null,
+      "digitSpanParams": {
+        "startLength": 4,
+        "displayTimeMs": 3000,
+        "maxLength": 15
+      },
+      "nbackGridParams": null,
+      "nbackParams": null
+    },
+    {
+      "id": "f2000000-0000-0000-0000-000000000003",
+      "subjectId": "b0000000-0000-0000-0000-000000000014",
+      "subjectCode": "DIGIT_SPAN",
+      "type": "DIGIT_SPAN",
+      "difficulty": "MEDIUM",
+      "prompt": "Memorize the digits, then type them back.",
+      "expectedAnswers": [],
+      "timeLimitSeconds": 300,
+      "mathOperation": null,
+      "mathComplexityScore": null,
+      "dualNBackGridParams": null,
+      "dualNBackCardParams": null,
+      "memoryCardParams": null,
+      "sumPairParams": null,
+      "sumPairRounds": null,
+      "sumPairGroups": null,
+      "sumPairDeck": null,
+      "imagePairParams": null,
+      "imagePairDeck": null,
+      "anagramParams": null,
+      "wordleParams": null,
+      "estimationParams": null,
+      "digitSpanParams": {
+        "startLength": 5,
+        "displayTimeMs": 2500,
+        "maxLength": 15
+      },
+      "nbackGridParams": null,
+      "nbackParams": null
+    },
+    {
+      "id": "f2000000-0000-0000-0000-000000000004",
+      "subjectId": "b0000000-0000-0000-0000-000000000014",
+      "subjectCode": "DIGIT_SPAN",
+      "type": "DIGIT_SPAN",
+      "difficulty": "HARD",
+      "prompt": "Memorize the digits, then type them back.",
+      "expectedAnswers": [],
+      "timeLimitSeconds": 300,
+      "mathOperation": null,
+      "mathComplexityScore": null,
+      "dualNBackGridParams": null,
+      "dualNBackCardParams": null,
+      "memoryCardParams": null,
+      "sumPairParams": null,
+      "sumPairRounds": null,
+      "sumPairGroups": null,
+      "sumPairDeck": null,
+      "imagePairParams": null,
+      "imagePairDeck": null,
+      "anagramParams": null,
+      "wordleParams": null,
+      "estimationParams": null,
+      "digitSpanParams": {
+        "startLength": 6,
+        "displayTimeMs": 2000,
+        "maxLength": 15
+      },
+      "nbackGridParams": null,
+      "nbackParams": null
+    },
+    {
+      "id": "f2000000-0000-0000-0000-000000000005",
+      "subjectId": "b0000000-0000-0000-0000-000000000014",
+      "subjectCode": "DIGIT_SPAN",
+      "type": "DIGIT_SPAN",
+      "difficulty": "VERY_HARD",
+      "prompt": "Memorize the digits, then type them back.",
+      "expectedAnswers": [],
+      "timeLimitSeconds": 300,
+      "mathOperation": null,
+      "mathComplexityScore": null,
+      "dualNBackGridParams": null,
+      "dualNBackCardParams": null,
+      "memoryCardParams": null,
+      "sumPairParams": null,
+      "sumPairRounds": null,
+      "sumPairGroups": null,
+      "sumPairDeck": null,
+      "imagePairParams": null,
+      "imagePairDeck": null,
+      "anagramParams": null,
+      "wordleParams": null,
+      "estimationParams": null,
+      "digitSpanParams": {
+        "startLength": 7,
+        "displayTimeMs": 1500,
+        "maxLength": 15
+      },
+      "nbackGridParams": null,
+      "nbackParams": null
+    }
+  ]
+}

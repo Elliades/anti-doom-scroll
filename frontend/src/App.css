@@ -116,7 +116,9 @@ body {
 
 .exercise-chronometer-row {
   display: flex;
-  justify-content: flex-end;
+  justify-content: center;
+  align-items: center;
+  gap: 0.75rem;
 }
 
 .exercise-chronometer-row .timer {
@@ -220,6 +222,16 @@ body {
   margin-top: 0.25rem;
 }
 
+.estimation-complexity {
+  margin: 0.3rem 0 0;
+  font-size: 0.68rem;
+  color: #c7c7d8;
+  opacity: 0.45;
+  letter-spacing: 0.02em;
+  text-align: right;
+  pointer-events: none;
+}
+
 .score-subscore-label {
   font-weight: 500;
   color: var(--text);
@@ -239,6 +251,33 @@ body {
   font-size: 0.9rem;
   color: var(--text-dim);
   margin: -0.75rem 0 1rem;
+}
+
+.complexity-badge-anchor {
+  position: relative;
+  padding-bottom: 1.1rem;
+}
+
+.complexity-badge {
+  position: absolute;
+  right: 0.1rem;
+  bottom: -0.1rem;
+  margin: 0;
+  font-size: 0.65rem;
+  color: #c7c7d8;
+  opacity: 0.4;
+  letter-spacing: 0.03em;
+  pointer-events: none;
+}
+
+.cognitive-load-badge {
+  align-self: flex-end;
+  margin: 0;
+  font-size: 0.64rem;
+  color: #c7c7d8;
+  opacity: 0.36;
+  letter-spacing: 0.03em;
+  pointer-events: none;
 }
 
 .input-row {
@@ -575,6 +614,77 @@ body {
   50%       { opacity: 0.8; width: 4rem; }
 }
 
+/* Level +/- buttons flanking the level number */
+.ladder-level-row {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.ladder-level-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-dim);
+  font-size: 1rem;
+  font-weight: 700;
+  width: 1.8rem;
+  height: 1.8rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: color 0.15s;
+  -webkit-tap-highlight-color: transparent;
+  padding: 0;
+  line-height: 1;
+}
+
+.ladder-level-btn:active:not(:disabled) {
+  color: var(--text);
+}
+
+.ladder-level-btn:disabled {
+  opacity: 0.2;
+  cursor: default;
+}
+
+/* Skip button next to the timer */
+.ladder-skip-btn {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: var(--text-dim);
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 0.2rem 0.7rem;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+  -webkit-tap-highlight-color: transparent;
+  white-space: nowrap;
+}
+
+.ladder-skip-btn:active {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text);
+}
+
+@media (prefers-color-scheme: light) {
+  .ladder-level-btn {
+    color: var(--text-dim);
+  }
+  .ladder-level-btn:active:not(:disabled) {
+    color: var(--text);
+  }
+  .ladder-skip-btn {
+    border-color: rgba(0, 0, 0, 0.12);
+    color: var(--text-dim);
+  }
+  .ladder-skip-btn:active {
+    background: rgba(0, 0, 0, 0.06);
+    color: var(--text);
+  }
+}
+
 .footer .link-btn {
   display: inline-block;
   padding: 0.75rem 1.25rem;
@@ -671,11 +781,61 @@ body {
 }
 
 .nback-stimulus {
+  position: relative;
   min-height: 12rem;
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: visible;
+}
+
+/* Letter-mode N-back: quick glow on hit/miss */
+.nback-stimulus--feedback-correct {
+  border-radius: 18px;
+  animation: nback-stimulus-feedback-glow-correct 0.75s ease-out;
+}
+
+.nback-stimulus--feedback-wrong {
+  border-radius: 18px;
+  animation: nback-stimulus-feedback-glow-wrong 0.75s ease-out;
+}
+
+@keyframes nback-stimulus-feedback-glow-correct {
+  0% {
+    box-shadow: 0 0 0 0 transparent;
+  }
+  20% {
+    box-shadow:
+      0 0 0 5px var(--correct),
+      0 0 48px 8px color-mix(in srgb, var(--correct) 65%, transparent);
+  }
+  60% {
+    box-shadow:
+      0 0 0 4px color-mix(in srgb, var(--correct) 85%, transparent),
+      0 0 40px 4px color-mix(in srgb, var(--correct) 50%, transparent);
+  }
+  100% {
+    box-shadow: 0 0 0 0 transparent;
+  }
+}
+
+@keyframes nback-stimulus-feedback-glow-wrong {
+  0% {
+    box-shadow: 0 0 0 0 transparent;
+  }
+  20% {
+    box-shadow:
+      0 0 0 5px var(--incorrect),
+      0 0 48px 8px color-mix(in srgb, var(--incorrect) 65%, transparent);
+  }
+  60% {
+    box-shadow:
+      0 0 0 4px color-mix(in srgb, var(--incorrect) 85%, transparent),
+      0 0 40px 4px color-mix(in srgb, var(--incorrect) 50%, transparent);
+  }
+  100% {
+    box-shadow: 0 0 0 0 transparent;
+  }
 }
 
 .nback-letter {
@@ -784,18 +944,6 @@ body {
   color: white;
 }
 
-.nback-match-btn.nback-match-correct {
-  background: var(--correct);
-  border-color: var(--correct);
-  color: var(--bg);
-}
-
-.nback-match-btn.nback-match-wrong {
-  background: var(--incorrect);
-  border-color: var(--incorrect);
-  color: white;
-}
-
 .nback-match-btn:disabled {
   opacity: 0.7;
   cursor: default;
@@ -809,7 +957,7 @@ body {
 /* N-Back card carousel v2: absolute-positioned cards, flip + move animations */
 .nback-carousel-v2 {
   position: relative;
-  height: 200px;
+  height: 220px;
   margin: 1.5rem auto;
   overflow: visible;
   padding: 0.5rem 0;
@@ -823,21 +971,110 @@ body {
 }
 .nback-carousel-card-v2 {
   position: absolute;
-  width: 90px;
-  height: 130px;
+  width: 110px;
+  height: 154px;
   display: flex;
   justify-content: center;
   align-items: center;
-  transition: left 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transition: left 0.36s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 .nback-carousel-card-v2.nback-card-exit {
   opacity: 0;
-  transition: left 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-    opacity 0.4s ease-out;
+  transition: left 0.36s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    opacity 0.32s ease-out;
 }
 .nback-carousel-card-v2.nback-card-enter {
-  transition: left 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-    opacity 0.4s ease-out;
+  transition: left 0.36s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    opacity 0.32s ease-out;
+}
+
+/* Glow feedback targets the visible card face inside the slot, not the outer slot wrapper.
+   This keeps the halo tightly around the card the user actually sees. */
+.nback-carousel-card-v2.nback-card-feedback--correct .nback-card-back,
+.nback-carousel-card-v2.nback-card-feedback--correct .playingCards .card {
+  animation: nback-card-feedback-glow-correct 0.75s ease-out;
+}
+
+.nback-carousel-card-v2.nback-card-feedback--wrong .nback-card-back,
+.nback-carousel-card-v2.nback-card-feedback--wrong .playingCards .card {
+  animation: nback-card-feedback-glow-wrong 0.75s ease-out;
+}
+
+@keyframes nback-card-feedback-glow-correct {
+  0% {
+    box-shadow: 0 0 0 0 transparent;
+  }
+  20% {
+    box-shadow:
+      0 0 0 5px var(--correct),
+      0 0 48px 8px color-mix(in srgb, var(--correct) 65%, transparent);
+  }
+  60% {
+    box-shadow:
+      0 0 0 4px color-mix(in srgb, var(--correct) 85%, transparent),
+      0 0 40px 4px color-mix(in srgb, var(--correct) 50%, transparent);
+  }
+  100% {
+    box-shadow: 0 0 0 0 transparent;
+  }
+}
+
+@keyframes nback-card-feedback-glow-wrong {
+  0% {
+    box-shadow: 0 0 0 0 transparent;
+  }
+  20% {
+    box-shadow:
+      0 0 0 5px var(--incorrect),
+      0 0 48px 8px color-mix(in srgb, var(--incorrect) 65%, transparent);
+  }
+  60% {
+    box-shadow:
+      0 0 0 4px color-mix(in srgb, var(--incorrect) 85%, transparent),
+      0 0 40px 4px color-mix(in srgb, var(--incorrect) 50%, transparent);
+  }
+  100% {
+    box-shadow: 0 0 0 0 transparent;
+  }
+}
+
+/* Floating popup text that rises from the card and fades out */
+.nback-card-popup {
+  position: absolute;
+  left: 50%;
+  bottom: 100%;
+  transform: translateX(-50%) translateY(0);
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  white-space: nowrap;
+  pointer-events: none;
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.6);
+  animation: nback-popup-rise 0.7s ease-out forwards;
+}
+.nback-card-popup--correct {
+  color: var(--correct);
+}
+.nback-card-popup--wrong {
+  color: var(--incorrect);
+}
+.nback-card-popup--miss {
+  color: var(--incorrect);
+}
+
+@keyframes nback-popup-rise {
+  0% {
+    opacity: 1;
+    transform: translateX(-50%) translateY(4px);
+  }
+  30% {
+    opacity: 1;
+    transform: translateX(-50%) translateY(-18px);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-44px);
+  }
 }
 
 /* Flip card v2 */
@@ -851,7 +1088,7 @@ body {
   width: 100%;
   height: 100%;
   transform-style: preserve-3d;
-  transition: transform 0.32s ease-in-out;
+  transition: transform 0.256s ease-in-out;
 }
 .nback-flip-card-v2.nback-flip-face .nback-flip-inner-v2 {
   transform: rotateY(0deg);
@@ -881,7 +1118,7 @@ body {
 
 /* Carousel cards: fit in slot, center slightly larger */
 .nback-carousel-v2 .nback-card-face-wrapper .playingCards .card {
-  font-size: 1.8em;
+  font-size: 2.2em;
 }
 .nback-carousel-v2 .nback-flip-inner-v2 {
   transform-origin: center center;
@@ -889,9 +1126,9 @@ body {
 
 /* Custom card back - clean design (replaces CSS Playing Cards .card.back) */
 .nback-card-back {
-  width: 72px;
-  height: 100px;
-  border-radius: 8px;
+  width: 88px;
+  height: 122px;
+  border-radius: 10px;
   background: linear-gradient(145deg, #2a2a40 0%, #1e1e32 50%, #252538 100%);
   border: 2px solid rgba(233, 69, 96, 0.35);
   box-shadow:
@@ -903,8 +1140,8 @@ body {
 }
 .nback-card-back::before {
   content: '';
-  width: 44px;
-  height: 60px;
+  width: 54px;
+  height: 74px;
   border-radius: 4px;
   border: 2px solid rgba(233, 69, 96, 0.2);
   background: repeating-linear-gradient(
@@ -1046,6 +1283,7 @@ body {
 }
 
 .memory-playing {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -1155,10 +1393,36 @@ body {
 }
 
 .sumpair-playing {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 1rem;
+}
+
+.imagepair-playing {
+  position: relative;
+}
+
+.exercise-complexity-watermark {
+  position: absolute;
+  left: 0.25rem;
+  bottom: -0.4rem;
+  z-index: 0;
+  margin: 0;
+  font-size: 0.68rem;
+  letter-spacing: 0.02em;
+  color: var(--text-dim);
+  opacity: 0.28;
+  pointer-events: none;
+  user-select: none;
+}
+
+.memory-grid,
+.imagepair-grid,
+.sumpair-grid {
+  position: relative;
+  z-index: 1;
 }
 
 .sumpair-statics {
@@ -1435,8 +1699,18 @@ body {
   gap: 0.35rem;
 }
 
-.wordle-row.shake {
+.wordle-row--incomplete {
   animation: wordle-shake 0.4s ease;
+}
+
+.wordle-row--invalid {
+  animation: wordle-invalid 0.55s ease;
+}
+
+.wordle-row--invalid .wordle-tile.active {
+  border-color: #ef4444;
+  background: color-mix(in srgb, #ef4444 16%, transparent);
+  color: var(--text);
 }
 
 @keyframes wordle-shake {
@@ -1444,6 +1718,14 @@ body {
   15% { transform: translateX(-6px); }
   45% { transform: translateX(6px); }
   75% { transform: translateX(-4px); }
+}
+
+@keyframes wordle-invalid {
+  0%, 100% { transform: translateX(0) rotate(0deg); }
+  18% { transform: translateX(-6px) rotate(-3deg); }
+  36% { transform: translateX(6px) rotate(3deg); }
+  54% { transform: translateX(-5px) rotate(-2deg); }
+  72% { transform: translateX(4px) rotate(2deg); }
 }
 
 .wordle-tile {
@@ -1592,6 +1874,401 @@ body {
   font-size: 0.85rem;
   color: var(--text-dim);
   margin: 0;
+}
+
+.exercise-complexity-indicator {
+  align-self: flex-end;
+  margin: -0.25rem 0 0;
+  font-size: 0.72rem;
+  opacity: 0.48;
+  letter-spacing: 0.03em;
+  color: var(--text-dim);
+}
+
+/* ── Digit Span (fluid single-screen) ────────────────── */
+.ds {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+  min-height: 20rem;
+}
+
+.ds-header {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--accent);
+  text-align: center;
+  transition: color 0.3s;
+}
+.ds-header--correct { color: var(--correct, #4ade80); }
+.ds-header--fail { color: #f87171; }
+
+.ds-span-badge {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-dim);
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
+  padding: 0.15rem 0.6rem;
+  border-radius: 999px;
+}
+
+.ds-instructions {
+  font-size: 0.95rem;
+  color: var(--text-dim);
+  text-align: center;
+  line-height: 1.6;
+}
+.ds-instructions p { margin: 0.2rem 0; }
+
+.ds-start-btn, .ds-end-btn {
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  border: 2px solid var(--accent);
+  background: transparent;
+  color: var(--accent);
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+.ds-start-btn:hover, .ds-end-btn:hover {
+  background: var(--accent);
+  color: #fff;
+}
+
+.ds-stage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 10rem;
+  width: 100%;
+}
+
+/* ── Tiles (shared between memorize, input, fail) ───── */
+.ds-tiles {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.ds-tile {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 3rem;
+  border-radius: 0.4rem;
+  border: 2px solid var(--text-dim);
+  font-size: 1.6rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--text);
+  background: var(--surface);
+  transition: border-color 0.2s, background 0.2s, color 0.2s, transform 0.15s;
+}
+
+.ds-tile--show {
+  border-color: var(--accent);
+  color: var(--text);
+}
+
+.ds-tile--filled {
+  border-color: var(--text);
+  animation: ds-pop 0.1s ease;
+}
+
+.ds-tile--active {
+  border-color: var(--accent);
+}
+
+.ds-tile--correct {
+  background: var(--correct, #4ade80);
+  border-color: var(--correct, #4ade80);
+  color: #fff;
+}
+
+.ds-tile--fail {
+  background: #f87171;
+  border-color: #f87171;
+  color: #fff;
+}
+
+@keyframes ds-pop {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
+/* ── Blink during memorize ──────────────────────────── */
+.ds-blink {
+  animation: ds-blink-anim 1s ease-in-out;
+}
+.ds-blink-last {
+  animation: ds-blink-fade 1s ease-in-out forwards;
+}
+
+@keyframes ds-blink-anim {
+  0%, 100% { opacity: 1; }
+  40% { opacity: 0.3; }
+}
+@keyframes ds-blink-fade {
+  0% { opacity: 1; }
+  40% { opacity: 0.3; }
+  70% { opacity: 1; }
+  100% { opacity: 0; transform: scale(0.95); }
+}
+
+.ds-tiles--correct {
+  animation: ds-correct-pulse 0.6s ease;
+}
+@keyframes ds-correct-pulse {
+  0% { transform: scale(1); }
+  30% { transform: scale(1.06); }
+  60% { transform: scale(1.02); }
+  100% { transform: scale(1); }
+}
+
+/* ── Goal reveal (challenge label) ──────────────────── */
+.ds-goal-reveal {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: ds-goal-in 0.4s ease-out;
+}
+.ds-goal-label {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--accent);
+  text-align: center;
+}
+@keyframes ds-goal-in {
+  0% { opacity: 0; transform: translateY(8px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Input area ─────────────────────────────────────── */
+.ds-input-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  animation: ds-input-in 0.35s ease-out;
+}
+@keyframes ds-input-in {
+  0% { opacity: 0; transform: translateY(6px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+.ds-challenge-tag {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 10%, transparent);
+  padding: 0.15rem 0.7rem;
+  border-radius: 999px;
+}
+
+/* ── Shake on incomplete submit ─────────────────────── */
+.ds-shake {
+  animation: ds-shake-anim 0.4s ease;
+}
+@keyframes ds-shake-anim {
+  0%  { transform: translateX(0); }
+  25% { transform: translateX(-6px); }
+  50% { transform: translateX(6px); }
+  75% { transform: translateX(-4px); }
+  100%{ transform: translateX(0); }
+}
+
+/* ── Digit keyboard (Wordle-consistent) ─────────────── */
+.ds-keyboard {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  align-items: center;
+  margin-top: 0.5rem;
+}
+.ds-keyboard-row {
+  display: flex;
+  gap: 0.35rem;
+  justify-content: center;
+}
+.ds-key {
+  height: 2.5rem;
+  border: 1px solid var(--text-dim);
+  border-radius: 4px;
+  background: var(--surface);
+  color: var(--text);
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+  transition: background 0.15s, border-color 0.15s;
+}
+.ds-key--digit {
+  width: 2.75rem;
+  font-size: 1.2rem;
+}
+.ds-key--action {
+  padding: 0 0.8rem;
+  font-size: 1rem;
+}
+.ds-key--enter {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+  font-size: 1.1rem;
+}
+.ds-key:hover:not(.ds-key--enter) {
+  border-color: var(--accent);
+  background: rgba(233, 69, 96, 0.1);
+}
+.ds-key--enter:hover {
+  opacity: 0.85;
+}
+.ds-key:active {
+  transform: scale(0.95);
+}
+
+/* ── Fail / stats ───────────────────────────────────── */
+.ds-fail-text {
+  font-size: 0.95rem;
+  color: var(--text-dim);
+  margin: 0;
+}
+.ds-stats {
+  font-size: 1rem;
+  color: var(--text-dim);
+}
+
+/* ═══════════════════════════════════════════════════════
+   MATH CHAIN EXERCISE
+   ═══════════════════════════════════════════════════════ */
+
+.mc {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.2rem;
+  padding: 1rem 0;
+  width: 100%;
+}
+
+.mc-header {
+  font-size: 1.3rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-align: center;
+}
+.mc-header--correct { color: var(--correct); }
+.mc-header--fail { color: var(--incorrect); }
+
+.mc-instructions {
+  text-align: center;
+  color: var(--text-dim);
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+.mc-instructions p { margin: 0.3rem 0; }
+
+.mc-start-btn, .mc-continue-btn {
+  padding: 0.7rem 2rem;
+  border: none;
+  border-radius: 0.7rem;
+  background: var(--accent);
+  color: #fff;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.15s, transform 0.1s;
+}
+.mc-start-btn:hover, .mc-continue-btn:hover {
+  opacity: 0.85;
+}
+.mc-start-btn:active, .mc-continue-btn:active {
+  transform: scale(0.97);
+}
+
+/* ── Number display ───────────────────────────────────── */
+.mc-number {
+  font-size: 3.5rem;
+  font-weight: 800;
+  color: var(--accent);
+  text-align: center;
+  padding: 1.5rem 0;
+}
+.mc-number--appear {
+  animation: mc-pop-in 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* ── Operation display ────────────────────────────────── */
+.mc-operation {
+  font-size: 2.8rem;
+  font-weight: 700;
+  text-align: center;
+  padding: 1rem 0;
+  color: var(--text);
+}
+.mc-operation--appear {
+  animation: mc-slide-in 0.35s ease-out;
+}
+
+@keyframes mc-pop-in {
+  0% { transform: scale(0.5); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes mc-slide-in {
+  0% { transform: translateY(1.5rem); opacity: 0; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+
+/* ── Progress bar ─────────────────────────────────────── */
+.mc-progress {
+  width: 100%;
+  max-width: 16rem;
+  text-align: center;
+}
+.mc-progress-text {
+  font-size: 0.9rem;
+  color: var(--text-dim);
+}
+.mc-progress-bar {
+  height: 0.35rem;
+  background: var(--surface);
+  border-radius: 0.2rem;
+  overflow: hidden;
+}
+.mc-progress-fill {
+  height: 100%;
+  background: var(--accent);
+  border-radius: 0.2rem;
+  transition: width 0.3s ease;
+}
+
+/* ── Chain summary (final screen) ─────────────────────── */
+.mc-chain-summary {
+  font-size: 1.3rem;
+  font-weight: 600;
+  text-align: center;
+  line-height: 1.6;
+  word-break: break-word;
+}
+.mc-chain-start {
+  color: var(--accent);
+}
+.mc-chain-op {
+  color: var(--text);
+}
+.mc-chain-eq {
+  color: var(--text-dim);
 }
 
 @media (prefers-color-scheme: light) {

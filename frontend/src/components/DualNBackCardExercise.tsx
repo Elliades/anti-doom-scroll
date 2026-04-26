@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import type { ExerciseDto } from '../types/api'
 import type { ExerciseResult } from '../types/exercise'
+import { estimateNBackComplexityScore } from '../api/exerciseParamGenerators'
 import { NBackCardDisplay } from './NBackCardDisplay'
 
 interface DualNBackCardExerciseProps {
@@ -27,6 +28,8 @@ export function DualNBackCardExercise({ exercise, onComplete, showInstruction = 
 
   const intervalMs = 2500
   const n = params.n ?? 1
+  const suitCount = Math.max(2, Math.min(4, new Set(params.sequence.map((s) => s.slice(-1))).size))
+  const cognitiveLoad = Math.round(estimateNBackComplexityScore(n, 2, suitCount))
   const matchColorSet = new Set(params.matchColorIndices ?? [])
   const matchNumberSet = new Set(params.matchNumberIndices ?? [])
 
@@ -43,6 +46,16 @@ export function DualNBackCardExercise({ exercise, onComplete, showInstruction = 
     setShowFeedback(matchNumberSet.has(index) ? 'number' : 'wrong')
     setTimeout(() => setShowFeedback(null), 400)
   }, [phase, index, matchNumberSet])
+
+  useEffect(() => {
+    if (phase !== 'playing') return
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'c' || e.key === 'C') { handleColorMatch(); return }
+      if (e.key === 'n' || e.key === 'N') { handleNumberMatch(); return }
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [phase, handleColorMatch, handleNumberMatch])
 
   useEffect(() => {
     if (phase !== 'playing' || index >= params.sequence.length) return
@@ -92,6 +105,7 @@ export function DualNBackCardExercise({ exercise, onComplete, showInstruction = 
         <div className="nback-n-badge" aria-label={`${n}-Back`}>
           {n}-Back
         </div>
+        <p className="cognitive-load-badge">Charge Cognitive : {cognitiveLoad}/100</p>
         <p className="prompt">{exercise.prompt}</p>
         {showInstruction && (
           <p className="nback-instruction">
@@ -99,7 +113,7 @@ export function DualNBackCardExercise({ exercise, onComplete, showInstruction = 
             &quot;Match Number&quot; when the rank matches, {params.n} step(s) back.
           </p>
         )}
-        <button onClick={handleStart} className="nback-start-btn">
+        <button onClick={handleStart} className="nback-start-btn" autoFocus>
           Start
         </button>
       </div>
@@ -113,6 +127,7 @@ export function DualNBackCardExercise({ exercise, onComplete, showInstruction = 
         <div className="nback-n-badge" aria-label={`${n}-Back`}>
           {n}-Back
         </div>
+        <p className="cognitive-load-badge">Charge Cognitive : {cognitiveLoad}/100</p>
         <div className="nback-stimulus" key={index}>
           <NBackCardDisplay code={currentCard} size="large" />
         </div>
@@ -150,6 +165,7 @@ export function DualNBackCardExercise({ exercise, onComplete, showInstruction = 
 
   return (
     <div className="nback-done">
+      <p className="cognitive-load-badge">Charge Cognitive : {cognitiveLoad}/100</p>
       <p className="nback-result">{resultMessage}</p>
       <p className="nback-score">
         Score: {Math.round(score * 100)}% · Hits: {totalHits} / {totalTargets} (Color: {colorHits}/

@@ -101,6 +101,27 @@ export interface EstimationParamsDto {
   timeWeightHigher?: boolean
 }
 
+export interface DigitSpanParamsDto {
+  startLength: number
+  displayTimeMs: number
+  maxLength: number
+}
+
+/** MATH_CHAIN: step in a sequential mental arithmetic chain. */
+export interface MathChainStepDto {
+  operation: string
+  operand: number
+  complexity: number
+}
+
+/** MATH_CHAIN: starting number + sequential operations, user computes final result. */
+export interface MathChainParamsDto {
+  startNumber: number
+  steps: MathChainStepDto[]
+  expectedAnswer: number
+  totalComplexity: number
+}
+
 export interface ExerciseDto {
   id: string
   subjectId: string
@@ -135,6 +156,8 @@ export interface ExerciseDto {
   wordleParams?: WordleParamsDto | null
   /** ESTIMATION: correctAnswer, unit, toleranceFactor, category, hint */
   estimationParams?: EstimationParamsDto | null
+  digitSpanParams?: DigitSpanParamsDto | null
+  mathChainParams?: MathChainParamsDto | null
 }
 
 export interface SessionStepDto {
@@ -196,6 +219,7 @@ export interface LadderSessionResponseDto {
   mode: string
   exercise: ExerciseDto
   ladderState: LadderStateDto
+  levelCount: number
   sessionDefaultSeconds: number
   lowBatteryModeSeconds: number
 }
@@ -219,6 +243,8 @@ export interface LadderMixStateDto {
   currentLevelIndex: number
   perLadderStates: Record<string, PerLadderStateDto>
   nextLadderIndex: number
+  /** Recently served exercise IDs (newest last); echoed from API for repeat avoidance. */
+  recentExerciseIds?: string[]
 }
 
 export interface LadderMixSessionResponseDto {
@@ -226,6 +252,7 @@ export interface LadderMixSessionResponseDto {
   mode: string
   exercise: ExerciseDto
   ladderMixState: LadderMixStateDto
+  levelCount: number
   sessionDefaultSeconds: number
   lowBatteryModeSeconds: number
 }

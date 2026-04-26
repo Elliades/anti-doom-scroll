@@ -172,94 +172,13 @@ App: http://localhost:5174
 - `npm run build` then `npm run preview` to test production build.
 - Add `public/icon-192.png` and `public/icon-512.png` for install icons (optional).
 
-### Deploy frontend to Firebase Hosting
+### Android install (phone, standalone)
 
-The frontend (React + Vite) can be deployed as a static site to [Firebase Hosting](https://firebase.google.com/docs/hosting). The backend is not deployed by this flow; you need to run it elsewhere (e.g. Cloud Run, Railway) and point the app at it (env or rewrites).
+The app can be installed as a **debug APK** via Capacitor; the web UI uses the same **standalone** display mode as the PWA. Full checklist, `.env.android`, offline vs API-on-LAN, and troubleshooting:
 
-**One-time setup**
+**[src/docs/android-standalone-publish.md](src/docs/android-standalone-publish.md)**
 
-1. Install Firebase CLI: `npm install -g firebase-tools`
-2. Log in: `firebase login`
-3. Create a project in [Firebase Console](https://console.firebase.google.com/) (or use an existing one).
-4. Link this repo: from project root run `firebase use --add` and select the project.
-
-**Deploy**
-
-From **project root**: `.\scripts\deploy-firebase.ps1`
-
-From **frontend** directory: `npm run deploy`
-
-Or manually: `cd frontend` → `npm run build` → `cd ..` → `firebase deploy`.
-
-After deploy, the Hosting URL (e.g. `https://<project>.web.app`) is shown in the CLI. The app will load; API calls will show a clear "Backend not available" message until you deploy the backend. Then set **`VITE_API_URL`** to your backend base URL including `/api` (e.g. `https://your-backend.run.app/api`) and rebuild/redeploy the frontend so the app calls your backend instead of the same origin.
-
-### Deploy backend to Google Cloud Run
-
-The backend runs as a container on [Cloud Run](https://cloud.google.com/run). The repo includes a **Dockerfile at the root** (multi-stage: Gradle build → JRE + JAR) and a deploy script.
-
-**Why this Dockerfile (not a generic one):**
-
-- The project has no Unix `gradlew` (only `gradlew.bat`), so the build stage uses the official `gradle:8.5-jdk21-alpine` image and runs `gradle bootJar` instead of `./gradlew`.
-- Multi-stage build keeps the final image small (only the JAR + JRE).
-- `.dockerignore` excludes frontend, IDE files, and caches so the build context is small.
-- The app listens on **PORT** (Cloud Run sets `PORT=8080`); `application.yml` uses `server.port: ${PORT:5173}` so local dev stays on 5173.
-
-**One-time setup**
-
-1. Install [Google Cloud SDK](https://cloud.google.com/sdk/docs/install) and log in: `gcloud auth login`
-2. Set project: `gcloud config set project YOUR_PROJECT_ID`
-3. Enable APIs: `gcloud services enable run.googleapis.com artifactregistry.googleapis.com`
-4. Have a PostgreSQL instance (e.g. [Cloud SQL](https://cloud.google.com/sql) or [Neon](https://neon.tech)). For Neon, use the `neon` profile and set the DB URL via env (see below).
-
-**Deploy**
-
-From **project root**:
-
-```powershell
-.\scripts\deploy-backend-cloudrun.ps1
-```
-
-Optional: `-ServiceName "my-api" -Region "europe-west1" -ProjectId "my-gcp-project"`
-
-The script runs `gcloud run deploy --source .`, which builds the image in Cloud Build from the root Dockerfile and deploys the service. The first run may take several minutes.
-
-**Configure the service (required for DB)**
-
-In [Cloud Run console](https://console.cloud.google.com/run) → your service → **Edit & deploy new revision** → **Variables & secrets**:
-
-- `SPRING_PROFILES_ACTIVE` = `neon` (or leave unset if you use another profile with env-based DB config)
-- `SPRING_DATASOURCE_URL` = your JDBC URL (e.g. Neon: `jdbc:postgresql://ep-xxx-pooler.region.aws.neon.tech/neondb?sslmode=require`)
-- `SPRING_DATASOURCE_USERNAME` = your DB user
-- `SPRING_DATASOURCE_PASSWORD` = your DB password (prefer [Secret Manager](https://cloud.google.com/run/docs/configuring/secrets) for production)
-- `APP_CORS_ORIGINS` = your frontend origins, comma-separated (e.g. `https://your-app.web.app,https://your-domain.com`)
-
-Redeploy after changing variables. Then set your frontend **`VITE_API_URL`** to `https://YOUR_SERVICE_URL/api` and rebuild/redeploy the frontend.
-
-### Production (prod branch): Cloud Run + Neon + Firebase
-
-On the **`prod`** branch the app is wired for production:
-
-- **Backend:** Cloud Run. Production config is in **`application-prod.yml`** (Neon URL, username, CORS for Firebase). The Docker image defaults to `SPRING_PROFILES_ACTIVE=prod`. The only value you set in Cloud Run is **`SPRING_DATASOURCE_PASSWORD`** (once).
-- **Database:** Neon PostgreSQL (URL and user are in `application-prod.yml`).
-- **Frontend:** Firebase Hosting; `frontend/.env.production` sets `VITE_API_URL` to the Cloud Run API.
-
-**Deploy backend** (do this every time you deploy; the script sets the DB password on the service then builds and deploys the image so the new revision starts successfully):
-
-```powershell
-$env:NEON_DB_PASSWORD = "your-neon-password"
-.\scripts\deploy-backend-cloudrun.ps1
-```
-
-**Deploy frontend:**
-
-```powershell
-.\scripts\deploy-production.ps1
-```
-
-**If deployment fails with "container failed to start and listen on the port"**
-
-- The backend image uses **lazy initialization**: the HTTP server listens on `PORT` immediately; the DB (and Flyway) initializes on first request. That avoids Cloud Run killing the container before the JVM is ready.
-- Ensure **`SPRING_DATASOURCE_PASSWORD`** is set on the Cloud Run service (Console → your service → Edit → Variables). If you deploy from a trigger/Console instead of the script, set this env var once so new revisions can connect to Neon.
+Quick install (from `frontend/` with a device connected): `npm run android:install` after copying `frontend/.env.android.example` → `frontend/.env.android`.
 
 ## Config (backend)
 

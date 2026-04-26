@@ -10,9 +10,32 @@ const T_FAIL_SEC = 60
 const W = 0.7
 /** Minimum relative error tolerance (20%) — never stricter than this. */
 const TAU_MIN = 0.20
+const ESTIMATION_CATEGORY_WEIGHTS: Record<string, number> = {
+  SIMPLE: 1.0,
+  EVERYDAY: 1.8,
+  SCIENCE: 2.8,
+  BUDGET: 4.0,
+}
+const ESTIMATION_TOLERANCE_MIN = 0.05
+const ESTIMATION_TOLERANCE_MAX = 0.5
+const ESTIMATION_RAW_MIN = (1 / ESTIMATION_TOLERANCE_MAX) * ESTIMATION_CATEGORY_WEIGHTS.SIMPLE
+const ESTIMATION_RAW_MAX = (1 / ESTIMATION_TOLERANCE_MIN) * ESTIMATION_CATEGORY_WEIGHTS.BUDGET
 
 function clamp(x: number, lo: number, hi: number): number {
   return Math.max(lo, Math.min(hi, x))
+}
+
+/**
+ * Psychophysics-inspired estimation complexity:
+ * Cb_raw = (1 / toleranceFactor) * categoryWeight
+ * score_0_100 = affine_norm(Cb_raw)
+ */
+function estimationComplexityScore(toleranceFactor: number, category: string): number {
+  const categoryWeight = ESTIMATION_CATEGORY_WEIGHTS[category] ?? ESTIMATION_CATEGORY_WEIGHTS.EVERYDAY
+  const safeTolerance = clamp(toleranceFactor, ESTIMATION_TOLERANCE_MIN, ESTIMATION_TOLERANCE_MAX)
+  const raw = (1 / safeTolerance) * categoryWeight
+  const normalized = ((raw - ESTIMATION_RAW_MIN) / (ESTIMATION_RAW_MAX - ESTIMATION_RAW_MIN)) * 100
+  return clamp(normalized, 0, 100)
 }
 
 /**
@@ -58,7 +81,7 @@ export interface EstimationExerciseProps {
  * Estimation exercise: numeric input, scored by relative error and response time.
  * Displays precision, time, overall score and result band (Success / Medium / Fail).
  */
-export function EstimationExercise({ exercise, onComplete, showInstruction = true }: EstimationExerciseProps) {
+export function EstimationExercise({ exercise, onComplete }: EstimationExerciseProps) {
   const params = exercise.estimationParams
   const [answer, setAnswer] = useState('')
   const [revealed, setRevealed] = useState(false)
@@ -71,7 +94,8 @@ export function EstimationExercise({ exercise, onComplete, showInstruction = tru
     )
   }
 
-  const { correctAnswer, unit, toleranceFactor, hint, timeWeightHigher } = params
+  const { correctAnswer, unit, toleranceFactor, hint, timeWeightHigher, category } = params
+  const complexityScore = estimationComplexityScore(toleranceFactor, category)
   /** Pure math: time matters more (w=0.4); word/geography: precision matters more (w=0.7). */
   const w = timeWeightHigher ? 0.4 : 0.7
   const numAnswer = Number(answer.trim().replace(/,/g, ''))
@@ -101,11 +125,6 @@ export function EstimationExercise({ exercise, onComplete, showInstruction = tru
   return (
     <>
       <p className="prompt">{exercise.prompt}</p>
-      {showInstruction && (
-        <p className="nback-instruction">
-          Your score combines how close your estimate is to the correct answer and how quickly you respond.
-        </p>
-      )}
       {hint != null && hint !== '' && (
         <p className="estimation-hint" aria-label="Hint">{hint}</p>
       )}
@@ -128,6 +147,9 @@ export function EstimationExercise({ exercise, onComplete, showInstruction = tru
           <span className={revealed ? 'correct' : ''}>✓ Checked</span>
         )}
       </div>
+      <p className="estimation-complexity" aria-label="Estimation complexity score">
+        Cx {Math.round(complexityScore)}/100
+      </p>
       {revealed && lastSubscores && (
         <ul className="estimation-subscores" aria-label="Score breakdown">
           {lastSubscores.map((s, i) => (
