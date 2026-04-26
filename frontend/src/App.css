@@ -36,6 +36,14 @@ body {
   margin: 0 auto;
 }
 
+.screen-feedback-correct {
+  animation: screen-feedback-correct 0.7s ease-out;
+}
+
+.screen-feedback-incorrect {
+  animation: screen-feedback-incorrect 0.7s ease-out;
+}
+
 .screen.center {
   justify-content: center;
   align-items: center;
@@ -49,6 +57,30 @@ body {
 @keyframes pulse {
   0%, 100% { opacity: 1; }
   50% { opacity: 0.5; }
+}
+
+@keyframes screen-feedback-correct {
+  0% {
+    box-shadow: inset 0 0 0 0 transparent;
+  }
+  25% {
+    box-shadow: inset 0 0 0 4px color-mix(in srgb, var(--correct) 90%, transparent);
+  }
+  100% {
+    box-shadow: inset 0 0 0 0 transparent;
+  }
+}
+
+@keyframes screen-feedback-incorrect {
+  0% {
+    box-shadow: inset 0 0 0 0 transparent;
+  }
+  25% {
+    box-shadow: inset 0 0 0 4px color-mix(in srgb, var(--incorrect) 90%, transparent);
+  }
+  100% {
+    box-shadow: inset 0 0 0 0 transparent;
+  }
 }
 
 .error {

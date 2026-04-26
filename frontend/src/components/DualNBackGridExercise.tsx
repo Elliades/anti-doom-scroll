@@ -25,7 +25,7 @@ export function DualNBackGridExercise({ exercise, onComplete, showInstruction = 
   const [userColorMatches, setUserColorMatches] = useState<Set<number>>(new Set())
   const [showFeedback, setShowFeedback] = useState<'position' | 'color' | 'wrong' | null>(null)
 
-  const intervalMs = 2500
+  const intervalMs = 1700
   const matchPositionSet = new Set(params.matchPositionIndices ?? [])
   const matchColorSet = new Set(params.matchColorIndices ?? [])
   const n = params.n ?? 1

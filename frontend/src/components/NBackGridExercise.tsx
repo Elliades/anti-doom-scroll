@@ -23,7 +23,7 @@ export function NBackGridExercise({ exercise, onComplete, showInstruction = true
   const [userMatches, setUserMatches] = useState<Set<number>>(new Set())
   const [showMatchFeedback, setShowMatchFeedback] = useState<boolean | null>(null)
 
-  const intervalMs = 2500
+  const intervalMs = 1700
   const matchIndicesSet = new Set(params.matchIndices ?? [])
   const n = params.n ?? 1
   const gridSize = params.gridSize ?? 3

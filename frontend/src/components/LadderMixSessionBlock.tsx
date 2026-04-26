@@ -17,7 +17,9 @@ function formatPercent(v: number): string {
 }
 
 const ANSWERS_NEEDED = 5
-const POST_EXERCISE_DELAY_MS = 1200
+const SUCCESS_FEEDBACK_DELAY_MS = 250
+const FAILURE_FEEDBACK_DELAY_MS = 1500
+const FEEDBACK_GLOW_MS = 700
 
 const LADDER_LABELS: Record<string, string> = {
   sum: 'Math',
@@ -44,12 +46,14 @@ export function LadderMixSessionBlock({ mixCode = 'mix' }: LadderMixSessionBlock
   const [exerciseKey, setExerciseKey] = useState(0)
   const [levelToast, setLevelToast] = useState<{ from: number; to: number; direction: string } | null>(null)
   const [isFirstExerciseInLadder, setIsFirstExerciseInLadder] = useState(true)
+  const [answerFeedback, setAnswerFeedback] = useState<'correct' | 'incorrect' | null>(null)
 
   const ladderMixStateRef = useRef<LadderMixStateDto | null>(null)
   const levelCountRef = useRef(0)
   const currentLadderCodeRef = useRef<string | null>(null)
   const transitioningRef = useRef(false)
   const toastTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const feedbackTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   useEffect(() => { ladderMixStateRef.current = ladderMixState }, [ladderMixState])
   useEffect(() => { levelCountRef.current = levelCount }, [levelCount])
@@ -57,14 +61,19 @@ export function LadderMixSessionBlock({ mixCode = 'mix' }: LadderMixSessionBlock
   const clearToastTimer = () => {
     if (toastTimerRef.current) clearTimeout(toastTimerRef.current)
   }
+  const clearFeedbackTimer = () => {
+    if (feedbackTimerRef.current) clearTimeout(feedbackTimerRef.current)
+  }
 
   const loadInitial = useCallback(async () => {
     setLoading(true)
     setInlineError(null)
     setLevelToast(null)
     setIsFirstExerciseInLadder(true)
+    setAnswerFeedback(null)
     transitioningRef.current = false
     clearToastTimer()
+    clearFeedbackTimer()
     try {
       const data: LadderMixSessionResponseDto = await startLadderMixSession(undefined, mixCode)
       setExercise(data.exercise)
@@ -81,7 +90,10 @@ export function LadderMixSessionBlock({ mixCode = 'mix' }: LadderMixSessionBlock
 
   useEffect(() => {
     loadInitial()
-    return clearToastTimer
+    return () => {
+      clearToastTimer()
+      clearFeedbackTimer()
+    }
   }, [loadInitial])
 
   const handleComplete = useCallback(async (result: ExerciseResult) => {
@@ -94,9 +106,15 @@ export function LadderMixSessionBlock({ mixCode = 'mix' }: LadderMixSessionBlock
     setInlineError(null)
 
     try {
+      const isSuccess = result.score >= 0.5
+      setAnswerFeedback(isSuccess ? 'correct' : 'incorrect')
+      clearFeedbackTimer()
+      feedbackTimerRef.current = setTimeout(() => setAnswerFeedback(null), FEEDBACK_GLOW_MS)
+
+      const postExerciseDelayMs = isSuccess ? SUCCESS_FEEDBACK_DELAY_MS : FAILURE_FEEDBACK_DELAY_MS
       const [next] = await Promise.all([
         getNextLadderMixExercise(state, lastCompletedLadderCode, result.score),
-        new Promise<void>(resolve => setTimeout(resolve, POST_EXERCISE_DELAY_MS)),
+        new Promise<void>(resolve => setTimeout(resolve, postExerciseDelayMs)),
       ])
 
       setLadderMixState(next.ladderMixState)
@@ -130,6 +148,7 @@ export function LadderMixSessionBlock({ mixCode = 'mix' }: LadderMixSessionBlock
 
     transitioningRef.current = true
     setInlineError(null)
+    setAnswerFeedback(null)
 
     try {
       const next = await getNextLadderMixExercise(state, lastCompletedLadderCode, 0.5)
@@ -160,6 +179,7 @@ export function LadderMixSessionBlock({ mixCode = 'mix' }: LadderMixSessionBlock
 
     transitioningRef.current = true
     setInlineError(null)
+    setAnswerFeedback(null)
 
     const from = state.currentLevelIndex
     const adjustedState: LadderMixStateDto = {
@@ -231,7 +251,7 @@ export function LadderMixSessionBlock({ mixCode = 'mix' }: LadderMixSessionBlock
     v === null ? 'var(--text-dim)' : v >= 0.75 ? 'var(--correct)' : v >= 0.4 ? '#f59e0b' : 'var(--incorrect)'
 
   return (
-    <div className="screen">
+    <div className={`screen ${answerFeedback ? `screen-feedback-${answerFeedback}` : ''}`}>
       <header className="header ladder-header">
         <Link to="/ladder" className="back-link" style={{ marginRight: 'auto' }}>
           ← Back
