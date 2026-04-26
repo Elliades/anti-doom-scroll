@@ -27,6 +27,7 @@ type Phase =
 
 const SHOW_NUMBER_MS = 1500
 const SHOW_STEP_MS = 1500
+const AUTO_CONTINUE_MS = 2000
 
 export function MathChainExercise({ exercise, onComplete, showInstruction }: MathChainExerciseProps) {
   const params = exercise.mathChainParams
@@ -90,6 +91,15 @@ export function MathChainExercise({ exercise, onComplete, showInstruction }: Mat
     setPhase('show_step')
   }, [phase, stepIndex])
 
+  // Phase: wait_continue -> auto advance (no button)
+  useEffect(() => {
+    if (phase !== 'wait_continue') return
+    const t = setTimeout(() => {
+      handleContinue()
+    }, AUTO_CONTINUE_MS)
+    return () => clearTimeout(t)
+  }, [phase, handleContinue])
+
   const handleCheck = useCallback(() => {
     if (phase !== 'ask_answer' || revealed) return
     setRevealed(true)
@@ -117,13 +127,12 @@ export function MathChainExercise({ exercise, onComplete, showInstruction }: Mat
     const onKey = (e: KeyboardEvent) => {
       if (e.ctrlKey || e.altKey || e.metaKey) return
       if (e.key === 'Enter') {
-        if (phase === 'wait_continue') handleContinue()
-        else if (phase === 'ask_answer') handleCheck()
+        if (phase === 'ask_answer') handleCheck()
       }
     }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
-  }, [phase, handleContinue, handleCheck])
+  }, [phase, handleCheck])
 
   if (!params || steps.length === 0) {
     return <p className="prompt">No math chain data available.</p>
@@ -193,14 +202,6 @@ export function MathChainExercise({ exercise, onComplete, showInstruction }: Mat
         <div className="mc-operation">
           {sym} {currentStep.operand}
         </div>
-        <button
-          type="button"
-          className="mc-continue-btn"
-          onClick={handleContinue}
-          autoFocus
-        >
-          Continue →
-        </button>
         <div className="mc-progress">
           <div className="mc-progress-bar">
             <div
@@ -219,18 +220,6 @@ export function MathChainExercise({ exercise, onComplete, showInstruction }: Mat
     return (
       <div className="mc">
         <div className="mc-header">What's the result?</div>
-        <div className="mc-chain-summary">
-          <span className="mc-chain-start">{startNumber}</span>
-          {steps.map((s, i) => {
-            const sym = OP_SYMBOLS[s.operation] ?? '?'
-            return (
-              <span key={i} className="mc-chain-op">
-                {' '}{sym} {s.operand}
-              </span>
-            )
-          })}
-          <span className="mc-chain-eq"> = ?</span>
-        </div>
         <div className="input-row">
           <input
             ref={inputRef}
