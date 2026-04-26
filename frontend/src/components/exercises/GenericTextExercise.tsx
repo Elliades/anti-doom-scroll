@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import type { ExerciseDto } from '../../types/api'
 import type { ExerciseResult } from '../../types/exercise'
+import { ComplexityBadge } from './ComplexityBadge'
 
 export interface GenericTextExerciseProps {
   exercise: ExerciseDto
@@ -61,15 +62,11 @@ export function GenericTextExercise({ exercise, onComplete }: GenericTextExercis
 
   const inputMode =
     keyboardMode === 'numeric' ? 'numeric' : keyboardMode === 'decimal' ? 'decimal' : 'text'
+  const complexityScore = exercise.mathComplexityScore ?? null
 
   return (
-    <>
+    <div className="complexity-badge-anchor">
       <p className="prompt">{exercise.prompt}</p>
-      {exercise.mathOperation != null && exercise.mathComplexityScore != null && (
-        <p className="math-complexity" aria-label="Problem complexity score">
-          Complexity: {Math.round(exercise.mathComplexityScore * 10) / 10}
-        </p>
-      )}
       <div className="input-row">
         <input
           ref={inputRef}
@@ -95,6 +92,7 @@ export function GenericTextExercise({ exercise, onComplete }: GenericTextExercis
           </span>
         )}
       </div>
-    </>
+      {complexityScore == null ? null : <ComplexityBadge score={complexityScore} />}
+    </div>
   )
 }

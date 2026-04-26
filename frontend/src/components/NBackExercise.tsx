@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback, useMemo, useRef } from 'react'
 import type { ExerciseDto } from '../types/api'
 import type { ExerciseResult } from '../types/exercise'
+import { estimateNBackComplexityScore } from '../api/exerciseParamGenerators'
 import { isCardCode } from './NBackCardDisplay'
 import { NBackCardCarousel } from './NBackCardCarousel'
 
@@ -23,6 +24,11 @@ export function NBackExercise({ exercise, onComplete, showInstruction = true }: 
   }
 
   const n = params.n ?? 1
+  const suitCount = useMemo(() => {
+    const suits = new Set(params.sequence.map((item) => item.slice(-1)))
+    return Math.max(2, Math.min(4, suits.size))
+  }, [params.sequence])
+  const cognitiveLoad = Math.round(estimateNBackComplexityScore(n, 1, suitCount))
   const [phase, setPhase] = useState<'intro' | 'playing' | 'done'>('intro')
   const [index, setIndex] = useState(0)
   const [userMatches, setUserMatches] = useState<Set<number>>(new Set())
@@ -138,6 +144,7 @@ export function NBackExercise({ exercise, onComplete, showInstruction = true }: 
         <div className="nback-n-badge" aria-label={`${n}-Back`}>
           {n}-Back
         </div>
+        <p className="cognitive-load-badge">Charge Cognitive : {cognitiveLoad}/100</p>
         <p className="prompt">{exercise.prompt}</p>
         {showInstruction && (
           <p className="nback-instruction">
@@ -161,6 +168,7 @@ export function NBackExercise({ exercise, onComplete, showInstruction = true }: 
         <div className="nback-n-badge" aria-label={`${n}-Back`}>
           {n}-Back
         </div>
+        <p className="cognitive-load-badge">Charge Cognitive : {cognitiveLoad}/100</p>
         <div
           className={[
             'nback-stimulus',
@@ -222,6 +230,7 @@ export function NBackExercise({ exercise, onComplete, showInstruction = true }: 
   // phase === 'done'
   return (
     <div className="nback-done">
+      <p className="cognitive-load-badge">Charge Cognitive : {cognitiveLoad}/100</p>
       <p className="nback-result">{resultMessage}</p>
       <p className="nback-score">
         Score: {Math.round(score * 100)}% · Hits: {intersectionSize(userMatches, matchIndicesSet)} /{' '}
