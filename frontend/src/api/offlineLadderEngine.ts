@@ -11,10 +11,13 @@ import type {
 import { bundledDataUrl } from '../utils/bundledDataUrl'
 import { loadCatalogOfflineBundle } from './offlineCatalog'
 import {
+  applyScoreDrivenParams,
   hydrateExercise,
+  buildSyntheticAnagramPool,
   buildSyntheticMemoryCardPool,
   buildSyntheticSumPairPool,
   buildSyntheticMathFlashcardPool,
+  buildSyntheticWordlePool,
 } from './offlineGenerators'
 
 const OFFLINE_PROFILE_ID = 'offline-local'
@@ -47,6 +50,17 @@ export interface LadderOfflineDataBundle {
 }
 
 let ladderDataCache: LadderOfflineDataBundle | null = null
+const DIFFICULTY_TARGET_SCORE: Record<string, number> = {
+  ULTRA_EASY: 0.82,
+  EASY: 0.72,
+  MEDIUM: 0.6,
+  HARD: 0.46,
+  VERY_HARD: 0.35,
+}
+const EARLY_RAMP_PORTION = 0.2
+const EARLY_RAMP_START_EASE = 0.86
+const EARLY_RAMP_END_EASE = 0.64
+const FINAL_LINEAR_END_EASE = 0.26
 
 export async function loadLadderOfflineBundle(): Promise<LadderOfflineDataBundle> {
   if (ladderDataCache) return ladderDataCache
@@ -136,7 +150,8 @@ function pickRandom<T>(arr: T[]): T | null {
  */
 export function pickExerciseForLevel(
   level: OfflineLadderLevelDef,
-  allExercises: ExerciseDto[]
+  allExercises: ExerciseDto[],
+  targetScore?: number,
 ): ExerciseDto | null {
   if (level.exerciseIds?.length) {
     const idSet = new Set(level.exerciseIds)
@@ -153,7 +168,7 @@ export function pickExerciseForLevel(
     return true
   })
 
-  const syntheticPool = buildSyntheticPools(level, allExercises)
+  const syntheticPool = buildSyntheticPools(level, allExercises, targetScore)
 
   let pool = [...catalogPool, ...syntheticPool]
 
@@ -176,26 +191,63 @@ function findSubjectId(allExercises: ExerciseDto[], subjectCode: string): string
   return ex?.subjectId ?? null
 }
 
-function buildSyntheticPools(level: OfflineLadderLevelDef, allExercises: ExerciseDto[]): ExerciseDto[] {
+function buildSyntheticPools(level: OfflineLadderLevelDef, allExercises: ExerciseDto[], targetScore?: number): ExerciseDto[] {
   const synthetic: ExerciseDto[] = []
 
   if (level.subjectCodes.includes('MEMORY') && allowsType(level, 'MEMORY_CARD_PAIRS')) {
     const sid = findSubjectId(allExercises, 'MEMORY')
-    if (sid) synthetic.push(...buildSyntheticMemoryCardPool(level.allowedDifficulties, sid))
+    if (sid) synthetic.push(...buildSyntheticMemoryCardPool(level.allowedDifficulties, sid, targetScore))
   }
 
   if (level.subjectCodes.includes('MEMORY') && allowsType(level, 'SUM_PAIR')) {
     const sid = findSubjectId(allExercises, 'MEMORY')
-    if (sid) synthetic.push(...buildSyntheticSumPairPool(level.allowedDifficulties, sid))
+    if (sid) synthetic.push(...buildSyntheticSumPairPool(level.allowedDifficulties, sid, targetScore))
   }
 
   if (level.subjectCodes.includes('default') && allowsType(level, 'FLASHCARD_QA')) {
     const sid = findSubjectId(allExercises, 'default')
     const filterOps = level.exerciseParamFilter?.operation
-    if (sid) synthetic.push(...buildSyntheticMathFlashcardPool(level.allowedDifficulties, sid, filterOps))
+    if (sid) synthetic.push(...buildSyntheticMathFlashcardPool(level.allowedDifficulties, sid, filterOps, targetScore))
+  }
+
+  if (level.subjectCodes.includes('WORD') && allowsType(level, 'WORDLE')) {
+    const sid = findSubjectId(allExercises, 'WORD')
+    if (sid) synthetic.push(...buildSyntheticWordlePool(level.allowedDifficulties, sid, targetScore))
+  }
+
+  if (level.subjectCodes.includes('WORD') && allowsType(level, 'ANAGRAM')) {
+    const sid = findSubjectId(allExercises, 'WORD')
+    if (sid) synthetic.push(...buildSyntheticAnagramPool(level.allowedDifficulties, sid, targetScore))
   }
 
   return synthetic
+}
+
+function targetScoreFromDifficulties(difficulties: string[]): number {
+  const values = difficulties
+    .map((d) => DIFFICULTY_TARGET_SCORE[d])
+    .filter((v): v is number => v != null)
+  if (values.length === 0) return 0.6
+  return values.reduce((a, b) => a + b, 0) / values.length
+}
+
+export function targetScoreForLevel(levelIndex: number, maxLevelIndex: number, difficulties: string[]): number {
+  const safeMax = Math.max(1, maxLevelIndex)
+  const progress = Math.max(0, Math.min(1, levelIndex / safeMax))
+
+  // Rise quickly in complexity early (ease drops fast), then continue linearly.
+  const curveEase = progress <= EARLY_RAMP_PORTION
+    ? EARLY_RAMP_START_EASE - (EARLY_RAMP_START_EASE - EARLY_RAMP_END_EASE) * (progress / EARLY_RAMP_PORTION)
+    : EARLY_RAMP_END_EASE - (EARLY_RAMP_END_EASE - FINAL_LINEAR_END_EASE) * ((progress - EARLY_RAMP_PORTION) / (1 - EARLY_RAMP_PORTION))
+
+  const difficultyEase = targetScoreFromDifficulties(difficulties)
+  return Math.max(0, Math.min(1, curveEase * 0.7 + difficultyEase * 0.3))
+}
+
+function blendTargetWithRecent(baseTargetScore: number, recentScores: number[]): number {
+  if (recentScores.length === 0) return baseTargetScore
+  const avgRecent = recentScores.reduce((a, b) => a + b, 0) / recentScores.length
+  return Math.max(0, Math.min(1, baseTargetScore * 0.7 + avgRecent * 0.3))
 }
 
 export async function offlineStartLadderSession(ladderCode: string): Promise<LadderSessionResponseDto> {
@@ -209,9 +261,12 @@ export async function offlineStartLadderSession(ladderCode: string): Promise<Lad
   const level0 = cfg.levels.find((l) => l.levelIndex === 0)
   if (!level0) throw new Error(`Ladder "${resolvedCode}" has no level 0`)
 
-  const picked = pickExerciseForLevel(level0, allExercises)
+  const maxLevel = Math.max(...cfg.levels.map((l) => l.levelIndex))
+  const baseTargetScore = targetScoreForLevel(level0.levelIndex, maxLevel, level0.allowedDifficulties)
+  const picked = pickExerciseForLevel(level0, allExercises, baseTargetScore)
   if (!picked) throw new Error(`No exercise available for ladder "${resolvedCode}" level 0 (regenerate catalog-offline.json).`)
-  const exercise = await hydrateExercise(picked)
+  const scoreDriven = applyScoreDrivenParams(picked, baseTargetScore)
+  const exercise = await hydrateExercise(scoreDriven)
 
   const ladderState: LadderStateDto = {
     ladderCode: resolvedCode,
@@ -287,8 +342,11 @@ export async function offlineGetNextLadderExercise(
     return { exercise: null, ladderState: newState, levelChanged }
   }
 
-  const picked = pickExerciseForLevel(level, allExercises)
-  const exercise = picked ? await hydrateExercise(picked) : null
+  const maxLevel = Math.max(...config.levels.map((l) => l.levelIndex))
+  const baseTargetScore = targetScoreForLevel(level.levelIndex, maxLevel, level.allowedDifficulties)
+  const targetScore = blendTargetWithRecent(baseTargetScore, newState.recentScores)
+  const picked = pickExerciseForLevel(level, allExercises, targetScore)
+  const exercise = picked ? await hydrateExercise(applyScoreDrivenParams(picked, targetScore)) : null
   return { exercise, ladderState: newState, levelChanged }
 }
 
@@ -327,9 +385,11 @@ export async function offlineStartLadderMixSession(mixCode: string): Promise<Lad
   const level0 = config.levels.find((l) => l.levelIndex === 0)
   if (!level0) throw new Error(`Ladder ${firstLadderCode} has no level 0`)
 
-  const picked = pickExerciseForLevel(level0, allExercises)
+  const maxLevel = Math.max(...config.levels.map((l) => l.levelIndex))
+  const baseTargetScore = targetScoreForLevel(level0.levelIndex, maxLevel, level0.allowedDifficulties)
+  const picked = pickExerciseForLevel(level0, allExercises, baseTargetScore)
   if (!picked) throw new Error(`No exercise for ladder mix start (${firstLadderCode})`)
-  const exercise = await hydrateExercise(picked)
+  const exercise = await hydrateExercise(applyScoreDrivenParams(picked, baseTargetScore))
 
   const levelCount = Math.min(...ladderCodes.map((c) => getConfig(bundle, c)?.levels.length ?? 0))
 
@@ -458,8 +518,12 @@ export async function offlineGetNextLadderMixExercise(
     return { exercise: null, ladderMixState: newState, levelChanged }
   }
 
-  const picked = pickExerciseForLevel(level, allExercises)
-  const exercise = picked ? await hydrateExercise(picked) : null
+  const maxLevelForLadder = Math.max(...nextConfig.levels.map((l) => l.levelIndex))
+  const baseTargetScore = targetScoreForLevel(level.levelIndex, maxLevelForLadder, level.allowedDifficulties)
+  const ladderRecent = newState.perLadderStates[nextLadderCode]?.recentScores ?? []
+  const targetScore = blendTargetWithRecent(baseTargetScore, ladderRecent)
+  const picked = pickExerciseForLevel(level, allExercises, targetScore)
+  const exercise = picked ? await hydrateExercise(applyScoreDrivenParams(picked, targetScore)) : null
   return { exercise, ladderMixState: newState, levelChanged }
 }
 

@@ -1,6 +1,7 @@
 import { useState, useCallback, useEffect, useRef, useMemo } from 'react'
 import type { ExerciseDto } from '../../types/api'
 import type { ExerciseResult } from '../../types/exercise'
+import { estimateDigitSpanComplexityScore } from '../../api/exerciseParamGenerators'
 
 export interface DigitSpanExerciseProps {
   exercise: ExerciseDto
@@ -88,6 +89,7 @@ export function DigitSpanExercise({ exercise, onComplete }: DigitSpanExercisePro
   const [blinkCount, setBlinkCount] = useState(0)
   const [feedback, setFeedback] = useState('')
   const [shaking, setShaking] = useState(false)
+  const cognitiveLoad = Math.round(estimateDigitSpanComplexityScore(digitLength))
 
   const completedRef = useRef(false)
   const statsRef = useRef({ maxReached: 0, totalRounds: 0, totalChallenges: 0, challengesPassed: 0 })
@@ -239,6 +241,7 @@ export function DigitSpanExercise({ exercise, onComplete }: DigitSpanExercisePro
   if (phase === 'intro') {
     return (
       <div className="ds">
+        <p className="cognitive-load-badge">Charge Cognitive : {cognitiveLoad}/100</p>
         <div className="ds-header">Digit Span</div>
         <div className="ds-instructions">
           <p>Digits will flash on screen — memorize them!</p>
@@ -255,6 +258,7 @@ export function DigitSpanExercise({ exercise, onComplete }: DigitSpanExercisePro
   if (phase === 'done') {
     return (
       <div className="ds">
+        <p className="cognitive-load-badge">Charge Cognitive : {cognitiveLoad}/100</p>
         <div className="ds-header">Done!</div>
         <p className="ds-stats">Max span: {statsRef.current.maxReached} digits</p>
       </div>
@@ -264,6 +268,7 @@ export function DigitSpanExercise({ exercise, onComplete }: DigitSpanExercisePro
   if (phase === 'fail') {
     return (
       <div className="ds">
+        <p className="cognitive-load-badge">Charge Cognitive : {cognitiveLoad}/100</p>
         <div className="ds-header ds-header--fail">Wrong!</div>
         <div className="ds-tiles">
           {expected.map((d, i) => (
@@ -288,6 +293,7 @@ export function DigitSpanExercise({ exercise, onComplete }: DigitSpanExercisePro
 
   return (
     <div className="ds">
+      <p className="cognitive-load-badge">Charge Cognitive : {cognitiveLoad}/100</p>
       {/* Header */}
       <div className={`ds-header ${phase === 'correct_flash' ? 'ds-header--correct' : ''}`}>
         {isMemorizing ? 'Memorize' : 'List them'}

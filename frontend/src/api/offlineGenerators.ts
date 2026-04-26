@@ -1,5 +1,9 @@
 import type {
+  DigitSpanParamsDto,
+  EstimationParamsDto,
   ExerciseDto,
+  ImagePairParamsDto,
+  MathChainParamsDto,
   NBackParamsDto,
   NBackGridParamsDto,
   DualNBackCardParamsDto,
@@ -11,6 +15,7 @@ import type {
   AnagramParamsDto,
 } from '../types/api'
 import { loadWordListWords } from '../utils/wordleWordLoader'
+import { generateParamsFromScore } from './exerciseParamGenerators'
 
 // ---------------------------------------------------------------------------
 // Shared helpers
@@ -214,6 +219,37 @@ function generateMathDivide(firstMin: number, firstMax: number, secondMin: numbe
   return [`What is ${dividend} \u00f7 ${divisor}?`, String(quotient)]
 }
 
+function symbolForOperation(op: string): string {
+  if (op === 'ADD') return '+'
+  if (op === 'SUBTRACT') return '\u2212'
+  if (op === 'MULTIPLY') return '\u00d7'
+  return '\u00f7'
+}
+
+function buildFlashcardFromGeneratedParams(
+  operation: string,
+  firstOperand: number,
+  secondOperand: number,
+): { prompt: string; expectedAnswer: string; complexityScore: number } {
+  const symbol = symbolForOperation(operation)
+  if (operation === 'DIVIDE') {
+    const divisor = Math.max(1, secondOperand)
+    const quotient = Math.max(1, Math.floor(firstOperand / divisor))
+    const dividend = divisor * quotient
+    const prompt = `What is ${dividend} ${symbol} ${divisor}?`
+    const complexityScore = complexityForOp(operation, prompt, String(quotient))
+    return { prompt, expectedAnswer: String(quotient), complexityScore }
+  }
+  const prompt = `What is ${firstOperand} ${symbol} ${secondOperand}?`
+  const answer = operation === 'ADD'
+    ? firstOperand + secondOperand
+    : operation === 'SUBTRACT'
+      ? firstOperand - secondOperand
+      : firstOperand * secondOperand
+  const complexityScore = complexityForOp(operation, prompt, String(answer))
+  return { prompt, expectedAnswer: String(answer), complexityScore }
+}
+
 function complexityForOp(op: string, prompt: string, answer: string): number {
   const q = prompt.replace(/^What is /, '').replace(/\?$/, '')
   let parts: string[]
@@ -305,7 +341,7 @@ export async function generateWordleAnswer(
   wordLength: number,
   _difficulty?: string,
 ): Promise<string | null> {
-  const resolvedLen = _difficulty ? wordLengthForDifficulty(_difficulty) : wordLength
+  const resolvedLen = wordLength > 0 ? wordLength : (_difficulty ? wordLengthForDifficulty(_difficulty) : 5)
   const words = await loadWordListWords(language, resolvedLen)
   if (words.length === 0) return null
   return normalizeWordleWord(pickRandom(words))
@@ -626,6 +662,160 @@ export async function hydrateExercise(exercise: ExerciseDto): Promise<ExerciseDt
   }
 }
 
+function evaluateMathChain(startNumber: number, steps: Array<{ operation: string; operand: number }>): number {
+  let value = startNumber
+  for (const step of steps) {
+    if (step.operation === 'ADD') value += step.operand
+    else if (step.operation === 'SUBTRACT') value -= step.operand
+    else if (step.operation === 'MULTIPLY') value *= step.operand
+    else if (step.operation === 'DIVIDE') value = Math.max(1, Math.floor(value / Math.max(1, step.operand)))
+  }
+  return value
+}
+
+export function applyScoreDrivenParams(exercise: ExerciseDto, targetScore: number): ExerciseDto {
+  switch (exercise.type) {
+    case 'SUM_PAIR': {
+      const generated = generateParamsFromScore('SUM_PAIR', targetScore)
+      if (generated.type !== 'SUM_PAIR') return exercise
+      return { ...exercise, sumPairParams: generated.params }
+    }
+    case 'MEMORY_CARD_PAIRS': {
+      const generated = generateParamsFromScore('MEMORY_CARD_PAIRS', targetScore)
+      if (generated.type !== 'MEMORY_CARD_PAIRS') return exercise
+      const symbols = pickDistinctEmojis(generated.params.pairCount)
+      return {
+        ...exercise,
+        memoryCardParams: {
+          pairCount: generated.params.pairCount,
+          symbols,
+          shuffledDeck: shuffleMemoryDeck(symbols),
+        },
+      }
+    }
+    case 'IMAGE_PAIR': {
+      const generated = generateParamsFromScore('IMAGE_PAIR', targetScore)
+      if (generated.type !== 'IMAGE_PAIR') return exercise
+      return { ...exercise, imagePairParams: generated.params as ImagePairParamsDto }
+    }
+    case 'FLASHCARD_QA': {
+      const generated = generateParamsFromScore('FLASHCARD_QA', targetScore)
+      if (generated.type !== 'FLASHCARD_QA') return exercise
+      const built = buildFlashcardFromGeneratedParams(
+        generated.params.operation,
+        generated.params.firstOperand,
+        generated.params.secondOperand,
+      )
+      return {
+        ...exercise,
+        mathOperation: generated.params.operation,
+        prompt: built.prompt,
+        expectedAnswers: [built.expectedAnswer],
+        mathComplexityScore: built.complexityScore,
+      }
+    }
+    case 'MATH_CHAIN': {
+      const generated = generateParamsFromScore('MATH_CHAIN', targetScore)
+      if (generated.type !== 'MATH_CHAIN') return exercise
+      const expectedAnswer = evaluateMathChain(generated.params.startNumber, generated.params.steps)
+      const params: MathChainParamsDto = {
+        startNumber: generated.params.startNumber,
+        steps: generated.params.steps.map((s) => ({
+          operation: s.operation,
+          operand: s.operand,
+          complexity: generated.params.complexityScore / Math.max(1, generated.params.steps.length),
+        })),
+        expectedAnswer,
+        totalComplexity: generated.params.complexityScore,
+      }
+      return { ...exercise, mathChainParams: params, expectedAnswers: [String(expectedAnswer)] }
+    }
+    case 'WORDLE': {
+      const generated = generateParamsFromScore('WORDLE', targetScore)
+      if (generated.type !== 'WORDLE') return exercise
+      return { ...exercise, wordleParams: generated.params }
+    }
+    case 'ANAGRAM': {
+      const generated = generateParamsFromScore('ANAGRAM', targetScore)
+      if (generated.type !== 'ANAGRAM') return exercise
+      return { ...exercise, anagramParams: generated.params }
+    }
+    case 'ESTIMATION': {
+      const generated = generateParamsFromScore('ESTIMATION', targetScore)
+      if (generated.type !== 'ESTIMATION') return exercise
+      const { complexityScore: _complexityScore, ...params } = generated.params
+      return { ...exercise, estimationParams: params as EstimationParamsDto }
+    }
+    case 'DIGIT_SPAN': {
+      const generated = generateParamsFromScore('DIGIT_SPAN', targetScore)
+      if (generated.type !== 'DIGIT_SPAN') return exercise
+      const params: DigitSpanParamsDto = {
+        startLength: generated.params.startLength,
+        displayTimeMs: Math.max(600, 2200 - generated.params.startLength * 180),
+        maxLength: Math.min(14, generated.params.startLength + 4),
+      }
+      return { ...exercise, digitSpanParams: params }
+    }
+    case 'N_BACK': {
+      const generated = generateParamsFromScore('N_BACK', targetScore)
+      if (generated.type !== 'N_BACK') return exercise
+      const seqLength = Math.max(12, exercise.nBackParams?.sequence.length ?? exercise.nbackParams?.sequence.length ?? 12)
+      const result = generateNBackSequence(generated.params.n, generated.params.suitCount, seqLength)
+      const params: NBackParamsDto = { n: generated.params.n, sequence: result.sequence, matchIndices: result.matchIndices }
+      return { ...exercise, nBackParams: params, nbackParams: params }
+    }
+    case 'N_BACK_GRID': {
+      const generated = generateParamsFromScore('N_BACK', targetScore)
+      if (generated.type !== 'N_BACK') return exercise
+      const gridSize = exercise.nBackGridParams?.gridSize ?? exercise.nbackGridParams?.gridSize ?? 3
+      const seqLength = Math.max(12, exercise.nBackGridParams?.sequence.length ?? exercise.nbackGridParams?.sequence.length ?? 12)
+      const result = generateNBackGridSequence(generated.params.n, gridSize, seqLength)
+      const params: NBackGridParamsDto = {
+        n: generated.params.n,
+        sequence: result.sequence,
+        matchIndices: result.matchIndices,
+        gridSize,
+      }
+      return { ...exercise, nBackGridParams: params, nbackGridParams: params }
+    }
+    case 'DUAL_NBACK_CARD': {
+      const generated = generateParamsFromScore('DUAL_NBACK', targetScore)
+      if (generated.type !== 'DUAL_NBACK') return exercise
+      const seqLength = Math.max(12, exercise.dualNBackCardParams?.sequence.length ?? exercise.dualNbackCardParams?.sequence.length ?? 12)
+      const result = generateDualNBackCardSequence(generated.params.n, generated.params.colorCount, seqLength)
+      const params: DualNBackCardParamsDto = {
+        n: generated.params.n,
+        sequence: result.sequence,
+        matchColorIndices: result.matchColorIndices,
+        matchNumberIndices: result.matchNumberIndices,
+      }
+      return { ...exercise, dualNBackCardParams: params, dualNbackCardParams: params }
+    }
+    case 'DUAL_NBACK_GRID': {
+      const generated = generateParamsFromScore('DUAL_NBACK', targetScore)
+      if (generated.type !== 'DUAL_NBACK') return exercise
+      const seqLength = Math.max(12, exercise.dualNBackGridParams?.sequence.length ?? exercise.dualNbackGridParams?.sequence.length ?? 12)
+      const result = generateDualNBackGridSequence(
+        generated.params.n,
+        generated.params.gridSize,
+        generated.params.colorCount,
+        seqLength,
+      )
+      const params: DualNBackGridParamsDto = {
+        n: generated.params.n,
+        sequence: result.sequence,
+        matchPositionIndices: result.matchPositionIndices,
+        matchColorIndices: result.matchColorIndices,
+        colors: result.colors,
+        gridSize: generated.params.gridSize,
+      }
+      return { ...exercise, dualNBackGridParams: params, dualNbackGridParams: params }
+    }
+    default:
+      return exercise
+  }
+}
+
 function hydrateMathFlashcard(ex: ExerciseDto): ExerciseDto {
   const op = ex.mathOperation
   if (!op) return ex
@@ -774,9 +964,12 @@ function pickDistinctEmojis(count: number): string[] {
 export function buildSyntheticMemoryCardPool(
   difficulties: string[],
   subjectId: string,
+  targetScore?: number,
   count = 8,
 ): ExerciseDto[] {
-  const pairCount = memoryPairCount(difficulties)
+  const pairCount = targetScore == null
+    ? memoryPairCount(difficulties)
+    : (generateParamsFromScore('MEMORY_CARD_PAIRS', targetScore).params.pairCount)
   const difficulty = difficulties[0] ?? 'EASY'
   return Array.from({ length: count }, (_, i) => {
     const symbols = pickDistinctEmojis(pairCount)
@@ -817,11 +1010,17 @@ function sumPairParamsForDifficulty(difficulties: string[]): {
 export function buildSyntheticSumPairPool(
   difficulties: string[],
   subjectId: string,
+  targetScore?: number,
   count = 8,
 ): ExerciseDto[] {
   const difficulty = difficulties[0] ?? 'EASY'
   return Array.from({ length: count }, (_, i) => {
-    const { statics, pairs, minV, maxV } = sumPairParamsForDifficulty(difficulties)
+    const generated = targetScore == null ? null : generateParamsFromScore('SUM_PAIR', targetScore)
+    const fromDifficulty = sumPairParamsForDifficulty(difficulties)
+    const statics = generated?.type === 'SUM_PAIR' ? generated.params.staticNumbers : fromDifficulty.statics
+    const pairs = generated?.type === 'SUM_PAIR' ? generated.params.pairsPerRound : fromDifficulty.pairs
+    const minV = generated?.type === 'SUM_PAIR' ? generated.params.minValue ?? 1 : fromDifficulty.minV
+    const maxV = generated?.type === 'SUM_PAIR' ? generated.params.maxValue ?? 99 : fromDifficulty.maxV
     let groups: SumPairGroupDto[]
     let deck: SumPairCardDto[]
     try {
@@ -851,16 +1050,28 @@ export function buildSyntheticMathFlashcardPool(
   difficulties: string[],
   subjectId: string,
   allowedOps?: string[],
+  targetScore?: number,
   count = 8,
 ): ExerciseDto[] {
+  const generated = targetScore == null ? null : generateParamsFromScore('FLASHCARD_QA', targetScore)
   const ops = allowedOps && allowedOps.length > 0
     ? allowedOps.map((o) => o.toUpperCase())
+    : generated?.type === 'FLASHCARD_QA'
+      ? [generated.params.operation]
     : ['ADD', 'SUBTRACT', 'MULTIPLY', 'DIVIDE']
   const difficulty = difficulties[0] ?? 'EASY'
 
   return Array.from({ length: count }, (_, i) => {
     const op = pickRandom(ops)
-    const result = generateMathFlashcard(op, difficulty)
+    const generatedForScore = targetScore == null ? null : generateParamsFromScore('FLASHCARD_QA', targetScore)
+    const generatedParams = generatedForScore?.type === 'FLASHCARD_QA' ? generatedForScore.params : null
+    const result = generatedParams != null
+      ? buildFlashcardFromGeneratedParams(
+          generatedParams.operation,
+          generatedParams.firstOperand,
+          generatedParams.secondOperand,
+        )
+      : generateMathFlashcard(op, difficulty)
     return {
       id: `math-gen-offline-${Date.now()}-${i}`,
       subjectId,
@@ -870,8 +1081,70 @@ export function buildSyntheticMathFlashcardPool(
       prompt: result.prompt,
       expectedAnswers: [result.expectedAnswer],
       timeLimitSeconds: 60,
-      mathOperation: op,
+      mathOperation: generatedParams?.operation ?? op,
       mathComplexityScore: result.complexityScore,
+    } as ExerciseDto
+  })
+}
+
+export function buildSyntheticWordlePool(
+  difficulties: string[],
+  subjectId: string,
+  targetScore?: number,
+  count = 8,
+): ExerciseDto[] {
+  const difficulty = difficulties[0] ?? 'EASY'
+  return Array.from({ length: count }, (_, i) => {
+    const generated = targetScore == null ? null : generateParamsFromScore('WORDLE', targetScore)
+    const params = generated?.type === 'WORDLE'
+      ? generated.params
+      : {
+          answer: 'chat',
+          wordLength: wordLengthForDifficulty(difficulty),
+          maxAttempts: difficulty === 'HARD' || difficulty === 'VERY_HARD' ? 5 : 6,
+          language: 'fr',
+        }
+    return {
+      id: `wordle-gen-offline-${Date.now()}-${i}`,
+      subjectId,
+      subjectCode: 'WORD',
+      type: 'WORDLE',
+      difficulty,
+      prompt: 'Trouvez le mot caché.',
+      expectedAnswers: [],
+      timeLimitSeconds: 120,
+      wordleParams: params,
+    } as ExerciseDto
+  })
+}
+
+export function buildSyntheticAnagramPool(
+  difficulties: string[],
+  subjectId: string,
+  targetScore?: number,
+  count = 8,
+): ExerciseDto[] {
+  const difficulty = difficulties[0] ?? 'EASY'
+  return Array.from({ length: count }, (_, i) => {
+    const generated = targetScore == null ? null : generateParamsFromScore('ANAGRAM', targetScore)
+    const params = generated?.type === 'ANAGRAM'
+      ? generated.params
+      : {
+          answer: 'chat',
+          scrambledLetters: scrambleAnagram('chat'),
+          hintIntervalSeconds: 10,
+          letterColorHint: true,
+        }
+    return {
+      id: `anagram-gen-offline-${Date.now()}-${i}`,
+      subjectId,
+      subjectCode: 'WORD',
+      type: 'ANAGRAM',
+      difficulty,
+      prompt: 'Recomposez le mot.',
+      expectedAnswers: [],
+      timeLimitSeconds: 120,
+      anagramParams: params,
     } as ExerciseDto
   })
 }

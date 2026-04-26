@@ -14,6 +14,9 @@ import {
   buildSyntheticMemoryCardPool,
   buildSyntheticSumPairPool,
   buildSyntheticMathFlashcardPool,
+  buildSyntheticWordlePool,
+  buildSyntheticAnagramPool,
+  applyScoreDrivenParams,
 } from './offlineGenerators'
 import type { ExerciseDto } from '../types/api'
 
@@ -520,5 +523,59 @@ describe('buildSyntheticMathFlashcardPool', () => {
     for (const ex of pool) {
       expect(ex.mathOperation).toBe('ADD')
     }
+  })
+})
+
+describe('buildSyntheticWordlePool', () => {
+  it('creates wordle exercises with params', () => {
+    const pool = buildSyntheticWordlePool(['MEDIUM'], 'sub-1', 0.4)
+    expect(pool).toHaveLength(8)
+    for (const ex of pool) {
+      expect(ex.type).toBe('WORDLE')
+      expect(ex.wordleParams?.answer).toBeTruthy()
+      expect(ex.wordleParams?.wordLength).toBeGreaterThanOrEqual(3)
+      expect(ex.wordleParams?.wordLength).toBeLessThanOrEqual(7)
+    }
+  })
+})
+
+describe('buildSyntheticAnagramPool', () => {
+  it('creates anagram exercises with params', () => {
+    const pool = buildSyntheticAnagramPool(['MEDIUM'], 'sub-1', 0.4)
+    expect(pool).toHaveLength(8)
+    for (const ex of pool) {
+      expect(ex.type).toBe('ANAGRAM')
+      expect(ex.anagramParams?.answer).toBeTruthy()
+      expect(ex.anagramParams?.scrambledLetters).toHaveLength(ex.anagramParams?.answer.length ?? 0)
+    }
+  })
+})
+
+describe('applyScoreDrivenParams', () => {
+  it('branches mappings for all mapped exercise types', () => {
+    const base: ExerciseDto = {
+      id: 'seed',
+      subjectId: 's1',
+      subjectCode: 'default',
+      type: 'FLASHCARD_QA',
+      difficulty: 'EASY',
+      prompt: 'x',
+      expectedAnswers: [],
+      timeLimitSeconds: 60,
+    }
+
+    expect(applyScoreDrivenParams({ ...base, type: 'FLASHCARD_QA' }, 0.6).mathOperation).toBeTruthy()
+    expect(applyScoreDrivenParams({ ...base, type: 'SUM_PAIR' }, 0.6).sumPairParams).toBeDefined()
+    expect(applyScoreDrivenParams({ ...base, type: 'MEMORY_CARD_PAIRS' }, 0.6).memoryCardParams?.pairCount).toBeGreaterThan(0)
+    expect(applyScoreDrivenParams({ ...base, type: 'WORDLE' }, 0.6).wordleParams?.wordLength).toBeGreaterThanOrEqual(3)
+    expect(applyScoreDrivenParams({ ...base, type: 'ANAGRAM' }, 0.6).anagramParams?.answer.length).toBeGreaterThanOrEqual(3)
+    expect(applyScoreDrivenParams({ ...base, type: 'DIGIT_SPAN' }, 0.6).digitSpanParams?.startLength).toBeGreaterThanOrEqual(3)
+    expect(applyScoreDrivenParams({ ...base, type: 'ESTIMATION' }, 0.6).estimationParams?.toleranceFactor).toBeGreaterThan(0)
+    expect((applyScoreDrivenParams({ ...base, type: 'N_BACK' }, 0.6).nBackParams ?? applyScoreDrivenParams({ ...base, type: 'N_BACK' }, 0.6).nbackParams)?.n).toBeGreaterThanOrEqual(1)
+    expect((applyScoreDrivenParams({ ...base, type: 'N_BACK_GRID' }, 0.6).nBackGridParams ?? applyScoreDrivenParams({ ...base, type: 'N_BACK_GRID' }, 0.6).nbackGridParams)?.n).toBeGreaterThanOrEqual(1)
+    expect((applyScoreDrivenParams({ ...base, type: 'DUAL_NBACK_CARD' }, 0.6).dualNBackCardParams ?? applyScoreDrivenParams({ ...base, type: 'DUAL_NBACK_CARD' }, 0.6).dualNbackCardParams)?.n).toBeGreaterThanOrEqual(1)
+    expect((applyScoreDrivenParams({ ...base, type: 'DUAL_NBACK_GRID' }, 0.6).dualNBackGridParams ?? applyScoreDrivenParams({ ...base, type: 'DUAL_NBACK_GRID' }, 0.6).dualNbackGridParams)?.n).toBeGreaterThanOrEqual(1)
+    expect(applyScoreDrivenParams({ ...base, type: 'MATH_CHAIN' }, 0.6).mathChainParams?.steps.length).toBeGreaterThan(0)
+    expect(applyScoreDrivenParams({ ...base, type: 'IMAGE_PAIR' }, 0.6).imagePairParams).toBeDefined()
   })
 })
