@@ -995,16 +995,33 @@ function sumPairParamsForDifficulty(difficulties: string[]): {
   maxV: number
 } {
   const set = new Set(difficulties)
+  let statics: number[]
+  let basePairs: number
+  let minV: number
+  let maxV: number
+
   if (set.has('MEDIUM') || set.has('HARD') || set.has('VERY_HARD')) {
-    const statics = shuffled([2, 5, 10]).slice(0, 2 + Math.floor(Math.random() * 2))
-    return { statics, pairs: 4 + Math.floor(Math.random() * 3), minV: 1, maxV: 99 }
+    statics = shuffled([2, 5, 10]).slice(0, 2 + Math.floor(Math.random() * 2))
+    basePairs = 4 + Math.floor(Math.random() * 3)
+    minV = 1
+    maxV = 99
+  } else if (set.has('EASY') && !set.has('ULTRA_EASY')) {
+    statics = shuffled([5, 7]).slice(0, 1 + Math.floor(Math.random() * 2))
+    basePairs = 4 + Math.floor(Math.random() * 2)
+    minV = 1
+    maxV = 50
+  } else {
+    statics = shuffled([2, 3, 5]).slice(0, 1)
+    basePairs = 3 + Math.floor(Math.random() * 2)
+    minV = 1
+    maxV = 30
   }
-  if (set.has('EASY') && !set.has('ULTRA_EASY')) {
-    const statics = shuffled([5, 7]).slice(0, 1 + Math.floor(Math.random() * 2))
-    return { statics, pairs: 4 + Math.floor(Math.random() * 2), minV: 1, maxV: 50 }
-  }
-  const statics = shuffled([2, 3, 5]).slice(0, 1)
-  return { statics, pairs: 3 + Math.floor(Math.random() * 2), minV: 1, maxV: 30 }
+
+  // Extra sum statics ⇒ more pairs per round so total “trials” / board size scale together.
+  const extraPairsWhenMultiStatic = statics.length > 1 ? statics.length - 1 : 0
+  const pairs = basePairs + extraPairsWhenMultiStatic
+
+  return { statics, pairs, minV, maxV }
 }
 
 export function buildSyntheticSumPairPool(
