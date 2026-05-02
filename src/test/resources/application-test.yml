@@ -429,10 +429,26 @@ app:
             subjectCodes: [MEMORY]
             allowedTypes: [SUM_PAIR]
           - levelIndex: 1
-            allowedDifficulties: [EASY]
+            allowedDifficulties: [ULTRA_EASY]
             subjectCodes: [MEMORY]
             allowedTypes: [SUM_PAIR]
           - levelIndex: 2
+            allowedDifficulties: [ULTRA_EASY, EASY]
+            subjectCodes: [MEMORY]
+            allowedTypes: [SUM_PAIR]
+          - levelIndex: 3
+            allowedDifficulties: [ULTRA_EASY]
+            subjectCodes: [DIGIT_SPAN]
+            allowedTypes: [DIGIT_SPAN]
+            exerciseParamFilter:
+              startLength: ["2"]
+          - levelIndex: 4
+            allowedDifficulties: [ULTRA_EASY]
+            subjectCodes: [DIGIT_SPAN]
+            allowedTypes: [DIGIT_SPAN]
+            exerciseParamFilter:
+              startLength: ["3"]
+          - levelIndex: 5
             allowedDifficulties: [ULTRA_EASY]
             subjectCodes: [DIGIT_SPAN]
             allowedTypes: [DIGIT_SPAN]

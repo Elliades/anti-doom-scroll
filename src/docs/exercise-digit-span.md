@@ -48,6 +48,7 @@ A progressive working memory exercise where users memorize and recall sequences 
 
 | Difficulty  | Start length | Display time | ID prefix      |
 |-------------|-------------|--------------|----------------|
+| ULTRA_EASY  | 2           | 3500ms       | `f2000000-…06` |
 | ULTRA_EASY  | 3           | 3000ms       | `f2000000-…01` |
 | EASY        | 4           | 3000ms       | `f2000000-…02` |
 | MEDIUM      | 5           | 2500ms       | `f2000000-…03` |

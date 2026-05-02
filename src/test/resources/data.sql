@@ -374,6 +374,9 @@ VALUES
 -- DIGIT_SPAN exercises for integration tests
 INSERT INTO exercise (id, subject_id, type, difficulty, prompt, expected_answers, time_limit_seconds, exercise_params, created_at)
 VALUES
+    ('f2000000-0000-0000-0000-000000000006', 'b0000000-0000-0000-0000-000000000014', 'DIGIT_SPAN', 'ULTRA_EASY',
+     'Memorize the digits, then type them back.', '[]', 300,
+     '{"startLength":2,"displayTimeMs":3500,"maxLength":15}', CURRENT_TIMESTAMP),
     ('f2000000-0000-0000-0000-000000000001', 'b0000000-0000-0000-0000-000000000014', 'DIGIT_SPAN', 'ULTRA_EASY',
      'Memorize the digits, then type them back.', '[]', 300,
      '{"startLength":3,"displayTimeMs":3000,"maxLength":15}', CURRENT_TIMESTAMP),
