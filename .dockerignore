@@ -1,20 +1,44 @@
+# Frontend: keep source for multi-stage Docker build; drop heavy artefacts
+frontend/node_modules/
+frontend/dist/
+frontend/android/
+
+build/
+out/
+.gradle/
+**/.gradle/
+
 .git
 .github
 .idea
 .vscode
 .cursor
-.gradle
+*.iml
+.DS_Store
+Thumbs.db
 
-build/
-out/
-frontend/dist/
-frontend/node_modules/
-frontend/android/
-node_modules/
 scripts/
+node_modules/
 
 *.log
+logs/
 *.gz
 .env
 .env.*
 !frontend/.env.production
+
+# Firebase / IDE noise (not needed in backend image context)
+.firebase/
+.firebaserc
+firebase.json
+
+# Docs
+*.md
+!README.md
+
+# Tests / coverage
+coverage/
+**/coverage/
+
+.cursorrules
+*.ps1

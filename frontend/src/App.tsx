@@ -15,6 +15,7 @@ function App() {
       <Routes>
         <Route path="/" element={<JourneyPage />} />
         <Route path="/ladder" element={<LadderListPage />} />
+        <Route path="/ladder/mix/:mixCode" element={<LadderMixPage />} />
         <Route path="/ladder/:code" element={<LadderPage />} />
         <Route path="/ladder/mix/:mixCode" element={<LadderMixPage />} />
         <Route path="/subjects" element={<SubjectsListPage />} />
