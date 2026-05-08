@@ -23,6 +23,8 @@ data class ExerciseDto(
     val mathOperation: String? = null,
     /** Human arithmetic complexity score (0–5 very easy, 5–15 elementary, 15–30 intermediate, 30+ advanced). */
     val mathComplexityScore: Double? = null,
+    /** WORDLE: structural difficulty indicators + 0–100 score (see [WordleComplexityDto]). */
+    val wordleComplexity: WordleComplexityDto? = null,
     val nBackParams: NBackParamsDto? = null,
     val nBackGridParams: NBackGridParamsDto? = null,
     val dualNBackGridParams: DualNBackGridParamsDto? = null,
@@ -129,6 +131,23 @@ data class WordleParamsDto(
     val wordLength: Int,
     val maxAttempts: Int = 6,
     val language: String = "fr"
+)
+
+/**
+ * WORDLE setup difficulty from [app.antidoomscroll.domain.WordleComplexity]:
+ * entropy / search-space scale, attempt budget vs length, time per guess.
+ * [difficultyScore0To100]: 0 = easiest supported config, 100 = hardest.
+ */
+data class WordleComplexityDto(
+    val wordLength: Int,
+    val maxAttempts: Int,
+    val timeLimitSeconds: Int,
+    val effectiveAlphabetSize: Double,
+    val searchSpaceLog10: Double,
+    val entropyBits: Double,
+    val guessesPerLetter: Double,
+    val secondsPerGuessBudget: Double,
+    val difficultyScore0To100: Int
 )
 
 /**

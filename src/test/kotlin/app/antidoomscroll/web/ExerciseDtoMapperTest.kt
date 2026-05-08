@@ -14,6 +14,7 @@ import app.antidoomscroll.application.port.ExercisePort
 import app.antidoomscroll.domain.Difficulty
 import app.antidoomscroll.domain.Exercise
 import app.antidoomscroll.domain.ExerciseType
+import app.antidoomscroll.domain.WordleComplexity
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Assertions.assertNull
@@ -531,6 +532,30 @@ class ExerciseDtoMapperTest {
         assertNull(dto.sumPairParams)
         assertNull(dto.anagramParams)
         assertNull(dto.wordleParams)
+    }
+
+    @Test
+    fun `when WORDLE exercise then DTO has wordleParams and wordleComplexity`() {
+        val exercise = Exercise(
+            id = UUID.fromString("a0000000-0000-0000-0000-000000000201"),
+            subjectId = UUID.fromString("b0000000-0000-0000-0000-000000000011"),
+            type = ExerciseType.WORDLE,
+            difficulty = Difficulty.MEDIUM,
+            prompt = "Devinez le mot de 5 lettres en 6 essais.",
+            expectedAnswers = emptyList(),
+            timeLimitSeconds = 180,
+            exerciseParams = mapOf("language" to "fr", "maxAttempts" to 6)
+        )
+        val dto = mapper().toExerciseDto(exercise, "WORDLE_FR")
+        assertEquals("WORDLE", dto.type)
+        assertNotNull(dto.wordleParams) { "Word list must be present for FR length 5" }
+        assertEquals(5, dto.wordleParams!!.wordLength)
+        assertEquals(6, dto.wordleParams!!.maxAttempts)
+        assertNotNull(dto.wordleComplexity)
+        assertEquals(43, dto.wordleComplexity!!.difficultyScore0To100)
+        val expected = WordleComplexity.compute(5, 6, 180, "fr")
+        assertEquals(expected.searchSpaceLog10, dto.wordleComplexity!!.searchSpaceLog10, 1e-9)
+        assertEquals(expected.entropyBits, dto.wordleComplexity!!.entropyBits, 1e-9)
     }
 
     @Test

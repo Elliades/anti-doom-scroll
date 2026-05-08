@@ -196,10 +196,17 @@ data class Exercise(
     fun wordleParams(): WordleParams? = runCatching {
         when (type) {
             ExerciseType.WORDLE -> {
-                val p = exerciseParams ?: return@runCatching null
-                val wordLength = (p["wordLength"] as? Number)?.toInt() ?: return@runCatching null
-                val language = (p["language"] as? String)?.lowercase() ?: "fr"
-                val maxAttempts = (p["maxAttempts"] as? Number)?.toInt() ?: 6
+                val p = exerciseParams
+                val language = (p?.get("language") as? String)?.lowercase() ?: "fr"
+                val maxAttempts = (p?.get("maxAttempts") as? Number)?.toInt() ?: 6
+                val wordLength = (p?.get("wordLength") as? Number)?.toInt()
+                    ?: when (difficulty) {
+                        Difficulty.EASY -> 3
+                        Difficulty.MEDIUM -> 5
+                        Difficulty.HARD -> 6
+                        Difficulty.VERY_HARD -> 7
+                        else -> 3
+                    }
                 WordleParams(wordLength = wordLength, language = language, maxAttempts = maxAttempts)
             }
             else -> null

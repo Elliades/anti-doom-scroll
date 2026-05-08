@@ -19,9 +19,11 @@ import app.antidoomscroll.application.port.ExercisePort
 import app.antidoomscroll.domain.Exercise
 import app.antidoomscroll.domain.ExerciseType
 import app.antidoomscroll.domain.NBackParams
+import app.antidoomscroll.domain.WordleComplexity
 import app.antidoomscroll.web.dto.AnagramParamsDto
 import app.antidoomscroll.web.dto.DigitSpanParamsDto
 import app.antidoomscroll.web.dto.EstimationParamsDto
+import app.antidoomscroll.web.dto.WordleComplexityDto
 import app.antidoomscroll.web.dto.WordleParamsDto
 import app.antidoomscroll.web.dto.DualNBackCardParamsDto
 import app.antidoomscroll.web.dto.DualNBackGridParamsDto
@@ -131,7 +133,8 @@ class ExerciseDtoMapper(
                 mathComplexityScore = result.mathComplexityScore
             )
         }
-        val wordleParams = WordleParamsResolver.resolve(exerciseWithParams)?.let { p ->
+        val wordleResolved = WordleParamsResolver.resolve(exerciseWithParams)
+        val wordleParams = wordleResolved?.let { p ->
             wordleGenerator.generate(p)?.let { r ->
                 WordleParamsDto(
                     answer = r.answer,
@@ -140,6 +143,25 @@ class ExerciseDtoMapper(
                     language = p.language
                 )
             }
+        }
+        val wordleComplexity = wordleResolved?.let { p ->
+            val c = WordleComplexity.compute(
+                wordLength = p.wordLength,
+                maxAttempts = p.maxAttempts,
+                timeLimitSeconds = exerciseWithParams.timeLimitSeconds,
+                language = p.language
+            )
+            WordleComplexityDto(
+                wordLength = c.wordLength,
+                maxAttempts = c.maxAttempts,
+                timeLimitSeconds = c.timeLimitSeconds,
+                effectiveAlphabetSize = c.effectiveAlphabetSize,
+                searchSpaceLog10 = c.searchSpaceLog10,
+                entropyBits = c.entropyBits,
+                guessesPerLetter = c.guessesPerLetter,
+                secondsPerGuessBudget = c.secondsPerGuessBudget,
+                difficultyScore0To100 = c.difficultyScore0To100
+            )
         }
         val memoryCardShuffledDeck = memoryCardParams?.let { p ->
             memoryCardDeckCache.getOrGenerate(exerciseWithParams.id.toString(), p)
@@ -167,6 +189,7 @@ class ExerciseDtoMapper(
             timeLimitSeconds = exerciseWithParams.timeLimitSeconds,
             mathOperation = mathParams?.operation?.name,
             mathComplexityScore = mathComplexityScore,
+            wordleComplexity = wordleComplexity,
             nBackParams = nBackParams,
             nBackGridParams = nBackGridParams,
             dualNBackGridParams = dualNBackGridParams,

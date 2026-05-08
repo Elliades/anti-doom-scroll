@@ -104,6 +104,9 @@ function exerciseParamStringMap(ex: ExerciseDto): Record<string, string> {
   const dc = ex.dualNBackCardParams ?? ex.dualNbackCardParams
   if (dc?.n != null) m.n = String(dc.n)
   if (ex.wordleParams?.language) m.language = ex.wordleParams.language
+  if (ex.wordleComplexity?.difficultyScore0To100 != null) {
+    m.wordleDifficultyScore0To100 = String(ex.wordleComplexity.difficultyScore0To100)
+  }
   if (ex.digitSpanParams) {
     m.startLength = String(ex.digitSpanParams.startLength)
     m.maxLength = String(ex.digitSpanParams.maxLength)

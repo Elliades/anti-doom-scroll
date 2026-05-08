@@ -1,3 +1,4 @@
+import { computeWordleComplexity } from '../utils/wordleComplexity'
 import type {
   DigitSpanParamsDto,
   EstimationParamsDto,
@@ -334,6 +335,17 @@ function wordLengthForDifficulty(difficulty: string): number {
     case 'VERY_HARD': return 7
     default: return 3
   }
+}
+
+/** Matches WordleParamsResolver: explicit wordLength in params, else difficulty ladder. */
+export function resolveWordleWordLength(
+  difficulty: string,
+  explicitWordLength?: number | null,
+): number {
+  if (explicitWordLength != null && explicitWordLength >= 3 && explicitWordLength <= 10) {
+    return explicitWordLength
+  }
+  return wordLengthForDifficulty(difficulty)
 }
 
 export async function generateWordleAnswer(
@@ -832,10 +844,18 @@ async function hydrateWordle(ex: ExerciseDto): Promise<ExerciseDto> {
   const wp = ex.wordleParams
   if (!wp) return ex
   const language = wp.language ?? 'fr'
-  const answer = await generateWordleAnswer(language, wp.wordLength, ex.difficulty)
+  const maxAttempts = wp.maxAttempts ?? 6
+  const wordLength = resolveWordleWordLength(ex.difficulty, wp.wordLength)
+  const answer = await generateWordleAnswer(language, wordLength, undefined)
   if (!answer) return ex
-  const newParams: WordleParamsDto = { ...wp, answer }
-  return { ...ex, wordleParams: newParams }
+  const newParams: WordleParamsDto = { ...wp, wordLength, maxAttempts, language }
+  const wordleComplexity = computeWordleComplexity({
+    wordLength,
+    maxAttempts,
+    timeLimitSeconds: ex.timeLimitSeconds,
+    language,
+  })
+  return { ...ex, wordleParams: { ...newParams, answer }, wordleComplexity }
 }
 
 function hydrateNBack(ex: ExerciseDto): ExerciseDto {
