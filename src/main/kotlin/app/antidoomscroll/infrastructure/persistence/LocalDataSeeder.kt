@@ -1262,6 +1262,16 @@ class LocalDataSeeder(
             },
             // DIGIT_SPAN: progressive digit recall with challenge modes
             ExerciseEntity().apply {
+                id = UUID.fromString("f2000000-0000-0000-0000-000000000006")
+                subjectId = digitSpanId
+                type = "DIGIT_SPAN"
+                difficulty = "ULTRA_EASY"
+                prompt = "Memorize the digits, then type them back."
+                expectedAnswers = emptyList()
+                timeLimitSeconds = 300
+                exerciseParams = mapOf("startLength" to 2, "displayTimeMs" to 3500, "maxLength" to 15)
+            },
+            ExerciseEntity().apply {
                 id = UUID.fromString("f2000000-0000-0000-0000-000000000001")
                 subjectId = digitSpanId
                 type = "DIGIT_SPAN"

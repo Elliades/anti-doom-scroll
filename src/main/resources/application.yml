@@ -1330,7 +1330,7 @@ app:
             allowedDifficulties: [VERY_HARD]
             subjectCodes: [default]
             allowedTypes: [MATH_CHAIN]
-      # Working memory ladder: sum pairs then digit span
+      # Working memory ladder: brief sum-pair warm-up → digit span (from level 3) → sum-pair peak
       working_memory:
         name: "Working Memory Ladder"
         thresholds:
@@ -1354,127 +1354,133 @@ app:
             allowedTypes: [SUM_PAIR]
           # EASY: static=5, 4 pairs per round, range 1-50 or 1-2 digit numbers.
 
+          # Digit span from level 3 (mix ladder sees DS from shared level 3 onward). Level 3–4 gate on easier seeds (startLength 2–3).
           - levelIndex: 3
-            allowedDifficulties: [EASY]
-            subjectCodes: [MEMORY]
-            allowedTypes: [SUM_PAIR]
-
+            allowedDifficulties: [ULTRA_EASY]
+            subjectCodes: [DIGIT_SPAN]
+            allowedTypes: [DIGIT_SPAN]
+            exerciseParamFilter:
+              startLength: ["2"]
           - levelIndex: 4
-            allowedDifficulties: [EASY]
-            subjectCodes: [MEMORY]
-            allowedTypes: [SUM_PAIR]
-
+            allowedDifficulties: [ULTRA_EASY]
+            subjectCodes: [DIGIT_SPAN]
+            allowedTypes: [DIGIT_SPAN]
+            exerciseParamFilter:
+              startLength: ["3"]
           - levelIndex: 5
+            allowedDifficulties: [ULTRA_EASY]
+            subjectCodes: [DIGIT_SPAN]
+            allowedTypes: [DIGIT_SPAN]
+          - levelIndex: 6
+            allowedDifficulties: [ULTRA_EASY, EASY]
+            subjectCodes: [DIGIT_SPAN]
+            allowedTypes: [DIGIT_SPAN]
+          - levelIndex: 7
+            allowedDifficulties: [ULTRA_EASY, EASY]
+            subjectCodes: [DIGIT_SPAN]
+            allowedTypes: [DIGIT_SPAN]
+          - levelIndex: 8
+            allowedDifficulties: [EASY]
+            subjectCodes: [DIGIT_SPAN]
+            allowedTypes: [DIGIT_SPAN]
+          - levelIndex: 9
+            allowedDifficulties: [EASY]
+            subjectCodes: [DIGIT_SPAN]
+            allowedTypes: [DIGIT_SPAN]
+          - levelIndex: 10
+            allowedDifficulties: [EASY]
+            subjectCodes: [DIGIT_SPAN]
+            allowedTypes: [DIGIT_SPAN]
+          - levelIndex: 11
+            allowedDifficulties: [EASY, MEDIUM]
+            subjectCodes: [DIGIT_SPAN]
+            allowedTypes: [DIGIT_SPAN]
+          - levelIndex: 12
+            allowedDifficulties: [EASY, MEDIUM]
+            subjectCodes: [DIGIT_SPAN]
+            allowedTypes: [DIGIT_SPAN]
+          - levelIndex: 13
+            allowedDifficulties: [MEDIUM]
+            subjectCodes: [DIGIT_SPAN]
+            allowedTypes: [DIGIT_SPAN]
+          - levelIndex: 14
+            allowedDifficulties: [MEDIUM]
+            subjectCodes: [DIGIT_SPAN]
+            allowedTypes: [DIGIT_SPAN]
+          - levelIndex: 15
+            allowedDifficulties: [MEDIUM]
+            subjectCodes: [DIGIT_SPAN]
+            allowedTypes: [DIGIT_SPAN]
+          - levelIndex: 16
+            allowedDifficulties: [MEDIUM, HARD]
+            subjectCodes: [DIGIT_SPAN]
+            allowedTypes: [DIGIT_SPAN]
+          - levelIndex: 17
+            allowedDifficulties: [MEDIUM, HARD]
+            subjectCodes: [DIGIT_SPAN]
+            allowedTypes: [DIGIT_SPAN]
+
+          - levelIndex: 18
             allowedDifficulties: [EASY]
             subjectCodes: [MEMORY]
             allowedTypes: [SUM_PAIR]
 
-          - levelIndex: 6
+          - levelIndex: 19
+            allowedDifficulties: [EASY]
+            subjectCodes: [MEMORY]
+            allowedTypes: [SUM_PAIR]
+
+          - levelIndex: 20
+            allowedDifficulties: [EASY]
+            subjectCodes: [MEMORY]
+            allowedTypes: [SUM_PAIR]
+
+          - levelIndex: 21
             allowedDifficulties: [EASY, MEDIUM]
             subjectCodes: [MEMORY]
             allowedTypes: [SUM_PAIR]
           # MEDIUM: 2 statics (fixed or random), 3 pairs per round, range 1-99.
 
-          - levelIndex: 7
+          - levelIndex: 22
             allowedDifficulties: [MEDIUM]
             subjectCodes: [MEMORY]
             allowedTypes: [SUM_PAIR]
 
-          - levelIndex: 8
+          - levelIndex: 23
             allowedDifficulties: [MEDIUM]
             subjectCodes: [MEMORY]
             allowedTypes: [SUM_PAIR]
 
-          - levelIndex: 9
+          - levelIndex: 24
             allowedDifficulties: [MEDIUM]
             subjectCodes: [MEMORY]
             allowedTypes: [SUM_PAIR]
 
-          - levelIndex: 10
+          - levelIndex: 25
             allowedDifficulties: [MEDIUM, HARD]
             subjectCodes: [MEMORY]
             allowedTypes: [SUM_PAIR]
           # HARD: 3 statics [2, 5, 10], 4 pairs per round, range 1-99. Peak challenge.
 
-          - levelIndex: 11
-            allowedDifficulties: [HARD]
-            subjectCodes: [MEMORY]
-            allowedTypes: [SUM_PAIR]
-
-          - levelIndex: 12
-            allowedDifficulties: [HARD]
-            subjectCodes: [MEMORY]
-            allowedTypes: [SUM_PAIR]
-
-          - levelIndex: 13
-            allowedDifficulties: [HARD]
-            subjectCodes: [MEMORY]
-            allowedTypes: [SUM_PAIR]
-
-          - levelIndex: 14
-            allowedDifficulties: [HARD]
-            subjectCodes: [MEMORY]
-            allowedTypes: [SUM_PAIR]
-          - levelIndex: 15
-            allowedDifficulties: [ULTRA_EASY]
-            subjectCodes: [DIGIT_SPAN]
-            allowedTypes: [DIGIT_SPAN]
-          - levelIndex: 16
-            allowedDifficulties: [ULTRA_EASY]
-            subjectCodes: [DIGIT_SPAN]
-            allowedTypes: [DIGIT_SPAN]
-          - levelIndex: 17
-            allowedDifficulties: [ULTRA_EASY]
-            subjectCodes: [DIGIT_SPAN]
-            allowedTypes: [DIGIT_SPAN]
-          - levelIndex: 18
-            allowedDifficulties: [ULTRA_EASY, EASY]
-            subjectCodes: [DIGIT_SPAN]
-            allowedTypes: [DIGIT_SPAN]
-          - levelIndex: 19
-            allowedDifficulties: [ULTRA_EASY, EASY]
-            subjectCodes: [DIGIT_SPAN]
-            allowedTypes: [DIGIT_SPAN]
-          - levelIndex: 20
-            allowedDifficulties: [EASY]
-            subjectCodes: [DIGIT_SPAN]
-            allowedTypes: [DIGIT_SPAN]
-          - levelIndex: 21
-            allowedDifficulties: [EASY]
-            subjectCodes: [DIGIT_SPAN]
-            allowedTypes: [DIGIT_SPAN]
-          - levelIndex: 22
-            allowedDifficulties: [EASY]
-            subjectCodes: [DIGIT_SPAN]
-            allowedTypes: [DIGIT_SPAN]
-          - levelIndex: 23
-            allowedDifficulties: [EASY, MEDIUM]
-            subjectCodes: [DIGIT_SPAN]
-            allowedTypes: [DIGIT_SPAN]
-          - levelIndex: 24
-            allowedDifficulties: [EASY, MEDIUM]
-            subjectCodes: [DIGIT_SPAN]
-            allowedTypes: [DIGIT_SPAN]
-          - levelIndex: 25
-            allowedDifficulties: [MEDIUM]
-            subjectCodes: [DIGIT_SPAN]
-            allowedTypes: [DIGIT_SPAN]
           - levelIndex: 26
-            allowedDifficulties: [MEDIUM]
-            subjectCodes: [DIGIT_SPAN]
-            allowedTypes: [DIGIT_SPAN]
+            allowedDifficulties: [HARD]
+            subjectCodes: [MEMORY]
+            allowedTypes: [SUM_PAIR]
+
           - levelIndex: 27
-            allowedDifficulties: [MEDIUM]
-            subjectCodes: [DIGIT_SPAN]
-            allowedTypes: [DIGIT_SPAN]
+            allowedDifficulties: [HARD]
+            subjectCodes: [MEMORY]
+            allowedTypes: [SUM_PAIR]
+
           - levelIndex: 28
-            allowedDifficulties: [MEDIUM, HARD]
-            subjectCodes: [DIGIT_SPAN]
-            allowedTypes: [DIGIT_SPAN]
+            allowedDifficulties: [HARD]
+            subjectCodes: [MEMORY]
+            allowedTypes: [SUM_PAIR]
+
           - levelIndex: 29
-            allowedDifficulties: [MEDIUM, HARD]
-            subjectCodes: [DIGIT_SPAN]
-            allowedTypes: [DIGIT_SPAN]
+            allowedDifficulties: [HARD]
+            subjectCodes: [MEMORY]
+            allowedTypes: [SUM_PAIR]
     # Mix ladder: alternates by subject track (math, word, memory, working memory, estimation)
     mixes:
       mix:

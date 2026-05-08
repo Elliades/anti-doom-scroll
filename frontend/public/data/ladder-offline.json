@@ -3867,177 +3867,187 @@
         {
           "levelIndex": 3,
           "allowedDifficulties": [
-            "EASY"
+            "ULTRA_EASY"
           ],
           "subjectCodes": [
-            "MEMORY"
+            "DIGIT_SPAN"
           ],
           "exerciseIds": null,
-          "exerciseParamFilter": null,
+          "exerciseParamFilter": {
+            "startLength": [
+              "2"
+            ]
+          },
           "allowedTypes": [
-            "SUM_PAIR"
+            "DIGIT_SPAN"
           ]
         },
         {
           "levelIndex": 4,
           "allowedDifficulties": [
-            "EASY"
+            "ULTRA_EASY"
           ],
           "subjectCodes": [
-            "MEMORY"
+            "DIGIT_SPAN"
           ],
           "exerciseIds": null,
-          "exerciseParamFilter": null,
+          "exerciseParamFilter": {
+            "startLength": [
+              "3"
+            ]
+          },
           "allowedTypes": [
-            "SUM_PAIR"
+            "DIGIT_SPAN"
           ]
         },
         {
           "levelIndex": 5,
           "allowedDifficulties": [
-            "EASY"
+            "ULTRA_EASY"
           ],
           "subjectCodes": [
-            "MEMORY"
+            "DIGIT_SPAN"
           ],
           "exerciseIds": null,
           "exerciseParamFilter": null,
           "allowedTypes": [
-            "SUM_PAIR"
+            "DIGIT_SPAN"
           ]
         },
         {
           "levelIndex": 6,
           "allowedDifficulties": [
-            "EASY",
-            "MEDIUM"
+            "ULTRA_EASY",
+            "EASY"
           ],
           "subjectCodes": [
-            "MEMORY"
+            "DIGIT_SPAN"
           ],
           "exerciseIds": null,
           "exerciseParamFilter": null,
           "allowedTypes": [
-            "SUM_PAIR"
+            "DIGIT_SPAN"
           ]
         },
         {
           "levelIndex": 7,
           "allowedDifficulties": [
-            "MEDIUM"
+            "ULTRA_EASY",
+            "EASY"
           ],
           "subjectCodes": [
-            "MEMORY"
+            "DIGIT_SPAN"
           ],
           "exerciseIds": null,
           "exerciseParamFilter": null,
           "allowedTypes": [
-            "SUM_PAIR"
+            "DIGIT_SPAN"
           ]
         },
         {
           "levelIndex": 8,
           "allowedDifficulties": [
-            "MEDIUM"
+            "EASY"
           ],
           "subjectCodes": [
-            "MEMORY"
+            "DIGIT_SPAN"
           ],
           "exerciseIds": null,
           "exerciseParamFilter": null,
           "allowedTypes": [
-            "SUM_PAIR"
+            "DIGIT_SPAN"
           ]
         },
         {
           "levelIndex": 9,
           "allowedDifficulties": [
-            "MEDIUM"
+            "EASY"
           ],
           "subjectCodes": [
-            "MEMORY"
+            "DIGIT_SPAN"
           ],
           "exerciseIds": null,
           "exerciseParamFilter": null,
           "allowedTypes": [
-            "SUM_PAIR"
+            "DIGIT_SPAN"
           ]
         },
         {
           "levelIndex": 10,
           "allowedDifficulties": [
-            "MEDIUM",
-            "HARD"
+            "EASY"
           ],
           "subjectCodes": [
-            "MEMORY"
+            "DIGIT_SPAN"
           ],
           "exerciseIds": null,
           "exerciseParamFilter": null,
           "allowedTypes": [
-            "SUM_PAIR"
+            "DIGIT_SPAN"
           ]
         },
         {
           "levelIndex": 11,
           "allowedDifficulties": [
-            "HARD"
+            "EASY",
+            "MEDIUM"
           ],
           "subjectCodes": [
-            "MEMORY"
+            "DIGIT_SPAN"
           ],
           "exerciseIds": null,
           "exerciseParamFilter": null,
           "allowedTypes": [
-            "SUM_PAIR"
+            "DIGIT_SPAN"
           ]
         },
         {
           "levelIndex": 12,
           "allowedDifficulties": [
-            "HARD"
+            "EASY",
+            "MEDIUM"
           ],
           "subjectCodes": [
-            "MEMORY"
+            "DIGIT_SPAN"
           ],
           "exerciseIds": null,
           "exerciseParamFilter": null,
           "allowedTypes": [
-            "SUM_PAIR"
+            "DIGIT_SPAN"
           ]
         },
         {
           "levelIndex": 13,
           "allowedDifficulties": [
-            "HARD"
+            "MEDIUM"
           ],
           "subjectCodes": [
-            "MEMORY"
+            "DIGIT_SPAN"
           ],
           "exerciseIds": null,
           "exerciseParamFilter": null,
           "allowedTypes": [
-            "SUM_PAIR"
+            "DIGIT_SPAN"
           ]
         },
         {
           "levelIndex": 14,
           "allowedDifficulties": [
-            "HARD"
+            "MEDIUM"
           ],
           "subjectCodes": [
-            "MEMORY"
+            "DIGIT_SPAN"
           ],
           "exerciseIds": null,
           "exerciseParamFilter": null,
           "allowedTypes": [
-            "SUM_PAIR"
+            "DIGIT_SPAN"
           ]
         },
         {
           "levelIndex": 15,
           "allowedDifficulties": [
-            "ULTRA_EASY"
+            "MEDIUM"
           ],
           "subjectCodes": [
             "DIGIT_SPAN"
@@ -4051,7 +4061,8 @@
         {
           "levelIndex": 16,
           "allowedDifficulties": [
-            "ULTRA_EASY"
+            "MEDIUM",
+            "HARD"
           ],
           "subjectCodes": [
             "DIGIT_SPAN"
@@ -4065,7 +4076,8 @@
         {
           "levelIndex": 17,
           "allowedDifficulties": [
-            "ULTRA_EASY"
+            "MEDIUM",
+            "HARD"
           ],
           "subjectCodes": [
             "DIGIT_SPAN"
@@ -4079,31 +4091,29 @@
         {
           "levelIndex": 18,
           "allowedDifficulties": [
-            "ULTRA_EASY",
             "EASY"
           ],
           "subjectCodes": [
-            "DIGIT_SPAN"
+            "MEMORY"
           ],
           "exerciseIds": null,
           "exerciseParamFilter": null,
           "allowedTypes": [
-            "DIGIT_SPAN"
+            "SUM_PAIR"
           ]
         },
         {
           "levelIndex": 19,
           "allowedDifficulties": [
-            "ULTRA_EASY",
             "EASY"
           ],
           "subjectCodes": [
-            "DIGIT_SPAN"
+            "MEMORY"
           ],
           "exerciseIds": null,
           "exerciseParamFilter": null,
           "allowedTypes": [
-            "DIGIT_SPAN"
+            "SUM_PAIR"
           ]
         },
         {
@@ -4112,142 +4122,140 @@
             "EASY"
           ],
           "subjectCodes": [
-            "DIGIT_SPAN"
+            "MEMORY"
           ],
           "exerciseIds": null,
           "exerciseParamFilter": null,
           "allowedTypes": [
-            "DIGIT_SPAN"
+            "SUM_PAIR"
           ]
         },
         {
           "levelIndex": 21,
           "allowedDifficulties": [
-            "EASY"
+            "EASY",
+            "MEDIUM"
           ],
           "subjectCodes": [
-            "DIGIT_SPAN"
+            "MEMORY"
           ],
           "exerciseIds": null,
           "exerciseParamFilter": null,
           "allowedTypes": [
-            "DIGIT_SPAN"
+            "SUM_PAIR"
           ]
         },
         {
           "levelIndex": 22,
           "allowedDifficulties": [
-            "EASY"
+            "MEDIUM"
           ],
           "subjectCodes": [
-            "DIGIT_SPAN"
+            "MEMORY"
           ],
           "exerciseIds": null,
           "exerciseParamFilter": null,
           "allowedTypes": [
-            "DIGIT_SPAN"
+            "SUM_PAIR"
           ]
         },
         {
           "levelIndex": 23,
           "allowedDifficulties": [
-            "EASY",
             "MEDIUM"
           ],
           "subjectCodes": [
-            "DIGIT_SPAN"
+            "MEMORY"
           ],
           "exerciseIds": null,
           "exerciseParamFilter": null,
           "allowedTypes": [
-            "DIGIT_SPAN"
+            "SUM_PAIR"
           ]
         },
         {
           "levelIndex": 24,
           "allowedDifficulties": [
-            "EASY",
             "MEDIUM"
           ],
           "subjectCodes": [
-            "DIGIT_SPAN"
+            "MEMORY"
           ],
           "exerciseIds": null,
           "exerciseParamFilter": null,
           "allowedTypes": [
-            "DIGIT_SPAN"
+            "SUM_PAIR"
           ]
         },
         {
           "levelIndex": 25,
           "allowedDifficulties": [
-            "MEDIUM"
+            "MEDIUM",
+            "HARD"
           ],
           "subjectCodes": [
-            "DIGIT_SPAN"
+            "MEMORY"
           ],
           "exerciseIds": null,
           "exerciseParamFilter": null,
           "allowedTypes": [
-            "DIGIT_SPAN"
+            "SUM_PAIR"
           ]
         },
         {
           "levelIndex": 26,
           "allowedDifficulties": [
-            "MEDIUM"
+            "HARD"
           ],
           "subjectCodes": [
-            "DIGIT_SPAN"
+            "MEMORY"
           ],
           "exerciseIds": null,
           "exerciseParamFilter": null,
           "allowedTypes": [
-            "DIGIT_SPAN"
+            "SUM_PAIR"
           ]
         },
         {
           "levelIndex": 27,
           "allowedDifficulties": [
-            "MEDIUM"
+            "HARD"
           ],
           "subjectCodes": [
-            "DIGIT_SPAN"
+            "MEMORY"
           ],
           "exerciseIds": null,
           "exerciseParamFilter": null,
           "allowedTypes": [
-            "DIGIT_SPAN"
+            "SUM_PAIR"
           ]
         },
         {
           "levelIndex": 28,
           "allowedDifficulties": [
-            "MEDIUM",
             "HARD"
           ],
           "subjectCodes": [
-            "DIGIT_SPAN"
+            "MEMORY"
           ],
           "exerciseIds": null,
           "exerciseParamFilter": null,
           "allowedTypes": [
-            "DIGIT_SPAN"
+            "SUM_PAIR"
           ]
         },
         {
           "levelIndex": 29,
           "allowedDifficulties": [
-            "MEDIUM",
             "HARD"
           ],
           "subjectCodes": [
-            "DIGIT_SPAN"
+            "MEMORY"
           ],
           "exerciseIds": null,
           "exerciseParamFilter": null,
           "allowedTypes": [
-            "DIGIT_SPAN"
+            "SUM_PAIR"
           ]
         }
       ]

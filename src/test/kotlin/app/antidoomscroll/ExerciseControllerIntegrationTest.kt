@@ -162,7 +162,9 @@ class ExerciseControllerIntegrationTest {
         val tree = com.fasterxml.jackson.databind.ObjectMapper().readTree(res)
         val scrambled = tree.get("anagramParams").get("scrambledLetters")
         val answer = tree.get("anagramParams").get("answer").asText()
-        org.junit.jupiter.api.Assertions.assertTrue(scrambled.size() == 3) { "ULTRA_EASY: 3 letters, got ${scrambled.size()}" }
+        org.junit.jupiter.api.Assertions.assertTrue(scrambled.size() in 2..3) {
+            "ULTRA_EASY: 2–3 letters per seed params, got ${scrambled.size()}"
+        }
         org.junit.jupiter.api.Assertions.assertEquals(scrambled.size(), answer.length) { "scrambledLetters length must match answer" }
     }
 

@@ -90,6 +90,7 @@ def main() -> None:
     )
 
     # Working memory: pair 15-29 (sum pair) as 0-14, digit span 15-29
+    # (Production application.yml may diverge — e.g. digit span from level 3; keep this script in sync if you regenerate.)
     wm_sum = [
         re.sub(r"levelIndex: \d+", f"levelIndex: {i}", b, count=1)
         for i, b in enumerate(pair_blocks[15:30])
