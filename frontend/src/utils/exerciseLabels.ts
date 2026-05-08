@@ -24,6 +24,7 @@ export function getExerciseTypeLabel(ex: ExerciseDto): string {
     ANAGRAM: 'Anagram',
     DIGIT_SPAN: 'Digit Span',
     MATH_CHAIN: 'Math Chain',
+    REMEMBER_NUMBER: 'Remember & Recall',
   }
   return labels[ex.type] ?? ex.type
 }
