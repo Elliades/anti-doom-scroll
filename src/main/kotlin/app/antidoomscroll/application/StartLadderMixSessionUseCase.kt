@@ -53,7 +53,8 @@ class StartLadderMixSessionUseCase(
         val level0 = config.levelAt(0)
             ?: throw IllegalStateException("Ladder $firstLadderCode has no level 0")
 
-        val exercise = ladderExercisePicker.pick(config, level0)
+        val targetScore = ladderExercisePicker.targetScoreForLevel(config, level0)
+        val exercise = ladderExercisePicker.pick(config, level0, targetScore = targetScore)
             ?: throw IllegalStateException("No exercise available for ladder $firstLadderCode level 0")
 
         val subjectCode = subjectPort.findById(exercise.subjectId)?.code

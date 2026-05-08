@@ -5,6 +5,7 @@ import app.antidoomscroll.application.ImagePairDeckCache
 import app.antidoomscroll.application.ImagePairGenerator
 import app.antidoomscroll.application.MathChainGenerator
 import app.antidoomscroll.application.MathFlashcardGenerator
+import app.antidoomscroll.application.RememberNumberGenerator
 import app.antidoomscroll.application.MemoryCardDeckCache
 import app.antidoomscroll.application.SumPairGenerator
 import app.antidoomscroll.application.SumPairRoundsCache
@@ -40,6 +41,7 @@ class ExerciseDtoMapperTest {
     private val imagePairDeckCache = ImagePairDeckCache(ImagePairGenerator())
     private val mathFlashcardGenerator = MathFlashcardGenerator()
     private val mathChainGenerator = MathChainGenerator()
+    private val rememberNumberGenerator = RememberNumberGenerator(mathFlashcardGenerator)
     private val anagramGenerator = AnagramGenerator()
     private val wordleGenerator = WordleGenerator()
 
@@ -49,7 +51,7 @@ class ExerciseDtoMapperTest {
 
     private fun mapper() = ExerciseDtoMapper(
         exercisePort, sumPairRoundsCache, memoryCardDeckCache,
-        imagePairDeckCache, mathFlashcardGenerator, mathChainGenerator, anagramGenerator, wordleGenerator
+        imagePairDeckCache, mathFlashcardGenerator, mathChainGenerator, rememberNumberGenerator, anagramGenerator, wordleGenerator
     )
 
     @Test
@@ -554,5 +556,34 @@ class ExerciseDtoMapperTest {
         val expected = WordleComplexity.compute(5, 6, 180, "fr")
         assertEquals(expected.searchSpaceLog10, dto.wordleComplexity!!.searchSpaceLog10, 1e-9)
         assertEquals(expected.entropyBits, dto.wordleComplexity!!.entropyBits, 1e-9)
+    }
+
+    @Test
+    fun `when REMEMBER_NUMBER exercise has params then DTO has rememberNumberParams`() {
+        val params = mapOf(
+            "numberDigits" to 3,
+            "displayTimeMs" to 2500,
+            "mathOperation" to "ADD",
+            "mathFirstMax" to 99,
+            "mathSecondMax" to 9
+        )
+        val exercise = Exercise(
+            id = UUID.fromString("f3000000-0000-0000-0000-000000000002"),
+            subjectId = UUID.fromString("b0000000-0000-0000-0000-000000000008"),
+            type = ExerciseType.REMEMBER_NUMBER,
+            difficulty = Difficulty.EASY,
+            prompt = "Remember the number.",
+            expectedAnswers = emptyList(),
+            timeLimitSeconds = 60,
+            exerciseParams = params
+        )
+        val dto = mapper().toExerciseDto(exercise, "MEMORY")
+        assertEquals("REMEMBER_NUMBER", dto.type)
+        assertNotNull(dto.rememberNumberParams)
+        val rn = dto.rememberNumberParams!!
+        assertTrue(rn.numberToRemember in 100..999) { "3-digit number expected, got ${rn.numberToRemember}" }
+        assertEquals(2500, rn.displayTimeMs)
+        assertTrue(rn.mathPrompt.startsWith("What is ")) { "Math prompt format: ${rn.mathPrompt}" }
+        assertTrue(rn.mathExpectedAnswer.toIntOrNull() != null)
     }
 }

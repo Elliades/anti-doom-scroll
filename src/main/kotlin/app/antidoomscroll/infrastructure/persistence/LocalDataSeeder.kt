@@ -1249,6 +1249,57 @@ class LocalDataSeeder(
                 timeLimitSeconds = 20
                 exerciseParams = mapOf("correctAnswer" to 120.0, "unit" to "minutes", "toleranceFactor" to 1.4, "category" to "math", "hint" to "1 hour = 60 minutes")
             },
+            // REMEMBER_NUMBER: memorize a number, solve math, recall
+            ExerciseEntity().apply {
+                id = UUID.fromString("f3000000-0000-0000-0000-000000000001")
+                subjectId = memoryId
+                type = "REMEMBER_NUMBER"
+                difficulty = "ULTRA_EASY"
+                prompt = "Remember the number, solve the math problem, then recall the number."
+                expectedAnswers = emptyList()
+                timeLimitSeconds = 60
+                exerciseParams = mapOf("numberDigits" to 2, "displayTimeMs" to 3000, "mathOperation" to "ADD", "mathFirstMax" to 9, "mathSecondMax" to 9)
+            },
+            ExerciseEntity().apply {
+                id = UUID.fromString("f3000000-0000-0000-0000-000000000002")
+                subjectId = memoryId
+                type = "REMEMBER_NUMBER"
+                difficulty = "EASY"
+                prompt = "Remember the number, solve the math problem, then recall the number."
+                expectedAnswers = emptyList()
+                timeLimitSeconds = 60
+                exerciseParams = mapOf("numberDigits" to 3, "displayTimeMs" to 2500, "mathOperation" to "ADD", "mathFirstMax" to 99, "mathSecondMax" to 9)
+            },
+            ExerciseEntity().apply {
+                id = UUID.fromString("f3000000-0000-0000-0000-000000000003")
+                subjectId = memoryId
+                type = "REMEMBER_NUMBER"
+                difficulty = "MEDIUM"
+                prompt = "Remember the number, solve the math problem, then recall the number."
+                expectedAnswers = emptyList()
+                timeLimitSeconds = 90
+                exerciseParams = mapOf("numberDigits" to 4, "displayTimeMs" to 2000, "mathOperation" to "SUBTRACT", "mathFirstMax" to 99, "mathSecondMax" to 99)
+            },
+            ExerciseEntity().apply {
+                id = UUID.fromString("f3000000-0000-0000-0000-000000000004")
+                subjectId = memoryId
+                type = "REMEMBER_NUMBER"
+                difficulty = "HARD"
+                prompt = "Remember the number, solve the math problem, then recall the number."
+                expectedAnswers = emptyList()
+                timeLimitSeconds = 90
+                exerciseParams = mapOf("numberDigits" to 5, "displayTimeMs" to 1500, "mathOperation" to "MULTIPLY", "mathFirstMax" to 12, "mathSecondMax" to 9)
+            },
+            ExerciseEntity().apply {
+                id = UUID.fromString("f3000000-0000-0000-0000-000000000005")
+                subjectId = memoryId
+                type = "REMEMBER_NUMBER"
+                difficulty = "VERY_HARD"
+                prompt = "Remember the number, solve the math problem, then recall the number."
+                expectedAnswers = emptyList()
+                timeLimitSeconds = 120
+                exerciseParams = mapOf("numberDigits" to 6, "displayTimeMs" to 1200, "mathOperation" to "MULTIPLY", "mathFirstMax" to 99, "mathSecondMax" to 9)
+            },
             // DIGIT_SPAN: progressive digit recall with challenge modes
             ExerciseEntity().apply {
                 id = UUID.fromString("f2000000-0000-0000-0000-000000000001")

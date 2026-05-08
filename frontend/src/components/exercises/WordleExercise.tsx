@@ -3,6 +3,7 @@ import type { ExerciseDto } from '../../types/api'
 import type { ExerciseResult } from '../../types/exercise'
 import { loadWordListWords } from '../../utils/wordleWordLoader'
 import { computeWordleComplexity } from '../../utils/wordleComplexity'
+import { estimateWordleComplexityFromParams } from '../../utils/wordComplexity'
 
 export interface WordleExerciseProps {
   exercise: ExerciseDto
@@ -92,6 +93,7 @@ export function WordleExercise({ exercise, onComplete }: WordleExerciseProps) {
   const maxAttempts = params.maxAttempts ?? 6
   const language = params.language ?? 'fr'
   const isFrench = language === 'fr'
+  const complexityScore = Math.round(estimateWordleComplexityFromParams(params))
 
   const wordleComplexity = useMemo(() => {
     return (
@@ -350,6 +352,9 @@ export function WordleExercise({ exercise, onComplete }: WordleExerciseProps) {
               ? `Essais restants : ${maxAttempts - guesses.length}`
               : `Attempts left: ${maxAttempts - guesses.length}`
             : ''}
+      </p>
+      <p className="exercise-complexity-indicator">
+        {isFrench ? `Complexité ${complexityScore}/100` : `Complexity ${complexityScore}/100`}
       </p>
     </div>
   )

@@ -127,6 +127,15 @@ export interface MathChainStepDto {
   complexity: number
 }
 
+/** REMEMBER_NUMBER: memorize a number, solve a math distraction, then recall. */
+export interface RememberNumberParamsDto {
+  numberToRemember: number
+  displayTimeMs: number
+  mathPrompt: string
+  mathExpectedAnswer: string
+  mathComplexityScore?: number | null
+}
+
 /** MATH_CHAIN: starting number + sequential operations, user computes final result. */
 export interface MathChainParamsDto {
   startNumber: number
@@ -173,6 +182,7 @@ export interface ExerciseDto {
   estimationParams?: EstimationParamsDto | null
   digitSpanParams?: DigitSpanParamsDto | null
   mathChainParams?: MathChainParamsDto | null
+  rememberNumberParams?: RememberNumberParamsDto | null
 }
 
 export interface SessionStepDto {

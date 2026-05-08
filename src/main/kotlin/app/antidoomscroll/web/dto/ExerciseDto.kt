@@ -48,7 +48,9 @@ data class ExerciseDto(
     /** DIGIT_SPAN: progressive digit recall with challenge modes. */
     val digitSpanParams: DigitSpanParamsDto? = null,
     /** MATH_CHAIN: sequential operations starting from a number. */
-    val mathChainParams: MathChainParamsDto? = null
+    val mathChainParams: MathChainParamsDto? = null,
+    /** REMEMBER_NUMBER: memorize a number, solve a math distraction, then recall. */
+    val rememberNumberParams: RememberNumberParamsDto? = null
 )
 
 data class ImagePairParamsDto(
@@ -188,4 +190,16 @@ data class MathChainStepDto(
     val operation: String,
     val operand: Int,
     val complexity: Double
+)
+
+/**
+ * Params for REMEMBER_NUMBER exercise: memorize a number, solve a math problem, recall.
+ * Generated at response time from DB-stored config (numberDigits, displayTimeMs, mathOperation).
+ */
+data class RememberNumberParamsDto(
+    val numberToRemember: Int,
+    val displayTimeMs: Int,
+    val mathPrompt: String,
+    val mathExpectedAnswer: String,
+    val mathComplexityScore: Double? = null
 )

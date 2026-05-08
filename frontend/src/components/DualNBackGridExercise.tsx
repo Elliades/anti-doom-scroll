@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import type { ExerciseDto } from '../types/api'
 import type { ExerciseResult } from '../types/exercise'
+import { estimateNBackComplexityScore } from '../api/exerciseParamGenerators'
 
 interface DualNBackGridExerciseProps {
   exercise: ExerciseDto
@@ -29,6 +30,9 @@ export function DualNBackGridExercise({ exercise, onComplete, showInstruction = 
   const matchColorSet = new Set(params.matchColorIndices ?? [])
   const n = params.n ?? 1
   const gridSize = params.gridSize ?? 3
+  const colorCount = Math.max(2, Math.min(4, params.colors?.length ?? 2))
+  const variety = Math.min(gridSize * gridSize, colorCount)
+  const cognitiveLoad = Math.round(estimateNBackComplexityScore(n, 2, variety))
   const cellCount = gridSize * gridSize
 
   const handlePositionMatch = useCallback(() => {
@@ -103,6 +107,7 @@ export function DualNBackGridExercise({ exercise, onComplete, showInstruction = 
         <div className="nback-n-badge" aria-label={`${n}-Back`}>
           {n}-Back
         </div>
+        <p className="cognitive-load-badge">Charge Cognitive : {cognitiveLoad}/100</p>
         <p className="prompt">{exercise.prompt}</p>
         {showInstruction && (
           <p className="nback-instruction">
@@ -124,6 +129,7 @@ export function DualNBackGridExercise({ exercise, onComplete, showInstruction = 
         <div className="nback-n-badge" aria-label={`${n}-Back`}>
           {n}-Back
         </div>
+        <p className="cognitive-load-badge">Charge Cognitive : {cognitiveLoad}/100</p>
         <div className="nback-grid-container">
           <div
             className="nback-grid nback-grid--dual"
@@ -178,6 +184,7 @@ export function DualNBackGridExercise({ exercise, onComplete, showInstruction = 
 
   return (
     <div className="nback-done">
+      <p className="cognitive-load-badge">Charge Cognitive : {cognitiveLoad}/100</p>
       <p className="nback-result">{resultMessage}</p>
       <p className="nback-score">
         Score: {Math.round(score * 100)}% · Hits: {totalHits} / {totalTargets} (Position: {posHits}/
