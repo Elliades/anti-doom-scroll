@@ -9,6 +9,7 @@ import app.antidoomscroll.application.WordleGenerator
 import app.antidoomscroll.application.WordleParamsResolver
 import app.antidoomscroll.application.MathChainGenerator
 import app.antidoomscroll.application.MathFlashcardGenerator
+import app.antidoomscroll.application.RememberNumberGenerator
 import app.antidoomscroll.application.NBackSequenceGenerator
 import app.antidoomscroll.application.ImagePairDeckCache
 import app.antidoomscroll.application.MemoryCardDeckCache
@@ -36,6 +37,7 @@ import app.antidoomscroll.web.dto.NBackParamsDto
 import app.antidoomscroll.application.SumPairResult
 import app.antidoomscroll.web.dto.MathChainParamsDto
 import app.antidoomscroll.web.dto.MathChainStepDto
+import app.antidoomscroll.web.dto.RememberNumberParamsDto
 import app.antidoomscroll.web.dto.SumPairCardDto
 import app.antidoomscroll.web.dto.SumPairGroupDto
 import app.antidoomscroll.web.dto.SumPairParamsDto
@@ -55,6 +57,7 @@ class ExerciseDtoMapper(
     private val imagePairDeckCache: ImagePairDeckCache,
     private val mathFlashcardGenerator: MathFlashcardGenerator,
     private val mathChainGenerator: MathChainGenerator,
+    private val rememberNumberGenerator: RememberNumberGenerator,
     private val anagramGenerator: AnagramGenerator,
     private val wordleGenerator: WordleGenerator
 ) {
@@ -120,6 +123,16 @@ class ExerciseDtoMapper(
                 totalComplexity = chainResult.totalComplexity
             )
         } else null
+        val rememberNumberParams = exerciseWithParams.rememberNumberParams()?.let { p ->
+            val result = rememberNumberGenerator.generate(p, exerciseWithParams.difficulty)
+            RememberNumberParamsDto(
+                numberToRemember = result.numberToRemember,
+                displayTimeMs = result.displayTimeMs,
+                mathPrompt = result.mathPrompt,
+                mathExpectedAnswer = result.mathExpectedAnswer,
+                mathComplexityScore = result.mathComplexityScore
+            )
+        }
         val wordleResolved = WordleParamsResolver.resolve(exerciseWithParams)
         val wordleParams = wordleResolved?.let { p ->
             wordleGenerator.generate(p)?.let { r ->
@@ -216,7 +229,8 @@ class ExerciseDtoMapper(
             wordleParams = wordleParams,
             estimationParams = estimationParams,
             digitSpanParams = digitSpanParams,
-            mathChainParams = mathChainParams
+            mathChainParams = mathChainParams,
+            rememberNumberParams = rememberNumberParams
         )
     }
 

@@ -1,6 +1,7 @@
 import { useState, useMemo, useCallback, useEffect, useRef } from 'react'
 import type { ExerciseDto } from '../../types/api'
 import type { ExerciseResult } from '../../types/exercise'
+import { estimateMemoryCardComplexityScore } from '../../api/exerciseParamGenerators'
 
 export interface MemoryCardExerciseProps {
   exercise: ExerciseDto
@@ -30,6 +31,7 @@ export function MemoryCardExercise({ exercise, onComplete, showInstruction = tru
   const [cards, setCards] = useState<Card[]>([])
   const [moves, setMoves] = useState(0)
   const completedRef = useRef(false)
+  const complexityScore = Math.round(estimateMemoryCardComplexityScore(params.pairCount))
 
   const deck = useMemo(() => {
     if (params.shuffledDeck?.length === params.pairCount * 2) {
@@ -149,6 +151,9 @@ export function MemoryCardExercise({ exercise, onComplete, showInstruction = tru
 
   return (
     <div className="memory-playing">
+      <p className="exercise-complexity-watermark" aria-hidden="true">
+        C {complexityScore}/100
+      </p>
       <div
         className="memory-grid"
         style={{

@@ -1,6 +1,7 @@
 import { useState, useCallback, useEffect, useRef } from 'react'
 import type { ExerciseDto } from '../../types/api'
 import type { ExerciseResult } from '../../types/exercise'
+import { estimateAnagramComplexityFromParams } from '../../utils/wordComplexity'
 
 export interface AnagramExerciseProps {
   exercise: ExerciseDto
@@ -26,6 +27,7 @@ export function AnagramExercise({ exercise, onComplete, showInstruction = true }
   const hintIntervalSeconds = params.hintIntervalSeconds ?? 10
   const hintIntervalMs = hintIntervalSeconds * 1000
   const letterColorHint = params.letterColorHint ?? true
+  const complexityScore = Math.round(estimateAnagramComplexityFromParams(params))
 
   const [slots, setSlots] = useState<string[]>(() => Array(len).fill(''))
   const [hintIndex, setHintIndex] = useState(0)
@@ -229,6 +231,9 @@ export function AnagramExercise({ exercise, onComplete, showInstruction = true }
         {hintIntervalSeconds > 0
           ? `Indice après ${hintIntervalSeconds} secondes sans saisie`
           : 'Pas d\'indice automatique'}
+      </p>
+      <p className="exercise-complexity-indicator">
+        Complexité {complexityScore}/100
       </p>
     </div>
   )

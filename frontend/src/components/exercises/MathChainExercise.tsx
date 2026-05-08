@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import type { ExerciseDto } from '../../types/api'
 import type { ExerciseResult } from '../../types/exercise'
+import { ComplexityBadge } from './ComplexityBadge'
 
 export interface MathChainExerciseProps {
   exercise: ExerciseDto
@@ -44,6 +45,7 @@ export function MathChainExercise({ exercise, onComplete, showInstruction }: Mat
   const currentStep = steps[stepIndex] ?? null
   const isCorrect = parseInt(answer.trim(), 10) === expectedAnswer
   const isLastStep = stepIndex >= steps.length - 1
+  const complexityScore = params?.totalComplexity ?? null
 
   // Phase: show_number → auto-advance after delay
   useEffect(() => {
@@ -141,6 +143,7 @@ export function MathChainExercise({ exercise, onComplete, showInstruction }: Mat
         <button type="button" className="mc-start-btn" onClick={handleStart} autoFocus>
           Start
         </button>
+        {complexityScore == null ? null : <ComplexityBadge score={complexityScore} />}
       </div>
     )
   }
@@ -154,6 +157,7 @@ export function MathChainExercise({ exercise, onComplete, showInstruction }: Mat
         <div className="mc-progress">
           <span className="mc-progress-text">Get ready…</span>
         </div>
+        {complexityScore == null ? null : <ComplexityBadge score={complexityScore} />}
       </div>
     )
   }
@@ -175,6 +179,7 @@ export function MathChainExercise({ exercise, onComplete, showInstruction }: Mat
             />
           </div>
         </div>
+        {complexityScore == null ? null : <ComplexityBadge score={complexityScore} />}
       </div>
     )
   }
@@ -204,6 +209,7 @@ export function MathChainExercise({ exercise, onComplete, showInstruction }: Mat
             />
           </div>
         </div>
+        {complexityScore == null ? null : <ComplexityBadge score={complexityScore} />}
       </div>
     )
   }
@@ -243,6 +249,7 @@ export function MathChainExercise({ exercise, onComplete, showInstruction }: Mat
           />
           <button onClick={handleCheck}>Check</button>
         </div>
+        {complexityScore == null ? null : <ComplexityBadge score={complexityScore} />}
       </div>
     )
   }
@@ -275,6 +282,7 @@ export function MathChainExercise({ exercise, onComplete, showInstruction }: Mat
           {isCorrect ? '✓ Correct' : `✗ Expected: ${expectedAnswer}`}
         </span>
       </div>
+      {complexityScore == null ? null : <ComplexityBadge score={complexityScore} />}
     </div>
   )
 }

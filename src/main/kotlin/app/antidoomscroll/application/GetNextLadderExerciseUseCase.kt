@@ -51,7 +51,9 @@ class GetNextLadderExerciseUseCase(
         }
 
         val level = config.levelAt(newState.currentLevelIndex) ?: return null
-        val exercise = ladderExercisePicker.pick(config, level)
+        val baseTarget = ladderExercisePicker.targetScoreForLevel(config, level)
+        val targetScore = ladderExercisePicker.blendTargetWithRecent(baseTarget, newState.recentScores)
+        val exercise = ladderExercisePicker.pick(config, level, targetScore = targetScore)
 
         val subjectCode = exercise?.let { subjectPort.findById(it.subjectId)?.code }
 

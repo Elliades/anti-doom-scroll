@@ -249,6 +249,27 @@ data class Exercise(
         }
     }.getOrNull()
 
+    fun rememberNumberParams(): RememberNumberParams? = runCatching {
+        when (type) {
+            ExerciseType.REMEMBER_NUMBER -> {
+                val p = exerciseParams ?: return@runCatching null
+                val numberDigits = (p["numberDigits"] as? Number)?.toInt() ?: return@runCatching null
+                val displayTimeMs = (p["displayTimeMs"] as? Number)?.toInt() ?: 3000
+                val mathOperation = (p["mathOperation"] as? String) ?: "ADD"
+                val mathFirstMax = (p["mathFirstMax"] as? Number)?.toInt() ?: 9
+                val mathSecondMax = (p["mathSecondMax"] as? Number)?.toInt() ?: 9
+                RememberNumberParams(
+                    numberDigits = numberDigits,
+                    displayTimeMs = displayTimeMs,
+                    mathOperation = mathOperation,
+                    mathFirstMax = mathFirstMax,
+                    mathSecondMax = mathSecondMax
+                )
+            }
+            else -> null
+        }
+    }.getOrNull()
+
     fun mathChainDifficulty(): Difficulty? = runCatching {
         when (type) {
             ExerciseType.MATH_CHAIN -> difficulty
