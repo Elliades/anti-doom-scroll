@@ -82,11 +82,7 @@ export function RememberNumberExercise({ exercise, onComplete, showInstruction }
     if (completedRef.current) return
     completedRef.current = true
 
-    let score: number
-    if (isRecallCorrect && isMathCorrect) score = 1.0
-    else if (isRecallCorrect && !isMathCorrect) score = 0.6
-    else if (!isRecallCorrect && isMathCorrect) score = 0.2
-    else score = 0.0
+    const score = (isRecallCorrect && isMathCorrect) ? 1.0 : 0.0
 
     const subscores = [
       { label: 'Number recall', value: isRecallCorrect ? 'Correct' : 'Wrong' },

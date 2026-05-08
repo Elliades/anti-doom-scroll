@@ -40,11 +40,9 @@ problem (distraction), then must recall the original number.
 | VERY_HARD | 6 | 1200 ms | All four | 1–2 digit |
 
 ## Scoring (client-side)
-Overall score 0–1 combining recall accuracy and math accuracy:
-- **Recall correct + Math correct** → 1.0
-- **Recall correct + Math wrong** → 0.6 (primary goal is memory)
-- **Recall wrong + Math correct** → 0.2
-- **Recall wrong + Math wrong** → 0.0
+Both parts must be correct for a pass — failing either one means failing the exercise:
+- **Recall correct + Math correct** → 1.0 (pass)
+- **Any part wrong** → 0.0 (fail)
 
 Subscores:
 - `Number recall` — "Correct" or "Wrong"
