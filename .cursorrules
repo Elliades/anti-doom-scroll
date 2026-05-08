@@ -103,7 +103,7 @@ Exercises are stored in the database (PostgreSQL in prod, H2 in local). There is
 |------|------|----------------|
 | `default` | Default | FLASHCARD_QA (ADD, SUBTRACT, MULTIPLY, DIVIDE) |
 | `B1` | N-back | N_BACK, N_BACK_GRID, DUAL_NBACK_GRID, DUAL_NBACK_CARD |
-| `MEMORY` | Memory | MEMORY_CARD_PAIRS, SUM_PAIR, IMAGE_PAIR |
+| `MEMORY` | Memory | MEMORY_CARD_PAIRS, SUM_PAIR, IMAGE_PAIR, REMEMBER_NUMBER |
 | `WORD` | Word | ANAGRAM |
 | `WORDLE_FR` | Wordle (FR) | WORDLE |
 | `WORDLE_EN` | Wordle (EN) | WORDLE |
@@ -119,7 +119,9 @@ Exercises are stored in the database (PostgreSQL in prod, H2 in local). There is
 | `e0000000-…` | SUM_PAIR exercises |
 | `f0000000-…` | ANAGRAM exercises |
 | `f1000000-…` | IMAGE_PAIR exercises (local seeder) |
-| `f2000000-…` | Next new exercise type |
+| `f2000000-…` | DIGIT_SPAN exercises |
+| `f3000000-…` | REMEMBER_NUMBER exercises |
+| `f4000000-…` | Next new exercise type |
 
 - Backend: (1) Add enum value in domain ExerciseType.kt. (2) Add persistence for type-specific params if needed (exercise_params JSONB or domain parser). (3) Ensure ExerciseDto / ExerciseDtoMapper can carry and map those params. No new REST endpoint per type; existing GET /api/exercises/{id} and session/journey APIs return type + params.
 - Frontend: (1) Add a component (e.g. XxxExercise.tsx) with props exercise: ExerciseDto, onComplete?: (score?: number) => void. (2) Register it in the exercise type registry in ExercisePlayer.tsx: EXERCISE_TYPE_COMPONENTS['NEW_TYPE'] = NewTypeExercise. (3) Do not change SessionExerciseBlock or the play page layout.

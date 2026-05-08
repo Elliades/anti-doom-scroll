@@ -16,6 +16,7 @@ import { ImagePairExercise } from './exercises/ImagePairExercise'
 import { SumPairExercise } from './exercises/SumPairExercise'
 import { DigitSpanExercise } from './exercises/DigitSpanExercise'
 import { MathChainExercise } from './exercises/MathChainExercise'
+import { RememberNumberExercise } from './exercises/RememberNumberExercise'
 
 export interface ExercisePlayerProps {
   exercise: ExerciseDto
@@ -71,6 +72,9 @@ const EXERCISE_TYPE_COMPONENTS: Record<string, React.ComponentType<ExerciseCompo
   ),
   MATH_CHAIN: ({ exercise, onComplete, showInstruction }) => (
     <MathChainExercise exercise={exercise} onComplete={onComplete} showInstruction={showInstruction} />
+  ),
+  REMEMBER_NUMBER: ({ exercise, onComplete, showInstruction }) => (
+    <RememberNumberExercise exercise={exercise} onComplete={onComplete} showInstruction={showInstruction} />
   ),
 }
 

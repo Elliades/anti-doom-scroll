@@ -146,7 +146,11 @@ export function SumPairExercise({ exercise, onComplete, showInstruction = true }
     completedRef.current = true
     setPhase('done')
     const totalPairs = (groups ?? []).reduce((s, g) => s + g.cards.length / 2, 0)
-    const score = Math.max(0, Math.min(1, 1 - (moves - totalPairs) * 0.05))
+    const nbCases = cards.length
+    const perfectMoves = totalPairs
+    const freeMovesBeforePenalty = Math.round(nbCases / 2)
+    const excessMoves = Math.max(0, moves - perfectMoves - freeMovesBeforePenalty)
+    const score = Math.max(0, Math.min(1, 1 - excessMoves * 0.05))
     onComplete?.({
       score,
       subscores: [
@@ -154,7 +158,7 @@ export function SumPairExercise({ exercise, onComplete, showInstruction = true }
         { label: 'Perfect', value: totalPairs },
       ],
     })
-  }, [phase, allMatched, moves, groups, onComplete])
+  }, [phase, allMatched, moves, groups, cards.length, onComplete])
 
   const gridCols = (n: number) => {
     if (n <= 4) return 2
