@@ -8,12 +8,14 @@ const fs = require('fs');
 const path = require('path');
 
 const OUT_DIR = path.join(__dirname, '..', 'src', 'main', 'resources', 'words');
+const EXCLUDED_WORDS = new Set(['axl']);
 
 function filterWords(words, minLen = 2, maxLen = 10) {
   return words.filter(w => {
     const s = String(w).toLowerCase().trim();
     if (s.length < minLen || s.length > maxLen) return false;
     if (/[^a-zàâäéèêëïîôùûüçœæ]/.test(s)) return false; // letters only (incl. French accented)
+    if (EXCLUDED_WORDS.has(s)) return false; // manual exclusions
     return true;
   });
 }
