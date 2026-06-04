@@ -429,6 +429,10 @@ export function estimateImagePairComplexityScore(params: ImagePairParamsDto): nu
 
 /**
  * Fitts + arithmetic spread complexity for SUM_PAIR.
+ *
+ * Facteurs sum (nombre de couleurs / +K distincts à suivre) = `staticNumbers.length`
+ * (ex. `[7]` → 1, `[2, 5, 10]` → 3).
+ *
  * Base formula: Cb = pairCount * (1 + (varietyFactor / 10))
  * with pairCount = staticNumbers.length * pairsPerRound.
  *

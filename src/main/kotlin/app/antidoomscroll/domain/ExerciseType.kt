@@ -20,5 +20,6 @@ enum class ExerciseType {
     WORDLE,
     ESTIMATION,
     DIGIT_SPAN,
-    MATH_CHAIN
+    MATH_CHAIN,
+    REMEMBER_NUMBER
 }

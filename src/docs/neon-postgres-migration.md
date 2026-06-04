@@ -7,7 +7,7 @@
 
 ## 1. Fix applied in repo
 
-- **Duplicate Flyway version**: There were two migrations named `V11__*`. One was renamed to `V23__nback_cards_sequence.sql` so Flyway runs all migrations in order on a fresh DB.
+- **Duplicate Flyway versions (resolved)**: `V11__nback_cards_sequence.sql` duplicated the same SQL as `V23__nback_cards_sequence.sql`; the `V11__` copy was removed so only `V23__` remains. `V23__digit_span_subject.sql` collided with that `V23__` file, so digit span was moved to `V27__digit_span_subject.sql`.
 - **Neon profile**: `application-neon.yml` configures the datasource from environment variables (no credentials in repo).
 
 ## 2. Configure environment
@@ -31,7 +31,7 @@ $env:SPRING_DATASOURCE_PASSWORD = "<your-password>"
 
 ## 3. Run migration (Flyway on startup)
 
-With the env vars set, start the app with the `neon` profile. Flyway will run all migrations (V1–V23) on first connect:
+With the env vars set, start the app with the `neon` profile. Flyway will run all versioned migrations on first connect:
 
 ```bash
 ./gradlew bootRun --args='--spring.profiles.active=neon'

@@ -371,6 +371,25 @@ VALUES
     ('a0000000-0000-0000-0000-000000000103', 'b0000000-0000-0000-0000-000000000010', 'ANAGRAM', 'HARD', 'Trouvez le mot.', '[]', 180, '{"minLetters":6,"maxLetters":7,"language":"fr"}', CURRENT_TIMESTAMP),
     ('a0000000-0000-0000-0000-000000000104', 'b0000000-0000-0000-0000-000000000010', 'ANAGRAM', 'VERY_HARD', 'Trouvez le mot.', '[]', 210, '{"minLetters":8,"maxLetters":15,"language":"fr","hintIntervalSeconds":15,"letterColorHint":false}', CURRENT_TIMESTAMP);
 
+-- REMEMBER_NUMBER exercises for integration tests
+INSERT INTO exercise (id, subject_id, type, difficulty, prompt, expected_answers, time_limit_seconds, exercise_params, created_at)
+VALUES
+    ('f3000000-0000-0000-0000-000000000001', 'b0000000-0000-0000-0000-000000000008', 'REMEMBER_NUMBER', 'ULTRA_EASY',
+     'Remember the number, solve the math problem, then recall the number.', '[]', 60,
+     '{"numberDigits":2,"displayTimeMs":3000,"mathOperation":"ADD","mathFirstMax":9,"mathSecondMax":9}', CURRENT_TIMESTAMP),
+    ('f3000000-0000-0000-0000-000000000002', 'b0000000-0000-0000-0000-000000000008', 'REMEMBER_NUMBER', 'EASY',
+     'Remember the number, solve the math problem, then recall the number.', '[]', 60,
+     '{"numberDigits":3,"displayTimeMs":2500,"mathOperation":"ADD","mathFirstMax":99,"mathSecondMax":9}', CURRENT_TIMESTAMP),
+    ('f3000000-0000-0000-0000-000000000003', 'b0000000-0000-0000-0000-000000000008', 'REMEMBER_NUMBER', 'MEDIUM',
+     'Remember the number, solve the math problem, then recall the number.', '[]', 90,
+     '{"numberDigits":4,"displayTimeMs":2000,"mathOperation":"SUBTRACT","mathFirstMax":99,"mathSecondMax":99}', CURRENT_TIMESTAMP),
+    ('f3000000-0000-0000-0000-000000000004', 'b0000000-0000-0000-0000-000000000008', 'REMEMBER_NUMBER', 'HARD',
+     'Remember the number, solve the math problem, then recall the number.', '[]', 90,
+     '{"numberDigits":5,"displayTimeMs":1500,"mathOperation":"MULTIPLY","mathFirstMax":12,"mathSecondMax":9}', CURRENT_TIMESTAMP),
+    ('f3000000-0000-0000-0000-000000000005', 'b0000000-0000-0000-0000-000000000008', 'REMEMBER_NUMBER', 'VERY_HARD',
+     'Remember the number, solve the math problem, then recall the number.', '[]', 120,
+     '{"numberDigits":6,"displayTimeMs":1200,"mathOperation":"MULTIPLY","mathFirstMax":99,"mathSecondMax":9}', CURRENT_TIMESTAMP);
+
 -- DIGIT_SPAN exercises for integration tests
 INSERT INTO exercise (id, subject_id, type, difficulty, prompt, expected_answers, time_limit_seconds, exercise_params, created_at)
 VALUES

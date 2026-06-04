@@ -2303,6 +2303,41 @@ body {
   color: var(--text-dim);
 }
 
+/* ── Remember Number exercise ─────────────────────────── */
+.rn-countdown {
+  transition: width 0.2s linear;
+}
+
+.rn-results {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  width: 100%;
+  max-width: 22rem;
+}
+
+.rn-result-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0.8rem;
+  background: var(--surface);
+  border-radius: 0.5rem;
+  font-size: 0.95rem;
+}
+
+.rn-result-label {
+  color: var(--text-dim);
+  font-weight: 500;
+  flex-shrink: 0;
+  margin-right: 0.5rem;
+}
+
+.rn-result-value {
+  font-weight: 700;
+  text-align: right;
+}
+
 @media (prefers-color-scheme: light) {
   :root {
     --bg: #f5f5f8;
