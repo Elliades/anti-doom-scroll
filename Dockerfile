@@ -28,7 +28,8 @@ RUN gradle bootJar --no-daemon
 FROM eclipse-temurin:21-jre-alpine
 
 WORKDIR /app
-RUN adduser -D -g "" appuser
+RUN apk add --no-cache wget \
+  && adduser -D -g "" appuser
 
 COPY --from=backend /app/build/libs/*.jar app.jar
 

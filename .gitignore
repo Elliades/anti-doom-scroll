@@ -13,7 +13,11 @@ Desktop.ini
 
 # --- Logs ---
 *.log
+*.gz
 logs/
+
+# --- Cursor ---
+.cursor/
 
 # --- Secrets / local env ---
 .env
