@@ -7,11 +7,11 @@ import org.springframework.web.bind.annotation.RestController
 
 /**
  * Handles GET / so users who open the API root see a helpful message instead of a 404/500.
- * Only active when the frontend runs separately (local dev). On railway/prod the SPA
- * static files serve the React app at / via SpaForwardingConfig.
+ * Only active when the frontend runs separately (local dev profile).
+ * On apps/railway/prod the SPA static files serve the React app at / via SpaForwardingConfig.
  */
 @RestController
-@Profile("!railway")
+@Profile("local")
 class RootController {
 
     @GetMapping("/", produces = [MediaType.TEXT_HTML_VALUE])
