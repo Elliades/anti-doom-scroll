@@ -21,10 +21,17 @@ class SessionApiIntegrationTest {
     private lateinit var mvc: MockMvc
 
     @Test
-    fun healthReturnsUp() {
+    fun healthReturnsHomelabContract() {
         mvc.perform(get("/api/health"))
             .andExpect(status().isOk())
-            .andExpect(jsonPath("$.status").value("UP"))
+            .andExpect(jsonPath("$.status").value("ok"))
+            .andExpect(jsonPath("$.service").value("anti-doom-scroll"))
+            .andExpect(jsonPath("$.timestamp").exists())
+            .andExpect(jsonPath("$.uptime").isNumber())
+            .andExpect(jsonPath("$.checks.frontend.status").value("ok"))
+            .andExpect(jsonPath("$.checks.backend.status").value("ok"))
+            .andExpect(jsonPath("$.checks.database.status").value("ok"))
+            .andExpect(jsonPath("$.checks.database.latencyMs").isNumber())
     }
 
     @Test
